@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.168
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AsyncRAT-Sharp", "AsyncRAT-Sharp\AsyncRAT-Sharp.csproj", "{7767C300-5FD5-4A5D-9D4C-59559CCE48A3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "Client\Client.csproj", "{C3C49F45-2589-4E04-9C50-71B6035C14AE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7767C300-5FD5-4A5D-9D4C-59559CCE48A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7767C300-5FD5-4A5D-9D4C-59559CCE48A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7767C300-5FD5-4A5D-9D4C-59559CCE48A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7767C300-5FD5-4A5D-9D4C-59559CCE48A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3C49F45-2589-4E04-9C50-71B6035C14AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3C49F45-2589-4E04-9C50-71B6035C14AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3C49F45-2589-4E04-9C50-71B6035C14AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3C49F45-2589-4E04-9C50-71B6035C14AE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B9F2462F-603A-41C4-9CFC-1FAC60B4731C}
+	EndGlobalSection
+EndGlobal
