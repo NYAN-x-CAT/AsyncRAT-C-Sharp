@@ -22,7 +22,7 @@ namespace AsyncRAT_Sharp
             while (true)
             {
                 await Task.Delay(1000);
-                toolStripStatusLabel1.Text = String.Format("Online {0}", listView1.Items.Count.ToString());
+                toolStripStatusLabel1.Text = string.Format("Online {0}", listView1.Items.Count.ToString());
             }
         }
 

