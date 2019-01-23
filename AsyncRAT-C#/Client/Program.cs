@@ -46,6 +46,7 @@ namespace Client
             }
             catch
             {
+                Console.WriteLine("Disconnected!");
                 Thread.Sleep(2500);
                 InitializeClient();
             }
@@ -63,7 +64,12 @@ namespace Client
 
         public static void ReadServertData(IAsyncResult ar)
         {
-
+            if (client.Connected == false)
+            {
+                client.Close();
+                client.Dispose();
+                InitializeClient();
+            }
             try
             {
                 int Recevied = client.EndReceive(ar);
@@ -102,6 +108,12 @@ namespace Client
                         }
                     }
                 }
+                else
+                {
+                    client.Close();
+                    client.Dispose();
+                    InitializeClient();
+                }
                 client.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None, ReadServertData, null);
             }
             catch
@@ -130,22 +142,23 @@ namespace Client
 
         public static void BeginSend(byte[] Msgs)
         {
+            if (client.Connected)
+            {
                 try
                 {
-
                     using (MemoryStream MS = new MemoryStream())
                     {
-                    byte[] buffer = Msgs;
-                    byte[] buffersize = Encoding.UTF8.GetBytes(buffer.Length.ToString() + Strings.ChrW(0));
-                     MS.Write(buffersize, 0, buffersize.Length);
-                     MS.Write(buffer, 0, buffer.Length);
+                        byte[] buffer = Msgs;
+                        byte[] buffersize = Encoding.UTF8.GetBytes(buffer.Length.ToString() + Strings.ChrW(0));
+                        MS.Write(buffersize, 0, buffersize.Length);
+                        MS.Write(buffer, 0, buffer.Length);
 
-                    client.Poll(-1, SelectMode.SelectWrite);
+                        client.Poll(-1, SelectMode.SelectWrite);
                         client.BeginSend(MS.ToArray(), 0, Convert.ToInt32(MS.Length), SocketFlags.None, new AsyncCallback(EndSend), null);
                     }
                 }
                 catch
-                {
+                { }
             }
         }
 
@@ -156,8 +169,7 @@ namespace Client
                 client.EndSend(ar);
             }
             catch
-            {
-            }
+            { }
         }
     }
 }
