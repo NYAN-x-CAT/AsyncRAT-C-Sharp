@@ -1,33 +1,29 @@
 ﻿using AsyncRAT_Sharp.Sockets;
 using System.Windows.Forms;
 using AsyncRAT_Sharp.MessagePack;
+using System;
 
 namespace AsyncRAT_Sharp.Handle_Packet
 {
     class HandlePacket
     {
-        public static Form1 Form;
-        public delegate void UpdateListViewDelegatevoid(Clients Client, byte[] Data);
-        public static void Read(Clients Client, byte[] Data)
+        public static void Read(Clients client, byte[] data)
         {
             MsgPack unpack_msgpack = new MsgPack();
-            unpack_msgpack.DecodeFromBytes(Data);
+            unpack_msgpack.DecodeFromBytes(data);
             switch (unpack_msgpack.ForcePathObject("Packet").AsString)
             {
                 case "ClientInfo":
-                    if (Form.listView1.InvokeRequired)
-                        Form.listView1.Invoke(new UpdateListViewDelegatevoid(Read), new object[] {Client, Data});
-                    else
-                    {
-                        Client.LV = new ListViewItem();
-                        Client.LV.Tag = Client;
-                        Client.LV.Text = string.Concat(Client.client.RemoteEndPoint.ToString());
-                        Client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("User").AsString);
-                        Client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("OS").AsString);
-                        Form.listView1.Items.Insert(0, Client.LV);
-                        Form.listView1.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
-                    }
-                    break;
+                        Program.form1.Invoke((MethodInvoker)delegate ()
+                        {
+                            client.LV = new ListViewItem();
+                            client.LV.Tag = client;
+                            client.LV.Text = string.Concat(client.client.RemoteEndPoint.ToString());
+                            client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("User").AsString);
+                            client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("OS").AsString);
+                            Program.form1.listView1.Items.Insert(0, client.LV);
+                        });
+                    break;                             
             }
         }
     }

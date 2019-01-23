@@ -2,7 +2,9 @@
 using System.Windows.Forms;
 using AsyncRAT_Sharp.MessagePack;
 using AsyncRAT_Sharp.Sockets;
+using System.Threading.Tasks;
 using Microsoft.VisualBasic;
+
 namespace AsyncRAT_Sharp
 {
     public partial class Form1 : Form
@@ -12,12 +14,16 @@ namespace AsyncRAT_Sharp
             InitializeComponent();
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+       async private void Form1_Load(object sender, EventArgs e)
         {
-            Handle_Packet.HandlePacket.Form = this;
-
             Listener listener = new Listener();
             listener.Connect(8080);
+
+            while (true)
+            {
+                await Task.Delay(1000);
+                toolStripStatusLabel1.Text = String.Format("Online {0}", listView1.Items.Count.ToString());
+            }
         }
 
         private void sendMessageToolStripMenuItem_Click(object sender, EventArgs e)
@@ -36,6 +42,11 @@ namespace AsyncRAT_Sharp
                     CL.BeginSend(msgpack.Encode2Bytes());
                 }
             }
+        }
+
+        private void listView1_Resize(object sender, EventArgs e)
+        {
+           listView1.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
         }
     }
 }

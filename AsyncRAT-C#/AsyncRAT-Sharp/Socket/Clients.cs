@@ -89,8 +89,8 @@ namespace AsyncRAT_Sharp.Sockets
         delegate void _isDisconnected();
         public void Disconnected()
         {
-            if (HandlePacket.Form.listView1.InvokeRequired)
-                HandlePacket.Form.listView1.Invoke(new _isDisconnected(Disconnected));
+            if (Program.form1.listView1.InvokeRequired)
+                Program.form1.listView1.Invoke(new _isDisconnected(Disconnected));
             else
             {
                 LV.Remove();
