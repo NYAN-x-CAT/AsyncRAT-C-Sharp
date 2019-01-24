@@ -37,6 +37,7 @@
             this.sendMessageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.ping = new System.Windows.Forms.Timer(this.components);
             this.contextMenuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -107,6 +108,12 @@
             this.toolStripStatusLabel1.Size = new System.Drawing.Size(24, 25);
             this.toolStripStatusLabel1.Text = "...";
             // 
+            // ping
+            // 
+            this.ping.Enabled = true;
+            this.ping.Interval = 50000;
+            this.ping.Tick += new System.EventHandler(this.ping_Tick);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -135,6 +142,7 @@
         private System.Windows.Forms.ToolStripMenuItem sendMessageToolStripMenuItem;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private System.Windows.Forms.Timer ping;
     }
 }
 

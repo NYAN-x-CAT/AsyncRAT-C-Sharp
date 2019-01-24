@@ -9,7 +9,7 @@ namespace AsyncRAT_Sharp.Sockets
 {
     class Listener
     {
-        public Socket listener;
+        public Socket listener { get; set; }
 
         public async void Connect(int port)
         {

