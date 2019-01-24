@@ -23,7 +23,7 @@ namespace AsyncRAT_Sharp.Handle_Packet
                     {
                         client.LV = new ListViewItem();
                         client.LV.Tag = client;
-                        client.LV.Text = string.Concat(client.client.RemoteEndPoint.ToString());
+                        client.LV.Text = string.Concat(client.Client.RemoteEndPoint.ToString());
                         client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("User").AsString);
                         client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("OS").AsString);
                         Program.form1.listView1.Items.Insert(0, client.LV);

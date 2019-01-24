@@ -12,13 +12,13 @@ namespace Client
 {
     class Program
     {
-        public static Socket client;
-        public static byte[] Buffer;
-        public static long Buffersize;
-        public static bool BufferRecevied;
-        public static MemoryStream MS;
+        public static Socket client { get; set; }
+        public static byte[] Buffer { get; set; }
+        public static long Buffersize { get; set; }
+        public static bool BufferRecevied { get; set; }
+        public static MemoryStream MS { get; set; }
 
-      static void Main(string[] args)
+        static void Main(string[] args)
         {
             InitializeClient();
             while (true)

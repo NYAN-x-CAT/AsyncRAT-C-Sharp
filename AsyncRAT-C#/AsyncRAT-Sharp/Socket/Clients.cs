@@ -11,43 +11,42 @@ namespace AsyncRAT_Sharp.Sockets
 {
     class Clients
     {
-        public Socket client;
-        public byte[] Buffer;
-        public long Buffersize;
-        public bool BufferRecevied;
-        public MemoryStream MS;
-        public ListViewItem LV;
+        public Socket Client { get; set; }
+        public byte[] Buffer { get; set; }
+        public long Buffersize { get; set; }
+        public bool BufferRecevied { get; set; }
+        public MemoryStream MS { get; set; }
+        public ListViewItem LV { get; set; }
         public event ReadEventHandler Read;
         public delegate void ReadEventHandler(Clients client, byte[] data);
 
         public void InitializeClient(Socket CLIENT)
         {
-            client = CLIENT;
-            client.ReceiveBufferSize = 50 * 1024;
-            client.SendBufferSize = 50 * 1024;
-            client.ReceiveTimeout = -1;
-            client.SendTimeout = -1;
+            Client = CLIENT;
+            Client.ReceiveBufferSize = 50 * 1024;
+            Client.SendBufferSize = 50 * 1024;
+            Client.ReceiveTimeout = -1;
+            Client.SendTimeout = -1;
             Buffer = new byte[1];
             Buffersize = 0;
             BufferRecevied = false;
             MS = new MemoryStream();
             LV = null;
             Read += HandlePacket.Read;
-            client.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None, ReadClientData, null);
-
+            Client.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None, ReadClientData, null);
         }
 
         public async void ReadClientData(IAsyncResult ar)
         {
             try
             {
-                if (!client.Connected)
+                if (!Client.Connected)
                 {
                     Disconnected();
                 }
                 else
                 {
-                    int Recevied = client.EndReceive(ar);
+                    int Recevied = Client.EndReceive(ar);
                     if (Recevied > 0)
                     {
                         if (BufferRecevied == false)
@@ -76,12 +75,12 @@ namespace AsyncRAT_Sharp.Sockets
                                 Read?.BeginInvoke(this, MS.ToArray(), null, null);
                                 Buffer = new byte[1];
                                 Buffersize = 0;
-                                BufferRecevied = false;
                                 MS.Dispose();
                                 MS = new MemoryStream();
+                                BufferRecevied = false;
                             }
                         }
-                        client.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None, ReadClientData, null);
+                        Client.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None, ReadClientData, null);
                     }
                     else
                     {
@@ -107,15 +106,15 @@ namespace AsyncRAT_Sharp.Sockets
             try
             {
                 MS.Dispose();
-                client.Close();
-                client.Dispose();
+                Client.Close();
+                Client.Dispose();
             }
             catch { }
         }
 
         public async void BeginSend(byte[] Msgs)
         {
-            if (client.Connected)
+            if (Client.Connected)
             {
                 try
                 {
@@ -126,8 +125,8 @@ namespace AsyncRAT_Sharp.Sockets
                         await MS.WriteAsync(buffersize, 0, buffersize.Length);
                         await MS.WriteAsync(buffer, 0, buffer.Length);
 
-                        client.Poll(-1, SelectMode.SelectWrite);
-                        client.BeginSend(MS.ToArray(), 0, Convert.ToInt32(MS.Length), SocketFlags.None, new AsyncCallback(EndSend), null);
+                        Client.Poll(-1, SelectMode.SelectWrite);
+                        Client.BeginSend(MS.ToArray(), 0, Convert.ToInt32(MS.Length), SocketFlags.None, new AsyncCallback(EndSend), null);
                     }
                 }
                 catch (Exception ex)
@@ -142,7 +141,7 @@ namespace AsyncRAT_Sharp.Sockets
         {
             try
             {
-                client.EndSend(ar);
+                Client.EndSend(ar);
             }
             catch (Exception ex)
             {
