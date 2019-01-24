@@ -23,7 +23,7 @@ namespace Client
             InitializeClient();
             while (true)
             {
-                Thread.Sleep(1000);
+                Thread.Sleep(1500);
             }
         }
 
@@ -143,7 +143,6 @@ namespace Client
                     }
                     break;
             }
-
         }
 
         public static void BeginSend(byte[] Msgs)
