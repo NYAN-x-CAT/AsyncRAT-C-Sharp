@@ -29,6 +29,7 @@ namespace Client
 
         static void Main(string[] args)
         {
+            Console.Title = "AsyncRAT | Client";
             InitializeClient();
             while (true)
             {
