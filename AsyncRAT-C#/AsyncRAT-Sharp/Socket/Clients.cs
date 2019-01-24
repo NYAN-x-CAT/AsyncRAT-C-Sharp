@@ -95,16 +95,16 @@ namespace AsyncRAT_Sharp.Sockets
             }
         }
 
-        delegate void _isDisconnected();
         public void Disconnected()
         {
             if (LV != null)
             {
                 if (Program.form1.listView1.InvokeRequired)
-                    Program.form1.listView1.BeginInvoke(new _isDisconnected(Disconnected));
-                else
                 {
-                    LV.Remove();
+                    Program.form1.listView1.BeginInvoke((MethodInvoker)(() =>
+                    {
+                        LV.Remove();
+                    }));
                 }
             }
             Settings.Online.Remove(this);

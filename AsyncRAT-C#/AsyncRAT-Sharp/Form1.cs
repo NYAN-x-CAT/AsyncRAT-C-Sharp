@@ -6,6 +6,13 @@ using System.Threading.Tasks;
 using Microsoft.VisualBasic;
 using System.Linq;
 
+//       │ Author     : NYAN CAT
+//       │ Name       : AsyncRAT // Simple Socket
+
+//       Contact Me   : https://github.com/NYAN-x-CAT
+
+//       This program Is distributed for educational purposes only.
+
 namespace AsyncRAT_Sharp
 {
     public partial class Form1 : Form
