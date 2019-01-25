@@ -76,5 +76,10 @@ namespace AsyncRAT_Sharp
             }
         }
 
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Environment.Exit(0);
+        }
+
     }
 }

