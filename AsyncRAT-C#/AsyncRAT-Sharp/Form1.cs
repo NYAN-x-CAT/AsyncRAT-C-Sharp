@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.VisualBasic;
 using System.Linq;
 using System.Threading;
+using System.Drawing;
 
 //       │ Author     : NYAN CAT
 //       │ Name       : AsyncRAT // Simple Socket
@@ -23,7 +24,7 @@ namespace AsyncRAT_Sharp
             InitializeComponent();
         }
 
-       async private void Form1_Load(object sender, EventArgs e)
+        async private void Form1_Load(object sender, EventArgs e)
         {
             Listener listener = new Listener();
             Thread thread = new Thread(new ParameterizedThreadStart(listener.Connect));
@@ -51,15 +52,12 @@ namespace AsyncRAT_Sharp
                     foreach (ListViewItem C in listView1.SelectedItems)
                     {
                         Clients CL = (Clients)C.Tag;
+                        CL.LV.ForeColor = Color.Red;
                         CL.BeginSend(msgpack.Encode2Bytes());
+                        CL.LV.ForeColor = Color.Empty;
                     }
                 }
             }
-        }
-
-        private void listView1_Resize(object sender, EventArgs e)
-        {
-           listView1.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
         }
 
         private void ping_Tick(object sender, EventArgs e)
@@ -81,5 +79,26 @@ namespace AsyncRAT_Sharp
             Environment.Exit(0);
         }
 
+
+        private void listView1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Modifiers == Keys.Control && e.KeyCode == Keys.A)
+            {
+                if (listView1.Items.Count > 0)
+                {
+                    foreach (ListViewItem x in listView1.Items)
+                        x.Selected = true;
+                }
+            }
+        }
+
+        private void listView1_MouseMove(object sender, MouseEventArgs e)
+        {
+            ListViewHitTestInfo hitInfo = listView1.HitTest(e.Location);
+            if (e.Button == MouseButtons.Left && (hitInfo.Item != null || hitInfo.SubItem != null))
+            {
+                listView1.Items[hitInfo.Item.Index].Selected = true;
+            }
+        }
     }
 }
