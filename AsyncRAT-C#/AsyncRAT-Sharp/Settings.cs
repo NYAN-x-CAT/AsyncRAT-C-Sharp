@@ -7,5 +7,6 @@ namespace AsyncRAT_Sharp
     {
         public static List<Clients> Online = new List<Clients>();
         public static int Port = 8080;
+        public static string Version = "0.2";
     }
 }

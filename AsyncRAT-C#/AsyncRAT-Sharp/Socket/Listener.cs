@@ -9,8 +9,8 @@ namespace AsyncRAT_Sharp.Sockets
 {
     class Listener
     {
-        public Socket listener { get; set; }
-        public static ManualResetEvent allDone = new ManualResetEvent(false);
+        private Socket listener { get; set; }
+        private static ManualResetEvent allDone = new ManualResetEvent(false);
 
         public void Connect(object port)
         {
@@ -39,7 +39,7 @@ namespace AsyncRAT_Sharp.Sockets
             }
         }
 
-        public void EndAccept(IAsyncResult ar)
+        private void EndAccept(IAsyncResult ar)
         {
             try
             {

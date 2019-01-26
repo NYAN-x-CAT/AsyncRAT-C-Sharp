@@ -12,13 +12,13 @@ namespace AsyncRAT_Sharp.Sockets
     class Clients
     {
         public Socket Client { get; set; }
-        public byte[] Buffer { get; set; }
-        public long Buffersize { get; set; }
-        public bool BufferRecevied { get; set; }
-        public MemoryStream MS { get; set; }
+        private byte[] Buffer { get; set; }
+        private long Buffersize { get; set; }
+        private bool BufferRecevied { get; set; }
+        private MemoryStream MS { get; set; }
         public ListViewItem LV { get; set; }
-        public event ReadEventHandler Read;
-        public delegate void ReadEventHandler(Clients client, byte[] data);
+        private event ReadEventHandler Read;
+        private delegate void ReadEventHandler(Clients client, byte[] data);
 
         public Clients(Socket CLIENT)
         {
@@ -135,7 +135,6 @@ namespace AsyncRAT_Sharp.Sockets
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine("BeginSend " + ex.Message);
                     Disconnected();
                 }
             }
@@ -149,7 +148,6 @@ namespace AsyncRAT_Sharp.Sockets
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("EndSend " + ex.Message);
                 Disconnected();
             }
         }
