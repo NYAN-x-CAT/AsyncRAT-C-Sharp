@@ -68,7 +68,7 @@ namespace AsyncRAT_Sharp.Sockets
                             await MS.WriteAsync(Buffer, 0, Recevied);
                             if (MS.Length == Buffersize)
                             {
-                                Read?.BeginInvoke(this, MS.ToArray(), null, null);
+                                Read.BeginInvoke(this, MS.ToArray(), null, null);
                                 Settings.Received += MS.ToArray().Length;
                                 Buffer = new byte[1];
                                 Buffersize = 0;
