@@ -219,7 +219,7 @@ namespace Client
                         MS.Write(buffer, 0, buffer.Length);
 
                         Client.Poll(-1, SelectMode.SelectWrite);
-                        Client.BeginSend(MS.ToArray(), 0, Convert.ToInt32(MS.Length), SocketFlags.None, new AsyncCallback(EndSend), null);
+                        Client.BeginSend(MS.ToArray(), 0, Convert.ToInt32(MS.Length), SocketFlags.None, EndSend, null);
                     }
                 }
                 catch
