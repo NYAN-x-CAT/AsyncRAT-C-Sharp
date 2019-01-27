@@ -40,6 +40,7 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.ping = new System.Windows.Forms.Timer(this.components);
+            this.UpdateUI = new System.Windows.Forms.Timer(this.components);
             this.contextMenuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -133,6 +134,12 @@
             this.ping.Interval = 50000;
             this.ping.Tick += new System.EventHandler(this.ping_Tick);
             // 
+            // UpdateUI
+            // 
+            this.UpdateUI.Enabled = true;
+            this.UpdateUI.Interval = 1000;
+            this.UpdateUI.Tick += new System.EventHandler(this.UpdateUI_Tick);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -166,6 +173,7 @@
         private System.Windows.Forms.Timer ping;
         private System.Windows.Forms.ToolStripMenuItem sendFileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem closeConnectionToolStripMenuItem;
+        private System.Windows.Forms.Timer UpdateUI;
     }
 }
 

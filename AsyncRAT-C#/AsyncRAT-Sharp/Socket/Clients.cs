@@ -69,11 +69,16 @@ namespace AsyncRAT_Sharp.Sockets
                             if (MS.Length == Buffersize)
                             {
                                 Read?.BeginInvoke(this, MS.ToArray(), null, null);
+                                Settings.Received += MS.ToArray().Length;
                                 Buffer = new byte[1];
                                 Buffersize = 0;
                                 MS.Dispose();
                                 MS = new MemoryStream();
                                 BufferRecevied = false;
+                            }
+                            else
+                            {
+                                Buffer = new byte[Buffersize - MS.Length];
                             }
                         }
                         Client.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None, ReadClientData, null);
@@ -112,7 +117,7 @@ namespace AsyncRAT_Sharp.Sockets
             catch { }
         }
 
-        public async void BeginSend(byte[] Msgs)
+        public async void BeginSend(object Msgs)
         {
             if (Client.Connected)
             {
@@ -120,16 +125,15 @@ namespace AsyncRAT_Sharp.Sockets
                 {
                     using (MemoryStream MS = new MemoryStream())
                     {
-                        byte[] buffer = Msgs;
+                        byte[] buffer = (byte[])Msgs;
                         byte[] buffersize = Encoding.UTF8.GetBytes(buffer.Length.ToString() + Strings.ChrW(0));
                         await MS.WriteAsync(buffersize, 0, buffersize.Length);
                         await MS.WriteAsync(buffer, 0, buffer.Length);
-
                         Client.Poll(-1, SelectMode.SelectWrite);
-                        Client.BeginSend(MS.ToArray(), 0, Convert.ToInt32(MS.Length), SocketFlags.None, EndSend, null);
+                        Client.BeginSend(MS.ToArray(), 0, (int)MS.Length, SocketFlags.None, EndSend, null);
                     }
                 }
-                catch (Exception ex)
+                catch
                 {
                     Disconnected();
                 }
@@ -140,9 +144,10 @@ namespace AsyncRAT_Sharp.Sockets
         {
             try
             {
-                Client.EndSend(ar);
+             int Sent = Client.EndSend(ar);
+                Settings.Sent += Sent;
             }
-            catch (Exception ex)
+            catch
             {
                 Disconnected();
             }

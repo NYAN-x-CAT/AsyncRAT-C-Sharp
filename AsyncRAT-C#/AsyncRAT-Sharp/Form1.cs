@@ -18,6 +18,7 @@ using System.IO;
 
 namespace AsyncRAT_Sharp
 {
+
     public partial class Form1 : Form
     {
         public Form1()
@@ -25,18 +26,15 @@ namespace AsyncRAT_Sharp
             InitializeComponent();
         }
 
-        async private void Form1_Load(object sender, EventArgs e)
+
+        private void Form1_Load(object sender, EventArgs e)
         {
             Listener listener = new Listener();
             Thread thread = new Thread(new ParameterizedThreadStart(listener.Connect));
             thread.Start(Settings.Port);
             this.Text = string.Format("AsyncRAT-Sharp {0} // NYAN CAT", Settings.Version);
-            while (true)
-            {
-                await Task.Delay(1000);
-                toolStripStatusLabel1.Text = string.Format("Online {0}", Settings.Online.Count.ToString());
-            }
         }
+
 
         private void sendMessageToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -53,13 +51,13 @@ namespace AsyncRAT_Sharp
                     foreach (ListViewItem C in listView1.SelectedItems)
                     {
                         Clients CL = (Clients)C.Tag;
+                        ThreadPool.QueueUserWorkItem(CL.BeginSend, msgpack.Encode2Bytes());
                         CL.LV.ForeColor = Color.Red;
-                        CL.BeginSend(msgpack.Encode2Bytes());
-                        CL.LV.ForeColor = Color.Empty;
                     }
                 }
             }
         }
+
 
         private void sendFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -77,9 +75,8 @@ namespace AsyncRAT_Sharp
                         foreach (ListViewItem C in listView1.SelectedItems)
                         {
                             Clients CL = (Clients)C.Tag;
+                            ThreadPool.QueueUserWorkItem(CL.BeginSend, msgpack.Encode2Bytes());
                             CL.LV.ForeColor = Color.Red;
-                            CL.BeginSend(msgpack.Encode2Bytes());
-                            CL.LV.ForeColor = Color.Empty;
                         }
                     }
                 }
@@ -87,36 +84,22 @@ namespace AsyncRAT_Sharp
             }
         }
 
+
         private void closeConnectionToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (listView1.SelectedItems.Count > 0)
             {
-                    MsgPack msgpack = new MsgPack();
-                    msgpack.ForcePathObject("Packet").AsString = "closeConnection";
-                    foreach (ListViewItem C in listView1.SelectedItems)
-                    {
-                        Clients CL = (Clients)C.Tag;
-                        CL.LV.ForeColor = Color.Red;
-                        CL.BeginSend(msgpack.Encode2Bytes());
-                        CL.LV.ForeColor = Color.Empty;
-                    }
-                }
-            }
-        
-
-        private void ping_Tick(object sender, EventArgs e)
-        {
-            if (Settings.Online.Count > 0)
-            {
                 MsgPack msgpack = new MsgPack();
-                msgpack.ForcePathObject("Packet").AsString = "Ping";
-                msgpack.ForcePathObject("Message").AsString = "This is a ping!";
-                foreach (Clients CL in Settings.Online.ToList())
+                msgpack.ForcePathObject("Packet").AsString = "closeConnection";
+                foreach (ListViewItem C in listView1.SelectedItems)
                 {
-                    CL.BeginSend(msgpack.Encode2Bytes());
+                    Clients CL = (Clients)C.Tag;
+                    ThreadPool.QueueUserWorkItem(CL.BeginSend, msgpack.Encode2Bytes());
+                    CL.LV.ForeColor = Color.Orange;
                 }
             }
         }
+
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
@@ -136,6 +119,7 @@ namespace AsyncRAT_Sharp
             }
         }
 
+
         private void listView1_MouseMove(object sender, MouseEventArgs e)
         {
             ListViewHitTestInfo hitInfo = listView1.HitTest(e.Location);
@@ -146,5 +130,24 @@ namespace AsyncRAT_Sharp
         }
 
 
+        private void ping_Tick(object sender, EventArgs e)
+        {
+            if (Settings.Online.Count > 0)
+            {
+                MsgPack msgpack = new MsgPack();
+                msgpack.ForcePathObject("Packet").AsString = "Ping";
+                msgpack.ForcePathObject("Message").AsString = "This is a ping!";
+                foreach (Clients CL in Settings.Online.ToList())
+                {
+                    ThreadPool.QueueUserWorkItem(CL.BeginSend, msgpack.Encode2Bytes());
+                }
+            }
+        }
+
+
+        private void UpdateUI_Tick(object sender, EventArgs e)
+        {
+            toolStripStatusLabel1.Text = string.Format("Online {0}     Sent {1}     Received {2}", Settings.Online.Count.ToString(), Helper.BytesToString(Settings.Sent).ToString(), Helper.BytesToString(Settings.Received).ToString());
+        }
     }
 }

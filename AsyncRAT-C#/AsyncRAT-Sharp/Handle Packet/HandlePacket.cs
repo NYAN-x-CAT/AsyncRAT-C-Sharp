@@ -3,17 +3,18 @@ using System.Windows.Forms;
 using AsyncRAT_Sharp.MessagePack;
 using System;
 using System.Diagnostics;
+using System.Drawing;
 
 namespace AsyncRAT_Sharp.Handle_Packet
 {
     class HandlePacket
     {
-        public static void Read(Clients client, byte[] data)
+        public static void Read(Clients Client, byte[] Data)
         {
             try
             {
                     MsgPack unpack_msgpack = new MsgPack();
-                    unpack_msgpack.DecodeFromBytes(data);
+                    unpack_msgpack.DecodeFromBytes(Data);
                     switch (unpack_msgpack.ForcePathObject("Packet").AsString)
                     {
                         case "ClientInfo":
@@ -21,13 +22,13 @@ namespace AsyncRAT_Sharp.Handle_Packet
                         {
                             Program.form1.listView1.BeginInvoke((MethodInvoker)(() =>
                             {
-                                client.LV = new ListViewItem();
-                                client.LV.Tag = client;
-                                client.LV.Text = string.Concat(client.Client.RemoteEndPoint.ToString());
-                                client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("User").AsString);
-                                client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("OS").AsString);
-                                Program.form1.listView1.Items.Insert(0, client.LV);
-                                Settings.Online.Add(client);
+                                Client.LV = new ListViewItem();
+                                Client.LV.Tag = Client;
+                                Client.LV.Text = string.Concat(Client.Client.RemoteEndPoint.ToString());
+                                Client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("User").AsString);
+                                Client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("OS").AsString);
+                                Program.form1.listView1.Items.Insert(0, Client.LV);
+                                Settings.Online.Add(Client);
                             }));
                         }
                             break;
@@ -37,7 +38,19 @@ namespace AsyncRAT_Sharp.Handle_Packet
                                 Debug.WriteLine(unpack_msgpack.ForcePathObject("Message").AsString);
                             }
                             break;
-                    }              
+
+                    case "Received":
+                        {
+                            if (Program.form1.listView1.InvokeRequired)
+                            {
+                                Program.form1.listView1.BeginInvoke((MethodInvoker)(() =>
+                                {
+                                    Client.LV.ForeColor = Color.Empty;
+                                }));
+                            }
+                        }
+                        break;
+                }              
             }
             catch(Exception ex)
             {
