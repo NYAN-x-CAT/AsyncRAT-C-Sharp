@@ -77,17 +77,17 @@ namespace Client
         public static void Reconnect()
         {
             if (Client.Connected) return;
-            if (Client.Connected == false)
+            Tick?.Dispose();
+
+            if (Client != null)
             {
-                Tick?.Dispose();
-
-                Client?.Close();
-                Client?.Dispose();
-
-                MS?.Dispose();
-
-                InitializeClient();
+                Client.Close();
+                Client.Dispose();
             }
+
+            MS?.Dispose();
+
+            InitializeClient();
         }
 
         public static byte[] SendInfo()
