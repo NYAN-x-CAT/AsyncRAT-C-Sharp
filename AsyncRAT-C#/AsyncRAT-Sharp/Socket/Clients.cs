@@ -118,30 +118,30 @@ namespace AsyncRAT_Sharp.Sockets
             catch { }
         }
 
-        public async void BeginSend(object Msgs)
+        public void BeginSend(object Msgs)
         {
-            if (Client.Connected)
+            Clients Me = this;
+            lock (Me)
             {
-                try
+                if (Client.Connected)
                 {
-                    using (MemoryStream MS = new MemoryStream())
+                    try
                     {
-                        byte[] buffer = (byte[])Msgs;
-                        byte[] buffersize = Encoding.UTF8.GetBytes(buffer.Length.ToString() + Strings.ChrW(0));
-                        await MS.WriteAsync(buffersize, 0, buffersize.Length);
-                        await MS.WriteAsync(buffer, 0, buffer.Length);
-                        while (!(Client.Poll(-1, SelectMode.SelectWrite)))
+                        using (MemoryStream MS = new MemoryStream())
                         {
-                            await Task.Delay(100);
-                            if (!Client.Connected) Disconnected();
-                        }
+                            byte[] buffer = (byte[])Msgs;
+                            byte[] buffersize = Encoding.UTF8.GetBytes(buffer.Length.ToString() + Strings.ChrW(0));
+                            MS.WriteAsync(buffersize, 0, buffersize.Length);
+                            MS.WriteAsync(buffer, 0, buffer.Length);
+                            Client.Poll(-1, SelectMode.SelectWrite);
                             Client.BeginSend(MS.ToArray(), 0, (int)MS.Length, SocketFlags.None, EndSend, null);
                             Settings.Sent += (long)MS.Length;
+                        }
                     }
-                }
-                catch
-                {
-                    Disconnected();
+                    catch
+                    {
+                        Disconnected();
+                    }
                 }
             }
         }
