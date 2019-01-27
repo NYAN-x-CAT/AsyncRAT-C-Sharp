@@ -87,10 +87,10 @@ namespace Client
                     Client.Close();
                     Client.Dispose();
                 }
-
-                MS?.Dispose();
             }
             catch { }
+
+            MS?.Dispose();
 
             InitializeClient();
         }
