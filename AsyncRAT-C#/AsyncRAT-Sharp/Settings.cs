@@ -5,8 +5,8 @@ namespace AsyncRAT_Sharp
 {
     class Settings
     {
-        public static List<Clients> Online = new List<Clients>();
-        public static int Port = 8080;
-        public static string Version = "0.2";
+        public static readonly List<Clients> Online = new List<Clients>();
+        public static readonly int Port = 8080;
+        public static readonly string Version = "0.2";
     }
 }
