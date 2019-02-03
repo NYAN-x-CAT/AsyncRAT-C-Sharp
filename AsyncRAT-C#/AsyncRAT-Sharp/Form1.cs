@@ -98,7 +98,6 @@ namespace AsyncRAT_Sharp
                 {
                     Clients CL = (Clients)C.Tag;
                     ThreadPool.QueueUserWorkItem(CL.BeginSend, msgpack.Encode2Bytes());
-                    CL.LV.ForeColor = Color.Orange;
                 }
             }
         }

