@@ -374,7 +374,7 @@ namespace AsyncRAT_Sharp.MessagePack
             if (File.Exists(fileName))
             {
                 byte[] value = null;
-                FileStream fs = new FileStream(fileName, FileMode.Open);
+                FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
                 value = new byte[fs.Length];
                 fs.Read(value, 0, (int)fs.Length);
                 fs.Close();
@@ -585,7 +585,7 @@ namespace AsyncRAT_Sharp.MessagePack
                 rawByte = new byte[2];
                 ms.Read(rawByte, 0, 2);
                 rawByte = BytesTools.SwapBytes(rawByte);
-                len = BitConverter.ToInt16(rawByte, 0);
+                len = BitConverter.ToUInt16(rawByte, 0);
 
                 // read binary
                 rawByte = new byte[len];

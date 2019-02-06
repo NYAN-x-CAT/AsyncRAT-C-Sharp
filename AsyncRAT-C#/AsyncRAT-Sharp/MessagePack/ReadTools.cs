@@ -67,7 +67,7 @@ namespace AsyncRAT_Sharp.MessagePack
                 rawBytes = new byte[2];
                 ms.Read(rawBytes, 0, 2);
                 rawBytes = BytesTools.SwapBytes(rawBytes);
-                len = BitConverter.ToInt16(rawBytes, 0);
+                len = BitConverter.ToUInt16(rawBytes, 0);
             }
             else if (strFlag == 0xDB)
             {
