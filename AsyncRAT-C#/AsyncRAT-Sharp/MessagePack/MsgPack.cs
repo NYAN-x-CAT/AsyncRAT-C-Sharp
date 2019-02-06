@@ -369,14 +369,14 @@ namespace AsyncRAT_Sharp.MessagePack
             tmp.SetAsInteger(value);
         }
 
-        public bool LoadFileAsBytes(string fileName)
+       public async Task<bool> LoadFileAsBytes(string fileName)
         {
             if (File.Exists(fileName))
             {
                 byte[] value = null;
                 FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
                 value = new byte[fs.Length];
-                fs.Read(value, 0, (int)fs.Length);
+                await fs.ReadAsync(value, 0, (int)fs.Length);
                 fs.Close();
                 SetAsBytes(value);
                 return true;
