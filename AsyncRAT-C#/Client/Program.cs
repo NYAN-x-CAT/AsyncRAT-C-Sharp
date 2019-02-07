@@ -33,7 +33,7 @@ namespace Client
     {
         public static readonly string IP = "127.0.0.1";
         public static readonly int Port = 6606;
-        public static readonly string Version = "0.2.2";
+        public static readonly string Version = "0.2.3";
     }
 
     /// The Main Class
