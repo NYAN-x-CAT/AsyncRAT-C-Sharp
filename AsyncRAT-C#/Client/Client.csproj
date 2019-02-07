@@ -23,6 +23,7 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>
     </DocumentationFile>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -40,6 +41,8 @@
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
@@ -50,6 +53,37 @@
     <Compile Include="MessagePack\WriteTools.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StreamLibrary\Codecs\DirectDriverCodec.cs" />
+    <Compile Include="StreamLibrary\Codecs\MJPGCodec.cs" />
+    <Compile Include="StreamLibrary\Codecs\QuickCachedStreamCodec.cs" />
+    <Compile Include="StreamLibrary\Codecs\QuickStreamCodec.cs" />
+    <Compile Include="StreamLibrary\Codecs\SmallCachedStreamCodec.cs" />
+    <Compile Include="StreamLibrary\Codecs\SmallStreamCodec.cs" />
+    <Compile Include="StreamLibrary\Encoders\GridCoder\GridBlock.cs" />
+    <Compile Include="StreamLibrary\Encoders\GridCoder\GridEncoder.cs" />
+    <Compile Include="StreamLibrary\Enums.cs" />
+    <Compile Include="StreamLibrary\IEncoder.cs" />
+    <Compile Include="StreamLibrary\IUnsafeCodec.cs" />
+    <Compile Include="StreamLibrary\IVideoCodec.cs" />
+    <Compile Include="StreamLibrary\src\CRC32.cs" />
+    <Compile Include="StreamLibrary\src\ExtensionAttribute.cs" />
+    <Compile Include="StreamLibrary\src\Extentions.cs" />
+    <Compile Include="StreamLibrary\src\FastBitmap.cs" />
+    <Compile Include="StreamLibrary\src\JpgCompression.cs" />
+    <Compile Include="StreamLibrary\src\LzwCompression.cs" />
+    <Compile Include="StreamLibrary\src\MurmurHash2Unsafe.cs" />
+    <Compile Include="StreamLibrary\src\NativeMethods.cs" />
+    <Compile Include="StreamLibrary\src\PayloadWriter.cs" />
+    <Compile Include="StreamLibrary\src\PointerHelper.cs" />
+    <Compile Include="StreamLibrary\src\SafeQuickLZ.cs" />
+    <Compile Include="StreamLibrary\src\SimpleBitmap.cs" />
+    <Compile Include="StreamLibrary\UnsafeCodecs\UnsafeCacheCodec.cs" />
+    <Compile Include="StreamLibrary\UnsafeCodecs\UnsafeCachedStreamCodec.cs" />
+    <Compile Include="StreamLibrary\UnsafeCodecs\UnsafeMiniCodec.cs" />
+    <Compile Include="StreamLibrary\UnsafeCodecs\UnsafeOptimizedCodec.cs" />
+    <Compile Include="StreamLibrary\UnsafeCodecs\UnsafeQuickStream.cs" />
+    <Compile Include="StreamLibrary\UnsafeCodecs\UnsafeStreamCodec.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

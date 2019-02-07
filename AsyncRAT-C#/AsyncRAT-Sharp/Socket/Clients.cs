@@ -21,7 +21,7 @@ namespace AsyncRAT_Sharp.Sockets
         // private event ReadEventHandler Read;
         // private delegate void ReadEventHandler(Clients client, byte[] data);
         private object SendSync { get; set; }
-
+        public string ID { get; set; }
 
         public Clients(Socket CLIENT)
         {

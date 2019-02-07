@@ -32,6 +32,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.listView1 = new System.Windows.Forms.ListView();
             this.lv_ip = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.lv_hwid = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.lv_user = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.lv_os = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -43,11 +44,12 @@
             this.sENDMESSAGEBOXToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sENDFILEToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sENDFILETOMEMORYToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.rEMOTEDESKTOPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.ping = new System.Windows.Forms.Timer(this.components);
             this.UpdateUI = new System.Windows.Forms.Timer(this.components);
-            this.lv_hwid = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.pROCESSMANAGERToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -78,6 +80,11 @@
             this.lv_ip.Text = "IP";
             this.lv_ip.Width = 150;
             // 
+            // lv_hwid
+            // 
+            this.lv_hwid.Text = "HWID";
+            this.lv_hwid.Width = 150;
+            // 
             // lv_user
             // 
             this.lv_user.Text = "USER";
@@ -96,9 +103,11 @@
             this.toolStripSeparator1,
             this.sENDMESSAGEBOXToolStripMenuItem,
             this.sENDFILEToolStripMenuItem,
-            this.sENDFILETOMEMORYToolStripMenuItem});
+            this.sENDFILETOMEMORYToolStripMenuItem,
+            this.rEMOTEDESKTOPToolStripMenuItem,
+            this.pROCESSMANAGERToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(275, 130);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(275, 223);
             // 
             // cLIENTOPTIONSToolStripMenuItem
             // 
@@ -157,6 +166,13 @@
             this.sENDFILETOMEMORYToolStripMenuItem.Text = "SEND FILE TO MEMORY";
             this.sENDFILETOMEMORYToolStripMenuItem.Click += new System.EventHandler(this.sENDFILETOMEMORYToolStripMenuItem_Click);
             // 
+            // rEMOTEDESKTOPToolStripMenuItem
+            // 
+            this.rEMOTEDESKTOPToolStripMenuItem.Name = "rEMOTEDESKTOPToolStripMenuItem";
+            this.rEMOTEDESKTOPToolStripMenuItem.Size = new System.Drawing.Size(274, 30);
+            this.rEMOTEDESKTOPToolStripMenuItem.Text = "REMOTE DESKTOP";
+            this.rEMOTEDESKTOPToolStripMenuItem.Click += new System.EventHandler(this.rEMOTEDESKTOPToolStripMenuItem_Click);
+            // 
             // statusStrip1
             // 
             this.statusStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
@@ -186,10 +202,12 @@
             this.UpdateUI.Interval = 1000;
             this.UpdateUI.Tick += new System.EventHandler(this.UpdateUI_Tick);
             // 
-            // lv_hwid
+            // pROCESSMANAGERToolStripMenuItem
             // 
-            this.lv_hwid.Text = "HWID";
-            this.lv_hwid.Width = 150;
+            this.pROCESSMANAGERToolStripMenuItem.Name = "pROCESSMANAGERToolStripMenuItem";
+            this.pROCESSMANAGERToolStripMenuItem.Size = new System.Drawing.Size(274, 30);
+            this.pROCESSMANAGERToolStripMenuItem.Text = "PROCESS MANAGER";
+            this.pROCESSMANAGERToolStripMenuItem.Click += new System.EventHandler(this.pROCESSMANAGERToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -231,7 +249,9 @@
         private System.Windows.Forms.ToolStripMenuItem sENDMESSAGEBOXToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem sENDFILEToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem sENDFILETOMEMORYToolStripMenuItem;
-        private System.Windows.Forms.ColumnHeader lv_hwid;
+        private System.Windows.Forms.ToolStripMenuItem rEMOTEDESKTOPToolStripMenuItem;
+        public System.Windows.Forms.ColumnHeader lv_hwid;
+        private System.Windows.Forms.ToolStripMenuItem pROCESSMANAGERToolStripMenuItem;
     }
 }
 

