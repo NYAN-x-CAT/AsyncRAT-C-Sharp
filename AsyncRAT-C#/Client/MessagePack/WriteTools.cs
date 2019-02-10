@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace AsyncRAT_Sharp.MessagePack
+namespace Client.MessagePack
 {
     class WriteTools
     {

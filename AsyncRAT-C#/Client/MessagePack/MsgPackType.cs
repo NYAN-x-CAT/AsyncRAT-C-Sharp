@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AsyncRAT_Sharp.MessagePack
+namespace Client.MessagePack
 {
     public enum MsgPackType
     {

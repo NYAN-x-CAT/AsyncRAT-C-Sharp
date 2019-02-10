@@ -31,6 +31,7 @@ namespace AsyncRAT_Sharp.Handle_Packet
                                 Client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("HWID").AsString);
                                 Client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("User").AsString);
                                 Client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("OS").AsString);
+                                Client.LV.ToolTipText = unpack_msgpack.ForcePathObject("Path").AsString;
                                 Client.ID = unpack_msgpack.ForcePathObject("HWID").AsString;
                                 Program.form1.listView1.Items.Insert(0, Client.LV);
                                 Settings.Online.Add(Client);

