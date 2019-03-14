@@ -30,7 +30,7 @@ namespace AsyncRAT_Sharp
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            this.Text = string.Format("AsyncRAT-Sharp {0} // NYAN CAT", Settings.Version);
+            this.Text = string.Format(" {0} // NYAN CAT", Settings.Version);
 
             Listener listener = new Listener();
             Thread thread = new Thread(new ParameterizedThreadStart(listener.Connect));
@@ -87,7 +87,7 @@ namespace AsyncRAT_Sharp
 
         private void UpdateUI_Tick(object sender, EventArgs e)
         {
-            toolStripStatusLabel1.Text = string.Format("Online {0}     Sent {1}     Received {2}", Settings.Online.Count.ToString(), Helper.BytesToString(Settings.Sent).ToString(), Helper.BytesToString(Settings.Received).ToString());
+            toolStripStatusLabel1.Text = string.Format("Online {0}     Selected {3}                    Sent {1}     Received {2}", Settings.Online.Count.ToString(), Helper.BytesToString(Settings.Sent).ToString(), Helper.BytesToString(Settings.Received).ToString(),listView1.SelectedItems.Count.ToString());
         }
 
         private async void cLOSEToolStripMenuItem_Click(object sender, EventArgs e)
