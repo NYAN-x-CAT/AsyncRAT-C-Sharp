@@ -29,7 +29,7 @@ namespace Client
     {
 
 
-        static void Main(string[] args)
+        static void Main()
         {
             NormalStartup.Install();
 
