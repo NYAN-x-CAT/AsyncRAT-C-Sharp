@@ -63,6 +63,16 @@ namespace AsyncRAT_Sharp.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] cGeoIp1 {
+            get {
+                object obj = ResourceManager.GetObject("cGeoIp1", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] Plugin {
             get {
                 object obj = ResourceManager.GetObject("Plugin", resourceCulture);

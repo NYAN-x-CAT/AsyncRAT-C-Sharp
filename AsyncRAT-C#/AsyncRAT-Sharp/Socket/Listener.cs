@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using System.Net;
+﻿using System.Net;
 using System.Net.Sockets;
 using System;
 using System.Windows.Forms;
@@ -38,9 +37,11 @@ namespace AsyncRAT_Sharp.Sockets
             try
             {
                 Clients CL = new Clients(Server.EndAccept(ar));
+            }
+            finally
+            {
                 Server.BeginAccept(EndAccept, null);
             }
-            catch { }
         }
     }
 }

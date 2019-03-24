@@ -32,10 +32,7 @@ namespace AsyncRAT_Sharp.Forms
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            if (!C.Client.Connected)
-            {
-                this.Close();
-            }
+            if (!C.Client.Connected) this.Close();
         }
 
         private void RemoteDesktop_Activated(object sender, EventArgs e)
@@ -53,10 +50,7 @@ namespace AsyncRAT_Sharp.Forms
 
         private void RemoteDesktop_Deactivate(object sender, EventArgs e)
         {
-            if (Active == true)
-            {
-                Active = false;
-            }
+            if (Active == true) Active = false;
         }
     }
 }

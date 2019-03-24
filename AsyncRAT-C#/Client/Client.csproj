@@ -30,7 +30,7 @@
     <PlatformTarget>x86</PlatformTarget>
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\AsyncRAT-Sharp\bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -49,6 +49,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Handle Packet\HandlePacket.cs" />
+    <Compile Include="Handle Packet\ProcessManager.cs" />
+    <Compile Include="Handle Packet\RemoteDesktop.cs" />
+    <Compile Include="Handle Packet\SendFile.cs" />
     <Compile Include="Install\HiddenStartup.cs" />
     <Compile Include="Install\NormalStartup.cs" />
     <Compile Include="MessagePack\BytesTools.cs" />

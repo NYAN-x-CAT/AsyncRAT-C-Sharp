@@ -32,6 +32,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.listView1 = new System.Windows.Forms.ListView();
             this.lv_ip = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.lv_country = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.lv_hwid = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.lv_user = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.lv_os = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -46,10 +47,13 @@
             this.sENDFILETOMEMORYToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rEMOTEDESKTOPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pROCESSMANAGERToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.bUILDERToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.ping = new System.Windows.Forms.Timer(this.components);
             this.UpdateUI = new System.Windows.Forms.Timer(this.components);
+            this.lv_version = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.contextMenuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -59,9 +63,11 @@
             this.listView1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.lv_ip,
+            this.lv_country,
             this.lv_hwid,
             this.lv_user,
-            this.lv_os});
+            this.lv_os,
+            this.lv_version});
             this.listView1.ContextMenuStrip = this.contextMenuStrip1;
             this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listView1.FullRowSelect = true;
@@ -70,7 +76,7 @@
             this.listView1.Name = "listView1";
             this.listView1.ShowGroups = false;
             this.listView1.ShowItemToolTips = true;
-            this.listView1.Size = new System.Drawing.Size(915, 342);
+            this.listView1.Size = new System.Drawing.Size(1002, 342);
             this.listView1.TabIndex = 0;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
@@ -81,6 +87,11 @@
             // 
             this.lv_ip.Text = "IP";
             this.lv_ip.Width = 150;
+            // 
+            // lv_country
+            // 
+            this.lv_country.Text = "COUNTRY";
+            this.lv_country.Width = 140;
             // 
             // lv_hwid
             // 
@@ -95,7 +106,7 @@
             // lv_os
             // 
             this.lv_os.Text = "OS";
-            this.lv_os.Width = 350;
+            this.lv_os.Width = 250;
             // 
             // contextMenuStrip1
             // 
@@ -107,9 +118,11 @@
             this.sENDFILEToolStripMenuItem,
             this.sENDFILETOMEMORYToolStripMenuItem,
             this.rEMOTEDESKTOPToolStripMenuItem,
-            this.pROCESSMANAGERToolStripMenuItem});
+            this.pROCESSMANAGERToolStripMenuItem,
+            this.toolStripSeparator2,
+            this.bUILDERToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(275, 190);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(275, 226);
             // 
             // cLIENTOPTIONSToolStripMenuItem
             // 
@@ -182,6 +195,18 @@
             this.pROCESSMANAGERToolStripMenuItem.Text = "PROCESS MANAGER";
             this.pROCESSMANAGERToolStripMenuItem.Click += new System.EventHandler(this.pROCESSMANAGERToolStripMenuItem_Click);
             // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(271, 6);
+            // 
+            // bUILDERToolStripMenuItem
+            // 
+            this.bUILDERToolStripMenuItem.Name = "bUILDERToolStripMenuItem";
+            this.bUILDERToolStripMenuItem.Size = new System.Drawing.Size(274, 30);
+            this.bUILDERToolStripMenuItem.Text = "BUILDER";
+            this.bUILDERToolStripMenuItem.Click += new System.EventHandler(this.bUILDERToolStripMenuItem_Click);
+            // 
             // statusStrip1
             // 
             this.statusStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
@@ -189,7 +214,7 @@
             this.toolStripStatusLabel1});
             this.statusStrip1.Location = new System.Drawing.Point(0, 342);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(915, 30);
+            this.statusStrip1.Size = new System.Drawing.Size(1002, 30);
             this.statusStrip1.TabIndex = 1;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -211,11 +236,16 @@
             this.UpdateUI.Interval = 1000;
             this.UpdateUI.Tick += new System.EventHandler(this.UpdateUI_Tick);
             // 
+            // lv_version
+            // 
+            this.lv_version.Text = "VERSION";
+            this.lv_version.Width = 143;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(915, 372);
+            this.ClientSize = new System.Drawing.Size(1002, 372);
             this.Controls.Add(this.listView1);
             this.Controls.Add(this.statusStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -254,6 +284,10 @@
         private System.Windows.Forms.ToolStripMenuItem rEMOTEDESKTOPToolStripMenuItem;
         public System.Windows.Forms.ColumnHeader lv_hwid;
         private System.Windows.Forms.ToolStripMenuItem pROCESSMANAGERToolStripMenuItem;
+        private System.Windows.Forms.ColumnHeader lv_country;
+        private System.Windows.Forms.ToolStripMenuItem bUILDERToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ColumnHeader lv_version;
     }
 }
 

