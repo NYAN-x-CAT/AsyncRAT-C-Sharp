@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows.Forms;
 using dnlib.DotNet;
 using dnlib.DotNet.Emit;
+using System.IO;
 
 namespace AsyncRAT_Sharp.Forms
 {
@@ -25,7 +26,7 @@ namespace AsyncRAT_Sharp.Forms
 
             try
             {
-                var md = ModuleDefMD.Load(@"C:\Users\NC\source\repos\AsyncRAT-C-Sharp\AsyncRAT-C#\Client\bin\Debug\Client.exe");
+                var md = ModuleDefMD.Load(Path.Combine(Application.StartupPath, "Stub.exe"));
                 foreach (TypeDef type in md.Types)
                 {
                     if (type.Name == "Settings")
