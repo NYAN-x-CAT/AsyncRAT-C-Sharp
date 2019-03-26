@@ -110,7 +110,6 @@ namespace AsyncRAT_Sharp.Sockets
             try
             {
                 MS?.Dispose();
-                Client?.Close();
                 Client?.Dispose();
             }
             catch { }

