@@ -279,6 +279,8 @@ namespace AsyncRAT_Sharp
                         await Task.Run(() =>
                         {
                             Clients CL = (Clients)C.Tag;
+                            CL.BeginSend(msgpack.Encode2Bytes());
+
                             this.BeginInvoke((MethodInvoker)(() =>
                             {
                                 RemoteDesktop RD = (RemoteDesktop)Application.OpenForms["RemoteDesktop:" + CL.ID];
@@ -293,7 +295,6 @@ namespace AsyncRAT_Sharp
                                         Active = true
                                     };
                                     RD.Show();
-                                    CL.BeginSend(msgpack.Encode2Bytes());
                                 }
                             }));
                         });
@@ -321,6 +322,7 @@ namespace AsyncRAT_Sharp
                         await Task.Run(() =>
                         {
                             Clients CL = (Clients)C.Tag;
+                            CL.BeginSend(msgpack.Encode2Bytes());
                             this.BeginInvoke((MethodInvoker)(() =>
                             {
                                 ProcessManager PM = (ProcessManager)Application.OpenForms["processManager:" + CL.ID];
@@ -334,7 +336,6 @@ namespace AsyncRAT_Sharp
                                         C = CL
                                     };
                                     PM.Show();
-                                    CL.BeginSend(msgpack.Encode2Bytes());
                                 }
                             }));
                         });

