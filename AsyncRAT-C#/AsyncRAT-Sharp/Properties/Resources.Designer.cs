@@ -61,11 +61,35 @@ namespace AsyncRAT_Sharp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+        ///&lt;configuration&gt;
+        ///    &lt;configSections&gt;
+        ///        &lt;sectionGroup name=&quot;userSettings&quot; type=&quot;System.Configuration.UserSettingsGroup, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089&quot; &gt;
+        ///            &lt;section name=&quot;AsyncRAT_Sharp.Properties.Settings&quot; type=&quot;System.Configuration.ClientSettingsSection, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089&quot; allowExeDefinition=&quot;MachineToLocalUser&quot; requirePermission=&quot;false&quot; /&gt;
+        ///         [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string AsyncRAT_Sharp_exe {
+            get {
+                return ResourceManager.GetString("AsyncRAT_Sharp_exe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] cGeoIp1 {
+        internal static byte[] cGeoIp {
             get {
-                object obj = ResourceManager.GetObject("cGeoIp1", resourceCulture);
+                object obj = ResourceManager.GetObject("cGeoIp", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] dnlib {
+            get {
+                object obj = ResourceManager.GetObject("dnlib", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -76,6 +100,16 @@ namespace AsyncRAT_Sharp.Properties {
         internal static byte[] Plugin {
             get {
                 object obj = ResourceManager.GetObject("Plugin", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] Stub {
+            get {
+                object obj = ResourceManager.GetObject("Stub", resourceCulture);
                 return ((byte[])(obj));
             }
         }

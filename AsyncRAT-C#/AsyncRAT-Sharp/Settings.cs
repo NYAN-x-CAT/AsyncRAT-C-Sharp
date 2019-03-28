@@ -1,4 +1,5 @@
-﻿using AsyncRAT_Sharp.Sockets;
+﻿using AsyncRAT_Sharp.Cryptography;
+using AsyncRAT_Sharp.Sockets;
 using System.Collections.Generic;
 
 namespace AsyncRAT_Sharp
@@ -6,9 +7,13 @@ namespace AsyncRAT_Sharp
     class Settings
     {
         public static List<Clients> Online = new List<Clients>();
-        public static int Port = 6606;
-        public static readonly string Version = "AsyncRAT 0.2.7A";
+        public static List<string> Blocked = new List<string>();
+        public static string Port = "6606";
+        public static List<int> Ports = new List<int>();
+        public static readonly string Version = "AsyncRAT 0.2.8";
         public static long Sent = 0;
         public static long Received = 0;
+        public static string Password = "NYAN CAT";
+        public static Aes256 aes256;
     }
 }

