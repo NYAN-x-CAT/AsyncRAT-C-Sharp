@@ -99,10 +99,12 @@ namespace AsyncRAT_Sharp.Forms
         private void Builder_Load(object sender, EventArgs e)
         {
             comboBoxFolder.SelectedIndex = 0;
-            textPort.Text = string.Join(",", Settings.Ports.ToList());
-            if (Properties.Settings.Default.DNS != null)
+            textPort.Text = Settings.Port;
+            if (Properties.Settings.Default.DNS.Length > 0)
                 textIP.Text = Properties.Settings.Default.DNS;
-            if (Properties.Settings.Default.Filename != null)
+            else
+                textIP.Text = "127.0.0.1,127.0.0.1";
+            if (Properties.Settings.Default.Filename.Length > 0)
                 textFilename.Text = Properties.Settings.Default.Filename;
         }
     }

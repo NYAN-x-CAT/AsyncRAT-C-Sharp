@@ -17,10 +17,12 @@ namespace AsyncRAT_Sharp.Forms
         {
             Methods.FadeIn(this, 5);
 
-            if (Properties.Settings.Default.Ports != null)
+            textPorts.Text = Settings.Port;
+
+            if (Properties.Settings.Default.Ports.Length > 0)
                 textPorts.Text = Properties.Settings.Default.Ports;
 
-            if (Properties.Settings.Default.Password != null)
+            if (Properties.Settings.Default.Password.Length > 0)
                 textPassword.Text = Properties.Settings.Default.Password;
 
             this.Text = $"{Settings.Version} | Welcome {Environment.UserName}";

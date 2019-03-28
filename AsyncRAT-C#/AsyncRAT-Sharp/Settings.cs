@@ -8,8 +8,7 @@ namespace AsyncRAT_Sharp
     {
         public static List<Clients> Online = new List<Clients>();
         public static List<string> Blocked = new List<string>();
-        public static string Port = "6606";
-        public static List<int> Ports = new List<int>();
+        public static string Port = "6606,7707,8808";
         public static readonly string Version = "AsyncRAT 0.2.8";
         public static long Sent = 0;
         public static long Received = 0;

