@@ -50,7 +50,7 @@ namespace AsyncRAT_Sharp.Forms
                                         method.Body.Instructions[i].Operand = textFilename.Text;
 
                                     if (method.Body.Instructions[i].Operand.ToString() == "false")
-                                        method.Body.Instructions[i].Operand = checkBox1.Checked.ToString();
+                                        method.Body.Instructions[i].Operand = checkBox1.Checked.ToString().ToLower();
 
                                     if (method.Body.Instructions[i].Operand.ToString() == "NYAN CAT")
                                         method.Body.Instructions[i].Operand = Settings.Password;

