@@ -17,10 +17,9 @@ namespace Client.Handle_Packet
         {
             try
             {
-                IUnsafeCodec unsafeCodec = new UnsafeStreamCodec(80);
+                IUnsafeCodec unsafeCodec = new UnsafeStreamCodec(60);
                 while (RemoteDesktop_Status == true)
                 {
-                    Thread.Sleep(1);
                     if (!ClientSocket.Client.Connected) break;
                     Bitmap bmp = GetScreen();
                     Rectangle rect = new Rectangle(0, 0, bmp.Width, bmp.Height);

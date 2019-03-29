@@ -44,7 +44,7 @@ namespace AsyncRAT_Sharp.Forms
                 msgpack.ForcePathObject("Packet").AsString = "remoteDesktop";
                 msgpack.ForcePathObject("Option").AsString = "true";
                 C.BeginSend(msgpack.Encode2Bytes());
-                decoder = new UnsafeStreamCodec(80);
+                decoder = new UnsafeStreamCodec(60);
             }
         }
 

@@ -13,10 +13,13 @@ namespace AsyncRAT_Sharp.Handle_Packet
     class HandlePacket
     {
        private static cGeoMain cNewGeoUse = new cGeoMain();
-        public static void Read(Clients Client, byte[] Data)
+        public static void Read(object Obj)
         {
             try
             {
+                object[] array = Obj as object[];
+                byte[] Data = (byte[])array[0];
+                Clients Client = (Clients)array[1];
                 MsgPack unpack_msgpack = new MsgPack();
                 unpack_msgpack.DecodeFromBytes(Data);
                 switch (unpack_msgpack.ForcePathObject("Packet").AsString)

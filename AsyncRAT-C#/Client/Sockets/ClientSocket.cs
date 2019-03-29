@@ -123,7 +123,7 @@ namespace Client.Sockets
                         if (Buffer[0] == 0)
                         {
                             Buffersize = Convert.ToInt64(Encoding.UTF8.GetString(MS.ToArray()));
-                            Debug.WriteLine("///  Buffersize: " + Buffersize.ToString() + "Bytes  ///");
+                            Debug.WriteLine("///  Buffersize: " + Buffersize.ToString() + " Bytes  ///");
                             MS.Dispose();
                             MS = new MemoryStream();
                             if (Buffersize > 0)

