@@ -1,4 +1,4 @@
-<img src="https://i.imgur.com/lo0Jj0M.png">
+<img src="https://i.imgur.com/6hxWs3H.png">
 
 
 # AsyncRAT
