@@ -5,9 +5,9 @@ using System.Runtime.InteropServices;
 
 namespace Client.Handle_Packet
 {
-    class SendFile
+    class SendToMemory
     {
-        public static void SendToMemory(object obj)
+        public static void Reflection(object obj)
         {
             object[] Obj = (object[])obj;
             byte[] Buffer = (byte[])Obj[0];

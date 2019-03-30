@@ -32,7 +32,7 @@ namespace AsyncRAT_Sharp.Forms
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            if (!C.Client.Connected) this.Close();
+            if (!C.ClientSocket.Connected) this.Close();
         }
 
         private void RemoteDesktop_Activated(object sender, EventArgs e)

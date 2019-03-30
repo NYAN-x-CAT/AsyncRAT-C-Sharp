@@ -70,7 +70,8 @@
     <Compile Include="Handle Packet\HandlePacket.cs" />
     <Compile Include="Handle Packet\ProcessManager.cs" />
     <Compile Include="Handle Packet\RemoteDesktop.cs" />
-    <Compile Include="Handle Packet\SendFile.cs" />
+    <Compile Include="Handle Packet\SendToMemory.cs" />
+    <Compile Include="Helper\Methods.cs" />
     <Compile Include="Install\HiddenStartup.cs" />
     <Compile Include="Install\NormalStartup.cs" />
     <Compile Include="MessagePack\BytesTools.cs" />

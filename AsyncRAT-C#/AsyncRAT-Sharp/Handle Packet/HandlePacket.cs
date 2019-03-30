@@ -31,8 +31,8 @@ namespace AsyncRAT_Sharp.Handle_Packet
                             {
                                 Client.LV = new ListViewItem();
                                 Client.LV.Tag = Client;
-                                Client.LV.Text = string.Format("{0}:{1}", Client.Client.RemoteEndPoint.ToString().Split(':')[0], Client.Client.LocalEndPoint.ToString().Split(':')[1]);
-                                string[] ipinf = cNewGeoUse.GetIpInf(Client.Client.RemoteEndPoint.ToString().Split(':')[0]).Split(':');
+                                Client.LV.Text = string.Format("{0}:{1}", Client.ClientSocket.RemoteEndPoint.ToString().Split(':')[0], Client.ClientSocket.LocalEndPoint.ToString().Split(':')[1]);
+                                string[] ipinf = cNewGeoUse.GetIpInf(Client.ClientSocket.RemoteEndPoint.ToString().Split(':')[0]).Split(':');
                                 Client.LV.SubItems.Add(ipinf[1]);
                                 Client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("HWID").AsString);
                                 Client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("User").AsString);

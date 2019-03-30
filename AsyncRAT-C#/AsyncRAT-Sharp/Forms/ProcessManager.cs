@@ -24,7 +24,7 @@ namespace AsyncRAT_Sharp.Forms
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            if (!C.Client.Connected) this.Close();
+            if (!C.ClientSocket.Connected) this.Close();
         }
 
         private async void killToolStripMenuItem_Click(object sender, EventArgs e)
