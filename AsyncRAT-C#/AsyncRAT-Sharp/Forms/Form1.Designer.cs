@@ -50,6 +50,7 @@
             this.pROCESSMANAGERToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.bUILDERToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fILEMANAGERToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.ping = new System.Windows.Forms.Timer(this.components);
@@ -132,11 +133,12 @@
             this.sENDFILEToolStripMenuItem,
             this.sENDFILETOMEMORYToolStripMenuItem,
             this.rEMOTEDESKTOPToolStripMenuItem,
+            this.fILEMANAGERToolStripMenuItem,
             this.pROCESSMANAGERToolStripMenuItem,
             this.toolStripSeparator2,
             this.bUILDERToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(275, 226);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(275, 256);
             // 
             // cLIENTOPTIONSToolStripMenuItem
             // 
@@ -220,6 +222,13 @@
             this.bUILDERToolStripMenuItem.Size = new System.Drawing.Size(274, 30);
             this.bUILDERToolStripMenuItem.Text = "BUILDER";
             this.bUILDERToolStripMenuItem.Click += new System.EventHandler(this.bUILDERToolStripMenuItem_Click);
+            // 
+            // fILEMANAGERToolStripMenuItem
+            // 
+            this.fILEMANAGERToolStripMenuItem.Name = "fILEMANAGERToolStripMenuItem";
+            this.fILEMANAGERToolStripMenuItem.Size = new System.Drawing.Size(274, 30);
+            this.fILEMANAGERToolStripMenuItem.Text = "FILE MANAGER";
+            this.fILEMANAGERToolStripMenuItem.Click += new System.EventHandler(this.fILEMANAGERToolStripMenuItem_Click);
             // 
             // statusStrip1
             // 
@@ -368,6 +377,7 @@
         public System.Windows.Forms.ListView listView2;
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.ColumnHeader columnHeader2;
+        private System.Windows.Forms.ToolStripMenuItem fILEMANAGERToolStripMenuItem;
     }
 }
 

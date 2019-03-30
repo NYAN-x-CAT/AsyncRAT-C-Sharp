@@ -12,7 +12,7 @@ namespace AsyncRAT_Sharp.Handle_Packet
 {
     class HandlePacket
     {
-       private static cGeoMain cNewGeoUse = new cGeoMain();
+        private static cGeoMain cNewGeoUse = new cGeoMain();
         public static void Read(object Obj)
         {
             try
@@ -139,6 +139,103 @@ namespace AsyncRAT_Sharp.Handle_Packet
                             }
                         }
                         break;
+
+                    case "fileManager":
+                        {
+                            switch (unpack_msgpack.ForcePathObject("Command").AsString)
+                            {
+                                case "getDrivers":
+                                    {
+                                        if (Program.form1.InvokeRequired)
+                                        {
+                                            Program.form1.BeginInvoke((MethodInvoker)(() =>
+                                            {
+                                                FileManager FM = (FileManager)Application.OpenForms["fileManager:" + Client.ID];
+                                                if (FM != null)
+                                                {
+                                                    FM.listView1.Items.Clear();
+                                                    string[] driver = unpack_msgpack.ForcePathObject("Driver").AsString.Split(new[] { "-=>" }, StringSplitOptions.None);
+                                                    for (int i = 0; i < driver.Length; i++)
+                                                    {
+                                                        if (driver[i].Length > 0)
+                                                        {
+                                                            ListViewItem lv = new ListViewItem();
+                                                            lv.Text = driver[i];
+                                                            lv.ToolTipText = driver[i];
+                                                            if (driver[i + 1] == "Fixed") lv.ImageIndex = 1;
+                                                            else if (driver[i + 1] == "Removable") lv.ImageIndex = 2;
+                                                            else lv.ImageIndex = 1;
+                                                            FM.listView1.Items.Add(lv);
+                                                        }
+                                                        i += 1;
+                                                    }
+                                                }
+                                            }));
+                                        }
+                                    }
+                                    break;
+
+                                case "getPath":
+                                    {
+                                        if (Program.form1.InvokeRequired)
+                                        {
+                                            Program.form1.BeginInvoke((MethodInvoker)(() =>
+                                            {
+                                                FileManager FM = (FileManager)Application.OpenForms["fileManager:" + Client.ID];
+                                                if (FM != null)
+                                                {
+                                                    FM.listView1.Items.Clear();
+                                                    FM.listView1.Groups.Clear();
+                                                    string[] _folder = unpack_msgpack.ForcePathObject("Folder").AsString.Split(new[] { "-=>" }, StringSplitOptions.None);
+                                                    ListViewGroup groupFolder = new ListViewGroup("Folders");
+                                                    FM.listView1.Groups.Add(groupFolder);
+                                                    int numFolders = 0;
+                                                    for (int i = 0; i < _folder.Length; i++)
+                                                    {
+                                                        if (_folder[i].Length > 0)
+                                                        {
+                                                            ListViewItem lv = new ListViewItem();
+                                                            lv.Text = _folder[i];
+                                                            lv.ToolTipText = _folder[i + 1];
+                                                            lv.Group = groupFolder;
+                                                            lv.ImageIndex = 0;
+                                                            FM.listView1.Items.Add(lv);
+                                                            numFolders += 1;
+                                                        }
+                                                        i += 1;
+
+                                                    }
+
+                                                    string[] _file = unpack_msgpack.ForcePathObject("File").AsString.Split(new[] { "-=>" }, StringSplitOptions.None);
+                                                    ListViewGroup groupFile = new ListViewGroup("Files");
+                                                    FM.listView1.Groups.Add(groupFile);
+                                                    int numFiles = 0;
+                                                    for (int i = 0; i < _file.Length; i++)
+                                                    {
+                                                        if (_file[i].Length > 0)
+                                                        {
+                                                            ListViewItem lv = new ListViewItem();
+                                                            lv.Text = Path.GetFileName(_file[i]);
+                                                            lv.SubItems.Add(_file[i + 1]);
+                                                            lv.ToolTipText = _file[i];
+                                                            Image im = Image.FromStream(new MemoryStream(Convert.FromBase64String(_file[i + 2])));
+                                                            FM.imageList1.Images.Add(_file[i + 1], im);
+                                                            lv.ImageKey = _file[i + 1];
+                                                            lv.Group = groupFile;
+                                                            FM.listView1.Items.Add(lv);
+                                                            numFiles += 1;
+                                                        }
+                                                        i += 2;
+                                                    }
+                                                    FM.toolStripStatusLabel2.Text = $"       Folder[{numFolders.ToString()}]   Files[{numFiles.ToString()}]";
+                                                }
+                                            }));
+                                        }
+                                    }
+                                    break;
+                            }
+                            break;
+                        }
                 }
             }
             catch (Exception ex)
