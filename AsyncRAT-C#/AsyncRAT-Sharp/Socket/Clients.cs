@@ -23,6 +23,7 @@ namespace AsyncRAT_Sharp.Sockets
         private object SendSync { get; set; }
         private object EndSendSync { get; set; }
         public string ID { get; set; }
+        public long BytesRecevied { get; set; }
 
         public Clients(Socket socket)
         {
@@ -43,6 +44,7 @@ namespace AsyncRAT_Sharp.Sockets
             LV = null;
             SendSync = new object();
             EndSendSync = new object();
+            BytesRecevied = 0;
             ClientSocket.BeginReceive(ClientBuffer, 0, ClientBuffer.Length, SocketFlags.None, ReadClientData, null);
         }
 
@@ -79,6 +81,7 @@ namespace AsyncRAT_Sharp.Sockets
                         {
                             await ClientMS.WriteAsync(ClientBuffer, 0, Recevied);
                             Settings.Received += Recevied;
+                            BytesRecevied += Recevied;
                             if (ClientMS.Length == ClientBuffersize)
                             {
                                 try

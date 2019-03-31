@@ -97,6 +97,12 @@
     <Compile Include="Forms\RemoteDesktop.Designer.cs">
       <DependentUpon>RemoteDesktop.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\DownloadFile.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\DownloadFile.Designer.cs">
+      <DependentUpon>DownloadFile.cs</DependentUpon>
+    </Compile>
     <Compile Include="Handle Packet\HandleLogs.cs" />
     <Compile Include="Handle Packet\HandlePacket.cs" />
     <Compile Include="Helper\Methods.cs" />
@@ -168,6 +174,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\RemoteDesktop.resx">
       <DependentUpon>RemoteDesktop.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\DownloadFile.resx">
+      <DependentUpon>DownloadFile.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
