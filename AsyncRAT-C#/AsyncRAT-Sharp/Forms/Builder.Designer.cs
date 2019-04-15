@@ -36,20 +36,23 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.comboBoxFolder = new System.Windows.Forms.ComboBox();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.textFilename = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.comboBoxFolder = new System.Windows.Forms.ComboBox();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.chkAnti = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(16, 456);
+            this.button1.Location = new System.Drawing.Point(12, 611);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(440, 50);
+            this.button1.Size = new System.Drawing.Size(446, 50);
             this.button1.TabIndex = 0;
             this.button1.Text = "Build";
             this.button1.UseVisualStyleBackColor = true;
@@ -114,6 +117,30 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Install";
             // 
+            // comboBoxFolder
+            // 
+            this.comboBoxFolder.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxFolder.Enabled = false;
+            this.comboBoxFolder.FormattingEnabled = true;
+            this.comboBoxFolder.Items.AddRange(new object[] {
+            "%AppData%",
+            "%Temp%"});
+            this.comboBoxFolder.Location = new System.Drawing.Point(106, 150);
+            this.comboBoxFolder.Name = "comboBoxFolder";
+            this.comboBoxFolder.Size = new System.Drawing.Size(271, 28);
+            this.comboBoxFolder.TabIndex = 8;
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(18, 40);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(67, 24);
+            this.checkBox1.TabIndex = 7;
+            this.checkBox1.Text = "OFF";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            // 
             // textFilename
             // 
             this.textFilename.Enabled = false;
@@ -140,35 +167,34 @@
             this.label4.TabIndex = 4;
             this.label4.Text = "Filename";
             // 
-            // checkBox1
+            // groupBox3
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(18, 40);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(67, 24);
-            this.checkBox1.TabIndex = 7;
-            this.checkBox1.Text = "OFF";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            this.groupBox3.Controls.Add(this.chkAnti);
+            this.groupBox3.Location = new System.Drawing.Point(16, 468);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(440, 99);
+            this.groupBox3.TabIndex = 9;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "MISC";
             // 
-            // comboBoxFolder
+            // chkAnti
             // 
-            this.comboBoxFolder.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxFolder.Enabled = false;
-            this.comboBoxFolder.FormattingEnabled = true;
-            this.comboBoxFolder.Items.AddRange(new object[] {
-            "%AppData%",
-            "%Temp%"});
-            this.comboBoxFolder.Location = new System.Drawing.Point(106, 150);
-            this.comboBoxFolder.Name = "comboBoxFolder";
-            this.comboBoxFolder.Size = new System.Drawing.Size(271, 28);
-            this.comboBoxFolder.TabIndex = 8;
+            this.chkAnti.AutoSize = true;
+            this.chkAnti.Checked = true;
+            this.chkAnti.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkAnti.Location = new System.Drawing.Point(21, 40);
+            this.chkAnti.Name = "chkAnti";
+            this.chkAnti.Size = new System.Drawing.Size(125, 24);
+            this.chkAnti.TabIndex = 9;
+            this.chkAnti.Text = "Anti Analysis";
+            this.chkAnti.UseVisualStyleBackColor = true;
             // 
             // Builder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(470, 518);
+            this.ClientSize = new System.Drawing.Size(470, 693);
+            this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.button1);
@@ -180,6 +206,8 @@
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -198,5 +226,7 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.ComboBox comboBoxFolder;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.CheckBox chkAnti;
     }
 }

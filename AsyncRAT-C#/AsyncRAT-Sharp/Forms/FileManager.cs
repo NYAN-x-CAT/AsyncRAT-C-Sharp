@@ -120,9 +120,7 @@ namespace AsyncRAT_Sharp.Forms
                     ThreadPool.QueueUserWorkItem(C.BeginSend, msgpack.Encode2Bytes());
                 }
             }
-            catch (Exception ex)
-            {
-            }
+            catch { }
         }
 
         private void dELETEToolStripMenuItem_Click(object sender, EventArgs e)
@@ -142,10 +140,7 @@ namespace AsyncRAT_Sharp.Forms
                     }
                 }
             }
-            catch
-            {
-
-            }
+            catch { }
         }
 
         private void rEFRESHToolStripMenuItem_Click(object sender, EventArgs e)

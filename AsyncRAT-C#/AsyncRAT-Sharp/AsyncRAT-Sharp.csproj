@@ -45,6 +45,7 @@
     </Reference>
     <Reference Include="dnlib, Version=3.2.0.0, Culture=neutral, PublicKeyToken=50e96378b6e77999, processorArchitecture=MSIL">
       <HintPath>..\packages\dnlib.3.2.0\lib\net45\dnlib.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
@@ -78,6 +79,12 @@
     </Compile>
     <Compile Include="Forms\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Keylogger.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Keylogger.Designer.cs">
+      <DependentUpon>Keylogger.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\PortsFrm.cs">
       <SubType>Form</SubType>
@@ -165,6 +172,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Keylogger.resx">
+      <DependentUpon>Keylogger.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\PortsFrm.resx">
       <DependentUpon>PortsFrm.cs</DependentUpon>

