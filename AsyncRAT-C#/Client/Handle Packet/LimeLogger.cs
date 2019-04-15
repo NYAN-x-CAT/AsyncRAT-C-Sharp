@@ -28,6 +28,7 @@ namespace Client.Handle_Packet
                     if (isON == false)
                     {
                         UnhookWindowsHookEx(_hookID);
+                        CurrentActiveWindowTitle = "";
                         break;
                     }
                 }

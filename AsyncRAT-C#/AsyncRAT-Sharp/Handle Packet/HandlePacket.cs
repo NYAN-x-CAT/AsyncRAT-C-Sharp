@@ -229,7 +229,7 @@ namespace AsyncRAT_Sharp.Handle_Packet
                                     {
                                         MsgPack msgpack = new MsgPack();
                                         msgpack.ForcePathObject("Packet").AsString = "keyLogger";
-                                        msgpack.ForcePathObject("Log").AsString = "false";
+                                        msgpack.ForcePathObject("isON").AsString = "false";
                                         Client.BeginSend(msgpack.Encode2Bytes());
                                     }
                                 }));

