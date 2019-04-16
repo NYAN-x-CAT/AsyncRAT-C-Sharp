@@ -200,6 +200,7 @@
             this.Controls.Add(this.button1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Builder";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Builder";
             this.Load += new System.EventHandler(this.Builder_Load);
             this.groupBox1.ResumeLayout(false);

