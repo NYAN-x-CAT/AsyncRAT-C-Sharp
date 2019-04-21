@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Text;
 using System.IO;
 using System.Net.Sockets;
 using System.Windows.Forms;
 using AsyncRAT_Sharp.Handle_Packet;
-using System.Threading.Tasks;
 using System.Security.Cryptography;
 using System.Drawing;
 using System.Diagnostics;
@@ -15,15 +13,16 @@ namespace AsyncRAT_Sharp.Sockets
     class Clients
     {
         public Socket ClientSocket { get; set; }
-        private byte[] ClientBuffer { get; set; }
-        private long ClientBuffersize { get; set; }
-        private bool ClientBufferRecevied { get; set; }
-        private MemoryStream ClientMS { get; set; }
         public ListViewItem LV { get; set; }
-        private object SendSync { get; set; }
-        private object EndSendSync { get; set; }
         public string ID { get; set; }
-        public long BytesRecevied { get; set; }
+
+        private byte[] ClientBuffer;
+        private long ClientBuffersize;
+        private bool ClientBufferRecevied;
+        private MemoryStream ClientMS;
+        private object SendSync;
+        private object EndSendSync;
+        public long BytesRecevied;
 
         public Clients(Socket socket)
         {
@@ -35,7 +34,6 @@ namespace AsyncRAT_Sharp.Sockets
 
             ClientSocket = socket;
             ClientBuffer = new byte[4];
-            ClientBuffersize = 0;
             ClientBufferRecevied = false;
             ClientMS = new MemoryStream();
             LV = null;
@@ -62,8 +60,6 @@ namespace AsyncRAT_Sharp.Sockets
                         if (ClientBufferRecevied == false)
                         {
                             await ClientMS.WriteAsync(ClientBuffer, 0, ClientBuffer.Length);
-                            if (ClientMS.Length == 4)
-                            {
                                 ClientBuffersize = BitConverter.ToInt32(ClientMS.ToArray(), 0);
                                 ClientMS.Dispose();
                                 ClientMS = new MemoryStream();
@@ -73,12 +69,6 @@ namespace AsyncRAT_Sharp.Sockets
                                     Debug.WriteLine("/// Server Buffersize " + ClientBuffersize.ToString() + " Bytes  ///");
                                     ClientBufferRecevied = true;
                                 }
-                            }
-                            else
-                            {
-                                Disconnected();
-                                return;
-                            }
                         }
                         else
                         {
@@ -99,7 +89,6 @@ namespace AsyncRAT_Sharp.Sockets
                                     return;
                                 }
                                 ClientBuffer = new byte[4];
-                                ClientBuffersize = 0;
                                 ClientMS.Dispose();
                                 ClientMS = new MemoryStream();
                                 ClientBufferRecevied = false;
