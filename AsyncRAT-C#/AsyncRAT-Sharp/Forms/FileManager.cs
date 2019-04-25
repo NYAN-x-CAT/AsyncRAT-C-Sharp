@@ -181,5 +181,10 @@ namespace AsyncRAT_Sharp.Forms
 
             }
         }
+
+        private void Timer1_Tick(object sender, EventArgs e)
+        {
+            if (!C.ClientSocket.Connected) this.Close();
+        }
     }
 }

