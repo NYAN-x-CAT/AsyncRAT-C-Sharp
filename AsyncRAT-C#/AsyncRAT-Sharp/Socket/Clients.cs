@@ -17,12 +17,12 @@ namespace AsyncRAT_Sharp.Sockets
         public string ID { get; set; }
 
         private byte[] ClientBuffer;
-        private long ClientBuffersize;
+        private int ClientBuffersize;
         private bool ClientBufferRecevied;
         private MemoryStream ClientMS;
         private object SendSync;
         private object EndSendSync;
-        public long BytesRecevied;
+        public int BytesRecevied;
 
         public Clients(Socket socket)
         {
@@ -75,15 +75,15 @@ namespace AsyncRAT_Sharp.Sockets
                         if (ClientBufferRecevied == false)
                         {
                             await ClientMS.WriteAsync(ClientBuffer, 0, ClientBuffer.Length);
-                                ClientBuffersize = BitConverter.ToInt32(ClientMS.ToArray(), 0);
-                                ClientMS.Dispose();
-                                ClientMS = new MemoryStream();
-                                if (ClientBuffersize > 0)
-                                {
-                                    ClientBuffer = new byte[ClientBuffersize];
-                                    Debug.WriteLine("/// Server Buffersize " + ClientBuffersize.ToString() + " Bytes  ///");
-                                    ClientBufferRecevied = true;
-                                }
+                            ClientBuffersize = BitConverter.ToInt32(ClientMS.ToArray(), 0);
+                            ClientMS.Dispose();
+                            ClientMS = new MemoryStream();
+                            if (ClientBuffersize > 0)
+                            {
+                                ClientBuffer = new byte[ClientBuffersize];
+                                Debug.WriteLine("/// Server Buffersize " + ClientBuffersize.ToString() + " Bytes  ///");
+                                ClientBufferRecevied = true;
+                            }
                         }
                         else
                         {

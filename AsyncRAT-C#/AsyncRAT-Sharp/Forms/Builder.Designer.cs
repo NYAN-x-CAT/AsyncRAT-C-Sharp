@@ -180,8 +180,6 @@
             // chkAnti
             // 
             this.chkAnti.AutoSize = true;
-            this.chkAnti.Checked = true;
-            this.chkAnti.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkAnti.Location = new System.Drawing.Point(21, 40);
             this.chkAnti.Name = "chkAnti";
             this.chkAnti.Size = new System.Drawing.Size(125, 24);

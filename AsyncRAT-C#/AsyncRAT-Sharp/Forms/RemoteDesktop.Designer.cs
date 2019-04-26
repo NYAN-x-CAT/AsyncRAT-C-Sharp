@@ -60,8 +60,8 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "RemoteDesktop";
             this.Text = "RemoteDesktop";
-            this.Activated += new System.EventHandler(this.RemoteDesktop_Activated);
-            this.Deactivate += new System.EventHandler(this.RemoteDesktop_Deactivate);
+            //this.Activated += new System.EventHandler(this.RemoteDesktop_Activated);
+            //this.Deactivate += new System.EventHandler(this.RemoteDesktop_Deactivate);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 

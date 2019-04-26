@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using dnlib.DotNet;
 using dnlib.DotNet.Emit;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace AsyncRAT_Sharp.Forms
 {
@@ -14,7 +15,7 @@ namespace AsyncRAT_Sharp.Forms
             InitializeComponent();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private async void button1_Click(object sender, EventArgs e)
         {
 
             if (string.IsNullOrWhiteSpace(textIP.Text) || string.IsNullOrWhiteSpace(textPort.Text)) return;
@@ -23,9 +24,9 @@ namespace AsyncRAT_Sharp.Forms
                 if (string.IsNullOrWhiteSpace(textFilename.Text) || string.IsNullOrWhiteSpace(comboBoxFolder.Text)) return;
                 if (!textFilename.Text.EndsWith("exe")) textFilename.Text += ".exe";
             }
-
             try
             {
+                button1.Enabled = false;
                 var md = ModuleDefMD.Load(Path.Combine(Application.StartupPath, @"Stub\Stub.exe"));
                 foreach (TypeDef type in md.Types)
                 {
@@ -72,17 +73,37 @@ namespace AsyncRAT_Sharp.Forms
                 saveFileDialog1.FileName = "Client";
                 if (saveFileDialog1.ShowDialog() == DialogResult.OK)
                 {
-                    md.Write(saveFileDialog1.FileName);
-                    MessageBox.Show("Done", "AsyncRAT | Builder", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    Properties.Settings.Default.DNS = textIP.Text;
-                    Properties.Settings.Default.Filename = textFilename.Text;
-                    Properties.Settings.Default.Save();
-                    this.Close();
+                    bool isok = false; ;
+                    await Task.Run(() =>
+                    {
+                        try
+                        {
+                            md.Write(saveFileDialog1.FileName);
+                            isok = true;
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message, "AsyncRAT | Builder", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            isok = false;
+                        }
+                    });
+                    if (isok == true)
+                    {
+                        MessageBox.Show("Done!", "AsyncRAT | Builder", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        Properties.Settings.Default.DNS = textIP.Text;
+                        Properties.Settings.Default.Filename = textFilename.Text;
+                        Properties.Settings.Default.Save();
+                        button1.Enabled = true;
+                        this.Close();
+                    }
+                    else
+                        button1.Enabled = true;
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "AsyncRAT | Builder", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                button1.Enabled = true;
             }
         }
 

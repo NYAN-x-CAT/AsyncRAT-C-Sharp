@@ -24,7 +24,7 @@ namespace AsyncRAT_Sharp.Forms
         public long dSize = 0;
         private void timer1_Tick(object sender, EventArgs e)
         {
-           labelsize.Text = $"{Methods.BytesToString(dSize)} \\ {Methods.BytesToString(C.BytesRecevied)}";
+            labelsize.Text = $"{Methods.BytesToString(dSize)} \\ {Methods.BytesToString(C.BytesRecevied)}";
             if (C.BytesRecevied > dSize)
             {
                 labelsize.Text = "Downloaded";
@@ -36,11 +36,6 @@ namespace AsyncRAT_Sharp.Forms
         private void SocketDownload_FormClosed(object sender, FormClosedEventArgs e)
         {
             if (C != null) C.Disconnected();
-        }
-
-        private void Timer2_Tick(object sender, EventArgs e)
-        {
-            if (!C.ClientSocket.Connected) this.Close();
         }
     }
 }

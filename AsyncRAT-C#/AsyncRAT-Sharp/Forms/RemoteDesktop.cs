@@ -36,22 +36,22 @@ namespace AsyncRAT_Sharp.Forms
             if (!C.ClientSocket.Connected) this.Close();
         }
 
-        private void RemoteDesktop_Activated(object sender, EventArgs e)
-        {
-            if (Active == false)
-            {
-                Active = true;
-                MsgPack msgpack = new MsgPack();
-                msgpack.ForcePathObject("Packet").AsString = "remoteDesktop";
-                msgpack.ForcePathObject("Option").AsString = "true";
-                ThreadPool.QueueUserWorkItem(C.BeginSend, msgpack.Encode2Bytes());
-                decoder = new UnsafeStreamCodec(60);
-            }
-        }
+        //private void RemoteDesktop_Activated(object sender, EventArgs e)
+        //{
+        //    //if (Active == false)
+        //    //{
+        //    //    Active = true;
+        //    //    MsgPack msgpack = new MsgPack();
+        //    //    msgpack.ForcePathObject("Packet").AsString = "remoteDesktop";
+        //    //    msgpack.ForcePathObject("Option").AsString = "true";
+        //    //    ThreadPool.QueueUserWorkItem(C.BeginSend, msgpack.Encode2Bytes());
+        //    //    decoder = new UnsafeStreamCodec(60);
+        //    //}
+        //}
 
-        private void RemoteDesktop_Deactivate(object sender, EventArgs e)
-        {
-            if (Active == true) Active = false;
-        }
+        //private void RemoteDesktop_Deactivate(object sender, EventArgs e)
+        //{
+        //   // if (Active == true) Active = false;
+        //}
     }
 }

