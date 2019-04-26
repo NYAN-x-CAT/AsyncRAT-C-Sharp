@@ -33,10 +33,13 @@ namespace AsyncRAT_Sharp.Sockets
             }
 
             int count = 0;
-            foreach (Clients client in Settings.Online)
+            lock (Settings.Online)
             {
-                if (client.ClientSocket.RemoteEndPoint.ToString().Split(':')[0] == socket.RemoteEndPoint.ToString().Split(':')[0])
-                    count++;
+                foreach (Clients client in Settings.Online)
+                {
+                    if (client.ClientSocket.RemoteEndPoint.ToString().Split(':')[0] == socket.RemoteEndPoint.ToString().Split(':')[0])
+                        count++;
+                }
             }
 
             if (count >= 5)
