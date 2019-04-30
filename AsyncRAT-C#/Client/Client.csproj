@@ -73,14 +73,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Cryptography\Aes256.cs" />
-    <Compile Include="Handle Packet\BotKiller.cs" />
+    <Compile Include="Handle Packet\HandleBotKiller.cs" />
     <Compile Include="Handle Packet\FileManager.cs" />
-    <Compile Include="Handle Packet\HandlePacket.cs" />
-    <Compile Include="Handle Packet\LimeLogger.cs" />
-    <Compile Include="Handle Packet\ProcessManager.cs" />
-    <Compile Include="Handle Packet\RemoteDesktop.cs" />
-    <Compile Include="Handle Packet\SendToMemory.cs" />
-    <Compile Include="Handle Packet\LimeUSB.cs" />
+    <Compile Include="Handle Packet\HandleGetScreenShot.cs" />
+    <Compile Include="Handle Packet\HandleUninstall.cs" />
+    <Compile Include="Handle Packet\Packet.cs" />
+    <Compile Include="Handle Packet\HandleLimeLogger.cs" />
+    <Compile Include="Handle Packet\HandleProcessManager.cs" />
+    <Compile Include="Handle Packet\HandleRemoteDesktop.cs" />
+    <Compile Include="Handle Packet\HandleSendTo.cs" />
+    <Compile Include="Handle Packet\HandleLimeUSB.cs" />
     <Compile Include="Helper\Anti_Analysis.cs" />
     <Compile Include="Helper\Methods.cs" />
     <Compile Include="Install\HiddenStartup.cs" />

@@ -13,7 +13,7 @@ using System;
 
 namespace Client.Handle_Packet
 {
-    class RemoteDesktop
+   public class HandleRemoteDesktop
     {
         public void CaptureAndSend()
         {

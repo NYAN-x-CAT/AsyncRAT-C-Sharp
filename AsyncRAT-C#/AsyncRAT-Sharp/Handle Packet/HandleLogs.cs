@@ -8,9 +8,9 @@ using System.Drawing;
 
 namespace AsyncRAT_Sharp.Handle_Packet
 {
-    static class HandleLogs
+    public class HandleLogs
     {
-        public static void Addmsg(string Msg, Color color)
+        public void Addmsg(string Msg, Color color)
         {
             if (Program.form1.listView2.InvokeRequired)
             {

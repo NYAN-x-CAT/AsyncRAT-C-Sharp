@@ -116,8 +116,15 @@
     <Compile Include="Forms\FormDownloadFile.Designer.cs">
       <DependentUpon>FormDownloadFile.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\HandleKeylogger.cs" />
+    <Compile Include="Handle Packet\HandleFileManager.cs" />
+    <Compile Include="Handle Packet\HandleListView.cs" />
     <Compile Include="Handle Packet\HandleLogs.cs" />
-    <Compile Include="Handle Packet\HandlePacket.cs" />
+    <Compile Include="Handle Packet\HandlePing.cs" />
+    <Compile Include="Handle Packet\HandleRemoteDesktop.cs" />
+    <Compile Include="Handle Packet\HandleThumbnails.cs" />
+    <Compile Include="Handle Packet\Packet.cs" />
+    <Compile Include="Handle Packet\HandleProcessManager.cs" />
     <Compile Include="Helper\Methods.cs" />
     <Compile Include="MessagePack\BytesTools.cs" />
     <Compile Include="MessagePack\MsgPack.cs" />

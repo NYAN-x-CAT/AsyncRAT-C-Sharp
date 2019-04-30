@@ -11,9 +11,9 @@ using System.Text;
 
 namespace Client.Handle_Packet
 {
-    class ProcessManager
+   public class HandleProcessManager
     {
-        public static void ProcessKill(int ID)
+        public void ProcessKill(int ID)
         {
             foreach (var process in Process.GetProcesses())
             {
@@ -29,7 +29,7 @@ namespace Client.Handle_Packet
             ProcessList();
         }
 
-        public static void ProcessList()
+        public void ProcessList()
         {
             StringBuilder sb = new StringBuilder();
             var query = "SELECT ProcessId, Name, ExecutablePath FROM Win32_Process";

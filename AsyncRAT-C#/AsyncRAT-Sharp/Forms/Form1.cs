@@ -76,7 +76,7 @@ namespace AsyncRAT_Sharp
             Settings.Port = portsFrm.textPorts.Text;
             Settings.Password = portsFrm.textPassword.Text;
             Settings.AES = new Aes256(Settings.Password);
-
+            portsFrm.Dispose();
             string[] ports = Settings.Port.Split(',');
             try
             {
@@ -317,6 +317,7 @@ namespace AsyncRAT_Sharp
                         }
                     }
                     formSend.Close();
+                    formSend.Dispose();
                 }
                 catch (Exception ex)
                 {
@@ -407,7 +408,9 @@ namespace AsyncRAT_Sharp
 
         private void bUILDERToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            new FormBuilder().ShowDialog();
+            FormBuilder formBuilder = new FormBuilder();
+            formBuilder.ShowDialog();
+            formBuilder.Dispose();
         }
 
         private void fILEMANAGERToolStripMenuItem_Click(object sender, EventArgs e)
@@ -557,7 +560,10 @@ namespace AsyncRAT_Sharp
 
         private void ABOUTToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            new FormAbout().ShowDialog();
+            using (FormAbout formAbout = new FormAbout())
+            {
+                formAbout.ShowDialog();
+            }
         }
 
         private void Form1_Activated(object sender, EventArgs e)

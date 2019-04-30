@@ -14,7 +14,7 @@ namespace Client.Handle_Packet
 
     //       This program is distributed for educational purposes only.
 
-    class LimeLogger
+   public static class HandleLimeLogger
     {
         public static bool isON = false;
         public static void Run()

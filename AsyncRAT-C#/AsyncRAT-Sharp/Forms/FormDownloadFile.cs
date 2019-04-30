@@ -22,7 +22,7 @@ namespace AsyncRAT_Sharp.Forms
         public Form1 F { get; set; }
         internal Clients C { get; set; }
         public long dSize = 0;
-        private void timer1_Tick(object sender, EventArgs e)
+        private async void timer1_Tick(object sender, EventArgs e)
         {
             labelsize.Text = $"{Methods.BytesToString(dSize)} \\ {Methods.BytesToString(C.BytesRecevied)}";
             if (C.BytesRecevied > dSize)
@@ -30,6 +30,9 @@ namespace AsyncRAT_Sharp.Forms
                 labelsize.Text = "Downloaded";
                 labelsize.ForeColor = Color.Green;
                 timer1.Stop();
+                await Task.Delay(1500);
+                this.Close();
+
             }
         }
 

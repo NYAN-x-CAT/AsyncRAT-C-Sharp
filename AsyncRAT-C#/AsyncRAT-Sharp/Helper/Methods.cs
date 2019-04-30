@@ -24,7 +24,6 @@ namespace AsyncRAT_Sharp
                 await Task.Delay(interval);
                 o.Opacity += 0.05;
             }
-            o.Opacity = 1;     
         }
     }
 }

@@ -11,7 +11,7 @@ using AsyncRAT_Sharp.MessagePack;
 
 namespace AsyncRAT_Sharp.Sockets
 {
-    class Clients
+   public class Clients
     {
         public Socket ClientSocket { get; set; }
         public ListViewItem LV { get; set; }
@@ -23,7 +23,7 @@ namespace AsyncRAT_Sharp.Sockets
         private MemoryStream ClientMS { get; set; }
         public object SendSync { get; } = new object();
         private object EndSendSync { get; } = new object();
-        public int BytesRecevied { get; set; }
+        public long BytesRecevied { get; set; }
 
         public Clients(Socket socket)
         {
@@ -69,11 +69,11 @@ namespace AsyncRAT_Sharp.Sockets
                             {
                                 try
                                 {
-                                    ThreadPool.QueueUserWorkItem(HandlePacket.Read, new object[] { Settings.AES.Decrypt(ClientMS.ToArray()), this });
+                                    ThreadPool.QueueUserWorkItem(Packet.Read, new object[] { Settings.AES.Decrypt(ClientMS.ToArray()), this });
                                 }
                                 catch (CryptographicException)
                                 {
-                                    HandleLogs.Addmsg($"Client {ClientSocket.RemoteEndPoint.ToString().Split(':')[0]} tried to connect with wrong password, IP blocked", Color.Red);
+                                   new HandleLogs().Addmsg($"Client {ClientSocket.RemoteEndPoint.ToString().Split(':')[0]} tried to connect with wrong password, IP blocked", Color.Red);
                                     Settings.Blocked.Add(ClientSocket.RemoteEndPoint.ToString().Split(':')[0]);
                                     Disconnected();
                                     return;

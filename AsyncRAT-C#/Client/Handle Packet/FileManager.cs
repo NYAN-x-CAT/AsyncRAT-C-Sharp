@@ -11,7 +11,7 @@ using System.Diagnostics;
 using System.Net.Sockets;
 namespace Client.Handle_Packet
 {
-    class FileManager
+   public class FileManager
     {
         public void GetDrivers()
         {

