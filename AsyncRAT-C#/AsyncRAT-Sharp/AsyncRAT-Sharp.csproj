@@ -62,17 +62,23 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Cryptography\Aes256.cs" />
-    <Compile Include="Forms\Builder.cs">
+    <Compile Include="Forms\FormAbout.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Builder.Designer.cs">
-      <DependentUpon>Builder.cs</DependentUpon>
+    <Compile Include="Forms\FormAbout.Designer.cs">
+      <DependentUpon>FormAbout.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\FileManager.cs">
+    <Compile Include="Forms\FormBuilder.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\FileManager.Designer.cs">
-      <DependentUpon>FileManager.cs</DependentUpon>
+    <Compile Include="Forms\FormBuilder.Designer.cs">
+      <DependentUpon>FormBuilder.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormFileManager.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormFileManager.Designer.cs">
+      <DependentUpon>FormFileManager.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\Form1.cs">
       <SubType>Form</SubType>
@@ -80,35 +86,35 @@
     <Compile Include="Forms\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Keylogger.cs">
+    <Compile Include="Forms\FormKeylogger.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Keylogger.Designer.cs">
-      <DependentUpon>Keylogger.cs</DependentUpon>
+    <Compile Include="Forms\FormKeylogger.Designer.cs">
+      <DependentUpon>FormKeylogger.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\PortsFrm.cs">
+    <Compile Include="Forms\FormPorts.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\PortsFrm.Designer.cs">
-      <DependentUpon>PortsFrm.cs</DependentUpon>
+    <Compile Include="Forms\FormPorts.Designer.cs">
+      <DependentUpon>FormPorts.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\ProcessManager.cs">
+    <Compile Include="Forms\FormProcessManager.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\ProcessManager.Designer.cs">
-      <DependentUpon>ProcessManager.cs</DependentUpon>
+    <Compile Include="Forms\FormProcessManager.Designer.cs">
+      <DependentUpon>FormProcessManager.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\RemoteDesktop.cs">
+    <Compile Include="Forms\FormRemoteDesktop.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\RemoteDesktop.Designer.cs">
-      <DependentUpon>RemoteDesktop.cs</DependentUpon>
+    <Compile Include="Forms\FormRemoteDesktop.Designer.cs">
+      <DependentUpon>FormRemoteDesktop.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\DownloadFile.cs">
+    <Compile Include="Forms\FormDownloadFile.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\DownloadFile.Designer.cs">
-      <DependentUpon>DownloadFile.cs</DependentUpon>
+    <Compile Include="Forms\FormDownloadFile.Designer.cs">
+      <DependentUpon>FormDownloadFile.cs</DependentUpon>
     </Compile>
     <Compile Include="Handle Packet\HandleLogs.cs" />
     <Compile Include="Handle Packet\HandlePacket.cs" />
@@ -120,11 +126,11 @@
     <Compile Include="MessagePack\WriteTools.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Forms\SendFileToMemory.cs">
+    <Compile Include="Forms\FormSendFileToMemory.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\SendFileToMemory.Designer.cs">
-      <DependentUpon>SendFileToMemory.cs</DependentUpon>
+    <Compile Include="Forms\FormSendFileToMemory.Designer.cs">
+      <DependentUpon>FormSendFileToMemory.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -164,37 +170,40 @@
     <Compile Include="StreamLibrary\UnsafeCodecs\UnsafeOptimizedCodec.cs" />
     <Compile Include="StreamLibrary\UnsafeCodecs\UnsafeQuickStream.cs" />
     <Compile Include="StreamLibrary\UnsafeCodecs\UnsafeStreamCodec.cs" />
-    <EmbeddedResource Include="Forms\Builder.resx">
-      <DependentUpon>Builder.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\FormAbout.resx">
+      <DependentUpon>FormAbout.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FileManager.resx">
-      <DependentUpon>FileManager.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\FormBuilder.resx">
+      <DependentUpon>FormBuilder.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormFileManager.resx">
+      <DependentUpon>FormFileManager.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Keylogger.resx">
-      <DependentUpon>Keylogger.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\FormKeylogger.resx">
+      <DependentUpon>FormKeylogger.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\PortsFrm.resx">
-      <DependentUpon>PortsFrm.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\FormPorts.resx">
+      <DependentUpon>FormPorts.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\ProcessManager.resx">
-      <DependentUpon>ProcessManager.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\FormProcessManager.resx">
+      <DependentUpon>FormProcessManager.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\RemoteDesktop.resx">
-      <DependentUpon>RemoteDesktop.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\FormRemoteDesktop.resx">
+      <DependentUpon>FormRemoteDesktop.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\DownloadFile.resx">
-      <DependentUpon>DownloadFile.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\FormDownloadFile.resx">
+      <DependentUpon>FormDownloadFile.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\SendFileToMemory.resx">
-      <DependentUpon>SendFileToMemory.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\FormSendFileToMemory.resx">
+      <DependentUpon>FormSendFileToMemory.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -215,6 +224,22 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="async_icon.ico" />
+    <None Include="Resources\stop %281%29.png" />
+    <None Include="Resources\play-button.png" />
+    <None Include="Resources\info.png" />
+    <None Include="Resources\circle-loading-gif.gif" />
+    <None Include="Resources\msgbox.png" />
+    <None Include="Resources\builder.png" />
+    <None Include="Resources\usb.png" />
+    <None Include="Resources\botkiller.png" />
+    <None Include="Resources\process.png" />
+    <None Include="Resources\filemanager.png" />
+    <None Include="Resources\logger.png" />
+    <None Include="Resources\remotedesktop.png" />
+    <None Include="Resources\tomem1.png" />
+    <None Include="Resources\tomem.png" />
+    <None Include="Resources\visit.png" />
+    <None Include="Resources\client.png" />
     <None Include="Resources\Stub.exe" />
     <None Include="Resources\cGeoIp.dll" />
     <None Include="Resources\Plugin.dll" />

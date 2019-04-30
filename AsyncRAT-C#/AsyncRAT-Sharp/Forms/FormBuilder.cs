@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace AsyncRAT_Sharp.Forms
 {
-    public partial class Builder : Form
+    public partial class FormBuilder : Form
     {
-        public Builder()
+        public FormBuilder()
         {
             InitializeComponent();
         }
@@ -57,7 +57,7 @@ namespace AsyncRAT_Sharp.Forms
                                         method.Body.Instructions[i].Operand = chkAnti.Checked.ToString().ToLower();
 
                                     if (method.Body.Instructions[i].Operand.ToString() == "%MTX%")
-                                        method.Body.Instructions[i].Operand = Guid.NewGuid().ToString();
+                                        method.Body.Instructions[i].Operand = Settings.Password; //Guid.NewGuid().ToString();
 
                                     if (method.Body.Instructions[i].Operand.ToString() == "NYAN CAT")
                                         method.Body.Instructions[i].Operand = Settings.Password;
@@ -99,6 +99,9 @@ namespace AsyncRAT_Sharp.Forms
                     else
                         button1.Enabled = true;
                 }
+                else
+                    button1.Enabled = true;
+
             }
             catch (Exception ex)
             {

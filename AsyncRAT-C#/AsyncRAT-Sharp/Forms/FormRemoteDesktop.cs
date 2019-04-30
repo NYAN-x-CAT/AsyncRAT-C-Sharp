@@ -16,15 +16,16 @@ using System.Threading;
 
 namespace AsyncRAT_Sharp.Forms
 {
-    public partial class RemoteDesktop : Form
+    public partial class FormRemoteDesktop : Form
     {
-        public RemoteDesktop()
+        public FormRemoteDesktop()
         {
             InitializeComponent();
         }
 
         public Form1 F { get; set; }
         internal Clients C { get; set; }
+        internal Clients C2 { get; set; }
         public bool Active { get; set; }
         public int FPS = 0;
         public Stopwatch sw = Stopwatch.StartNew();
@@ -33,7 +34,7 @@ namespace AsyncRAT_Sharp.Forms
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            if (!C.ClientSocket.Connected) this.Close();
+            if (!C.ClientSocket.Connected || !C2.ClientSocket.Connected ) this.Close();
         }
 
         //private void RemoteDesktop_Activated(object sender, EventArgs e)

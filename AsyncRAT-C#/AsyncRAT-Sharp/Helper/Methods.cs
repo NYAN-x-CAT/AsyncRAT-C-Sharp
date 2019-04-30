@@ -17,7 +17,7 @@ namespace AsyncRAT_Sharp
             return (Math.Sign(byteCount) * num).ToString() + suf[place];
         }
 
-        public static async void FadeIn(Form o, int interval = 80)
+        public static async Task FadeIn(Form o, int interval = 80)
         {
             while (o.Opacity < 1.0)
             {

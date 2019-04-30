@@ -7,6 +7,7 @@ using System.Security.Cryptography;
 using System.Drawing;
 using System.Diagnostics;
 using System.Threading;
+using AsyncRAT_Sharp.MessagePack;
 
 namespace AsyncRAT_Sharp.Sockets
 {
@@ -14,50 +15,21 @@ namespace AsyncRAT_Sharp.Sockets
     {
         public Socket ClientSocket { get; set; }
         public ListViewItem LV { get; set; }
+        public ListViewItem LV2 { get; set; }
         public string ID { get; set; }
-
-        private byte[] ClientBuffer;
-        private int ClientBuffersize;
-        private bool ClientBufferRecevied;
-        private MemoryStream ClientMS;
-        private object SendSync;
-        private object EndSendSync;
-        public int BytesRecevied;
+        private byte[] ClientBuffer { get; set; }
+        private int ClientBuffersize { get; set; }
+        private bool ClientBufferRecevied { get; set; }
+        private MemoryStream ClientMS { get; set; }
+        public object SendSync { get; } = new object();
+        private object EndSendSync { get; } = new object();
+        public int BytesRecevied { get; set; }
 
         public Clients(Socket socket)
         {
-            if (Settings.Blocked.Contains(socket.RemoteEndPoint.ToString().Split(':')[0]))
-            {
-                Disconnected();
-                return;
-            }
-
-            int count = 0;
-            lock (Settings.Online)
-            {
-                foreach (Clients client in Settings.Online)
-                {
-                    if (client.ClientSocket.RemoteEndPoint.ToString().Split(':')[0] == socket.RemoteEndPoint.ToString().Split(':')[0])
-                        count++;
-                }
-            }
-
-            if (count >= 5)
-            {
-                Settings.Blocked.Add(socket.RemoteEndPoint.ToString().Split(':')[0]);
-                HandleLogs.Addmsg($"Client {socket.RemoteEndPoint.ToString().Split(':')[0]} tried to spam, IP blocked", Color.Red);
-                Disconnected();
-                return;
-            }
-
             ClientSocket = socket;
             ClientBuffer = new byte[4];
-            ClientBufferRecevied = false;
             ClientMS = new MemoryStream();
-            LV = null;
-            SendSync = new object();
-            EndSendSync = new object();
-            BytesRecevied = 0;
             ClientSocket.BeginReceive(ClientBuffer, 0, ClientBuffer.Length, SocketFlags.None, ReadClientData, null);
         }
 
@@ -75,7 +47,7 @@ namespace AsyncRAT_Sharp.Sockets
                     int Recevied = ClientSocket.EndReceive(ar);
                     if (Recevied > 0)
                     {
-                        if (ClientBufferRecevied == false)
+                        if (!ClientBufferRecevied)
                         {
                             await ClientMS.WriteAsync(ClientBuffer, 0, ClientBuffer.Length);
                             ClientBuffersize = BitConverter.ToInt32(ClientMS.ToArray(), 0);
@@ -97,7 +69,7 @@ namespace AsyncRAT_Sharp.Sockets
                             {
                                 try
                                 {
-                                    ThreadPool.QueueUserWorkItem(HandlePacket.Read, new object[] { Settings.aes256.Decrypt(ClientMS.ToArray()), this });
+                                    ThreadPool.QueueUserWorkItem(HandlePacket.Read, new object[] { Settings.AES.Decrypt(ClientMS.ToArray()), this });
                                 }
                                 catch (CryptographicException)
                                 {
@@ -160,20 +132,15 @@ namespace AsyncRAT_Sharp.Sockets
         {
             lock (SendSync)
             {
-                if (ClientSocket == null)
-                {
-                    Disconnected();
-                    return;
-                }
-                if (!ClientSocket.Connected)
-                {
-                    Disconnected();
-                    return;
-                }
-
                 try
                 {
-                    byte[] buffer = Settings.aes256.Encrypt((byte[])Msgs);
+                    if (!ClientSocket.Connected)
+                    {
+                        Disconnected();
+                        return;
+                    }
+
+                    byte[] buffer = Settings.AES.Encrypt((byte[])Msgs);
                     byte[] buffersize = BitConverter.GetBytes(buffer.Length);
 
                     ClientSocket.Poll(-1, SelectMode.SelectWrite);
@@ -189,12 +156,18 @@ namespace AsyncRAT_Sharp.Sockets
             }
         }
 
-        public void EndSend(IAsyncResult ar)
+        private void EndSend(IAsyncResult ar)
         {
             lock (EndSendSync)
             {
                 try
                 {
+                    if (!ClientSocket.Connected)
+                    {
+                        Disconnected();
+                        return;
+                    }
+
                     int sent = 0;
                     sent = ClientSocket.EndSend(ar);
                     Debug.WriteLine("/// Server Sent " + sent.ToString() + " Bytes  ///");
@@ -206,6 +179,30 @@ namespace AsyncRAT_Sharp.Sockets
                     return;
                 }
             }
+        }
+
+        public void Ping(object obj)
+        {
+            lock (SendSync)
+            {
+                try
+                {
+                    MsgPack msgpack = new MsgPack();
+                    msgpack.ForcePathObject("Packet").AsString = "Ping";
+                    msgpack.ForcePathObject("Message").AsString = "This is a ping!";
+                    byte[] buffer = Settings.AES.Encrypt(msgpack.Encode2Bytes());
+                    byte[] buffersize = BitConverter.GetBytes(buffer.Length);
+                    ClientSocket.Poll(-1, SelectMode.SelectWrite);
+                    ClientSocket.Send(buffersize, 0, buffersize.Length, SocketFlags.None);
+                    ClientSocket.Send(buffer, 0, buffer.Length, SocketFlags.None);
+                }
+                catch
+                {
+                    Disconnected();
+                    return;
+                }
+            }
+
         }
     }
 }

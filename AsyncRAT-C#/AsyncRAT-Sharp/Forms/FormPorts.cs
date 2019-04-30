@@ -4,10 +4,10 @@ using System.IO;
 using System.Diagnostics;
 namespace AsyncRAT_Sharp.Forms
 {
-    public partial class PortsFrm : Form
+    public partial class FormPorts : Form
     {
         private static bool isOK = false;
-        public PortsFrm()
+        public FormPorts()
         {
             InitializeComponent();
             this.Opacity = 0;
@@ -15,10 +15,11 @@ namespace AsyncRAT_Sharp.Forms
 
         private void PortsFrm_Load(object sender, EventArgs e)
         {
-            Methods.FadeIn(this, 5);
+           Methods.FadeIn(this, 5);
 
             textPorts.Text = Settings.Port;
 
+            textPorts.Text = "6606, 7707, 8808";
             if (Properties.Settings.Default.Ports.Length > 0)
                 textPorts.Text = Properties.Settings.Default.Ports;
 

