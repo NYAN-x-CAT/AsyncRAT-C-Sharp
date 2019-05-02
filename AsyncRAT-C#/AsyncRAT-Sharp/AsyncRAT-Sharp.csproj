@@ -116,7 +116,7 @@
     <Compile Include="Forms\FormDownloadFile.Designer.cs">
       <DependentUpon>FormDownloadFile.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\HandleKeylogger.cs" />
+    <Compile Include="Handle Packet\HandleKeylogger.cs" />
     <Compile Include="Handle Packet\HandleFileManager.cs" />
     <Compile Include="Handle Packet\HandleListView.cs" />
     <Compile Include="Handle Packet\HandleLogs.cs" />
@@ -231,6 +231,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="async_icon.ico" />
+    <None Include="Resources\arrow_up.png" />
+    <None Include="Resources\arrow_down.png" />
     <None Include="Resources\stop %281%29.png" />
     <None Include="Resources\play-button.png" />
     <None Include="Resources\info.png" />

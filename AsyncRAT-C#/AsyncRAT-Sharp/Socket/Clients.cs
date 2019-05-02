@@ -122,8 +122,17 @@ namespace AsyncRAT_Sharp.Sockets
 
             try
             {
-                ClientMS?.Dispose();
+                if (ClientSocket.Connected)
+                {
+                    ClientSocket.Shutdown(SocketShutdown.Both);
+                }
+            }
+            catch { }
+
+            try
+            {
                 ClientSocket?.Dispose();
+                ClientMS?.Dispose();
             }
             catch { }
         }

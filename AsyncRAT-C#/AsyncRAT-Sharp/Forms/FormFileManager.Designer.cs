@@ -65,7 +65,7 @@
             this.listView1.Location = new System.Drawing.Point(0, 1);
             this.listView1.Name = "listView1";
             this.listView1.ShowItemToolTips = true;
-            this.listView1.Size = new System.Drawing.Size(1166, 559);
+            this.listView1.Size = new System.Drawing.Size(979, 427);
             this.listView1.SmallImageList = this.imageList1;
             this.listView1.TabIndex = 0;
             this.listView1.UseCompatibleStateImageBehavior = false;
@@ -147,9 +147,9 @@
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1,
             this.toolStripStatusLabel2});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 563);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 431);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(1166, 30);
+            this.statusStrip1.Size = new System.Drawing.Size(979, 30);
             this.statusStrip1.TabIndex = 2;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -171,15 +171,15 @@
             this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.Timer1_Tick);
             // 
-            // FileManager
+            // FormFileManager
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1166, 593);
+            this.ClientSize = new System.Drawing.Size(979, 461);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.listView1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "FileManager";
+            this.Name = "FormFileManager";
             this.Text = "FileManager";
             this.contextMenuStrip1.ResumeLayout(false);
             this.statusStrip1.ResumeLayout(false);

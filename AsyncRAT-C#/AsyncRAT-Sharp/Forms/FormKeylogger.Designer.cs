@@ -43,7 +43,7 @@
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.ReadOnly = true;
             this.richTextBox1.ShortcutsEnabled = false;
-            this.richTextBox1.Size = new System.Drawing.Size(800, 450);
+            this.richTextBox1.Size = new System.Drawing.Size(731, 410);
             this.richTextBox1.TabIndex = 0;
             this.richTextBox1.Text = "";
             // 
@@ -53,14 +53,14 @@
             this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.Timer1_Tick);
             // 
-            // Keylogger
+            // FormKeylogger
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(731, 410);
             this.Controls.Add(this.richTextBox1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "Keylogger";
+            this.Name = "FormKeylogger";
             this.Text = "Keylogger";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Keylogger_FormClosed);
             this.ResumeLayout(false);

@@ -33,11 +33,11 @@
             this.listView1 = new System.Windows.Forms.ListView();
             this.lv_name = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.lv_id = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.imageList1 = new System.Windows.Forms.ImageList(this.components);
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.killToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.refreshToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.imageList1 = new System.Windows.Forms.ImageList(this.components);
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -56,7 +56,7 @@
             this.listView1.Name = "listView1";
             this.listView1.ShowGroups = false;
             this.listView1.ShowItemToolTips = true;
-            this.listView1.Size = new System.Drawing.Size(659, 719);
+            this.listView1.Size = new System.Drawing.Size(557, 577);
             this.listView1.SmallImageList = this.imageList1;
             this.listView1.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.listView1.TabIndex = 0;
@@ -73,6 +73,29 @@
             this.lv_id.Text = "ID";
             this.lv_id.Width = 150;
             // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.killToolStripMenuItem,
+            this.refreshToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(144, 64);
+            // 
+            // killToolStripMenuItem
+            // 
+            this.killToolStripMenuItem.Name = "killToolStripMenuItem";
+            this.killToolStripMenuItem.Size = new System.Drawing.Size(143, 30);
+            this.killToolStripMenuItem.Text = "Kill";
+            this.killToolStripMenuItem.Click += new System.EventHandler(this.killToolStripMenuItem_Click);
+            // 
+            // refreshToolStripMenuItem
+            // 
+            this.refreshToolStripMenuItem.Name = "refreshToolStripMenuItem";
+            this.refreshToolStripMenuItem.Size = new System.Drawing.Size(143, 30);
+            this.refreshToolStripMenuItem.Text = "Refresh";
+            this.refreshToolStripMenuItem.Click += new System.EventHandler(this.refreshToolStripMenuItem_Click);
+            // 
             // imageList1
             // 
             this.imageList1.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit;
@@ -85,37 +108,14 @@
             this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // contextMenuStrip1
-            // 
-            this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
-            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.killToolStripMenuItem,
-            this.refreshToolStripMenuItem});
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(241, 97);
-            // 
-            // killToolStripMenuItem
-            // 
-            this.killToolStripMenuItem.Name = "killToolStripMenuItem";
-            this.killToolStripMenuItem.Size = new System.Drawing.Size(240, 30);
-            this.killToolStripMenuItem.Text = "Kill";
-            this.killToolStripMenuItem.Click += new System.EventHandler(this.killToolStripMenuItem_Click);
-            // 
-            // refreshToolStripMenuItem
-            // 
-            this.refreshToolStripMenuItem.Name = "refreshToolStripMenuItem";
-            this.refreshToolStripMenuItem.Size = new System.Drawing.Size(240, 30);
-            this.refreshToolStripMenuItem.Text = "Refresh";
-            this.refreshToolStripMenuItem.Click += new System.EventHandler(this.refreshToolStripMenuItem_Click);
-            // 
-            // ProcessManager
+            // FormProcessManager
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(659, 719);
+            this.ClientSize = new System.Drawing.Size(557, 577);
             this.Controls.Add(this.listView1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "ProcessManager";
+            this.Name = "FormProcessManager";
             this.Text = "ProcessManager";
             this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);

