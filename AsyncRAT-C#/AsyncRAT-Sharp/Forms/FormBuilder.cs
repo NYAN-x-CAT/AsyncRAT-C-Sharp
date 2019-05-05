@@ -61,8 +61,8 @@ namespace AsyncRAT_Sharp.Forms
                                     if (method.Body.Instructions[i].Operand.ToString() == "%MTX%")
                                         method.Body.Instructions[i].Operand = txtMutex.Text;
 
-                                    //if (method.Body.Instructions[i].Operand.ToString() == "NYAN CAT")
-                                       // method.Body.Instructions[i].Operand = Settings.Password;
+                                    if (method.Body.Instructions[i].Operand.ToString() == "NYAN CAT")
+                                        method.Body.Instructions[i].Operand = Settings.Password;
                                 }
                             }
                         }
