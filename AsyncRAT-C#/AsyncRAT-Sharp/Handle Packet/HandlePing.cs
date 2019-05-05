@@ -12,10 +12,14 @@ namespace AsyncRAT_Sharp.Handle_Packet
             {
                 Program.form1.listView1.BeginInvoke((MethodInvoker)(() =>
                 {
-                    if (client.LV != null)
+                    try
                     {
-                        client.LV.SubItems[Program.form1.lv_prefor.Index].Text = unpack_msgpack.ForcePathObject("Message").AsString;
+                        if (client.LV != null)
+                        {
+                            client.LV.SubItems[Program.form1.lv_prefor.Index].Text = unpack_msgpack.ForcePathObject("Message").AsString;
+                        }
                     }
+                    catch { }
                 }));
             }
         }

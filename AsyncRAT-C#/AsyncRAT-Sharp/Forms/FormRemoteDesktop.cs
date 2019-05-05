@@ -56,7 +56,7 @@ namespace AsyncRAT_Sharp.Forms
         private void FormRemoteDesktop_Load(object sender, EventArgs e)
         {
             button2.Top = panel1.Bottom + 5;
-            button2.PerformClick();
+            //button2.PerformClick();
         }
 
         private void Button1_Click(object sender, EventArgs e)

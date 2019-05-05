@@ -58,39 +58,46 @@ namespace AsyncRAT_Sharp.Sockets
 
         private bool IsDublicated(Socket socket)
         {
-            if (Settings.Blocked.Contains(socket.RemoteEndPoint.ToString().Split(':')[0]))
+            try
             {
-                return true;
-            }
-
-            int count = 0;
-            foreach (Clients client in Settings.Online.ToList())
-            {
-                if (client.LV != null)
+                if (Settings.Blocked.Contains(socket.RemoteEndPoint.ToString().Split(':')[0]))
                 {
-                    if (client.ClientSocket.RemoteEndPoint.ToString().Split(':')[0] == socket.RemoteEndPoint.ToString().Split(':')[0])
-                        count++;
+                    return true;
                 }
-            }
 
-            if (count > 4)
-            {
-                Settings.Blocked.Add(socket.RemoteEndPoint.ToString().Split(':')[0]);
-                new HandleLogs().Addmsg($"Client {socket.RemoteEndPoint.ToString().Split(':')[0]} tried to spam, IP blocked", Color.Red);
+                int count = 0;
                 foreach (Clients client in Settings.Online.ToList())
                 {
-                    if (client.ClientSocket.RemoteEndPoint.ToString().Split(':')[0] == socket.RemoteEndPoint.ToString().Split(':')[0] && client.LV != null)
+                    if (client.LV != null)
                     {
-                        try
-                        {
-                            client.Disconnected();
-                        }
-                        catch { }
+                        if (client.ClientSocket.RemoteEndPoint.ToString().Split(':')[0] == socket.RemoteEndPoint.ToString().Split(':')[0])
+                            count++;
                     }
                 }
-                return true;
+
+                if (count > 3)
+                {
+                    Settings.Blocked.Add(socket.RemoteEndPoint.ToString().Split(':')[0]);
+                    new HandleLogs().Addmsg($"Client {socket.RemoteEndPoint.ToString().Split(':')[0]} tried to spam, IP blocked", Color.Red);
+                    foreach (Clients client in Settings.Online.ToList())
+                    {
+                        if (client.ClientSocket.RemoteEndPoint.ToString().Split(':')[0] == socket.RemoteEndPoint.ToString().Split(':')[0] && client.LV != null)
+                        {
+                            try
+                            {
+                                client.Disconnected();
+                            }
+                            catch { }
+                        }
+                    }
+                    return true;
+                }
+                return false;
             }
-            return false;
+            catch
+            {
+                return false;
+            }
         }
     }
 }

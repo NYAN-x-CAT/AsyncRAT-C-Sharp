@@ -31,7 +31,7 @@ namespace AsyncRAT_Sharp.Forms
         private async void timer1_Tick(object sender, EventArgs e)
         {
             labelsize.Text = $"{Methods.BytesToString(dSize)} \\ {Methods.BytesToString(C.BytesRecevied)}";
-            if (C.BytesRecevied > dSize)
+            if (C.BytesRecevied >= dSize)
             {
                 labelsize.Text = "Downloaded";
                 labelsize.ForeColor = Color.Green;
@@ -44,7 +44,9 @@ namespace AsyncRAT_Sharp.Forms
         private void SocketDownload_FormClosed(object sender, FormClosedEventArgs e)
         {
             if (isDownload)
+            {
                 if (C != null) C.Disconnected();
+            }
         }
 
         public void Send(object obj)

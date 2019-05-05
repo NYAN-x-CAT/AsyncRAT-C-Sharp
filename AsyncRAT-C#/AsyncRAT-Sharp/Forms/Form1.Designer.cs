@@ -70,13 +70,16 @@
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.listView3 = new System.Windows.Forms.ListView();
             this.contextMenuStrip2 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.sTARTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sTOPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.performanceCounter1 = new System.Diagnostics.PerformanceCounter();
             this.performanceCounter2 = new System.Diagnostics.PerformanceCounter();
-            this.listView3 = new System.Windows.Forms.ListView();
+            this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
+            this.contextMenuStrip3 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.notificationOFFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -86,6 +89,7 @@
             this.contextMenuStrip2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.performanceCounter1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.performanceCounter2)).BeginInit();
+            this.contextMenuStrip3.SuspendLayout();
             this.SuspendLayout();
             // 
             // listView1
@@ -151,7 +155,7 @@
             // 
             // contextMenuStrip1
             // 
-            this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(18, 18);
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.cLIENTOPTIONSToolStripMenuItem,
             this.toolStripSeparator1,
@@ -170,7 +174,7 @@
             this.toolStripSeparator3,
             this.aBOUTToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(283, 412);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(277, 412);
             // 
             // cLIENTOPTIONSToolStripMenuItem
             // 
@@ -181,47 +185,47 @@
             this.uNISTALLToolStripMenuItem});
             this.cLIENTOPTIONSToolStripMenuItem.Image = global::AsyncRAT_Sharp.Properties.Resources.client;
             this.cLIENTOPTIONSToolStripMenuItem.Name = "cLIENTOPTIONSToolStripMenuItem";
-            this.cLIENTOPTIONSToolStripMenuItem.Size = new System.Drawing.Size(282, 30);
+            this.cLIENTOPTIONSToolStripMenuItem.Size = new System.Drawing.Size(276, 30);
             this.cLIENTOPTIONSToolStripMenuItem.Text = "CLIENT OPTIONS";
             // 
             // cLOSEToolStripMenuItem
             // 
             this.cLOSEToolStripMenuItem.Name = "cLOSEToolStripMenuItem";
-            this.cLOSEToolStripMenuItem.Size = new System.Drawing.Size(173, 30);
+            this.cLOSEToolStripMenuItem.Size = new System.Drawing.Size(252, 30);
             this.cLOSEToolStripMenuItem.Text = "CLOSE";
             this.cLOSEToolStripMenuItem.Click += new System.EventHandler(this.cLOSEToolStripMenuItem_Click);
             // 
             // rESTARTToolStripMenuItem
             // 
             this.rESTARTToolStripMenuItem.Name = "rESTARTToolStripMenuItem";
-            this.rESTARTToolStripMenuItem.Size = new System.Drawing.Size(173, 30);
+            this.rESTARTToolStripMenuItem.Size = new System.Drawing.Size(252, 30);
             this.rESTARTToolStripMenuItem.Text = "RESTART";
             this.rESTARTToolStripMenuItem.Click += new System.EventHandler(this.RESTARTToolStripMenuItem_Click);
             // 
             // uPDATEToolStripMenuItem
             // 
             this.uPDATEToolStripMenuItem.Name = "uPDATEToolStripMenuItem";
-            this.uPDATEToolStripMenuItem.Size = new System.Drawing.Size(173, 30);
+            this.uPDATEToolStripMenuItem.Size = new System.Drawing.Size(252, 30);
             this.uPDATEToolStripMenuItem.Text = "UPDATE";
             this.uPDATEToolStripMenuItem.Click += new System.EventHandler(this.uPDATEToolStripMenuItem_Click);
             // 
             // uNISTALLToolStripMenuItem
             // 
             this.uNISTALLToolStripMenuItem.Name = "uNISTALLToolStripMenuItem";
-            this.uNISTALLToolStripMenuItem.Size = new System.Drawing.Size(173, 30);
+            this.uNISTALLToolStripMenuItem.Size = new System.Drawing.Size(252, 30);
             this.uNISTALLToolStripMenuItem.Text = "UNISTALL";
             this.uNISTALLToolStripMenuItem.Click += new System.EventHandler(this.uNISTALLToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(279, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(273, 6);
             // 
             // vISITWEBSITEToolStripMenuItem
             // 
             this.vISITWEBSITEToolStripMenuItem.Image = global::AsyncRAT_Sharp.Properties.Resources.visit;
             this.vISITWEBSITEToolStripMenuItem.Name = "vISITWEBSITEToolStripMenuItem";
-            this.vISITWEBSITEToolStripMenuItem.Size = new System.Drawing.Size(282, 30);
+            this.vISITWEBSITEToolStripMenuItem.Size = new System.Drawing.Size(276, 30);
             this.vISITWEBSITEToolStripMenuItem.Text = "VISIT WEBSITE";
             this.vISITWEBSITEToolStripMenuItem.Click += new System.EventHandler(this.VISITWEBSITEToolStripMenuItem_Click);
             // 
@@ -229,7 +233,7 @@
             // 
             this.sENDMESSAGEBOXToolStripMenuItem.Image = global::AsyncRAT_Sharp.Properties.Resources.msgbox;
             this.sENDMESSAGEBOXToolStripMenuItem.Name = "sENDMESSAGEBOXToolStripMenuItem";
-            this.sENDMESSAGEBOXToolStripMenuItem.Size = new System.Drawing.Size(282, 30);
+            this.sENDMESSAGEBOXToolStripMenuItem.Size = new System.Drawing.Size(276, 30);
             this.sENDMESSAGEBOXToolStripMenuItem.Text = "SEND MESSAGEBOX";
             this.sENDMESSAGEBOXToolStripMenuItem.Click += new System.EventHandler(this.sENDMESSAGEBOXToolStripMenuItem_Click);
             // 
@@ -237,7 +241,7 @@
             // 
             this.sENDFILEToolStripMenuItem.Image = global::AsyncRAT_Sharp.Properties.Resources.tomem;
             this.sENDFILEToolStripMenuItem.Name = "sENDFILEToolStripMenuItem";
-            this.sENDFILEToolStripMenuItem.Size = new System.Drawing.Size(282, 30);
+            this.sENDFILEToolStripMenuItem.Size = new System.Drawing.Size(276, 30);
             this.sENDFILEToolStripMenuItem.Text = "SEND FILE TO DISK";
             this.sENDFILEToolStripMenuItem.Click += new System.EventHandler(this.sENDFILEToolStripMenuItem_Click_1);
             // 
@@ -245,7 +249,7 @@
             // 
             this.sENDFILETOMEMORYToolStripMenuItem.Image = global::AsyncRAT_Sharp.Properties.Resources.tomem1;
             this.sENDFILETOMEMORYToolStripMenuItem.Name = "sENDFILETOMEMORYToolStripMenuItem";
-            this.sENDFILETOMEMORYToolStripMenuItem.Size = new System.Drawing.Size(282, 30);
+            this.sENDFILETOMEMORYToolStripMenuItem.Size = new System.Drawing.Size(276, 30);
             this.sENDFILETOMEMORYToolStripMenuItem.Text = "SEND FILE TO MEMORY";
             this.sENDFILETOMEMORYToolStripMenuItem.Click += new System.EventHandler(this.sENDFILETOMEMORYToolStripMenuItem_Click);
             // 
@@ -253,7 +257,7 @@
             // 
             this.rEMOTEDESKTOPToolStripMenuItem.Image = global::AsyncRAT_Sharp.Properties.Resources.remotedesktop;
             this.rEMOTEDESKTOPToolStripMenuItem.Name = "rEMOTEDESKTOPToolStripMenuItem";
-            this.rEMOTEDESKTOPToolStripMenuItem.Size = new System.Drawing.Size(282, 30);
+            this.rEMOTEDESKTOPToolStripMenuItem.Size = new System.Drawing.Size(276, 30);
             this.rEMOTEDESKTOPToolStripMenuItem.Text = "REMOTE DESKTOP";
             this.rEMOTEDESKTOPToolStripMenuItem.Click += new System.EventHandler(this.rEMOTEDESKTOPToolStripMenuItem_Click);
             // 
@@ -261,7 +265,7 @@
             // 
             this.kEYLOGGERToolStripMenuItem.Image = global::AsyncRAT_Sharp.Properties.Resources.logger;
             this.kEYLOGGERToolStripMenuItem.Name = "kEYLOGGERToolStripMenuItem";
-            this.kEYLOGGERToolStripMenuItem.Size = new System.Drawing.Size(282, 30);
+            this.kEYLOGGERToolStripMenuItem.Size = new System.Drawing.Size(276, 30);
             this.kEYLOGGERToolStripMenuItem.Text = "KEYLOGGER";
             this.kEYLOGGERToolStripMenuItem.Click += new System.EventHandler(this.KEYLOGGERToolStripMenuItem_Click);
             // 
@@ -269,7 +273,7 @@
             // 
             this.fILEMANAGERToolStripMenuItem.Image = global::AsyncRAT_Sharp.Properties.Resources.filemanager;
             this.fILEMANAGERToolStripMenuItem.Name = "fILEMANAGERToolStripMenuItem";
-            this.fILEMANAGERToolStripMenuItem.Size = new System.Drawing.Size(282, 30);
+            this.fILEMANAGERToolStripMenuItem.Size = new System.Drawing.Size(276, 30);
             this.fILEMANAGERToolStripMenuItem.Text = "FILE MANAGER";
             this.fILEMANAGERToolStripMenuItem.Click += new System.EventHandler(this.fILEMANAGERToolStripMenuItem_Click);
             // 
@@ -277,7 +281,7 @@
             // 
             this.pROCESSMANAGERToolStripMenuItem.Image = global::AsyncRAT_Sharp.Properties.Resources.process;
             this.pROCESSMANAGERToolStripMenuItem.Name = "pROCESSMANAGERToolStripMenuItem";
-            this.pROCESSMANAGERToolStripMenuItem.Size = new System.Drawing.Size(282, 30);
+            this.pROCESSMANAGERToolStripMenuItem.Size = new System.Drawing.Size(276, 30);
             this.pROCESSMANAGERToolStripMenuItem.Text = "PROCESS MANAGER";
             this.pROCESSMANAGERToolStripMenuItem.Click += new System.EventHandler(this.pROCESSMANAGERToolStripMenuItem_Click);
             // 
@@ -285,7 +289,7 @@
             // 
             this.bOTKILLERToolStripMenuItem.Image = global::AsyncRAT_Sharp.Properties.Resources.botkiller;
             this.bOTKILLERToolStripMenuItem.Name = "bOTKILLERToolStripMenuItem";
-            this.bOTKILLERToolStripMenuItem.Size = new System.Drawing.Size(282, 30);
+            this.bOTKILLERToolStripMenuItem.Size = new System.Drawing.Size(276, 30);
             this.bOTKILLERToolStripMenuItem.Text = "BOT KILLER";
             this.bOTKILLERToolStripMenuItem.Click += new System.EventHandler(this.BOTKILLERToolStripMenuItem_Click);
             // 
@@ -293,33 +297,33 @@
             // 
             this.uSBSPREADToolStripMenuItem.Image = global::AsyncRAT_Sharp.Properties.Resources.usb;
             this.uSBSPREADToolStripMenuItem.Name = "uSBSPREADToolStripMenuItem";
-            this.uSBSPREADToolStripMenuItem.Size = new System.Drawing.Size(282, 30);
+            this.uSBSPREADToolStripMenuItem.Size = new System.Drawing.Size(276, 30);
             this.uSBSPREADToolStripMenuItem.Text = "USB SPREAD";
             this.uSBSPREADToolStripMenuItem.Click += new System.EventHandler(this.USBSPREADToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(279, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(273, 6);
             // 
             // bUILDERToolStripMenuItem
             // 
             this.bUILDERToolStripMenuItem.Image = global::AsyncRAT_Sharp.Properties.Resources.builder;
             this.bUILDERToolStripMenuItem.Name = "bUILDERToolStripMenuItem";
-            this.bUILDERToolStripMenuItem.Size = new System.Drawing.Size(282, 30);
+            this.bUILDERToolStripMenuItem.Size = new System.Drawing.Size(276, 30);
             this.bUILDERToolStripMenuItem.Text = "BUILDER";
             this.bUILDERToolStripMenuItem.Click += new System.EventHandler(this.bUILDERToolStripMenuItem_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(279, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(273, 6);
             // 
             // aBOUTToolStripMenuItem
             // 
             this.aBOUTToolStripMenuItem.Image = global::AsyncRAT_Sharp.Properties.Resources.info;
             this.aBOUTToolStripMenuItem.Name = "aBOUTToolStripMenuItem";
-            this.aBOUTToolStripMenuItem.Size = new System.Drawing.Size(282, 30);
+            this.aBOUTToolStripMenuItem.Size = new System.Drawing.Size(276, 30);
             this.aBOUTToolStripMenuItem.Text = "ABOUT";
             this.aBOUTToolStripMenuItem.Click += new System.EventHandler(this.ABOUTToolStripMenuItem_Click);
             // 
@@ -425,6 +429,19 @@
             this.tabPage3.Text = "Thumbnail";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
+            // listView3
+            // 
+            this.listView3.ContextMenuStrip = this.contextMenuStrip2;
+            this.listView3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listView3.LargeImageList = this.imageList1;
+            this.listView3.Location = new System.Drawing.Point(0, 0);
+            this.listView3.Name = "listView3";
+            this.listView3.ShowItemToolTips = true;
+            this.listView3.Size = new System.Drawing.Size(1160, 402);
+            this.listView3.SmallImageList = this.imageList1;
+            this.listView3.TabIndex = 0;
+            this.listView3.UseCompatibleStateImageBehavior = false;
+            // 
             // contextMenuStrip2
             // 
             this.contextMenuStrip2.ImageScalingSize = new System.Drawing.Size(24, 24);
@@ -467,18 +484,27 @@
             this.performanceCounter2.CategoryName = "Memory";
             this.performanceCounter2.CounterName = "% Committed Bytes In Use";
             // 
-            // listView3
+            // notifyIcon1
             // 
-            this.listView3.ContextMenuStrip = this.contextMenuStrip2;
-            this.listView3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listView3.LargeImageList = this.imageList1;
-            this.listView3.Location = new System.Drawing.Point(0, 0);
-            this.listView3.Name = "listView3";
-            this.listView3.ShowItemToolTips = true;
-            this.listView3.Size = new System.Drawing.Size(1160, 402);
-            this.listView3.SmallImageList = this.imageList1;
-            this.listView3.TabIndex = 0;
-            this.listView3.UseCompatibleStateImageBehavior = false;
+            this.notifyIcon1.ContextMenuStrip = this.contextMenuStrip3;
+            this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
+            this.notifyIcon1.Text = "AsyncRAT";
+            this.notifyIcon1.Visible = true;
+            // 
+            // contextMenuStrip3
+            // 
+            this.contextMenuStrip3.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.contextMenuStrip3.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.notificationOFFToolStripMenuItem});
+            this.contextMenuStrip3.Name = "contextMenuStrip3";
+            this.contextMenuStrip3.Size = new System.Drawing.Size(224, 34);
+            // 
+            // notificationOFFToolStripMenuItem
+            // 
+            this.notificationOFFToolStripMenuItem.Name = "notificationOFFToolStripMenuItem";
+            this.notificationOFFToolStripMenuItem.Size = new System.Drawing.Size(223, 30);
+            this.notificationOFFToolStripMenuItem.Text = "Notification [OFF]";
+            this.notificationOFFToolStripMenuItem.Click += new System.EventHandler(this.NotificationOFFToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -504,6 +530,7 @@
             this.contextMenuStrip2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.performanceCounter1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.performanceCounter2)).EndInit();
+            this.contextMenuStrip3.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -558,6 +585,9 @@
         private System.Windows.Forms.ToolStripMenuItem sTOPToolStripMenuItem;
         public System.Windows.Forms.ImageList imageList1;
         public System.Windows.Forms.ListView listView3;
+        public System.Windows.Forms.NotifyIcon notifyIcon1;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip3;
+        private System.Windows.Forms.ToolStripMenuItem notificationOFFToolStripMenuItem;
     }
 }
 

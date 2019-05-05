@@ -43,6 +43,8 @@
             this.label4 = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.chkAnti = new System.Windows.Forms.CheckBox();
+            this.txtMutex = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -50,7 +52,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(12, 611);
+            this.button1.Location = new System.Drawing.Point(10, 705);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(446, 50);
             this.button1.TabIndex = 0;
@@ -169,10 +171,12 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.txtMutex);
+            this.groupBox3.Controls.Add(this.label5);
             this.groupBox3.Controls.Add(this.chkAnti);
             this.groupBox3.Location = new System.Drawing.Point(16, 468);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(440, 99);
+            this.groupBox3.Size = new System.Drawing.Size(440, 174);
             this.groupBox3.TabIndex = 9;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "MISC";
@@ -187,17 +191,33 @@
             this.chkAnti.Text = "Anti Analysis";
             this.chkAnti.UseVisualStyleBackColor = true;
             // 
-            // Builder
+            // txtMutex
+            // 
+            this.txtMutex.Location = new System.Drawing.Point(106, 99);
+            this.txtMutex.Name = "txtMutex";
+            this.txtMutex.Size = new System.Drawing.Size(271, 26);
+            this.txtMutex.TabIndex = 11;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(14, 102);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(52, 20);
+            this.label5.TabIndex = 10;
+            this.label5.Text = "Mutex";
+            // 
+            // FormBuilder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(470, 693);
+            this.ClientSize = new System.Drawing.Size(470, 788);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.button1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "Builder";
+            this.Name = "FormBuilder";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Builder";
             this.Load += new System.EventHandler(this.Builder_Load);
@@ -227,5 +247,7 @@
         private System.Windows.Forms.ComboBox comboBoxFolder;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.CheckBox chkAnti;
+        private System.Windows.Forms.TextBox txtMutex;
+        private System.Windows.Forms.Label label5;
     }
 }

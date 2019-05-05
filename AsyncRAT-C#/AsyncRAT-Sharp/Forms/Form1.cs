@@ -67,18 +67,25 @@ namespace AsyncRAT_Sharp
         private async void Form1_Load(object sender, EventArgs e)
         {
             Text = $"{Settings.Version}";
-            FormPorts portsFrm = new FormPorts();
-            portsFrm.ShowDialog();
+            using (FormPorts portsFrm = new FormPorts())
+            {
+                portsFrm.ShowDialog();
+                Settings.Port = portsFrm.textPorts.Text;
+                Settings.Password = portsFrm.textPassword.Text;
+                Settings.AES = new Aes256(Settings.Password);
+            }
 
             await Methods.FadeIn(this, 5);
             trans = true;
-            Settings.Port = portsFrm.textPorts.Text;
-            Settings.Password = portsFrm.textPassword.Text;
-            Settings.AES = new Aes256(Settings.Password);
-            portsFrm.Dispose();
-            string[] ports = Settings.Port.Split(',');
+
+            Connect();
+        }
+
+        private void Connect()
+        {
             try
             {
+                string[] ports = Settings.Port.Split(',');
                 foreach (var port in ports)
                 {
                     if (!string.IsNullOrWhiteSpace(port))
@@ -96,10 +103,9 @@ namespace AsyncRAT_Sharp
                 Environment.Exit(0);
             }
         }
-
-
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
+            notifyIcon1.Dispose();
             Environment.Exit(0);
         }
 
@@ -407,9 +413,10 @@ namespace AsyncRAT_Sharp
 
         private void bUILDERToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FormBuilder formBuilder = new FormBuilder();
-            formBuilder.ShowDialog();
-            formBuilder.Dispose();
+           using( FormBuilder formBuilder = new FormBuilder())
+            {
+                formBuilder.ShowDialog();
+            }
         }
 
         private void fILEMANAGERToolStripMenuItem_Click(object sender, EventArgs e)
@@ -614,6 +621,21 @@ namespace AsyncRAT_Sharp
                 }
             }
             catch { }
+        }
+
+        private void NotificationOFFToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (notificationOFFToolStripMenuItem.Text.Contains("[ON]"))
+            {
+                notificationOFFToolStripMenuItem.Text = "Notification is currently [OFF]";
+                Properties.Settings.Default.Notification = false;
+            }
+            else
+            {
+                notificationOFFToolStripMenuItem.Text = "Notification is currently [ON]";
+                Properties.Settings.Default.Notification = true;
+            }
+            Properties.Settings.Default.Save();
         }
     }
 }

