@@ -14,6 +14,6 @@ namespace AsyncRAT_Sharp
         public static string Password { get; set; }
         public static Aes256 AES{ get; set; }
 
-        public static readonly string Version = "AsyncRAT 0.4.5";
+        public static readonly string Version = "AsyncRAT 0.4.6";
     }
 }

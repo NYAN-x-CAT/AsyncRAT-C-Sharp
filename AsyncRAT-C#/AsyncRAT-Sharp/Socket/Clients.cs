@@ -95,7 +95,6 @@ namespace AsyncRAT_Sharp.Sockets
 
         public void Disconnected()
         {
-
             try
             {
                 if (LV != null)

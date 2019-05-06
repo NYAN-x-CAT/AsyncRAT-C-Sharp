@@ -28,7 +28,7 @@ namespace AsyncRAT_Sharp.Handle_Packet
                         client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("Performance").AsString);
                         client.LV.ToolTipText = unpack_msgpack.ForcePathObject("Path").AsString;
                         client.ID = unpack_msgpack.ForcePathObject("HWID").AsString;
-                        Program.form1.listView1.Items.Insert(0, client.LV);
+                        Program.form1.listView1.Items.Add(client.LV);
                         Program.form1.listView1.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
 
                         if (Properties.Settings.Default.Notification == true)

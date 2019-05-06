@@ -4,7 +4,6 @@ using System;
 using System.Windows.Forms;
 using System.Drawing;
 using AsyncRAT_Sharp.Handle_Packet;
-using System.Linq;
 
 namespace AsyncRAT_Sharp.Sockets
 {
@@ -40,63 +39,11 @@ namespace AsyncRAT_Sharp.Sockets
         {
             try
             {
-                Socket socket = Server.EndAccept(ar);
-                if (IsDublicated(socket))
-                {
-                    socket.Dispose();
-                }
-                else
-                {
-                    new Clients(socket);
-                }
+                new Clients(Server.EndAccept(ar));
             }
             finally
             {
                 Server.BeginAccept(EndAccept, null);
-            }
-        }
-
-        private bool IsDublicated(Socket socket)
-        {
-            try
-            {
-                if (Settings.Blocked.Contains(socket.RemoteEndPoint.ToString().Split(':')[0]))
-                {
-                    return true;
-                }
-
-                int count = 0;
-                foreach (Clients client in Settings.Online.ToList())
-                {
-                    if (client.LV != null)
-                    {
-                        if (client.ClientSocket.RemoteEndPoint.ToString().Split(':')[0] == socket.RemoteEndPoint.ToString().Split(':')[0])
-                            count++;
-                    }
-                }
-
-                if (count > 3)
-                {
-                    Settings.Blocked.Add(socket.RemoteEndPoint.ToString().Split(':')[0]);
-                    new HandleLogs().Addmsg($"Client {socket.RemoteEndPoint.ToString().Split(':')[0]} tried to spam, IP blocked", Color.Red);
-                    foreach (Clients client in Settings.Online.ToList())
-                    {
-                        if (client.ClientSocket.RemoteEndPoint.ToString().Split(':')[0] == socket.RemoteEndPoint.ToString().Split(':')[0] && client.LV != null)
-                        {
-                            try
-                            {
-                                client.Disconnected();
-                            }
-                            catch { }
-                        }
-                    }
-                    return true;
-                }
-                return false;
-            }
-            catch
-            {
-                return false;
             }
         }
     }

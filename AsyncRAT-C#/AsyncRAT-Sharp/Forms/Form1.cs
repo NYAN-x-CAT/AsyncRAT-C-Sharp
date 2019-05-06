@@ -78,7 +78,7 @@ namespace AsyncRAT_Sharp
             await Methods.FadeIn(this, 5);
             trans = true;
 
-            Connect();
+            await Task.Run(() => Connect());
         }
 
         private void Connect()
@@ -109,7 +109,6 @@ namespace AsyncRAT_Sharp
             Environment.Exit(0);
         }
 
-
         private void listView1_KeyDown(object sender, KeyEventArgs e)
         {
             if (listView1.Items.Count > 0)
@@ -117,7 +116,6 @@ namespace AsyncRAT_Sharp
                     foreach (ListViewItem x in listView1.Items)
                         x.Selected = true;
         }
-
 
         private void listView1_MouseMove(object sender, MouseEventArgs e)
         {
@@ -128,7 +126,6 @@ namespace AsyncRAT_Sharp
                     listView1.Items[hitInfo.Item.Index].Selected = true;
             }
         }
-
 
         private void ping_Tick(object sender, EventArgs e)
         {
@@ -142,9 +139,9 @@ namespace AsyncRAT_Sharp
             }
         }
 
-
         private void UpdateUI_Tick(object sender, EventArgs e)
         {
+            Text = $"{Settings.Version}     {DateTime.Now.ToLongTimeString()}";
             toolStripStatusLabel1.Text = $"Online {listView1.Items.Count.ToString()}     Selected {listView1.SelectedItems.Count.ToString()}                    Sent {Methods.BytesToString(Settings.Sent).ToString()}     Received {Methods.BytesToString(Settings.Received).ToString()}                    CPU {(int)performanceCounter1.NextValue()}%     RAM {(int)performanceCounter2.NextValue()}%";
         }
 
@@ -334,7 +331,6 @@ namespace AsyncRAT_Sharp
 
         private void rEMOTEDESKTOPToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
             if (listView1.SelectedItems.Count > 0)
             {
                 try
@@ -413,7 +409,7 @@ namespace AsyncRAT_Sharp
 
         private void bUILDERToolStripMenuItem_Click(object sender, EventArgs e)
         {
-           using( FormBuilder formBuilder = new FormBuilder())
+            using (FormBuilder formBuilder = new FormBuilder())
             {
                 formBuilder.ShowDialog();
             }
@@ -586,7 +582,10 @@ namespace AsyncRAT_Sharp
         private static System.Threading.Timer Tick { get; set; }
         private void STARTToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Tick = new System.Threading.Timer(new TimerCallback(GetThumbnails), null, 2500, 5000);
+            if (Tick != null && listView1.Items.Count > 0)
+            {
+                Tick = new System.Threading.Timer(new TimerCallback(GetThumbnails), null, 2500, 5000);
+            }
         }
         private void GetThumbnails(object obj)
         {
