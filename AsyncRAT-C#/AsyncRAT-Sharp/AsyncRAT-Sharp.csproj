@@ -47,11 +47,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Resources\cGeoIp.dll</HintPath>
     </Reference>
-    <Reference Include="dnlib, Version=3.2.0.0, Culture=neutral, PublicKeyToken=50e96378b6e77999, processorArchitecture=MSIL">
-      <HintPath>..\packages\dnlib.3.2.0\lib\net45\dnlib.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="Mono.Cecil, Version=0.10.3.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e, processorArchitecture=MSIL">
+      <HintPath>..\packages\Mono.Cecil.0.10.3\lib\net40\Mono.Cecil.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -129,6 +128,7 @@
     <Compile Include="Handle Packet\HandleThumbnails.cs" />
     <Compile Include="Handle Packet\Packet.cs" />
     <Compile Include="Handle Packet\HandleProcessManager.cs" />
+    <Compile Include="Helper\BuildRenamer.cs" />
     <Compile Include="Helper\Methods.cs" />
     <Compile Include="MessagePack\BytesTools.cs" />
     <Compile Include="MessagePack\MsgPack.cs" />

@@ -81,12 +81,12 @@ namespace AsyncRAT_Sharp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
         ///&lt;configuration&gt;
         ///    &lt;configSections&gt;
-        ///        &lt;sectionGroup name=&quot;userSettings&quot; type=&quot;System.Configuration.UserSettingsGroup, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089&quot; &gt;
-        ///            &lt;section name=&quot;AsyncRAT_Sharp.Properties.Settings&quot; type=&quot;System.Configuration.ClientSettingsSection, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089&quot; allowExeDefinition=&quot;MachineToLocalUser&quot; requirePermission=&quot;false&quot; /&gt;
-        ///         [rest of string was truncated]&quot;;.
+        ///        &lt;sectionGroup name=&quot;userSettings&quot; type=&quot;System.Configuration.UserSettingsGroup, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089&quot;&gt;
+        ///            &lt;section name=&quot;AsyncRAT_Sharp.Properties.Settings&quot; type=&quot;System.Configuration.ClientSettingsSection, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089&quot; allowExeDefinition=&quot;MachineToLocalUser&quot; requirePermission=&quot;false&quot;/&gt;
+        ///        &lt;/s [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string AsyncRAT_Sharp_exe {
             get {
@@ -115,16 +115,6 @@ namespace AsyncRAT_Sharp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] cGeoIp {
-            get {
-                object obj = ResourceManager.GetObject("cGeoIp", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap circle_loading_gif {
@@ -141,16 +131,6 @@ namespace AsyncRAT_Sharp.Properties {
             get {
                 object obj = ResourceManager.GetObject("client", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] dnlib {
-            get {
-                object obj = ResourceManager.GetObject("dnlib", resourceCulture);
-                return ((byte[])(obj));
             }
         }
         

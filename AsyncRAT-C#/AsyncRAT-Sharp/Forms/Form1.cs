@@ -47,16 +47,13 @@ namespace AsyncRAT_Sharp
                 }
 
                 if (!File.Exists(Path.Combine(Application.StartupPath, "cGeoIp.dll")))
-                    File.WriteAllBytes(Path.Combine(Application.StartupPath, "cGeoIp.dll"), Properties.Resources.cGeoIp);
-
-                if (!File.Exists(Path.Combine(Application.StartupPath, "dnlib.dll")))
-                    File.WriteAllBytes(Path.Combine(Application.StartupPath, "dnlib.dll"), Properties.Resources.dnlib);
+                    MessageBox.Show("File 'cGeoIp.dll' Not Found!");
 
                 if (!Directory.Exists(Path.Combine(Application.StartupPath, "Stub")))
                     Directory.CreateDirectory(Path.Combine(Application.StartupPath, "Stub"));
 
                 if (!File.Exists(Path.Combine(Application.StartupPath, "Stub\\Stub.exe")))
-                    MessageBox.Show("Stub Not Found");
+                    MessageBox.Show("Stub Not Found!");
             }
             catch (Exception ex)
             {

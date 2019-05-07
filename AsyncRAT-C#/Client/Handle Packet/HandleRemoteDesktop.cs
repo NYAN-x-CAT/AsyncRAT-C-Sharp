@@ -1,7 +1,5 @@
 ﻿using Client.MessagePack;
 using Client.Sockets;
-using StreamLibrary;
-using StreamLibrary.UnsafeCodecs;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -10,6 +8,8 @@ using System.Windows.Forms;
 using System.Net.Sockets;
 using Client.Helper;
 using System;
+using Client.StreamLibrary.UnsafeCodecs;
+using Client.StreamLibrary;
 
 namespace Client.Handle_Packet
 {

@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using System.Text;
 
-namespace StreamLibrary.src
+namespace Client.StreamLibrary.src
 {
     public class NativeMethods
     {
