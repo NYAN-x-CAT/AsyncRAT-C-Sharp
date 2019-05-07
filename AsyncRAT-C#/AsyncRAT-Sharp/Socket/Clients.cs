@@ -127,19 +127,19 @@ namespace AsyncRAT_Sharp.Sockets
             catch { }
         }
 
-        public void BeginSend(object Msgs)
+        public void BeginSend(object msg)
         {
             lock (SendSync)
             {
                 try
                 {
-                    if (!ClientSocket.Connected)
+                    if (!ClientSocket.Connected || (byte[])msg == null)
                     {
                         Disconnected();
                         return;
                     }
 
-                    byte[] buffer = Settings.AES.Encrypt((byte[])Msgs);
+                    byte[] buffer = Settings.AES.Encrypt((byte[])msg);
                     byte[] buffersize = BitConverter.GetBytes(buffer.Length);
 
                     ClientSocket.Poll(-1, SelectMode.SelectWrite);

@@ -16,9 +16,8 @@ namespace Client
         public static readonly string MTX = "%MTX%";
 #if DEBUG
         public static readonly string Anti = "false";
-
 #else
-                public static readonly string Anti = "%Anti%";
+        public static readonly string Anti = "%Anti%";
 #endif
     }
 }

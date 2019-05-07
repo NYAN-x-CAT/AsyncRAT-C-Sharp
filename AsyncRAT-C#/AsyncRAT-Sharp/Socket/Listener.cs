@@ -20,8 +20,6 @@ namespace AsyncRAT_Sharp.Sockets
                 {
                     SendBufferSize = 50 * 1024,
                     ReceiveBufferSize = 50 * 1024,
-                    ReceiveTimeout = -1,
-                    SendTimeout = -1,
                 };
                 Server.Bind(ipEndPoint);
                 Server.Listen(30);

