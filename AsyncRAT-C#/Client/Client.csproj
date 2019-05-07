@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\Costura.Fody.3.3.3\build\Costura.Fody.props" Condition="Exists('..\packages\Costura.Fody.3.3.3\build\Costura.Fody.props')" />
+  <Import Project="..\packages\Costura.Fody.4.0.0\build\Costura.Fody.props" Condition="Exists('..\packages\Costura.Fody.4.0.0\build\Costura.Fody.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -36,7 +36,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\AsyncRAT-Sharp\Resources\</OutputPath>
+    <OutputPath>..\AsyncRAT-Sharp\bin\Debug\Stub\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -49,7 +49,7 @@
     <PlatformTarget>x86</PlatformTarget>
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\AsyncRAT-Sharp\Resources\</OutputPath>
+    <OutputPath>..\AsyncRAT-Sharp\bin\Release\Stub\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -61,8 +61,11 @@
   </PropertyGroup>
   <PropertyGroup />
   <ItemGroup>
+    <Reference Include="Costura, Version=4.0.0.0, Culture=neutral, PublicKeyToken=9919ef960d84173d, processorArchitecture=MSIL">
+      <HintPath>..\packages\Costura.Fody.4.0.0\lib\net40\Costura.dll</HintPath>
+    </Reference>
     <Reference Include="IconLib">
-      <HintPath>..\packages\IconLib\IconLib.dll</HintPath>
+      <HintPath>..\AsyncRAT-Sharp\Resources\IconLib.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
@@ -96,35 +99,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Sockets\ClientSocket.cs" />
-    <Compile Include="StreamLibrary\Codecs\DirectDriverCodec.cs" />
-    <Compile Include="StreamLibrary\Codecs\MJPGCodec.cs" />
-    <Compile Include="StreamLibrary\Codecs\QuickCachedStreamCodec.cs" />
-    <Compile Include="StreamLibrary\Codecs\QuickStreamCodec.cs" />
-    <Compile Include="StreamLibrary\Codecs\SmallCachedStreamCodec.cs" />
-    <Compile Include="StreamLibrary\Codecs\SmallStreamCodec.cs" />
-    <Compile Include="StreamLibrary\Encoders\GridCoder\GridBlock.cs" />
-    <Compile Include="StreamLibrary\Encoders\GridCoder\GridEncoder.cs" />
     <Compile Include="StreamLibrary\Enums.cs" />
-    <Compile Include="StreamLibrary\IEncoder.cs" />
     <Compile Include="StreamLibrary\IUnsafeCodec.cs" />
     <Compile Include="StreamLibrary\IVideoCodec.cs" />
-    <Compile Include="StreamLibrary\src\CRC32.cs" />
-    <Compile Include="StreamLibrary\src\ExtensionAttribute.cs" />
-    <Compile Include="StreamLibrary\src\Extentions.cs" />
-    <Compile Include="StreamLibrary\src\FastBitmap.cs" />
     <Compile Include="StreamLibrary\src\JpgCompression.cs" />
     <Compile Include="StreamLibrary\src\LzwCompression.cs" />
-    <Compile Include="StreamLibrary\src\MurmurHash2Unsafe.cs" />
     <Compile Include="StreamLibrary\src\NativeMethods.cs" />
-    <Compile Include="StreamLibrary\src\PayloadWriter.cs" />
-    <Compile Include="StreamLibrary\src\PointerHelper.cs" />
-    <Compile Include="StreamLibrary\src\SafeQuickLZ.cs" />
-    <Compile Include="StreamLibrary\src\SimpleBitmap.cs" />
-    <Compile Include="StreamLibrary\UnsafeCodecs\UnsafeCacheCodec.cs" />
-    <Compile Include="StreamLibrary\UnsafeCodecs\UnsafeCachedStreamCodec.cs" />
-    <Compile Include="StreamLibrary\UnsafeCodecs\UnsafeMiniCodec.cs" />
-    <Compile Include="StreamLibrary\UnsafeCodecs\UnsafeOptimizedCodec.cs" />
-    <Compile Include="StreamLibrary\UnsafeCodecs\UnsafeQuickStream.cs" />
     <Compile Include="StreamLibrary\UnsafeCodecs\UnsafeStreamCodec.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -139,12 +119,12 @@
     </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\packages\Fody.4.0.2\build\Fody.targets" Condition="Exists('..\packages\Fody.4.0.2\build\Fody.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Fody.4.0.2\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.4.0.2\build\Fody.targets'))" />
-    <Error Condition="!Exists('..\packages\Costura.Fody.3.3.3\build\Costura.Fody.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Costura.Fody.3.3.3\build\Costura.Fody.props'))" />
+    <Error Condition="!Exists('..\packages\Costura.Fody.4.0.0\build\Costura.Fody.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Costura.Fody.4.0.0\build\Costura.Fody.props'))" />
+    <Error Condition="!Exists('..\packages\Fody.5.0.5\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.5.0.5\build\Fody.targets'))" />
   </Target>
+  <Import Project="..\packages\Fody.5.0.5\build\Fody.targets" Condition="Exists('..\packages\Fody.5.0.5\build\Fody.targets')" />
 </Project>
