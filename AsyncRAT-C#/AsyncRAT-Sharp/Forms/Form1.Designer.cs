@@ -191,28 +191,28 @@
             // cLOSEToolStripMenuItem
             // 
             this.cLOSEToolStripMenuItem.Name = "cLOSEToolStripMenuItem";
-            this.cLOSEToolStripMenuItem.Size = new System.Drawing.Size(252, 30);
+            this.cLOSEToolStripMenuItem.Size = new System.Drawing.Size(173, 30);
             this.cLOSEToolStripMenuItem.Text = "CLOSE";
             this.cLOSEToolStripMenuItem.Click += new System.EventHandler(this.cLOSEToolStripMenuItem_Click);
             // 
             // rESTARTToolStripMenuItem
             // 
             this.rESTARTToolStripMenuItem.Name = "rESTARTToolStripMenuItem";
-            this.rESTARTToolStripMenuItem.Size = new System.Drawing.Size(252, 30);
+            this.rESTARTToolStripMenuItem.Size = new System.Drawing.Size(173, 30);
             this.rESTARTToolStripMenuItem.Text = "RESTART";
             this.rESTARTToolStripMenuItem.Click += new System.EventHandler(this.RESTARTToolStripMenuItem_Click);
             // 
             // uPDATEToolStripMenuItem
             // 
             this.uPDATEToolStripMenuItem.Name = "uPDATEToolStripMenuItem";
-            this.uPDATEToolStripMenuItem.Size = new System.Drawing.Size(252, 30);
+            this.uPDATEToolStripMenuItem.Size = new System.Drawing.Size(173, 30);
             this.uPDATEToolStripMenuItem.Text = "UPDATE";
             this.uPDATEToolStripMenuItem.Click += new System.EventHandler(this.uPDATEToolStripMenuItem_Click);
             // 
             // uNISTALLToolStripMenuItem
             // 
             this.uNISTALLToolStripMenuItem.Name = "uNISTALLToolStripMenuItem";
-            this.uNISTALLToolStripMenuItem.Size = new System.Drawing.Size(252, 30);
+            this.uNISTALLToolStripMenuItem.Size = new System.Drawing.Size(173, 30);
             this.uNISTALLToolStripMenuItem.Text = "UNISTALL";
             this.uNISTALLToolStripMenuItem.Click += new System.EventHandler(this.uNISTALLToolStripMenuItem_Click);
             // 
@@ -396,7 +396,6 @@
             this.listView2.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1,
             this.columnHeader2});
-            this.listView2.ContextMenuStrip = this.contextMenuStrip1;
             this.listView2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listView2.FullRowSelect = true;
             this.listView2.GridLines = true;
