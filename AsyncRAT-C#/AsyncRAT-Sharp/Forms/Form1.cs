@@ -12,6 +12,7 @@ using AsyncRAT_Sharp.Forms;
 using AsyncRAT_Sharp.Cryptography;
 using System.Diagnostics;
 using System.Net.Sockets;
+using AsyncRAT_Sharp.Handle_Packet;
 
 //       │ Author     : NYAN CAT
 //       │ Name       : AsyncRAT // Simple Socket
@@ -75,6 +76,7 @@ namespace AsyncRAT_Sharp
                 Settings.Port = portsFrm.textPorts.Text;
                 Settings.Password = portsFrm.textPassword.Text;
                 Settings.AES = new Aes256(Settings.Password);
+                new HandleLogs().Addmsg($"Password {Settings.Password}", Color.Green);
             }
 #endif
 
