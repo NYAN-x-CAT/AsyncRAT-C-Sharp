@@ -289,31 +289,6 @@ namespace Client.StreamLibrary.UnsafeCodecs
                 return decodedBitmap;
             }
             return decodedBitmap;
-            byte* bufferPtr = (byte*)CodecBuffer.ToInt32();
-            if (DataSize > 0)
-            {
-                Graphics g = Graphics.FromImage(decodedBitmap);
-                for (int i = 4; DataSize > 0; )
-                {
-                    Rectangle rect = new Rectangle(*(int*)(bufferPtr + i), *(int*)(bufferPtr + i + 4),
-                                                   *(int*)(bufferPtr + i + 8), *(int*)(bufferPtr + i + 12));
-                    int UpdateLen = *(int*)(bufferPtr + i + 16);
-                    byte[] temp = new byte[UpdateLen];
-
-                    fixed(byte* tempPtr = temp)
-                    {
-                        NativeMethods.memcpy(new IntPtr(tempPtr), new IntPtr(CodecBuffer.ToInt32() + i + 20), (uint)UpdateLen);
-                        using (Bitmap TmpBmp = new Bitmap(rect.Width, rect.Height, rect.Width * 3, decodedBitmap.PixelFormat, new IntPtr(tempPtr)))
-                        {
-                            g.DrawImage(TmpBmp, new Point(rect.X, rect.Y));
-                        }
-                    }
-                    DataSize -= UpdateLen + (4 * 5);
-                    i += UpdateLen + (4 * 5);
-                }
-                g.Dispose();
-            }
-            return decodedBitmap;
         }
 
         public override Bitmap DecodeData(Stream inStream)
