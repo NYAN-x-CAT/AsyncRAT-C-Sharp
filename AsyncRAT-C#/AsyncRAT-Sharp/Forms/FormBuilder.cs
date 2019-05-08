@@ -36,7 +36,6 @@ namespace AsyncRAT_Sharp.Forms
                     if (!r.Perform())
                         throw new Exception("renaming failed");
 
-                    // PHASE 3 - Saving
                     using (SaveFileDialog saveFileDialog1 = new SaveFileDialog())
                     {
                         saveFileDialog1.Filter = ".exe (*.exe)|*.exe";

