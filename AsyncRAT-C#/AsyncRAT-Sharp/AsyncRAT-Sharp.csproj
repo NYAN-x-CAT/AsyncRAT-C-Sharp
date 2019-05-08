@@ -232,10 +232,8 @@
     <None Include="Resources\tomem.png" />
     <None Include="Resources\visit.png" />
     <None Include="Resources\client.png" />
-    <None Include="Resources\Stub.exe" />
     <None Include="Resources\cGeoIp.dll" />
     <None Include="Resources\Plugin.dll" />
-    <None Include="Resources\dnlib.dll" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
