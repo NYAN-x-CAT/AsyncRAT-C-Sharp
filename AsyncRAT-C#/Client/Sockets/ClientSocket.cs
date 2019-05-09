@@ -60,7 +60,6 @@ namespace Client.Sockets
 
             try
             {
-                Packet.KeyRecevied = false;
                 Tick?.Dispose();
                 Client?.Dispose();
                 MS?.Dispose();
