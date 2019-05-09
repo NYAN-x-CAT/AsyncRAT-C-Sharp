@@ -147,6 +147,16 @@ namespace AsyncRAT_Sharp.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap disabled {
+            get {
+                object obj = ResourceManager.GetObject("disabled", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap filemanager {
             get {
                 object obj = ResourceManager.GetObject("filemanager", resourceCulture);
@@ -260,6 +270,16 @@ namespace AsyncRAT_Sharp.Properties {
         internal static System.Drawing.Bitmap tomem1 {
             get {
                 object obj = ResourceManager.GetObject("tomem1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap uac {
+            get {
+                object obj = ResourceManager.GetObject("uac", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

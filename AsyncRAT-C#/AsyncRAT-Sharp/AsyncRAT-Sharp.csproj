@@ -219,6 +219,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="async_icon.ico" />
+    <None Include="Resources\uac.png" />
+    <None Include="Resources\disabled.png" />
     <None Include="Resources\AsyncRAT-Sharp.exe.config" />
     <None Include="Resources\ddos.png" />
     <None Include="Resources\settings.png" />

