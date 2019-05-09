@@ -42,7 +42,7 @@ namespace AsyncRAT_Sharp
             {
                 if (!File.Exists(Path.Combine(Application.StartupPath, Path.GetFileName(Application.ExecutablePath) + ".config")))
                 {
-                   File.WriteAllText(Path.Combine(Application.StartupPath, Path.GetFileName(Application.ExecutablePath) + ".config"), Properties.Resources.AsyncRAT_Sharp_exe);
+                  // File.WriteAllText(Path.Combine(Application.StartupPath, Path.GetFileName(Application.ExecutablePath) + ".config"), Properties.Resources.AsyncRAT_Sharp_exe);
                     Process.Start(Application.ExecutablePath);
                     Environment.Exit(0);
                 }
@@ -588,9 +588,9 @@ namespace AsyncRAT_Sharp
         private static System.Threading.Timer Tick { get; set; }
         private void STARTToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (Tick != null && listView1.Items.Count > 0)
+            if (Tick == null && listView1.Items.Count > 0)
             {
-                Tick = new System.Threading.Timer(new TimerCallback(GetThumbnails), null, 2500, 5000);
+                Tick = new System.Threading.Timer(GetThumbnails, null, 2500, 5000);
             }
         }
         private void GetThumbnails(object obj)
@@ -617,6 +617,7 @@ namespace AsyncRAT_Sharp
             try
             {
                 Tick?.Dispose();
+                Tick = null;
                 listView3.Items.Clear();
                 imageList1.Images.Clear();
                 foreach (ListViewItem itm in listView1.Items)
