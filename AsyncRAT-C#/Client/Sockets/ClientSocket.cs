@@ -126,6 +126,8 @@ namespace Client.Sockets
                             MS.Dispose();
                             MS = new MemoryStream();
                         }
+                        else
+                            Buffer = new byte[Buffersize - MS.Length];
                     }
                     Client.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None, ReadServertData, null);
                 }
