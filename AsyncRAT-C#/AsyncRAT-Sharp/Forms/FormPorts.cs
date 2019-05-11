@@ -2,6 +2,9 @@
 using System.Windows.Forms;
 using System.IO;
 using System.Diagnostics;
+using AsyncRAT_Sharp.Helper;
+using System.Security.Cryptography.X509Certificates;
+
 namespace AsyncRAT_Sharp.Forms
 {
     public partial class FormPorts : Form
@@ -15,24 +18,32 @@ namespace AsyncRAT_Sharp.Forms
 
         private void PortsFrm_Load(object sender, EventArgs e)
         {
-           Methods.FadeIn(this, 5);
+            Methods.FadeIn(this, 5);
 
             textPorts.Text = "6606, 7707, 8808";
             if (Properties.Settings.Default.Ports.Length > 0)
                 textPorts.Text = Properties.Settings.Default.Ports;
 
-            if (Properties.Settings.Default.Password.Length > 0)
-                textPassword.Text = Properties.Settings.Default.Password;
-
             this.Text = $"{Settings.Version} | Welcome {Environment.UserName}";
+
+            if (!File.Exists(Settings.CertificatePath))
+            {
+                using (FormCertificate formCertificate = new FormCertificate())
+                {
+                    formCertificate.ShowDialog();
+                }
+            }
+            else
+            {
+                Settings.ServerCertificate = new X509Certificate2(Settings.CertificatePath);
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (textPorts.Text.Length > 0 && textPassword.Text.Length > 0)
+            if (textPorts.Text.Length > 0)
             {
                 Properties.Settings.Default.Ports = textPorts.Text;
-                Properties.Settings.Default.Password = textPassword.Text;
                 Properties.Settings.Default.Save();
                 isOK = true;
                 this.Close();

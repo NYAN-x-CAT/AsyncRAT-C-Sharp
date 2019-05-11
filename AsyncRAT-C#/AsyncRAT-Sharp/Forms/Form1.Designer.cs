@@ -64,6 +64,7 @@
             this.bUILDERToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.aBOUTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.pASSWORDRECOVERYToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.ping = new System.Windows.Forms.Timer(this.components);
@@ -157,12 +158,12 @@
             // lv_prefor
             // 
             this.lv_prefor.Text = "PERFORMANCE";
-            this.lv_prefor.Width = 170;
+            this.lv_prefor.Width = 189;
             // 
             // lv_admin
             // 
             this.lv_admin.Text = "PRIVILEGES";
-            this.lv_admin.Width = 138;
+            this.lv_admin.Width = 166;
             // 
             // contextMenuStrip1
             // 
@@ -178,6 +179,7 @@
             this.kEYLOGGERToolStripMenuItem,
             this.toolStripMenuItem1,
             this.fILEMANAGERToolStripMenuItem,
+            this.pASSWORDRECOVERYToolStripMenuItem,
             this.pROCESSMANAGERToolStripMenuItem,
             this.dISABLESToolStripMenuItem,
             this.bOTKILLERToolStripMenuItem,
@@ -188,7 +190,7 @@
             this.toolStripSeparator3,
             this.aBOUTToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(283, 502);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(283, 568);
             // 
             // cLIENTOPTIONSToolStripMenuItem
             // 
@@ -372,6 +374,14 @@
             this.aBOUTToolStripMenuItem.Size = new System.Drawing.Size(282, 30);
             this.aBOUTToolStripMenuItem.Text = "ABOUT";
             this.aBOUTToolStripMenuItem.Click += new System.EventHandler(this.ABOUTToolStripMenuItem_Click);
+            // 
+            // pASSWORDRECOVERYToolStripMenuItem
+            // 
+            this.pASSWORDRECOVERYToolStripMenuItem.Image = global::AsyncRAT_Sharp.Properties.Resources.key;
+            this.pASSWORDRECOVERYToolStripMenuItem.Name = "pASSWORDRECOVERYToolStripMenuItem";
+            this.pASSWORDRECOVERYToolStripMenuItem.Size = new System.Drawing.Size(282, 30);
+            this.pASSWORDRECOVERYToolStripMenuItem.Text = "PASSWORD RECOVERY";
+            this.pASSWORDRECOVERYToolStripMenuItem.Click += new System.EventHandler(this.PASSWORDRECOVERYToolStripMenuItem_Click);
             // 
             // statusStrip1
             // 
@@ -638,6 +648,7 @@
         private System.Windows.Forms.ToolStripMenuItem wINDOWDSDEFENDERToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem gETADMINISTRATORPRIVILEGESToolStripMenuItem;
         private System.Windows.Forms.ColumnHeader lv_admin;
+        private System.Windows.Forms.ToolStripMenuItem pASSWORDRECOVERYToolStripMenuItem;
     }
 }
 

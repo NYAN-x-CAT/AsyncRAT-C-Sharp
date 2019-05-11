@@ -43,6 +43,9 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BouncyCastle.Crypto, Version=1.8.5.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
+      <HintPath>..\packages\BouncyCastle.1.8.5\lib\BouncyCastle.Crypto.dll</HintPath>
+    </Reference>
     <Reference Include="cGeoIp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Resources\cGeoIp.dll</HintPath>
@@ -53,6 +56,8 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -65,6 +70,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Cryptography\Aes256.cs" />
+    <Compile Include="Cryptography\Sha256.cs" />
     <Compile Include="Forms\FormAbout.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -76,6 +82,12 @@
     </Compile>
     <Compile Include="Forms\FormBuilder.Designer.cs">
       <DependentUpon>FormBuilder.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormCertificate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormCertificate.Designer.cs">
+      <DependentUpon>FormCertificate.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FormDOS.cs">
       <SubType>Form</SubType>
@@ -170,6 +182,9 @@
     <EmbeddedResource Include="Forms\FormBuilder.resx">
       <DependentUpon>FormBuilder.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormCertificate.resx">
+      <DependentUpon>FormCertificate.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormDOS.resx">
       <DependentUpon>FormDOS.cs</DependentUpon>
     </EmbeddedResource>
@@ -219,6 +234,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="async_icon.ico" />
+    <None Include="Resources\key.png" />
     <None Include="Resources\uac.png" />
     <None Include="Resources\disabled.png" />
     <None Include="Resources\AsyncRAT-Sharp.exe.config" />

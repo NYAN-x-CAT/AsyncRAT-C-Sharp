@@ -11,6 +11,10 @@ using Client.Helper;
 
 //       This program Is distributed for educational purposes only.
 
+//       Credits;
+//       Serialization    @ymofen
+//       StreamLibrary    @Dergan
+//       Special Thanks   MaxXor@hf gigajew@hf
 
 namespace Client
 {

