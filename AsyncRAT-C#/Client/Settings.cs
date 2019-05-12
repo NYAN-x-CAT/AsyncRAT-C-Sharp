@@ -25,7 +25,7 @@ namespace Client
 #else
         public static string Ports = "%Ports%";
         public static string Hosts = "%Hosts%";
-        public static string Version = "AsyncRAT 0.4.8";
+        public static string Version = "AsyncRAT 0.4.8B";
         public static string Install = "%Install%";
         public static string ClientFullPath = Path.Combine(Environment.ExpandEnvironmentVariables("%Folder%"), "%File%");
         public static string Key = "%Key%";
