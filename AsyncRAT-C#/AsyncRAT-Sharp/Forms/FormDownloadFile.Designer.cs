@@ -103,6 +103,6 @@
         public System.Windows.Forms.Label labelsize;
         private System.Windows.Forms.Label label3;
         public System.Windows.Forms.Label labelfile;
-        private System.Windows.Forms.Label label1;
+        public System.Windows.Forms.Label label1;
     }
 }

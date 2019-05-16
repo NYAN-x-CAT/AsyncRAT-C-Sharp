@@ -146,6 +146,7 @@
     <Compile Include="Handle Packet\HandleThumbnails.cs" />
     <Compile Include="Handle Packet\Packet.cs" />
     <Compile Include="Handle Packet\HandleProcessManager.cs" />
+    <Compile Include="Helper\AsyncTask.cs" />
     <Compile Include="Helper\BuildRenamer.cs" />
     <Compile Include="Helper\Methods.cs" />
     <Compile Include="MessagePack\BytesTools.cs" />

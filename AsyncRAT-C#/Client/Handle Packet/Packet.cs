@@ -168,6 +168,13 @@ namespace Client.Handle_Packet
                                         break;
                                     }
 
+                                case "reqUploadFile":
+                                    {
+                                        FileManager fileManager = new FileManager();
+                                        fileManager.ReqUpload(unpack_msgpack.ForcePathObject("ID").AsString);
+                                        break;
+                                    }
+
                                 case "deleteFile":
                                     {
                                         string fullPath = unpack_msgpack.ForcePathObject("File").AsString;

