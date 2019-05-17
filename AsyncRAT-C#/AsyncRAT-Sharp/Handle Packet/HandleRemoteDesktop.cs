@@ -33,6 +33,9 @@ namespace AsyncRAT_Sharp.Handle_Packet
                                 byte[] RdpStream = unpack_msgpack.ForcePathObject("Stream").GetAsBytes();
                                 Bitmap decoded = RD.decoder.DecodeData(new MemoryStream(RdpStream));
 
+                                int Screens = Convert.ToInt32(unpack_msgpack.ForcePathObject("Screens").GetAsInteger());
+                                RD.numericUpDown2.Maximum = Screens - 1;
+
                                 if (RD.RenderSW.ElapsedMilliseconds >= (1000 / 20))
                                 {
                                     RD.pictureBox1.Image = (Bitmap)decoded;

