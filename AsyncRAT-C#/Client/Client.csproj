@@ -32,11 +32,11 @@
     </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\AsyncRAT-Sharp\bin\Debug\Stub\</OutputPath>
+    <OutputPath>..\Binaries\Debug\Stub\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -46,15 +46,16 @@
     <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\AsyncRAT-Sharp\bin\Release\Stub\</OutputPath>
+    <OutputPath>..\Binaries\Release\Stub\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+    <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
@@ -70,6 +71,7 @@
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Management" />
     <Reference Include="System.Security" />
@@ -83,6 +85,9 @@
     <Compile Include="Handle Packet\HandleDos.cs" />
     <Compile Include="Handle Packet\HandleFileManager.cs" />
     <Compile Include="Handle Packet\HandleGetScreenShot.cs" />
+    <Compile Include="Handle Packet\HandlerChat.cs" />
+    <Compile Include="Handle Packet\HandlerRecovery.cs" />
+    <Compile Include="Handle Packet\HandleShell.cs" />
     <Compile Include="Handle Packet\HandleUAC.cs" />
     <Compile Include="Handle Packet\HandleUninstall.cs" />
     <Compile Include="Handle Packet\HandleWindowsDefender.cs" />
@@ -93,6 +98,12 @@
     <Compile Include="Handle Packet\HandleSendTo.cs" />
     <Compile Include="Handle Packet\HandleLimeUSB.cs" />
     <Compile Include="Helper\Anti_Analysis.cs" />
+    <Compile Include="Helper\FormChat.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Helper\FormChat.Designer.cs">
+      <DependentUpon>FormChat.cs</DependentUpon>
+    </Compile>
     <Compile Include="Helper\Methods.cs" />
     <Compile Include="Install\NormalStartup.cs" />
     <Compile Include="MessagePack\BytesTools.cs" />
@@ -102,8 +113,6 @@
     <Compile Include="MessagePack\WriteTools.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Recovery\Recovery.cs" />
-    <Compile Include="Recovery\SQLiteHandler.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Sockets\ClientSocket.cs" />
     <Compile Include="StreamLibrary\Enums.cs" />
@@ -124,6 +133,11 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Helper\FormChat.resx">
+      <DependentUpon>FormChat.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

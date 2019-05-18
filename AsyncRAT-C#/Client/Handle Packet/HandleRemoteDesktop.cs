@@ -42,7 +42,7 @@ namespace Client.Handle_Packet
                     Size size = new Size(bmp.Width, bmp.Height);
                     BitmapData bmpData = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadWrite, bmp.PixelFormat);
 
-                    using (MemoryStream stream = new MemoryStream(10000000))
+                    using (MemoryStream stream = new MemoryStream())
                     {
                         unsafeCodec.CodeImage(bmpData.Scan0, rect, size, bmp.PixelFormat, stream);
                         if (stream.Length > 0)

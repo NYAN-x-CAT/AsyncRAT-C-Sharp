@@ -68,7 +68,7 @@ namespace AsyncRAT_Sharp.Forms
                 msgpack.ForcePathObject("Quality").AsInteger = Convert.ToInt32(numericUpDown1.Value);
                 msgpack.ForcePathObject("Screen").AsInteger = Convert.ToInt32(numericUpDown2.Value);
                 decoder = new UnsafeStreamCodec(Convert.ToInt32(numericUpDown1.Value));
-                ThreadPool.QueueUserWorkItem(C.BeginSend, msgpack.Encode2Bytes());
+                ThreadPool.QueueUserWorkItem(C.Send, msgpack.Encode2Bytes());
                 numericUpDown1.Enabled = false;
                 numericUpDown2.Enabled = false;
                 button1.Text = "STOP";

@@ -117,6 +117,16 @@ namespace AsyncRAT_Sharp.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap chat {
+            get {
+                object obj = ResourceManager.GetObject("chat", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap circle_loading_gif {
             get {
                 object obj = ResourceManager.GetObject("circle-loading-gif", resourceCulture);
@@ -235,6 +245,16 @@ namespace AsyncRAT_Sharp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] RecoveryPlugin {
+            get {
+                object obj = ResourceManager.GetObject("RecoveryPlugin", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap remotedesktop {
@@ -250,6 +270,16 @@ namespace AsyncRAT_Sharp.Properties {
         internal static System.Drawing.Bitmap settings {
             get {
                 object obj = ResourceManager.GetObject("settings", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap shell {
+            get {
+                object obj = ResourceManager.GetObject("shell", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

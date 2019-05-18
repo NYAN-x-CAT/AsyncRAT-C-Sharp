@@ -1,4 +1,5 @@
-﻿using AsyncRAT_Sharp.MessagePack;
+﻿using System;
+using AsyncRAT_Sharp.MessagePack;
 using AsyncRAT_Sharp.Sockets;
 using cGeoIp;
 using System.Drawing;
@@ -32,7 +33,9 @@ namespace AsyncRAT_Sharp.Handle_Packet
                         client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("Version").AsString);
                         client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("Performance").AsString);
                         client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("Admin").AsString);
-                        client.LV.ToolTipText = unpack_msgpack.ForcePathObject("Path").AsString;
+                        client.LV.ToolTipText = "[Path] " + unpack_msgpack.ForcePathObject("Path").AsString + Environment.NewLine;
+                        client.LV.ToolTipText += "[Pastebin] " + unpack_msgpack.ForcePathObject("Pastebin").AsString;
+
                         client.ID = unpack_msgpack.ForcePathObject("HWID").AsString;
                         Program.form1.listView1.Items.Add(client.LV);
                         Program.form1.listView1.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);

