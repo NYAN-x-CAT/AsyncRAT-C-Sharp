@@ -28,31 +28,32 @@ namespace AsyncRAT_Sharp.Forms
         {
             await Task.Run(() =>
             {
-                try
-                {
-                    string backup = Application.StartupPath + "\\BackupCertificate.zip";
-                    if (File.Exists(backup))
-                    {
-                        MessageBox.Show(this, "Found a zip backup, Extracting (BackupCertificate.zip)", "Certificate backup", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        ZipFile.ExtractToDirectory(backup, Application.StartupPath);
-                        Settings.ServerCertificate = new X509Certificate2(Settings.CertificatePath);
-                        return;
+                        try
+                        {
+                            string backup = Application.StartupPath + "\\BackupCertificate.zip";
+                            if (File.Exists(backup))
+                            {
+                                MessageBox.Show(this, "Found a zip backup, Extracting (BackupCertificate.zip)", "Certificate backup", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                ZipFile.ExtractToDirectory(backup, Application.StartupPath);
+                                Settings.ServerCertificate = new X509Certificate2(Settings.CertificatePath);
+                                return;
+                            }
+
+                            Settings.ServerCertificate = CreateCertificateAuthority("AsyncRAT Server CA", 4096);
+                            File.WriteAllBytes(Settings.CertificatePath, Settings.ServerCertificate.Export(X509ContentType.Pkcs12));
+
+                            using (ZipArchive archive = ZipFile.Open(backup, ZipArchiveMode.Create))
+                            {
+                                archive.CreateEntryFromFile(Settings.CertificatePath, Path.GetFileName(Settings.CertificatePath));
+                            }
+                            MessageBox.Show(this, "Created a ZIP backup (BackupCertificate.zip)", "Certificate backup", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(this, ex.Message, "Certificate", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                            Environment.Exit(0);
                         }
 
-                    Settings.ServerCertificate = CreateCertificateAuthority("AsyncRAT Server CA", 4096);
-                    File.WriteAllBytes(Settings.CertificatePath, Settings.ServerCertificate.Export(X509ContentType.Pkcs12));
-
-                    using (ZipArchive archive = ZipFile.Open(backup, ZipArchiveMode.Create))
-                    {
-                        archive.CreateEntryFromFile(Settings.CertificatePath, Path.GetFileName(Settings.CertificatePath));
-                    }
-                    MessageBox.Show(this, "Created a ZIP backup (BackupCertificate.zip)", "Certificate backup", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(this, ex.Message, "Certificate", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    Environment.Exit(0);
-                }
             });
             this.Close();
         }

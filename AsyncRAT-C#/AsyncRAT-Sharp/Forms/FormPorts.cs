@@ -20,9 +20,10 @@ namespace AsyncRAT_Sharp.Forms
         {
             Methods.FadeIn(this, 5);
 
-            textPorts.Text = "6606, 7707, 8808";
-            if (Properties.Settings.Default.Ports.Length > 0)
-                textPorts.Text = Properties.Settings.Default.Ports;
+            if (Properties.Settings.Default.Ports.Length == 0)
+            {
+                listBox1.Items.AddRange(new object[] { "6606", "7707", "8808" });
+            }
 
             this.Text = $"{Settings.Version} | Welcome {Environment.UserName}";
 
@@ -37,13 +38,29 @@ namespace AsyncRAT_Sharp.Forms
             {
                 Settings.ServerCertificate = new X509Certificate2(Settings.CertificatePath);
             }
+
+            try
+            {
+                string[] ports = Properties.Settings.Default.Ports.Split(new[] { "," }, StringSplitOptions.None);
+                foreach (string item in ports)
+                {
+                    if (!string.IsNullOrWhiteSpace(item))
+                        listBox1.Items.Add(item.Trim());
+                }
+            }
+            catch { }
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (textPorts.Text.Length > 0)
+            if (listBox1.Items.Count > 0)
             {
-                Properties.Settings.Default.Ports = textPorts.Text;
+                string ports = "";
+                foreach (string item in listBox1.Items)
+                {
+                    ports += item + ",";
+                }
+                Properties.Settings.Default.Ports = ports.Remove(ports.Length - 1);
                 Properties.Settings.Default.Save();
                 isOK = true;
                 this.Close();
@@ -53,7 +70,26 @@ namespace AsyncRAT_Sharp.Forms
         private void PortsFrm_FormClosed(object sender, FormClosedEventArgs e)
         {
             if (!isOK)
+            {
+                Program.form1.notifyIcon1.Dispose();
                 Environment.Exit(0);
+            }
+        }
+
+        private void BtnAdd_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Convert.ToInt16(textPorts.Text.Trim());
+                listBox1.Items.Add(textPorts.Text.Trim());
+                textPorts.Clear();
+            }
+            catch { }
+        }
+
+        private void BtnDelete_Click(object sender, EventArgs e)
+        {
+            listBox1.Items.Remove(listBox1.SelectedItem);
         }
     }
 }

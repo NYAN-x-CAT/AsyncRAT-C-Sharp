@@ -11,7 +11,6 @@ namespace AsyncRAT_Sharp
     {
         public static List<Clients> Online = new List<Clients>();
         public static List<string> Blocked = new List<string>();
-        public static string Port { get; set; }
         public static long Sent { get; set; }
         public static long Received { get; set; }
 
