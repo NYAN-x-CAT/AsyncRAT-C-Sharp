@@ -43,5 +43,13 @@ namespace Client.Helper
                 _appMutex = null;
             }
         }
+
+        public static void ClientExit()
+        {
+                if (Convert.ToBoolean(Settings.BDOS))
+                    ProcessCritical.Exit();
+            CloseMutex();
+            Environment.Exit(0);
+        }
     }
 }

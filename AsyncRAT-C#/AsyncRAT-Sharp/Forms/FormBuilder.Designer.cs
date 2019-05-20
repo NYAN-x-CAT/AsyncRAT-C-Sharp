@@ -46,6 +46,7 @@ namespace AsyncRAT_Sharp.Forms
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.chkBdos = new System.Windows.Forms.CheckBox();
             this.txtMutex = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.chkAnti = new System.Windows.Forms.CheckBox();
@@ -54,6 +55,7 @@ namespace AsyncRAT_Sharp.Forms
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -61,11 +63,12 @@ namespace AsyncRAT_Sharp.Forms
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(6, 236);
+            this.button1.Location = new System.Drawing.Point(3, 302);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(440, 49);
             this.button1.TabIndex = 0;
@@ -225,20 +228,32 @@ namespace AsyncRAT_Sharp.Forms
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.pictureBox1);
+            this.groupBox3.Controls.Add(this.chkBdos);
             this.groupBox3.Controls.Add(this.txtMutex);
             this.groupBox3.Controls.Add(this.label5);
             this.groupBox3.Controls.Add(this.chkAnti);
             this.groupBox3.Location = new System.Drawing.Point(6, 17);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(440, 174);
+            this.groupBox3.Size = new System.Drawing.Size(440, 229);
             this.groupBox3.TabIndex = 9;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "MISC";
             // 
+            // chkBdos
+            // 
+            this.chkBdos.AutoSize = true;
+            this.chkBdos.Location = new System.Drawing.Point(21, 82);
+            this.chkBdos.Name = "chkBdos";
+            this.chkBdos.Size = new System.Drawing.Size(143, 24);
+            this.chkBdos.TabIndex = 12;
+            this.chkBdos.Text = "Process Critical";
+            this.chkBdos.UseVisualStyleBackColor = true;
+            // 
             // txtMutex
             // 
             this.txtMutex.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::AsyncRAT_Sharp.Properties.Settings.Default, "Mutex", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.txtMutex.Location = new System.Drawing.Point(106, 98);
+            this.txtMutex.Location = new System.Drawing.Point(106, 165);
             this.txtMutex.Name = "txtMutex";
             this.txtMutex.Size = new System.Drawing.Size(271, 26);
             this.txtMutex.TabIndex = 11;
@@ -247,7 +262,7 @@ namespace AsyncRAT_Sharp.Forms
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(14, 102);
+            this.label5.Location = new System.Drawing.Point(14, 169);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(52, 20);
             this.label5.TabIndex = 10;
@@ -308,6 +323,16 @@ namespace AsyncRAT_Sharp.Forms
             this.tabPage3.Text = "Misc";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = global::AsyncRAT_Sharp.Properties.Resources.uac;
+            this.pictureBox1.Location = new System.Drawing.Point(181, 74);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(32, 32);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.pictureBox1.TabIndex = 13;
+            this.pictureBox1.TabStop = false;
+            // 
             // FormBuilder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -329,6 +354,7 @@ namespace AsyncRAT_Sharp.Forms
             this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -359,5 +385,7 @@ namespace AsyncRAT_Sharp.Forms
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.CheckBox chkBdos;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }

