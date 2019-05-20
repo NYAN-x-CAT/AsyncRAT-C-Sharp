@@ -52,8 +52,10 @@
             this.sENDFILETOMEMORYToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rEMOTEDESKTOPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.kEYLOGGERToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cHATToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.fILEMANAGERToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.rEMOTESHELLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pASSWORDRECOVERYToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pROCESSMANAGERToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dISABLESToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -65,8 +67,6 @@
             this.bUILDERToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.aBOUTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.rEMOTESHELLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.cHATToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.ping = new System.Windows.Forms.Timer(this.components);
@@ -302,6 +302,14 @@
             this.kEYLOGGERToolStripMenuItem.Text = "KEYLOGGER";
             this.kEYLOGGERToolStripMenuItem.Click += new System.EventHandler(this.KEYLOGGERToolStripMenuItem_Click);
             // 
+            // cHATToolStripMenuItem
+            // 
+            this.cHATToolStripMenuItem.Image = global::AsyncRAT_Sharp.Properties.Resources.chat;
+            this.cHATToolStripMenuItem.Name = "cHATToolStripMenuItem";
+            this.cHATToolStripMenuItem.Size = new System.Drawing.Size(278, 30);
+            this.cHATToolStripMenuItem.Text = "CHAT";
+            this.cHATToolStripMenuItem.Click += new System.EventHandler(this.CHATToolStripMenuItem_Click);
+            // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Image = global::AsyncRAT_Sharp.Properties.Resources.ddos;
@@ -317,6 +325,14 @@
             this.fILEMANAGERToolStripMenuItem.Size = new System.Drawing.Size(278, 30);
             this.fILEMANAGERToolStripMenuItem.Text = "FILE MANAGER";
             this.fILEMANAGERToolStripMenuItem.Click += new System.EventHandler(this.fILEMANAGERToolStripMenuItem_Click);
+            // 
+            // rEMOTESHELLToolStripMenuItem
+            // 
+            this.rEMOTESHELLToolStripMenuItem.Image = global::AsyncRAT_Sharp.Properties.Resources.shell;
+            this.rEMOTESHELLToolStripMenuItem.Name = "rEMOTESHELLToolStripMenuItem";
+            this.rEMOTESHELLToolStripMenuItem.Size = new System.Drawing.Size(278, 30);
+            this.rEMOTESHELLToolStripMenuItem.Text = "REMOTE SHELL";
+            this.rEMOTESHELLToolStripMenuItem.Click += new System.EventHandler(this.REMOTESHELLToolStripMenuItem_Click);
             // 
             // pASSWORDRECOVERYToolStripMenuItem
             // 
@@ -346,8 +362,8 @@
             // wINDOWDSDEFENDERToolStripMenuItem
             // 
             this.wINDOWDSDEFENDERToolStripMenuItem.Name = "wINDOWDSDEFENDERToolStripMenuItem";
-            this.wINDOWDSDEFENDERToolStripMenuItem.Size = new System.Drawing.Size(289, 30);
-            this.wINDOWDSDEFENDERToolStripMenuItem.Text = "WINDOWDS DEFENDER";
+            this.wINDOWDSDEFENDERToolStripMenuItem.Size = new System.Drawing.Size(276, 30);
+            this.wINDOWDSDEFENDERToolStripMenuItem.Text = "WINDOWS DEFENDER";
             this.wINDOWDSDEFENDERToolStripMenuItem.Click += new System.EventHandler(this.WINDOWDSDEFENDERToolStripMenuItem_Click);
             // 
             // bOTKILLERToolStripMenuItem
@@ -399,22 +415,6 @@
             this.aBOUTToolStripMenuItem.Size = new System.Drawing.Size(278, 30);
             this.aBOUTToolStripMenuItem.Text = "ABOUT";
             this.aBOUTToolStripMenuItem.Click += new System.EventHandler(this.ABOUTToolStripMenuItem_Click);
-            // 
-            // rEMOTESHELLToolStripMenuItem
-            // 
-            this.rEMOTESHELLToolStripMenuItem.Image = global::AsyncRAT_Sharp.Properties.Resources.shell;
-            this.rEMOTESHELLToolStripMenuItem.Name = "rEMOTESHELLToolStripMenuItem";
-            this.rEMOTESHELLToolStripMenuItem.Size = new System.Drawing.Size(278, 30);
-            this.rEMOTESHELLToolStripMenuItem.Text = "REMOTE SHELL";
-            this.rEMOTESHELLToolStripMenuItem.Click += new System.EventHandler(this.REMOTESHELLToolStripMenuItem_Click);
-            // 
-            // cHATToolStripMenuItem
-            // 
-            this.cHATToolStripMenuItem.Image = global::AsyncRAT_Sharp.Properties.Resources.chat;
-            this.cHATToolStripMenuItem.Name = "cHATToolStripMenuItem";
-            this.cHATToolStripMenuItem.Size = new System.Drawing.Size(278, 30);
-            this.cHATToolStripMenuItem.Text = "CHAT";
-            this.cHATToolStripMenuItem.Click += new System.EventHandler(this.CHATToolStripMenuItem_Click);
             // 
             // statusStrip1
             // 
