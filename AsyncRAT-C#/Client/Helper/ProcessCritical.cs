@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Threading;
 
 namespace Client.Helper
 {
@@ -25,7 +26,7 @@ namespace Client.Helper
             { 
             while(true)
                 {
-                Thread.Sleep(100000) //prevents a BSOD on exit failure
+                    Thread.Sleep(100000); //prevents a BSOD on exit failure
                 }
             }
         }

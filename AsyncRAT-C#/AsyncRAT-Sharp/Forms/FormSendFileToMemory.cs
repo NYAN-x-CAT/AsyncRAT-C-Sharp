@@ -14,6 +14,7 @@ namespace AsyncRAT_Sharp
 {
     public partial class FormSendFileToMemory : Form
     {
+        public bool isOK = false;
         public FormSendFileToMemory()
         {
             InitializeComponent();
@@ -52,15 +53,19 @@ namespace AsyncRAT_Sharp
                 toolStripStatusLabel1.Text = Path.GetFileName(O.FileName);
                 toolStripStatusLabel1.Tag = O.FileName;
                 toolStripStatusLabel1.ForeColor = Color.Green;
+                isOK = true;
                 if (comboBox1.SelectedIndex == 0)
                 {
                     try
                     {
                         Assembly.LoadFile(O.FileName);
+                        isOK = true;
                     }
                     catch
                     {
                         toolStripStatusLabel1.ForeColor = Color.Red;
+                        toolStripStatusLabel1.Text += " Invalid!";
+                        isOK = false;
                     }
                 }
             }
@@ -68,13 +73,21 @@ namespace AsyncRAT_Sharp
             {
                 toolStripStatusLabel1.Text = "";
                 toolStripStatusLabel1.ForeColor = Color.Black;
+                isOK = true;
             }
 
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            if (toolStripStatusLabel1.ForeColor == Color.Green && toolStripStatusLabel1.Text.Length > 0) this.Hide();
+            if (isOK)
+                this.Hide();
+        }
+
+        private void Button3_Click(object sender, EventArgs e)
+        {
+            isOK = false;
+            this.Hide();
         }
     }
 }

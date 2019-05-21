@@ -49,7 +49,6 @@
             this.vISITWEBSITEToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sENDMESSAGEBOXToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sENDFILEToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.sENDFILETOMEMORYToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rEMOTEDESKTOPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.kEYLOGGERToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cHATToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -63,6 +62,13 @@
             this.bOTKILLERToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.uSBSPREADToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gETADMINISTRATORPRIVILEGESToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.rEPORTACTIVEWINDOWToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.rUNToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sTOPToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.pCOPTIONSToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.rESTARTToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.sHUTDOWNToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.lOGOFFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.bUILDERToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
@@ -99,6 +105,8 @@
             this.contextMenuNotification = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.notificationOFFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.TimerTask = new System.Windows.Forms.Timer(this.components);
+            this.tOMEMORYToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tODISKToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuClient.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -137,6 +145,7 @@
             this.listView1.TabIndex = 0;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
+            this.listView1.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.ListView1_ColumnClick);
             this.listView1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.listView1_KeyDown);
             this.listView1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.listView1_MouseMove);
             // 
@@ -189,7 +198,6 @@
             this.vISITWEBSITEToolStripMenuItem,
             this.sENDMESSAGEBOXToolStripMenuItem,
             this.sENDFILEToolStripMenuItem,
-            this.sENDFILETOMEMORYToolStripMenuItem,
             this.rEMOTEDESKTOPToolStripMenuItem,
             this.kEYLOGGERToolStripMenuItem,
             this.cHATToolStripMenuItem,
@@ -202,12 +210,14 @@
             this.bOTKILLERToolStripMenuItem,
             this.uSBSPREADToolStripMenuItem,
             this.gETADMINISTRATORPRIVILEGESToolStripMenuItem,
+            this.rEPORTACTIVEWINDOWToolStripMenuItem,
+            this.pCOPTIONSToolStripMenuItem,
             this.toolStripSeparator2,
             this.bUILDERToolStripMenuItem,
             this.toolStripSeparator3,
             this.aBOUTToolStripMenuItem});
             this.contextMenuClient.Name = "contextMenuStrip1";
-            this.contextMenuClient.Size = new System.Drawing.Size(279, 592);
+            this.contextMenuClient.Size = new System.Drawing.Size(278, 655);
             // 
             // cLIENTOPTIONSToolStripMenuItem
             // 
@@ -272,19 +282,13 @@
             // 
             // sENDFILEToolStripMenuItem
             // 
+            this.sENDFILEToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tOMEMORYToolStripMenuItem,
+            this.tODISKToolStripMenuItem});
             this.sENDFILEToolStripMenuItem.Image = global::AsyncRAT_Sharp.Properties.Resources.tomem;
             this.sENDFILEToolStripMenuItem.Name = "sENDFILEToolStripMenuItem";
-            this.sENDFILEToolStripMenuItem.Size = new System.Drawing.Size(278, 30);
+            this.sENDFILEToolStripMenuItem.Size = new System.Drawing.Size(277, 30);
             this.sENDFILEToolStripMenuItem.Text = "SEND FILE TO DISK";
-            this.sENDFILEToolStripMenuItem.Click += new System.EventHandler(this.sENDFILEToolStripMenuItem_Click_1);
-            // 
-            // sENDFILETOMEMORYToolStripMenuItem
-            // 
-            this.sENDFILETOMEMORYToolStripMenuItem.Image = global::AsyncRAT_Sharp.Properties.Resources.tomem1;
-            this.sENDFILETOMEMORYToolStripMenuItem.Name = "sENDFILETOMEMORYToolStripMenuItem";
-            this.sENDFILETOMEMORYToolStripMenuItem.Size = new System.Drawing.Size(278, 30);
-            this.sENDFILETOMEMORYToolStripMenuItem.Text = "SEND FILE TO MEMORY";
-            this.sENDFILETOMEMORYToolStripMenuItem.Click += new System.EventHandler(this.sENDFILETOMEMORYToolStripMenuItem_Click);
             // 
             // rEMOTEDESKTOPToolStripMenuItem
             // 
@@ -389,6 +393,62 @@
             this.gETADMINISTRATORPRIVILEGESToolStripMenuItem.Size = new System.Drawing.Size(278, 30);
             this.gETADMINISTRATORPRIVILEGESToolStripMenuItem.Text = "GET ADMIN PRIVILEGES";
             this.gETADMINISTRATORPRIVILEGESToolStripMenuItem.Click += new System.EventHandler(this.GETADMINISTRATORPRIVILEGESToolStripMenuItem_Click);
+            // 
+            // rEPORTACTIVEWINDOWToolStripMenuItem
+            // 
+            this.rEPORTACTIVEWINDOWToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.rUNToolStripMenuItem,
+            this.sTOPToolStripMenuItem1});
+            this.rEPORTACTIVEWINDOWToolStripMenuItem.Image = global::AsyncRAT_Sharp.Properties.Resources.report;
+            this.rEPORTACTIVEWINDOWToolStripMenuItem.Name = "rEPORTACTIVEWINDOWToolStripMenuItem";
+            this.rEPORTACTIVEWINDOWToolStripMenuItem.Size = new System.Drawing.Size(278, 30);
+            this.rEPORTACTIVEWINDOWToolStripMenuItem.Text = "REPORT WINDOW";
+            // 
+            // rUNToolStripMenuItem
+            // 
+            this.rUNToolStripMenuItem.Name = "rUNToolStripMenuItem";
+            this.rUNToolStripMenuItem.Size = new System.Drawing.Size(139, 30);
+            this.rUNToolStripMenuItem.Text = "RUN";
+            this.rUNToolStripMenuItem.Click += new System.EventHandler(this.RUNToolStripMenuItem_Click);
+            // 
+            // sTOPToolStripMenuItem1
+            // 
+            this.sTOPToolStripMenuItem1.Name = "sTOPToolStripMenuItem1";
+            this.sTOPToolStripMenuItem1.Size = new System.Drawing.Size(139, 30);
+            this.sTOPToolStripMenuItem1.Text = "STOP";
+            this.sTOPToolStripMenuItem1.Click += new System.EventHandler(this.STOPToolStripMenuItem1_Click);
+            // 
+            // pCOPTIONSToolStripMenuItem
+            // 
+            this.pCOPTIONSToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.rESTARTToolStripMenuItem1,
+            this.sHUTDOWNToolStripMenuItem,
+            this.lOGOFFToolStripMenuItem});
+            this.pCOPTIONSToolStripMenuItem.Image = global::AsyncRAT_Sharp.Properties.Resources.pc;
+            this.pCOPTIONSToolStripMenuItem.Name = "pCOPTIONSToolStripMenuItem";
+            this.pCOPTIONSToolStripMenuItem.Size = new System.Drawing.Size(278, 30);
+            this.pCOPTIONSToolStripMenuItem.Text = "PC OPTIONS";
+            // 
+            // rESTARTToolStripMenuItem1
+            // 
+            this.rESTARTToolStripMenuItem1.Name = "rESTARTToolStripMenuItem1";
+            this.rESTARTToolStripMenuItem1.Size = new System.Drawing.Size(197, 30);
+            this.rESTARTToolStripMenuItem1.Text = "RESTART";
+            this.rESTARTToolStripMenuItem1.Click += new System.EventHandler(this.RESTARTToolStripMenuItem1_Click);
+            // 
+            // sHUTDOWNToolStripMenuItem
+            // 
+            this.sHUTDOWNToolStripMenuItem.Name = "sHUTDOWNToolStripMenuItem";
+            this.sHUTDOWNToolStripMenuItem.Size = new System.Drawing.Size(197, 30);
+            this.sHUTDOWNToolStripMenuItem.Text = "SHUTDOWN";
+            this.sHUTDOWNToolStripMenuItem.Click += new System.EventHandler(this.SHUTDOWNToolStripMenuItem_Click);
+            // 
+            // lOGOFFToolStripMenuItem
+            // 
+            this.lOGOFFToolStripMenuItem.Name = "lOGOFFToolStripMenuItem";
+            this.lOGOFFToolStripMenuItem.Size = new System.Drawing.Size(197, 30);
+            this.lOGOFFToolStripMenuItem.Text = "LOGOFF";
+            this.lOGOFFToolStripMenuItem.Click += new System.EventHandler(this.LOGOFFToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
@@ -684,6 +744,20 @@
             this.TimerTask.Interval = 5000;
             this.TimerTask.Tick += new System.EventHandler(this.TimerTask_Tick);
             // 
+            // tOMEMORYToolStripMenuItem
+            // 
+            this.tOMEMORYToolStripMenuItem.Name = "tOMEMORYToolStripMenuItem";
+            this.tOMEMORYToolStripMenuItem.Size = new System.Drawing.Size(252, 30);
+            this.tOMEMORYToolStripMenuItem.Text = "TO MEMORY";
+            this.tOMEMORYToolStripMenuItem.Click += new System.EventHandler(this.TOMEMORYToolStripMenuItem_Click);
+            // 
+            // tODISKToolStripMenuItem
+            // 
+            this.tODISKToolStripMenuItem.Name = "tODISKToolStripMenuItem";
+            this.tODISKToolStripMenuItem.Size = new System.Drawing.Size(252, 30);
+            this.tODISKToolStripMenuItem.Text = "TO DISK";
+            this.tODISKToolStripMenuItem.Click += new System.EventHandler(this.TODISKToolStripMenuItem_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -734,7 +808,6 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem sENDMESSAGEBOXToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem sENDFILEToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem sENDFILETOMEMORYToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem rEMOTEDESKTOPToolStripMenuItem;
         public System.Windows.Forms.ColumnHeader lv_hwid;
         private System.Windows.Forms.ToolStripMenuItem pROCESSMANAGERToolStripMenuItem;
@@ -787,6 +860,15 @@
         private System.Windows.Forms.Timer TimerTask;
         private System.Windows.Forms.ToolStripMenuItem rEMOTESHELLToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem cHATToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem pCOPTIONSToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem rESTARTToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem sHUTDOWNToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem lOGOFFToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem rEPORTACTIVEWINDOWToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem rUNToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem sTOPToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem tOMEMORYToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem tODISKToolStripMenuItem;
     }
 }
 

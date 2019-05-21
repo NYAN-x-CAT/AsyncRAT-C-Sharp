@@ -217,6 +217,16 @@ namespace AsyncRAT_Sharp.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap pc {
+            get {
+                object obj = ResourceManager.GetObject("pc", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap play_button {
             get {
                 object obj = ResourceManager.GetObject("play-button", resourceCulture);
@@ -245,21 +255,21 @@ namespace AsyncRAT_Sharp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static byte[] RecoveryPlugin {
+        internal static System.Drawing.Bitmap remotedesktop {
             get {
-                object obj = ResourceManager.GetObject("RecoveryPlugin", resourceCulture);
-                return ((byte[])(obj));
+                object obj = ResourceManager.GetObject("remotedesktop", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap remotedesktop {
+        internal static System.Drawing.Bitmap report {
             get {
-                object obj = ResourceManager.GetObject("remotedesktop", resourceCulture);
+                object obj = ResourceManager.GetObject("report", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -281,6 +291,16 @@ namespace AsyncRAT_Sharp.Properties {
             get {
                 object obj = ResourceManager.GetObject("shell", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] StealerLib {
+            get {
+                object obj = ResourceManager.GetObject("StealerLib", resourceCulture);
+                return ((byte[])(obj));
             }
         }
         

@@ -1,4 +1,5 @@
 ﻿using Client.MessagePack;
+using Client.Sockets;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -36,7 +37,7 @@ namespace Client.Handle_Packet
             stopwatch.Start();
 
             Debug.WriteLine($"Host:{host} Port:{port} Timeout:{timeout}");
-            while (!Packet.cts.IsCancellationRequested && timespan > stopwatch.Elapsed)
+            while (!Packet.ctsDos.IsCancellationRequested && timespan > stopwatch.Elapsed && ClientSocket.IsConnected)
             {
                 new Thread(() =>
                 {

