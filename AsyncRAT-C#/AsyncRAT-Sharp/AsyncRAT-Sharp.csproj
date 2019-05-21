@@ -255,9 +255,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="async_icon.ico" />
+    <None Include="Resources\StealerLib.dll" />
     <None Include="Resources\chat.png" />
     <None Include="Resources\shell.png" />
-    <None Include="Resources\RecoveryPlugin.dll" />
     <None Include="Resources\key.png" />
     <None Include="Resources\uac.png" />
     <None Include="Resources\disabled.png" />

