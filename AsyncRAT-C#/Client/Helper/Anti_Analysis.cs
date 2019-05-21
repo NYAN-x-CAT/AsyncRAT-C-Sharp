@@ -35,16 +35,16 @@ namespace Client.Helper
                 return true;
 
             // Method Two - has common card of virtual machine
-            if (HasVMCard())
-                return true;
+            //if (HasVMCard())
+                //return true;
 
             // Method Three - checks for vm drivers
             if (HasVBOXDriver())
                 return true;
 
             // Method Four - if machine has been on for less than 5 mins
-            if (GetUptime() < TimeSpan.FromMinutes(5))
-                return true;
+            //if (GetUptime() < TimeSpan.FromMinutes(5))
+                //return true;
 
             // Method Five - has VM mac address
             if (HasVMMac())
