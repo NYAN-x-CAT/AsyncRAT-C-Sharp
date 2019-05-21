@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -56,6 +57,16 @@ namespace AsyncRAT_Sharp.Forms
         private void Timer1_Tick(object sender, EventArgs e)
         {
             if (!C.ClientSocket.Connected) this.Close();
+        }
+
+        private void FormShell_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Label1_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/windows-commands");
         }
     }
 }
