@@ -1129,5 +1129,14 @@ namespace AsyncRAT_Sharp
                 }
             }
         }
+
+        private void CLEARToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                listView2.Items.Clear();
+            }
+            catch { }
+        }
     }
 }
