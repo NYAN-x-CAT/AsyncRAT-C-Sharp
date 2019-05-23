@@ -95,6 +95,15 @@ namespace AsyncRAT_Sharp
             trans = true;
 
             await Task.Run(() => Connect());
+
+            if (Properties.Settings.Default.Notification == true)
+            {
+                toolStripStatusLabel2.ForeColor = Color.Green;
+            }
+            else
+            {
+                toolStripStatusLabel2.ForeColor = Color.Black;
+            }
         }
 
         private void Connect()
@@ -240,19 +249,6 @@ namespace AsyncRAT_Sharp
                 }
             }
             catch { }
-        }
-
-        private void NotificationOFFToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (Properties.Settings.Default.Notification == true)
-            {
-                Properties.Settings.Default.Notification = false;
-            }
-            else
-            {
-                Properties.Settings.Default.Notification = true;
-            }
-            Properties.Settings.Default.Save();
         }
 
         private async void DownloadAndExecuteToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1108,6 +1104,21 @@ namespace AsyncRAT_Sharp
                 formDOS.Show();
 
             }
+        }
+
+        private void ToolStripStatusLabel2_Click(object sender, EventArgs e)
+        {
+            if (Properties.Settings.Default.Notification == true)
+            {
+                Properties.Settings.Default.Notification = false;
+                toolStripStatusLabel2.ForeColor = Color.Black;
+            }
+            else
+            {
+                Properties.Settings.Default.Notification = true;
+                toolStripStatusLabel2.ForeColor = Color.Green;
+            }
+            Properties.Settings.Default.Save();
         }
     }
 }
