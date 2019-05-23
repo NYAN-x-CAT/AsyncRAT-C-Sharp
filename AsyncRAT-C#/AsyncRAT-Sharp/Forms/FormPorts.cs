@@ -24,6 +24,19 @@ namespace AsyncRAT_Sharp.Forms
             {
                 listBox1.Items.AddRange(new object[] { "6606", "7707", "8808" });
             }
+            else
+            {
+                try
+                {
+                    string[] ports = Properties.Settings.Default.Ports.Split(new[] { "," }, StringSplitOptions.None);
+                    foreach (string item in ports)
+                    {
+                        if (!string.IsNullOrWhiteSpace(item))
+                            listBox1.Items.Add(item.Trim());
+                    }
+                }
+                catch { }
+            }
 
             this.Text = $"{Settings.Version} | Welcome {Environment.UserName}";
 
@@ -39,16 +52,6 @@ namespace AsyncRAT_Sharp.Forms
                 Settings.ServerCertificate = new X509Certificate2(Settings.CertificatePath);
             }
 
-            try
-            {
-                string[] ports = Properties.Settings.Default.Ports.Split(new[] { "," }, StringSplitOptions.None);
-                foreach (string item in ports)
-                {
-                    if (!string.IsNullOrWhiteSpace(item))
-                        listBox1.Items.Add(item.Trim());
-                }
-            }
-            catch { }
         }
 
         private void button1_Click(object sender, EventArgs e)
