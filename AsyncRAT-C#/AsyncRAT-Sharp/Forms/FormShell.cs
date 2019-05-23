@@ -59,11 +59,6 @@ namespace AsyncRAT_Sharp.Forms
             if (!C.ClientSocket.Connected) this.Close();
         }
 
-        private void FormShell_Load(object sender, EventArgs e)
-        {
-
-        }
-
         private void Label1_Click(object sender, EventArgs e)
         {
             Process.Start("https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/windows-commands");
