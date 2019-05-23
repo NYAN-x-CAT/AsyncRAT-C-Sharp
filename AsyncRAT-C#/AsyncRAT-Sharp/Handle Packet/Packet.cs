@@ -38,7 +38,7 @@ namespace AsyncRAT_Sharp.Handle_Packet
 
                     case "Logs":
                         {
-                            new HandleLogs().Addmsg(unpack_msgpack.ForcePathObject("Message").AsString, Color.Black);
+                            new HandleLogs().Addmsg($"Client {client.ClientSocket.RemoteEndPoint.ToString().Split(':')[0]} {unpack_msgpack.ForcePathObject("Message").AsString}", Color.Black);
                             break;
                         }
 
