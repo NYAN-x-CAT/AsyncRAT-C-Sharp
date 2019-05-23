@@ -123,7 +123,6 @@ namespace AsyncRAT_Sharp
         }
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
-            notifyIcon1.Dispose();
             Environment.Exit(0);
         }
 
@@ -1082,6 +1081,22 @@ namespace AsyncRAT_Sharp
                 }
                 catch { }
             }
+        }
+
+        private void toolStripStatusLabel2_Click(object sender, EventArgs e)
+        {
+            //Notification [OFF]
+            if (Properties.Settings.Default.Notification == true)
+            {
+                Properties.Settings.Default.Notification = false;
+                toolStripStatusLabel2.Text = "Notification [ON]";
+            }
+            else
+            {
+                Properties.Settings.Default.Notification = true;
+                toolStripStatusLabel2.Text = "Notification [OFF]";
+            }
+            Properties.Settings.Default.Save();
         }
     }
 }

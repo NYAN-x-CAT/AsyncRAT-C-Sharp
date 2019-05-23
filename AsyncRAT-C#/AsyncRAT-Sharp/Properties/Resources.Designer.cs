@@ -19,7 +19,7 @@ namespace AsyncRAT_Sharp.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -57,6 +57,16 @@ namespace AsyncRAT_Sharp.Properties {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap arrive {
+            get {
+                object obj = ResourceManager.GetObject("arrive", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -129,7 +139,7 @@ namespace AsyncRAT_Sharp.Properties {
         /// </summary>
         internal static System.Drawing.Bitmap circle_loading_gif {
             get {
-                object obj = ResourceManager.GetObject("circle-loading-gif", resourceCulture);
+                object obj = ResourceManager.GetObject("circle_loading_gif", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -229,7 +239,7 @@ namespace AsyncRAT_Sharp.Properties {
         /// </summary>
         internal static System.Drawing.Bitmap monitoring_system {
             get {
-                object obj = ResourceManager.GetObject("monitoring-system", resourceCulture);
+                object obj = ResourceManager.GetObject("monitoring_system", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -257,9 +267,9 @@ namespace AsyncRAT_Sharp.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap play_button {
+        internal static System.Drawing.Bitmap play {
             get {
-                object obj = ResourceManager.GetObject("play-button", resourceCulture);
+                object obj = ResourceManager.GetObject("play", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -337,9 +347,9 @@ namespace AsyncRAT_Sharp.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap stop__1_ {
+        internal static System.Drawing.Bitmap stop {
             get {
-                object obj = ResourceManager.GetObject("stop (1)", resourceCulture);
+                object obj = ResourceManager.GetObject("stop", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -379,7 +389,7 @@ namespace AsyncRAT_Sharp.Properties {
         /// </summary>
         internal static System.Drawing.Bitmap u_torrent_logo {
             get {
-                object obj = ResourceManager.GetObject("u-torrent-logo", resourceCulture);
+                object obj = ResourceManager.GetObject("u_torrent_logo", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

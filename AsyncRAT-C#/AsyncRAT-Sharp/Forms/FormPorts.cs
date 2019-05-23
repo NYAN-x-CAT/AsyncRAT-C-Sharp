@@ -71,7 +71,6 @@ namespace AsyncRAT_Sharp.Forms
         {
             if (!isOK)
             {
-                Program.form1.notifyIcon1.Dispose();
                 Environment.Exit(0);
             }
         }

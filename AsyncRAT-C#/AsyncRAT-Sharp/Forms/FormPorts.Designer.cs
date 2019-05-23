@@ -41,9 +41,10 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(23, 237);
+            this.button1.Location = new System.Drawing.Point(9, 162);
+            this.button1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(378, 50);
+            this.button1.Size = new System.Drawing.Size(267, 32);
             this.button1.TabIndex = 0;
             this.button1.Text = "Start AsyncRAT";
             this.button1.UseVisualStyleBackColor = true;
@@ -51,17 +52,19 @@
             // 
             // textPorts
             // 
-            this.textPorts.Location = new System.Drawing.Point(82, 48);
+            this.textPorts.Location = new System.Drawing.Point(48, 25);
+            this.textPorts.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.textPorts.Name = "textPorts";
-            this.textPorts.Size = new System.Drawing.Size(164, 26);
+            this.textPorts.Size = new System.Drawing.Size(208, 20);
             this.textPorts.TabIndex = 0;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 51);
+            this.label1.Location = new System.Drawing.Point(12, 28);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(46, 20);
+            this.label1.Size = new System.Drawing.Size(32, 13);
             this.label1.TabIndex = 1;
             this.label1.Text = "Ports";
             // 
@@ -72,9 +75,11 @@
             this.groupBox1.Controls.Add(this.btnAdd);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.textPorts);
-            this.groupBox1.Location = new System.Drawing.Point(13, 13);
+            this.groupBox1.Location = new System.Drawing.Point(9, 8);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(401, 198);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox1.Size = new System.Drawing.Size(267, 146);
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Settings";
@@ -82,17 +87,19 @@
             // listBox1
             // 
             this.listBox1.FormattingEnabled = true;
-            this.listBox1.ItemHeight = 20;
-            this.listBox1.Location = new System.Drawing.Point(82, 99);
+            this.listBox1.Location = new System.Drawing.Point(48, 50);
+            this.listBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(164, 84);
+            this.listBox1.Size = new System.Drawing.Size(174, 82);
             this.listBox1.TabIndex = 4;
             // 
             // btnDelete
             // 
-            this.btnDelete.Location = new System.Drawing.Point(301, 55);
+            this.btnDelete.Font = new System.Drawing.Font("Tahoma", 10F);
+            this.btnDelete.Location = new System.Drawing.Point(226, 98);
+            this.btnDelete.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnDelete.Name = "btnDelete";
-            this.btnDelete.Size = new System.Drawing.Size(57, 23);
+            this.btnDelete.Size = new System.Drawing.Size(30, 34);
             this.btnDelete.TabIndex = 3;
             this.btnDelete.Text = "-";
             this.btnDelete.UseVisualStyleBackColor = true;
@@ -100,9 +107,11 @@
             // 
             // btnAdd
             // 
-            this.btnAdd.Location = new System.Drawing.Point(301, 26);
+            this.btnAdd.Font = new System.Drawing.Font("Tahoma", 10F);
+            this.btnAdd.Location = new System.Drawing.Point(226, 50);
+            this.btnAdd.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(57, 23);
+            this.btnAdd.Size = new System.Drawing.Size(30, 34);
             this.btnAdd.TabIndex = 2;
             this.btnAdd.Text = "+";
             this.btnAdd.UseVisualStyleBackColor = true;
@@ -110,12 +119,13 @@
             // 
             // FormPorts
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(450, 333);
+            this.ClientSize = new System.Drawing.Size(281, 202);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.groupBox1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FormPorts";

