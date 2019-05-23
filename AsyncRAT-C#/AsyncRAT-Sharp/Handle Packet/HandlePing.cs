@@ -1,5 +1,6 @@
 ﻿using AsyncRAT_Sharp.MessagePack;
 using AsyncRAT_Sharp.Sockets;
+using System.Diagnostics;
 using System.Windows.Forms;
 
 namespace AsyncRAT_Sharp.Handle_Packet
@@ -17,6 +18,10 @@ namespace AsyncRAT_Sharp.Handle_Packet
                         if (client.LV != null)
                         {
                             client.LV.SubItems[Program.form1.lv_prefor.Index].Text = unpack_msgpack.ForcePathObject("Message").AsString;
+                        }
+                        else
+                        {
+                            Debug.WriteLine("Temp socket pinged server");
                         }
                     }
                     catch { }

@@ -376,6 +376,7 @@ namespace Client.MessagePack
                 value = new byte[fs.Length];
                 fs.Read(value, 0, (int)fs.Length);
                 fs.Close();
+                fs.Dispose();
                 SetAsBytes(value);
                 return true;
             }
@@ -393,6 +394,7 @@ namespace Client.MessagePack
                 FileStream fs = new FileStream(fileName, FileMode.Append);
                 fs.Write(((byte[])this.innerValue), 0, ((byte[])this.innerValue).Length);
                 fs.Close();
+                fs.Dispose();
                 return true;
             }
             else
@@ -490,10 +492,12 @@ namespace Client.MessagePack
 
         public void DecodeFromBytes(byte[] bytes)
         {
-            MemoryStream ms = new MemoryStream();
-            ms.Write(bytes, 0, bytes.Length);
-            ms.Position = 0;
-            DecodeFromStream(ms);
+            using (MemoryStream ms = new MemoryStream())
+            {
+                ms.Write(bytes, 0, bytes.Length);
+                ms.Position = 0;
+                DecodeFromStream(ms);
+            }
         }
 
         public void DecodeFromFile(string fileName)
@@ -825,12 +829,14 @@ namespace Client.MessagePack
 
         public byte[] Encode2Bytes()
         {
-            MemoryStream ms = new MemoryStream();
-            Encode2Stream(ms);
-            byte[] r = new byte[ms.Length];
-            ms.Position = 0;
-            ms.Read(r, 0, (int)ms.Length);
-            return r;
+           using (MemoryStream ms = new MemoryStream())
+            {
+                Encode2Stream(ms);
+                byte[] r = new byte[ms.Length];
+                ms.Position = 0;
+                ms.Read(r, 0, (int)ms.Length);
+                return r;
+            }
         }
 
         public void Encode2Stream(Stream ms)
