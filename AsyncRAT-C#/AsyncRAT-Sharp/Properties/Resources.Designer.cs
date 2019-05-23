@@ -167,6 +167,16 @@ namespace AsyncRAT_Sharp.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap extra {
+            get {
+                object obj = ResourceManager.GetObject("extra", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap filemanager {
             get {
                 object obj = ResourceManager.GetObject("filemanager", resourceCulture);
@@ -200,6 +210,26 @@ namespace AsyncRAT_Sharp.Properties {
         internal static System.Drawing.Bitmap logger {
             get {
                 object obj = ResourceManager.GetObject("logger", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Miscellaneous {
+            get {
+                object obj = ResourceManager.GetObject("Miscellaneous", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap monitoring_system {
+            get {
+                object obj = ResourceManager.GetObject("monitoring-system", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -310,6 +340,16 @@ namespace AsyncRAT_Sharp.Properties {
         internal static System.Drawing.Bitmap stop__1_ {
             get {
                 object obj = ResourceManager.GetObject("stop (1)", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap system {
+            get {
+                object obj = ResourceManager.GetObject("system", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

