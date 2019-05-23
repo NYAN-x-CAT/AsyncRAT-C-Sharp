@@ -4,6 +4,7 @@ using System;
 using System.Windows.Forms;
 using System.Drawing;
 using AsyncRAT_Sharp.Handle_Packet;
+using System.Diagnostics;
 
 namespace AsyncRAT_Sharp.Sockets
 {
