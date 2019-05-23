@@ -58,8 +58,13 @@ namespace AsyncRAT_Sharp.Forms
 
         private void FormRemoteDesktop_Load(object sender, EventArgs e)
         {
-            button2.Top = panel1.Bottom + 5;
-            //button2.PerformClick();
+            try
+            {
+                button2.Top = panel1.Bottom + 5;
+                button2.Left = pictureBox1.Width / 2;
+                button2.PerformClick();
+            }
+            catch { }
         }
 
         private void Button1_Click(object sender, EventArgs e)
@@ -98,15 +103,18 @@ namespace AsyncRAT_Sharp.Forms
 
         private void BtnSave_Click(object sender, EventArgs e)
         {
-            if (timerSave.Enabled)
+            if (button1.Text == "STOP")
             {
-                timerSave.Stop();
-                btnSave.Text = "START SAVE";
-            }
-            else
-            {
-                timerSave.Start();
-                btnSave.Text = "STOP SAVE";
+                if (timerSave.Enabled)
+                {
+                    timerSave.Stop();
+                    btnSave.Text = "START SAVE";
+                }
+                else
+                {
+                    timerSave.Start();
+                    btnSave.Text = "STOP SAVE";
+                }
             }
         }
 
