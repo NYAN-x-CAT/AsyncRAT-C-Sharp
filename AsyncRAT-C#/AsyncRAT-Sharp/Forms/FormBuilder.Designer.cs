@@ -35,10 +35,7 @@ namespace AsyncRAT_Sharp.Forms
             this.chkPastebin = new System.Windows.Forms.CheckBox();
             this.txtPastebin = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
-            this.textPort = new System.Windows.Forms.TextBox();
-            this.textIP = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.comboBoxFolder = new System.Windows.Forms.ComboBox();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
@@ -56,6 +53,15 @@ namespace AsyncRAT_Sharp.Forms
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.textPort = new System.Windows.Forms.TextBox();
+            this.listBoxPort = new System.Windows.Forms.ListBox();
+            this.btnAddPort = new System.Windows.Forms.Button();
+            this.btnRemovePort = new System.Windows.Forms.Button();
+            this.btnRemoveIP = new System.Windows.Forms.Button();
+            this.btnAddIP = new System.Windows.Forms.Button();
+            this.listBoxIP = new System.Windows.Forms.ListBox();
+            this.textIP = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -78,13 +84,19 @@ namespace AsyncRAT_Sharp.Forms
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.btnRemoveIP);
+            this.groupBox1.Controls.Add(this.btnAddIP);
+            this.groupBox1.Controls.Add(this.listBoxIP);
+            this.groupBox1.Controls.Add(this.textIP);
+            this.groupBox1.Controls.Add(this.label1);
+            this.groupBox1.Controls.Add(this.btnRemovePort);
+            this.groupBox1.Controls.Add(this.btnAddPort);
+            this.groupBox1.Controls.Add(this.listBoxPort);
             this.groupBox1.Controls.Add(this.chkPastebin);
             this.groupBox1.Controls.Add(this.txtPastebin);
             this.groupBox1.Controls.Add(this.label6);
             this.groupBox1.Controls.Add(this.textPort);
-            this.groupBox1.Controls.Add(this.textIP);
             this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Location = new System.Drawing.Point(6, 19);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(539, 363);
@@ -95,7 +107,7 @@ namespace AsyncRAT_Sharp.Forms
             // chkPastebin
             // 
             this.chkPastebin.AutoSize = true;
-            this.chkPastebin.Location = new System.Drawing.Point(264, 165);
+            this.chkPastebin.Location = new System.Drawing.Point(264, 261);
             this.chkPastebin.Name = "chkPastebin";
             this.chkPastebin.Size = new System.Drawing.Size(130, 24);
             this.chkPastebin.TabIndex = 9;
@@ -108,7 +120,7 @@ namespace AsyncRAT_Sharp.Forms
             // 
             this.txtPastebin.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::AsyncRAT_Sharp.Properties.Settings.Default, "Pastebin", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.txtPastebin.Enabled = false;
-            this.txtPastebin.Location = new System.Drawing.Point(106, 200);
+            this.txtPastebin.Location = new System.Drawing.Point(106, 296);
             this.txtPastebin.Name = "txtPastebin";
             this.txtPastebin.Size = new System.Drawing.Size(271, 26);
             this.txtPastebin.TabIndex = 8;
@@ -118,47 +130,20 @@ namespace AsyncRAT_Sharp.Forms
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(14, 203);
+            this.label6.Location = new System.Drawing.Point(14, 299);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(71, 20);
             this.label6.TabIndex = 7;
             this.label6.Text = "Pastebin";
             // 
-            // textPort
-            // 
-            this.textPort.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::AsyncRAT_Sharp.Properties.Settings.Default, "Ports", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.textPort.Location = new System.Drawing.Point(106, 98);
-            this.textPort.Name = "textPort";
-            this.textPort.Size = new System.Drawing.Size(271, 26);
-            this.textPort.TabIndex = 6;
-            this.textPort.Text = global::AsyncRAT_Sharp.Properties.Settings.Default.Ports;
-            // 
-            // textIP
-            // 
-            this.textIP.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::AsyncRAT_Sharp.Properties.Settings.Default, "IP", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.textIP.Location = new System.Drawing.Point(106, 42);
-            this.textIP.Name = "textIP";
-            this.textIP.Size = new System.Drawing.Size(271, 26);
-            this.textIP.TabIndex = 5;
-            this.textIP.Text = global::AsyncRAT_Sharp.Properties.Settings.Default.IP;
-            // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(14, 102);
+            this.label2.Location = new System.Drawing.Point(308, 37);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(38, 20);
             this.label2.TabIndex = 3;
             this.label2.Text = "Port";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(14, 45);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(24, 20);
-            this.label1.TabIndex = 4;
-            this.label1.Text = "IP";
             // 
             // groupBox2
             // 
@@ -333,6 +318,91 @@ namespace AsyncRAT_Sharp.Forms
             this.tabPage3.Text = "Misc";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
+            // textPort
+            // 
+            this.textPort.Location = new System.Drawing.Point(362, 34);
+            this.textPort.Name = "textPort";
+            this.textPort.Size = new System.Drawing.Size(161, 26);
+            this.textPort.TabIndex = 6;
+            // 
+            // listBoxPort
+            // 
+            this.listBoxPort.FormattingEnabled = true;
+            this.listBoxPort.ItemHeight = 20;
+            this.listBoxPort.Location = new System.Drawing.Point(362, 66);
+            this.listBoxPort.Name = "listBoxPort";
+            this.listBoxPort.Size = new System.Drawing.Size(161, 84);
+            this.listBoxPort.TabIndex = 10;
+            // 
+            // btnAddPort
+            // 
+            this.btnAddPort.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnAddPort.Location = new System.Drawing.Point(362, 156);
+            this.btnAddPort.Name = "btnAddPort";
+            this.btnAddPort.Size = new System.Drawing.Size(43, 26);
+            this.btnAddPort.TabIndex = 12;
+            this.btnAddPort.Text = "+";
+            this.btnAddPort.UseVisualStyleBackColor = true;
+            this.btnAddPort.Click += new System.EventHandler(this.BtnAddPort_Click);
+            // 
+            // btnRemovePort
+            // 
+            this.btnRemovePort.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnRemovePort.Location = new System.Drawing.Point(480, 156);
+            this.btnRemovePort.Name = "btnRemovePort";
+            this.btnRemovePort.Size = new System.Drawing.Size(43, 26);
+            this.btnRemovePort.TabIndex = 13;
+            this.btnRemovePort.Text = "-";
+            this.btnRemovePort.UseVisualStyleBackColor = true;
+            this.btnRemovePort.Click += new System.EventHandler(this.BtnRemovePort_Click);
+            // 
+            // btnRemoveIP
+            // 
+            this.btnRemoveIP.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnRemoveIP.Location = new System.Drawing.Point(190, 156);
+            this.btnRemoveIP.Name = "btnRemoveIP";
+            this.btnRemoveIP.Size = new System.Drawing.Size(43, 26);
+            this.btnRemoveIP.TabIndex = 18;
+            this.btnRemoveIP.Text = "-";
+            this.btnRemoveIP.UseVisualStyleBackColor = true;
+            this.btnRemoveIP.Click += new System.EventHandler(this.BtnRemoveIP_Click);
+            // 
+            // btnAddIP
+            // 
+            this.btnAddIP.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnAddIP.Location = new System.Drawing.Point(72, 156);
+            this.btnAddIP.Name = "btnAddIP";
+            this.btnAddIP.Size = new System.Drawing.Size(43, 26);
+            this.btnAddIP.TabIndex = 17;
+            this.btnAddIP.Text = "+";
+            this.btnAddIP.UseVisualStyleBackColor = true;
+            this.btnAddIP.Click += new System.EventHandler(this.BtnAddIP_Click);
+            // 
+            // listBoxIP
+            // 
+            this.listBoxIP.FormattingEnabled = true;
+            this.listBoxIP.ItemHeight = 20;
+            this.listBoxIP.Location = new System.Drawing.Point(72, 66);
+            this.listBoxIP.Name = "listBoxIP";
+            this.listBoxIP.Size = new System.Drawing.Size(161, 84);
+            this.listBoxIP.TabIndex = 16;
+            // 
+            // textIP
+            // 
+            this.textIP.Location = new System.Drawing.Point(72, 34);
+            this.textIP.Name = "textIP";
+            this.textIP.Size = new System.Drawing.Size(161, 26);
+            this.textIP.TabIndex = 15;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(18, 37);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(43, 20);
+            this.label1.TabIndex = 14;
+            this.label1.Text = "DNS";
+            // 
             // FormBuilder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -363,10 +433,7 @@ namespace AsyncRAT_Sharp.Forms
 
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.TextBox textPort;
-        private System.Windows.Forms.TextBox textIP;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.TextBox textFilename;
         private System.Windows.Forms.Label label3;
@@ -387,5 +454,14 @@ namespace AsyncRAT_Sharp.Forms
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.CheckBox chkBdos;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.ListBox listBoxPort;
+        private System.Windows.Forms.TextBox textPort;
+        private System.Windows.Forms.Button btnAddPort;
+        private System.Windows.Forms.Button btnRemovePort;
+        private System.Windows.Forms.Button btnRemoveIP;
+        private System.Windows.Forms.Button btnAddIP;
+        private System.Windows.Forms.ListBox listBoxIP;
+        private System.Windows.Forms.TextBox textIP;
+        private System.Windows.Forms.Label label1;
     }
 }

