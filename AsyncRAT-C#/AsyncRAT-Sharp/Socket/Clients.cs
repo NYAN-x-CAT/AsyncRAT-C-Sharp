@@ -46,6 +46,7 @@ namespace AsyncRAT_Sharp.Sockets
             }
             catch
             {
+                //Settings.Blocked.Add(ClientSocket.RemoteEndPoint.ToString().Split(':')[0]);
                 ClientSslStream?.Dispose();
                 ClientSocket?.Dispose();
             }
