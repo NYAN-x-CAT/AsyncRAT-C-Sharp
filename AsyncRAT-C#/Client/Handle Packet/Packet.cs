@@ -41,7 +41,7 @@ namespace Client.Handle_Packet
 
                     case "thumbnails":
                         {
-                            new HandleGetScreenShot();
+                            new HandleThumbnails();
                             break;
                         }
 
