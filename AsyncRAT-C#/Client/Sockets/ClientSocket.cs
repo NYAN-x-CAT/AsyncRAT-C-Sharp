@@ -188,13 +188,10 @@ namespace Client.Sockets
             {
                 try
                 {
-                    if (!Client.Connected || !IsConnected)
+                    if (!IsConnected || msg == null)
                     {
-                        IsConnected = false;
                         return;
                     }
-
-                    if (msg == null) return;
 
                     byte[] buffer = msg;
                     byte[] buffersize = BitConverter.GetBytes(buffer.Length);
