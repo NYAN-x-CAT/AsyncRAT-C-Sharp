@@ -337,6 +337,16 @@ namespace AsyncRAT_Sharp.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap u_torrent_logo {
+            get {
+                object obj = ResourceManager.GetObject("u-torrent-logo", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap uac {
             get {
                 object obj = ResourceManager.GetObject("uac", resourceCulture);

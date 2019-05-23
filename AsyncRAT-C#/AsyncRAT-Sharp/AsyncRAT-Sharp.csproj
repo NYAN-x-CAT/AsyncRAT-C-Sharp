@@ -149,6 +149,12 @@
     <Compile Include="Forms\FormShell.Designer.cs">
       <DependentUpon>FormShell.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormTorrent.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormTorrent.Designer.cs">
+      <DependentUpon>FormTorrent.cs</DependentUpon>
+    </Compile>
     <Compile Include="Handle Packet\HandleChat.cs" />
     <Compile Include="Handle Packet\HandleKeylogger.cs" />
     <Compile Include="Handle Packet\HandleFileManager.cs" />
@@ -233,6 +239,9 @@
     <EmbeddedResource Include="Forms\FormShell.resx">
       <DependentUpon>FormShell.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormTorrent.resx">
+      <DependentUpon>FormTorrent.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
@@ -258,6 +267,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="async_icon.ico" />
+    <None Include="Resources\u-torrent-logo.png" />
     <None Include="Resources\StealerLib.dll" />
     <None Include="Resources\report.png" />
     <None Include="Resources\pc.png" />

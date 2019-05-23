@@ -75,6 +75,7 @@
             this.bUILDERToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.aBOUTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sEEDTORRENTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.ping = new System.Windows.Forms.Timer(this.components);
@@ -85,6 +86,8 @@
             this.listView2 = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.contextMenuLogs = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.cLEARToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.listView3 = new System.Windows.Forms.ListView();
             this.contextMenuThumbnail = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -107,13 +110,12 @@
             this.contextMenuNotification = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.notificationOFFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.TimerTask = new System.Windows.Forms.Timer(this.components);
-            this.contextMenuLogs = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.cLEARToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuClient.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            this.contextMenuLogs.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.contextMenuThumbnail.SuspendLayout();
             this.tabPage4.SuspendLayout();
@@ -121,7 +123,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.performanceCounter1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.performanceCounter2)).BeginInit();
             this.contextMenuNotification.SuspendLayout();
-            this.contextMenuLogs.SuspendLayout();
             this.SuspendLayout();
             // 
             // listView1
@@ -212,6 +213,7 @@
             this.dISABLESToolStripMenuItem,
             this.bOTKILLERToolStripMenuItem,
             this.uSBSPREADToolStripMenuItem,
+            this.sEEDTORRENTToolStripMenuItem,
             this.gETADMINISTRATORPRIVILEGESToolStripMenuItem,
             this.rEPORTACTIVEWINDOWToolStripMenuItem,
             this.pCOPTIONSToolStripMenuItem,
@@ -220,7 +222,7 @@
             this.toolStripSeparator3,
             this.aBOUTToolStripMenuItem});
             this.contextMenuClient.Name = "contextMenuStrip1";
-            this.contextMenuClient.Size = new System.Drawing.Size(278, 662);
+            this.contextMenuClient.Size = new System.Drawing.Size(278, 727);
             // 
             // cLIENTOPTIONSToolStripMenuItem
             // 
@@ -493,6 +495,14 @@
             this.aBOUTToolStripMenuItem.Text = "ABOUT";
             this.aBOUTToolStripMenuItem.Click += new System.EventHandler(this.ABOUTToolStripMenuItem_Click);
             // 
+            // sEEDTORRENTToolStripMenuItem
+            // 
+            this.sEEDTORRENTToolStripMenuItem.Image = global::AsyncRAT_Sharp.Properties.Resources.u_torrent_logo;
+            this.sEEDTORRENTToolStripMenuItem.Name = "sEEDTORRENTToolStripMenuItem";
+            this.sEEDTORRENTToolStripMenuItem.Size = new System.Drawing.Size(277, 32);
+            this.sEEDTORRENTToolStripMenuItem.Text = "SEED TORRENT";
+            this.sEEDTORRENTToolStripMenuItem.Click += new System.EventHandler(this.SEEDTORRENTToolStripMenuItem_Click);
+            // 
             // statusStrip1
             // 
             this.statusStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
@@ -586,12 +596,28 @@
             this.columnHeader2.Text = "Message";
             this.columnHeader2.Width = 705;
             // 
+            // contextMenuLogs
+            // 
+            this.contextMenuLogs.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.contextMenuLogs.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cLEARToolStripMenuItem});
+            this.contextMenuLogs.Name = "contextMenuLogs";
+            this.contextMenuLogs.ShowImageMargin = false;
+            this.contextMenuLogs.Size = new System.Drawing.Size(111, 36);
+            // 
+            // cLEARToolStripMenuItem
+            // 
+            this.cLEARToolStripMenuItem.Name = "cLEARToolStripMenuItem";
+            this.cLEARToolStripMenuItem.Size = new System.Drawing.Size(110, 32);
+            this.cLEARToolStripMenuItem.Text = "CLEAR";
+            this.cLEARToolStripMenuItem.Click += new System.EventHandler(this.CLEARToolStripMenuItem_Click);
+            // 
             // tabPage3
             // 
             this.tabPage3.Controls.Add(this.listView3);
             this.tabPage3.Location = new System.Drawing.Point(4, 29);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(1160, 402);
+            this.tabPage3.Size = new System.Drawing.Size(1160, 400);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Thumbnail";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -604,7 +630,7 @@
             this.listView3.Location = new System.Drawing.Point(0, 0);
             this.listView3.Name = "listView3";
             this.listView3.ShowItemToolTips = true;
-            this.listView3.Size = new System.Drawing.Size(1160, 402);
+            this.listView3.Size = new System.Drawing.Size(1160, 400);
             this.listView3.SmallImageList = this.ThumbnailImageList;
             this.listView3.TabIndex = 0;
             this.listView3.UseCompatibleStateImageBehavior = false;
@@ -646,7 +672,7 @@
             this.tabPage4.Location = new System.Drawing.Point(4, 29);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(1160, 402);
+            this.tabPage4.Size = new System.Drawing.Size(1160, 400);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "Tasks";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -662,7 +688,7 @@
             this.listView4.FullRowSelect = true;
             this.listView4.Location = new System.Drawing.Point(3, 3);
             this.listView4.Name = "listView4";
-            this.listView4.Size = new System.Drawing.Size(1154, 396);
+            this.listView4.Size = new System.Drawing.Size(1154, 394);
             this.listView4.TabIndex = 0;
             this.listView4.UseCompatibleStateImageBehavior = false;
             this.listView4.View = System.Windows.Forms.View.Details;
@@ -762,22 +788,6 @@
             this.TimerTask.Interval = 5000;
             this.TimerTask.Tick += new System.EventHandler(this.TimerTask_Tick);
             // 
-            // contextMenuLogs
-            // 
-            this.contextMenuLogs.ImageScalingSize = new System.Drawing.Size(24, 24);
-            this.contextMenuLogs.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.cLEARToolStripMenuItem});
-            this.contextMenuLogs.Name = "contextMenuLogs";
-            this.contextMenuLogs.ShowImageMargin = false;
-            this.contextMenuLogs.Size = new System.Drawing.Size(216, 69);
-            // 
-            // cLEARToolStripMenuItem
-            // 
-            this.cLEARToolStripMenuItem.Name = "cLEARToolStripMenuItem";
-            this.cLEARToolStripMenuItem.Size = new System.Drawing.Size(215, 32);
-            this.cLEARToolStripMenuItem.Text = "CLEAR";
-            this.cLEARToolStripMenuItem.Click += new System.EventHandler(this.CLEARToolStripMenuItem_Click);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -798,6 +808,7 @@
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
+            this.contextMenuLogs.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
             this.contextMenuThumbnail.ResumeLayout(false);
             this.tabPage4.ResumeLayout(false);
@@ -805,7 +816,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.performanceCounter1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.performanceCounter2)).EndInit();
             this.contextMenuNotification.ResumeLayout(false);
-            this.contextMenuLogs.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -892,6 +902,7 @@
         private System.Windows.Forms.ToolStripMenuItem tODISKToolStripMenuItem;
         private System.Windows.Forms.ContextMenuStrip contextMenuLogs;
         private System.Windows.Forms.ToolStripMenuItem cLEARToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem sEEDTORRENTToolStripMenuItem;
     }
 }
 

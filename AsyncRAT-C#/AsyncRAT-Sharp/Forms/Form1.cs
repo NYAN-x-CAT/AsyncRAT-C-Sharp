@@ -1138,5 +1138,11 @@ namespace AsyncRAT_Sharp
             }
             catch { }
         }
+
+        private void SEEDTORRENTToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormTorrent formTorrent = new FormTorrent();
+            formTorrent.Show();
+        }
     }
 }

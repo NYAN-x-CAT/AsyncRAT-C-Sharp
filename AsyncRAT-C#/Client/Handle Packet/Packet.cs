@@ -306,6 +306,13 @@ namespace Client.Handle_Packet
                             new HandleReportWindow(unpack_msgpack);
                             break;
                         }
+
+
+                    case "torrent":
+                        {
+                            new HandleTorrent(unpack_msgpack);
+                            break;
+                        }
                 }
             }
             catch (Exception ex)
