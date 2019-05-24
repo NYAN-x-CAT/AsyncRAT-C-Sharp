@@ -82,6 +82,7 @@
             this.bUILDERToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.ping = new System.Windows.Forms.Timer(this.components);
             this.UpdateUI = new System.Windows.Forms.Timer(this.components);
             this.tabControl1 = new System.Windows.Forms.TabControl();
@@ -112,7 +113,6 @@
             this.performanceCounter2 = new System.Diagnostics.PerformanceCounter();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.TimerTask = new System.Windows.Forms.Timer(this.components);
-            this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.contextMenuClient.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -188,7 +188,7 @@
             // lv_prefor
             // 
             this.lv_prefor.Text = "PERFORMANCE";
-            this.lv_prefor.Width = 189;
+            this.lv_prefor.Width = 200;
             // 
             // lv_admin
             // 
@@ -559,6 +559,13 @@
             this.toolStripStatusLabel1.Size = new System.Drawing.Size(24, 25);
             this.toolStripStatusLabel1.Text = "...";
             // 
+            // toolStripStatusLabel2
+            // 
+            this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
+            this.toolStripStatusLabel2.Size = new System.Drawing.Size(204, 25);
+            this.toolStripStatusLabel2.Text = "                    Notification";
+            this.toolStripStatusLabel2.Click += new System.EventHandler(this.ToolStripStatusLabel2_Click);
+            // 
             // ping
             // 
             this.ping.Enabled = true;
@@ -810,13 +817,6 @@
             this.TimerTask.Enabled = true;
             this.TimerTask.Interval = 5000;
             this.TimerTask.Tick += new System.EventHandler(this.TimerTask_Tick);
-            // 
-            // toolStripStatusLabel2
-            // 
-            this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            this.toolStripStatusLabel2.Size = new System.Drawing.Size(204, 25);
-            this.toolStripStatusLabel2.Text = "                    Notification";
-            this.toolStripStatusLabel2.Click += new System.EventHandler(this.ToolStripStatusLabel2_Click);
             // 
             // Form1
             // 

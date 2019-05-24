@@ -79,7 +79,7 @@
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(482, 3);
+            this.btnSave.Location = new System.Drawing.Point(538, 3);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(152, 29);
             this.btnSave.TabIndex = 5;
@@ -154,11 +154,12 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(6, 5);
+            this.button1.BackgroundImage = global::AsyncRAT_Sharp.Properties.Resources.stop__1_;
+            this.button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.button1.Location = new System.Drawing.Point(12, 3);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(106, 29);
+            this.button1.Size = new System.Drawing.Size(32, 32);
             this.button1.TabIndex = 0;
-            this.button1.Text = "STOP";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.Button1_Click);
             // 

