@@ -12,7 +12,7 @@ namespace AsyncRAT_Sharp.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.1.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -92,6 +92,102 @@ namespace AsyncRAT_Sharp.Properties {
             }
             set {
                 this["IP"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ProductName {
+            get {
+                return ((string)(this["ProductName"]));
+            }
+            set {
+                this["ProductName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string txtDescription {
+            get {
+                return ((string)(this["txtDescription"]));
+            }
+            set {
+                this["txtDescription"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string txtCompany {
+            get {
+                return ((string)(this["txtCompany"]));
+            }
+            set {
+                this["txtCompany"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string txtCopyright {
+            get {
+                return ((string)(this["txtCopyright"]));
+            }
+            set {
+                this["txtCopyright"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string txtTrademarks {
+            get {
+                return ((string)(this["txtTrademarks"]));
+            }
+            set {
+                this["txtTrademarks"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string txtOriginalFilename {
+            get {
+                return ((string)(this["txtOriginalFilename"]));
+            }
+            set {
+                this["txtOriginalFilename"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.0.0.0")]
+        public string txtProductVersion {
+            get {
+                return ((string)(this["txtProductVersion"]));
+            }
+            set {
+                this["txtProductVersion"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.0.0.0")]
+        public string txtFileVersion {
+            get {
+                return ((string)(this["txtFileVersion"]));
+            }
+            set {
+                this["txtFileVersion"] = value;
             }
         }
     }

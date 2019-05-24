@@ -67,6 +67,9 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vestris.ResourceLib, Version=1.6.422.0, Culture=neutral, PublicKeyToken=ec632d8ba5e5750d, processorArchitecture=MSIL">
+      <HintPath>..\packages\Vestris.ResourceLib.1.6.422\lib\Vestris.ResourceLib.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Cryptography\Aes256.cs" />
@@ -170,6 +173,7 @@
     <Compile Include="Handle Packet\HandleProcessManager.cs" />
     <Compile Include="Helper\AsyncTask.cs" />
     <Compile Include="Helper\BuildRenamer.cs" />
+    <Compile Include="Helper\IconInjector.cs" />
     <Compile Include="Helper\ListViewColumnSorter.cs" />
     <Compile Include="Helper\Methods.cs" />
     <Compile Include="MessagePack\BytesTools.cs" />
