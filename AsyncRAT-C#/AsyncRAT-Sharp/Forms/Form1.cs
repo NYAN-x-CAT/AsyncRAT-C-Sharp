@@ -176,6 +176,10 @@ namespace AsyncRAT_Sharp
 
         private void bUILDERToolStripMenuItem_Click(object sender, EventArgs e)
         {
+#if DEBUG
+            MessageBox.Show("You can't build using a debug version.", "AsyncRAT | Builder", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            return;
+#endif
             using (FormBuilder formBuilder = new FormBuilder())
             {
                 formBuilder.ShowDialog();
