@@ -74,6 +74,8 @@ namespace AsyncRAT_Sharp.Forms
             {
                 if (listView1.SelectedItems.Count > 0)
                 {
+                    if (!Directory.Exists(Path.Combine(Application.StartupPath, "ClientsFolder\\" + C.ID)))
+                        Directory.CreateDirectory(Path.Combine(Application.StartupPath, "ClientsFolder\\" + C.ID));
                     foreach (ListViewItem itm in listView1.SelectedItems)
                     {
                         MsgPack msgpack = new MsgPack();

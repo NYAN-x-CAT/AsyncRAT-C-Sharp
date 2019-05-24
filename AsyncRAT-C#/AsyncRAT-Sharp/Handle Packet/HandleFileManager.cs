@@ -177,7 +177,7 @@ namespace AsyncRAT_Sharp.Handle_Packet
                                     if (SD != null)
                                     {
                                         if (!Directory.Exists(Path.Combine(Application.StartupPath, "ClientsFolder\\" + SD.Text.Replace("socketDownload:", ""))))
-                                            Directory.CreateDirectory(Path.Combine(Application.StartupPath, "ClientsFolder\\" + SD.Text.Replace("socketDownload:", "")));
+                                            return;
                                         string filename = Path.Combine(Application.StartupPath, "ClientsFolder\\" + SD.Text.Replace("socketDownload:", "") + "\\" + unpack_msgpack.ForcePathObject("Name").AsString);
                                         if (File.Exists(filename))
                                         {
