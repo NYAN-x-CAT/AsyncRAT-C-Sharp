@@ -1128,5 +1128,17 @@ namespace AsyncRAT_Sharp
             }
             Properties.Settings.Default.Save();
         }
+
+        private void ExecuteNETCodeToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            if (listView1.SelectedItems.Count > 0)
+            {
+                using (FormDotNetEditor dotNetEditor = new FormDotNetEditor())
+                {
+                    dotNetEditor.ShowDialog();
+                }
+            }
+
+        }
     }
 }

@@ -50,6 +50,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Resources\cGeoIp.dll</HintPath>
     </Reference>
+    <Reference Include="FastColoredTextBox, Version=2.16.24.0, Culture=neutral, PublicKeyToken=fb8aa12b994ef61b, processorArchitecture=MSIL">
+      <HintPath>..\packages\FCTB.2.16.24\lib\FastColoredTextBox.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Mono.Cecil, Version=0.10.3.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e, processorArchitecture=MSIL">
       <HintPath>..\packages\Mono.Cecil.0.10.3\lib\net40\Mono.Cecil.dll</HintPath>
@@ -104,6 +107,12 @@
     <Compile Include="Forms\FormDOS.Designer.cs">
       <DependentUpon>FormDOS.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormDotNetEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormDotNetEditor.Designer.cs">
+      <DependentUpon>FormDotNetEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormFileManager.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -121,6 +130,12 @@
     </Compile>
     <Compile Include="Forms\FormKeylogger.Designer.cs">
       <DependentUpon>FormKeylogger.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormPassword.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormPassword.Designer.cs">
+      <DependentUpon>FormPassword.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FormPorts.cs">
       <SubType>Form</SubType>
@@ -219,6 +234,9 @@
     <EmbeddedResource Include="Forms\FormDOS.resx">
       <DependentUpon>FormDOS.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormDotNetEditor.resx">
+      <DependentUpon>FormDotNetEditor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormFileManager.resx">
       <DependentUpon>FormFileManager.cs</DependentUpon>
     </EmbeddedResource>
@@ -227,6 +245,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormKeylogger.resx">
       <DependentUpon>FormKeylogger.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormPassword.resx">
+      <DependentUpon>FormPassword.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormPorts.resx">
       <DependentUpon>FormPorts.cs</DependentUpon>
@@ -271,6 +292,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="async_icon.ico" />
+    <None Include="Resources\coding.png" />
     <None Include="Resources\system.png" />
     <None Include="Resources\extra.png" />
     <None Include="Resources\Miscellaneous.png" />
