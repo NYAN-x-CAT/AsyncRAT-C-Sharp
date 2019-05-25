@@ -44,18 +44,17 @@
             this.label1 = new System.Windows.Forms.Label();
             this.comboLang = new System.Windows.Forms.ComboBox();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.panel3 = new System.Windows.Forms.Panel();
             this.txtBox = new FastColoredTextBoxNS.FastColoredTextBox();
             this.panel1.SuspendLayout();
             this.menuReferences.SuspendLayout();
             this.panel2.SuspendLayout();
+            this.panel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtBox)).BeginInit();
             this.SuspendLayout();
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.button3);
-            this.panel1.Controls.Add(this.button2);
-            this.panel1.Controls.Add(this.button1);
             this.panel1.Controls.Add(this.label3);
             this.panel1.Controls.Add(this.comboHelper);
             this.panel1.Controls.Add(this.label2);
@@ -63,16 +62,16 @@
             this.panel1.Controls.Add(this.label1);
             this.panel1.Controls.Add(this.comboLang);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel1.Location = new System.Drawing.Point(1049, 0);
+            this.panel1.Location = new System.Drawing.Point(914, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(215, 832);
+            this.panel1.Size = new System.Drawing.Size(215, 633);
             this.panel1.TabIndex = 0;
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(8, 700);
+            this.button3.Location = new System.Drawing.Point(375, 6);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(195, 43);
+            this.button3.Size = new System.Drawing.Size(95, 43);
             this.button3.TabIndex = 8;
             this.button3.Text = "Test";
             this.button3.UseVisualStyleBackColor = true;
@@ -80,9 +79,9 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(8, 635);
+            this.button2.Location = new System.Drawing.Point(148, 6);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(195, 43);
+            this.button2.Size = new System.Drawing.Size(95, 43);
             this.button2.TabIndex = 7;
             this.button2.Text = "Reset";
             this.button2.UseVisualStyleBackColor = true;
@@ -90,9 +89,9 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(8, 765);
+            this.button1.Location = new System.Drawing.Point(606, 6);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(195, 43);
+            this.button1.Size = new System.Drawing.Size(95, 43);
             this.button1.TabIndex = 6;
             this.button1.Text = "Execute";
             this.button1.UseVisualStyleBackColor = true;
@@ -199,8 +198,19 @@
             this.panel2.Controls.Add(this.txtBox);
             this.panel2.Location = new System.Drawing.Point(12, 12);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(1019, 808);
+            this.panel2.Size = new System.Drawing.Size(884, 554);
             this.panel2.TabIndex = 1;
+            // 
+            // panel3
+            // 
+            this.panel3.Controls.Add(this.button1);
+            this.panel3.Controls.Add(this.button3);
+            this.panel3.Controls.Add(this.button2);
+            this.panel3.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel3.Location = new System.Drawing.Point(0, 572);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(914, 61);
+            this.panel3.TabIndex = 1;
             // 
             // txtBox
             // 
@@ -236,8 +246,8 @@
             this.txtBox.RightBracket2 = '}';
             this.txtBox.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             this.txtBox.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("txtBox.ServiceColors")));
-            this.txtBox.Size = new System.Drawing.Size(1019, 808);
-            this.txtBox.TabIndex = 0;
+            this.txtBox.Size = new System.Drawing.Size(884, 554);
+            this.txtBox.TabIndex = 2;
             this.txtBox.Text = resources.GetString("txtBox.Text");
             this.txtBox.Zoom = 100;
             // 
@@ -245,7 +255,8 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1264, 832);
+            this.ClientSize = new System.Drawing.Size(1129, 633);
+            this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -257,6 +268,7 @@
             this.panel1.PerformLayout();
             this.menuReferences.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
+            this.panel3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.txtBox)).EndInit();
             this.ResumeLayout(false);
 
@@ -272,12 +284,13 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox comboLang;
         private System.Windows.Forms.Panel panel2;
-        private FastColoredTextBoxNS.FastColoredTextBox txtBox;
         private System.Windows.Forms.ContextMenuStrip menuReferences;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.ToolStripMenuItem addToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem removeToolStripMenuItem;
         private System.Windows.Forms.Button button3;
+        private FastColoredTextBoxNS.FastColoredTextBox txtBox;
+        private System.Windows.Forms.Panel panel3;
     }
 }
