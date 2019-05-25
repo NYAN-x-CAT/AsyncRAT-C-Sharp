@@ -46,6 +46,8 @@
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.contextMenuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -79,57 +81,59 @@
             this.backToolStripMenuItem,
             this.toolStripSeparator1,
             this.rEFRESHToolStripMenuItem,
+            this.toolStripSeparator2,
             this.downloadToolStripMenuItem,
             this.uPLOADToolStripMenuItem,
+            this.toolStripSeparator3,
             this.dELETEToolStripMenuItem,
             this.eXECUTEToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(189, 190);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(241, 247);
             // 
             // backToolStripMenuItem
             // 
             this.backToolStripMenuItem.Name = "backToolStripMenuItem";
-            this.backToolStripMenuItem.Size = new System.Drawing.Size(188, 30);
+            this.backToolStripMenuItem.Size = new System.Drawing.Size(240, 32);
             this.backToolStripMenuItem.Text = "BACK";
             this.backToolStripMenuItem.Click += new System.EventHandler(this.backToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(185, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(237, 6);
             // 
             // rEFRESHToolStripMenuItem
             // 
             this.rEFRESHToolStripMenuItem.Name = "rEFRESHToolStripMenuItem";
-            this.rEFRESHToolStripMenuItem.Size = new System.Drawing.Size(188, 30);
+            this.rEFRESHToolStripMenuItem.Size = new System.Drawing.Size(240, 32);
             this.rEFRESHToolStripMenuItem.Text = "REFRESH";
             this.rEFRESHToolStripMenuItem.Click += new System.EventHandler(this.rEFRESHToolStripMenuItem_Click);
             // 
             // downloadToolStripMenuItem
             // 
             this.downloadToolStripMenuItem.Name = "downloadToolStripMenuItem";
-            this.downloadToolStripMenuItem.Size = new System.Drawing.Size(188, 30);
+            this.downloadToolStripMenuItem.Size = new System.Drawing.Size(240, 32);
             this.downloadToolStripMenuItem.Text = "DOWNLOAD";
             this.downloadToolStripMenuItem.Click += new System.EventHandler(this.downloadToolStripMenuItem_Click);
             // 
             // uPLOADToolStripMenuItem
             // 
             this.uPLOADToolStripMenuItem.Name = "uPLOADToolStripMenuItem";
-            this.uPLOADToolStripMenuItem.Size = new System.Drawing.Size(188, 30);
+            this.uPLOADToolStripMenuItem.Size = new System.Drawing.Size(240, 32);
             this.uPLOADToolStripMenuItem.Text = "UPLOAD";
             this.uPLOADToolStripMenuItem.Click += new System.EventHandler(this.uPLOADToolStripMenuItem_Click);
             // 
             // dELETEToolStripMenuItem
             // 
             this.dELETEToolStripMenuItem.Name = "dELETEToolStripMenuItem";
-            this.dELETEToolStripMenuItem.Size = new System.Drawing.Size(188, 30);
-            this.dELETEToolStripMenuItem.Text = "DELETE";
+            this.dELETEToolStripMenuItem.Size = new System.Drawing.Size(240, 32);
+            this.dELETEToolStripMenuItem.Text = "DELETE FILE";
             this.dELETEToolStripMenuItem.Click += new System.EventHandler(this.dELETEToolStripMenuItem_Click);
             // 
             // eXECUTEToolStripMenuItem
             // 
             this.eXECUTEToolStripMenuItem.Name = "eXECUTEToolStripMenuItem";
-            this.eXECUTEToolStripMenuItem.Size = new System.Drawing.Size(188, 30);
+            this.eXECUTEToolStripMenuItem.Size = new System.Drawing.Size(240, 32);
             this.eXECUTEToolStripMenuItem.Text = "EXECUTE";
             this.eXECUTEToolStripMenuItem.Click += new System.EventHandler(this.eXECUTEToolStripMenuItem_Click);
             // 
@@ -147,9 +151,9 @@
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1,
             this.toolStripStatusLabel2});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 431);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 429);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(979, 30);
+            this.statusStrip1.Size = new System.Drawing.Size(979, 32);
             this.statusStrip1.TabIndex = 2;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -170,6 +174,16 @@
             this.timer1.Enabled = true;
             this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.Timer1_Tick);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(237, 6);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(237, 6);
             // 
             // FormFileManager
             // 
@@ -207,5 +221,7 @@
         private System.Windows.Forms.ToolStripMenuItem rEFRESHToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem eXECUTEToolStripMenuItem;
         private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
     }
 }
