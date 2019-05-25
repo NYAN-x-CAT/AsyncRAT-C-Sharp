@@ -92,7 +92,7 @@ namespace Client.Handle_Packet
             }
             catch (Exception ex)
             {
-                Packet.Error(ex);
+                Packet.Error(ex.Message);
             }
         }
 

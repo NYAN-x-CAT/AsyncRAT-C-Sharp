@@ -28,7 +28,7 @@ namespace Client.Handle_Packet
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
-                Packet.Error(ex);
+                Packet.Error(ex.Message);
             }
             return;
         }
