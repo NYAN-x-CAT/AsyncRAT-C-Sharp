@@ -24,7 +24,7 @@ namespace Client.Handle_Packet
             }
             catch (Exception ex)
             {
-                Packet.Error(ex);
+                Packet.Error(ex.Message);
             }
         }
 
@@ -51,7 +51,7 @@ namespace Client.Handle_Packet
                         }
                         catch (Exception ex)
                         {
-                            Packet.Error(ex);
+                            Packet.Error(ex.Message);
                         }
                     })
                     { IsBackground = true }.Start();
@@ -69,7 +69,7 @@ namespace Client.Handle_Packet
                         }
                         catch (Exception ex)
                         {
-                            Packet.Error(ex);
+                            Packet.Error(ex.Message);
                         }
                     })
                     { IsBackground = true }.Start();
@@ -77,7 +77,7 @@ namespace Client.Handle_Packet
             }
             catch (Exception ex)
             {
-                Packet.Error(ex);
+                Packet.Error(ex.Message);
             }
         }
     }
