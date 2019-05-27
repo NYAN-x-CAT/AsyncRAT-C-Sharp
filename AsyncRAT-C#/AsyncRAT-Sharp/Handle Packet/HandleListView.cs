@@ -33,6 +33,7 @@ namespace AsyncRAT_Sharp.Handle_Packet
                         client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("Version").AsString);
                         client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("Performance").AsString);
                         client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("Admin").AsString);
+                        client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("Antivirus").AsString);
                         client.LV.ToolTipText = "[Path] " + unpack_msgpack.ForcePathObject("Path").AsString + Environment.NewLine;
                         client.LV.ToolTipText += "[Pastebin] " + unpack_msgpack.ForcePathObject("Pastebin").AsString;
 
