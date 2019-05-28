@@ -26,6 +26,9 @@ namespace AsyncRAT_Sharp
         [STAThread]
         static void Main()
         {
+            Process Self = Process.GetCurrentProcess();
+            Self.PriorityClass = ProcessPriorityClass.RealTime; //Warning! Dont RealTime & Marshel
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             form1 = new Form1();
