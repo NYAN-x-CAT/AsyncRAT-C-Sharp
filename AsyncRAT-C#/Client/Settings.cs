@@ -12,7 +12,7 @@ namespace Client
 #if DEBUG
         public static string Ports = "6606";
         public static string Hosts = "127.0.0.1";
-        public static string Version = "0.4.9D";
+        public static string Version = "0.4.9E";
         public static string Install = "false";
         public static string ClientFullPath = Path.Combine(Environment.ExpandEnvironmentVariables("%AppData%"), "Payload.exe");
         public static string Key = "NYAN CAT";
@@ -28,7 +28,7 @@ namespace Client
 #else
         public static string Ports = "%Ports%";
         public static string Hosts = "%Hosts%";
-        public static string Version = "0.4.9D";
+        public static string Version = "0.4.9E";
         public static string Install = "%Install%";
         public static string ClientFullPath = Path.Combine(Environment.ExpandEnvironmentVariables("%Folder%"), "%File%");
         public static string Key = "%Key%";

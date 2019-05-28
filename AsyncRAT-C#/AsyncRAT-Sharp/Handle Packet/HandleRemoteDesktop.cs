@@ -29,6 +29,10 @@ namespace AsyncRAT_Sharp.Handle_Packet
                                 {
                                     RD.C2 = client;
                                     RD.timer1.Start();
+                                    byte[] RdpStream0 = unpack_msgpack.ForcePathObject("Stream").GetAsBytes();
+                                    Bitmap decoded0 = RD.decoder.DecodeData(new MemoryStream(RdpStream0));
+                                    RD.rdSize = decoded0.Size;
+                                    RD.Size = new Size(decoded0.Size.Width / 2, decoded0.Size.Height / 2);
                                 }
                                 byte[] RdpStream = unpack_msgpack.ForcePathObject("Stream").GetAsBytes();
                                 Bitmap decoded = RD.decoder.DecodeData(new MemoryStream(RdpStream));

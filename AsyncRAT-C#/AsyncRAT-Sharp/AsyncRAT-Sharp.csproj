@@ -292,6 +292,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="async_icon.ico" />
+    <None Include="Resources\save-image2.png" />
+    <None Include="Resources\save-image.png" />
+    <None Include="Resources\mouse_enable.png" />
+    <None Include="Resources\mouse.png" />
     <None Include="Resources\coding.png" />
     <None Include="Resources\system.png" />
     <None Include="Resources\extra.png" />

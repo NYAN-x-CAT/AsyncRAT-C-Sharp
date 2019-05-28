@@ -41,6 +41,7 @@
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.timerSave = new System.Windows.Forms.Timer(this.components);
+            this.btnMouse = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
@@ -52,10 +53,13 @@
             this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox1.Location = new System.Drawing.Point(0, 0);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(710, 409);
+            this.pictureBox1.Size = new System.Drawing.Size(1012, 674);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
+            this.pictureBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.PictureBox1_MouseDown);
+            this.pictureBox1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.PictureBox1_MouseMove);
+            this.pictureBox1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.PictureBox1_MouseUp);
             // 
             // timer1
             // 
@@ -65,6 +69,7 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.Transparent;
+            this.panel1.Controls.Add(this.btnMouse);
             this.panel1.Controls.Add(this.btnSave);
             this.panel1.Controls.Add(this.label2);
             this.panel1.Controls.Add(this.numericUpDown2);
@@ -74,23 +79,24 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(710, 38);
+            this.panel1.Size = new System.Drawing.Size(1012, 38);
             this.panel1.TabIndex = 1;
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(538, 3);
+            this.btnSave.BackgroundImage = global::AsyncRAT_Sharp.Properties.Resources.save_image;
+            this.btnSave.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnSave.Location = new System.Drawing.Point(455, 3);
             this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(152, 29);
+            this.btnSave.Size = new System.Drawing.Size(32, 32);
             this.btnSave.TabIndex = 5;
-            this.btnSave.Text = "START SAVE";
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.BtnSave_Click);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(300, 9);
+            this.label2.Location = new System.Drawing.Point(268, 9);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(76, 20);
             this.label2.TabIndex = 4;
@@ -105,7 +111,7 @@
             0,
             0,
             0});
-            this.numericUpDown2.Location = new System.Drawing.Point(384, 5);
+            this.numericUpDown2.Location = new System.Drawing.Point(352, 5);
             this.numericUpDown2.Maximum = new decimal(new int[] {
             0,
             0,
@@ -120,7 +126,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(130, 9);
+            this.label1.Location = new System.Drawing.Point(82, 9);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(78, 20);
             this.label1.TabIndex = 2;
@@ -135,7 +141,7 @@
             0,
             0,
             0});
-            this.numericUpDown1.Location = new System.Drawing.Point(214, 5);
+            this.numericUpDown1.Location = new System.Drawing.Point(166, 5);
             this.numericUpDown1.Minimum = new decimal(new int[] {
             20,
             0,
@@ -181,11 +187,22 @@
             this.timerSave.Interval = 1500;
             this.timerSave.Tick += new System.EventHandler(this.TimerSave_Tick);
             // 
+            // btnMouse
+            // 
+            this.btnMouse.BackgroundImage = global::AsyncRAT_Sharp.Properties.Resources.mouse;
+            this.btnMouse.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnMouse.Location = new System.Drawing.Point(550, 3);
+            this.btnMouse.Name = "btnMouse";
+            this.btnMouse.Size = new System.Drawing.Size(32, 32);
+            this.btnMouse.TabIndex = 3;
+            this.btnMouse.UseVisualStyleBackColor = true;
+            this.btnMouse.Click += new System.EventHandler(this.Button3_Click);
+            // 
             // FormRemoteDesktop
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(710, 409);
+            this.ClientSize = new System.Drawing.Size(1012, 674);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.pictureBox1);
@@ -217,5 +234,6 @@
         public System.Windows.Forms.NumericUpDown numericUpDown2;
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Timer timerSave;
+        private System.Windows.Forms.Button btnMouse;
     }
 }

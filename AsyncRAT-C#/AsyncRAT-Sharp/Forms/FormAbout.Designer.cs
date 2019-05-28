@@ -42,7 +42,7 @@
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.ReadOnly = true;
             this.richTextBox1.ShortcutsEnabled = false;
-            this.richTextBox1.Size = new System.Drawing.Size(526, 182);
+            this.richTextBox1.Size = new System.Drawing.Size(557, 210);
             this.richTextBox1.TabIndex = 0;
             this.richTextBox1.Text = "\n       │ Author      : NYAN CAT\n       │ Name       : AsyncRAT © 2019\n       │ C" +
     "ontact    : github.com/NYAN-x-CAT\n\n       This program is distributed for educat" +
@@ -53,7 +53,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(526, 182);
+            this.ClientSize = new System.Drawing.Size(557, 210);
             this.Controls.Add(this.richTextBox1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
