@@ -63,7 +63,7 @@ namespace AsyncRAT_Sharp.Forms
         {
             comboBoxFolder.SelectedIndex = 0;
             if (Properties.Settings.Default.IP.Length == 0)
-                listBoxIP.Items.AddRange(new object[] { "127.0.0.1", "0.0.0.0" });
+                listBoxIP.Items.Add("127.0.0.1" );
 
             if (Properties.Settings.Default.Pastebin.Length == 0)
                 txtPastebin.Text = "https://pastebin.com/raw/s14cUU5G";
