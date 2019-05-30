@@ -118,9 +118,14 @@ namespace AsyncRAT_Sharp.Forms
                 {
                     timerSave.Start();
                     btnSave.BackgroundImage = Properties.Resources.save_image2;
-                    string fullPath = Path.Combine(Application.StartupPath, "ClientsFolder\\" + C.ID);
-                    if (Directory.Exists(fullPath))
+                    try
+                    {
+                        string fullPath = Path.Combine(Application.StartupPath, "ClientsFolder\\" + C.ID + "\\RemoteDesktop");
+                        if (!Directory.Exists(fullPath))
+                            Directory.CreateDirectory(fullPath);
                         Process.Start(fullPath);
+                    }
+                    catch { }
                 }
             }
         }
