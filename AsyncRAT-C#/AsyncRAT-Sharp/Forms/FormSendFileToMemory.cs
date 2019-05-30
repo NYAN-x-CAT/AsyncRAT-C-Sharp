@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using System.Reflection;
+using AsyncRAT_Sharp.Helper;
 
 namespace AsyncRAT_Sharp
 {
@@ -58,7 +59,7 @@ namespace AsyncRAT_Sharp
                 {
                     try
                     {
-                        Assembly.LoadFile(O.FileName);
+                        new ReferenceLoader().AppDomainSetup(O.FileName);
                         isOK = true;
                     }
                     catch
