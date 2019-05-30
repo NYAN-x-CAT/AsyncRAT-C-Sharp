@@ -21,10 +21,9 @@ If you find a bug or have any suggestions please submit a issue in the
 ## Features
 * TCP network stream (IPv4support)
 * Fast and Secure
-* LAN & WAN support
 * Dynamic DNS support
 * Open websites on the client
-* Show Messagebox's as Service
+* Show Messagebox
 * Remote Task Manager Tools
 * Remote File Managment Tools
 * Bot Killer 
@@ -33,9 +32,9 @@ If you find a bug or have any suggestions please submit a issue in the
 * Downloading & Uploading to Client
 * Execute files
 * System Information via Client List
-* Power Options (Restart, Shutdown, LogOf)
+* Power Options (Restart, Shutdown, Logoff)
 * Keylogger
-* Password Recovery (Chrome, FireFox, EdgeDev)
+* Password Recovery (Chrome, FireFox)
 * Its Free!
 
 ## Coming Soon!
