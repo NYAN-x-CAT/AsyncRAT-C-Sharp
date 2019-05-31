@@ -40,17 +40,20 @@ namespace AsyncRAT_Sharp.Forms
             this.btnAddPort = new System.Windows.Forms.Button();
             this.listBoxPort = new System.Windows.Forms.ListBox();
             this.chkPastebin = new System.Windows.Forms.CheckBox();
+            this.txtPastebin = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.textPort = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.comboBoxFolder = new System.Windows.Forms.ComboBox();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.textFilename = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.chkBdos = new System.Windows.Forms.CheckBox();
+            this.txtMutex = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.chkAnti = new System.Windows.Forms.CheckBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
@@ -61,13 +64,21 @@ namespace AsyncRAT_Sharp.Forms
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.btnAssembly = new System.Windows.Forms.CheckBox();
+            this.txtFileVersion = new System.Windows.Forms.TextBox();
+            this.txtProductVersion = new System.Windows.Forms.TextBox();
+            this.txtOriginalFilename = new System.Windows.Forms.TextBox();
+            this.txtTrademarks = new System.Windows.Forms.TextBox();
+            this.txtCopyright = new System.Windows.Forms.TextBox();
+            this.txtCompany = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
+            this.txtDescription = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
+            this.txtProduct = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
@@ -78,17 +89,7 @@ namespace AsyncRAT_Sharp.Forms
             this.picIcon = new System.Windows.Forms.PictureBox();
             this.tabPage6 = new System.Windows.Forms.TabPage();
             this.btnBuild = new System.Windows.Forms.Button();
-            this.txtPastebin = new System.Windows.Forms.TextBox();
-            this.textFilename = new System.Windows.Forms.TextBox();
-            this.txtMutex = new System.Windows.Forms.TextBox();
-            this.txtFileVersion = new System.Windows.Forms.TextBox();
-            this.txtProductVersion = new System.Windows.Forms.TextBox();
-            this.txtOriginalFilename = new System.Windows.Forms.TextBox();
-            this.txtTrademarks = new System.Windows.Forms.TextBox();
-            this.txtCopyright = new System.Windows.Forms.TextBox();
-            this.txtCompany = new System.Windows.Forms.TextBox();
-            this.txtDescription = new System.Windows.Forms.TextBox();
-            this.txtProduct = new System.Windows.Forms.TextBox();
+            this.chkObfu = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -217,6 +218,17 @@ namespace AsyncRAT_Sharp.Forms
             this.chkPastebin.UseVisualStyleBackColor = true;
             this.chkPastebin.CheckedChanged += new System.EventHandler(this.CheckBox2_CheckedChanged);
             // 
+            // txtPastebin
+            // 
+            this.txtPastebin.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::AsyncRAT_Sharp.Properties.Settings.Default, "Pastebin", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.txtPastebin.Enabled = false;
+            this.txtPastebin.Location = new System.Drawing.Point(106, 352);
+            this.txtPastebin.Name = "txtPastebin";
+            this.txtPastebin.Size = new System.Drawing.Size(271, 26);
+            this.txtPastebin.TabIndex = 8;
+            this.txtPastebin.Text = global::AsyncRAT_Sharp.Properties.Settings.Default.Pastebin;
+            this.toolTip1.SetToolTip(this.txtPastebin, "IP:PORT .. Example 127.0.0.1:6606");
+            // 
             // label6
             // 
             this.label6.AutoSize = true;
@@ -280,6 +292,16 @@ namespace AsyncRAT_Sharp.Forms
             this.checkBox1.UseVisualStyleBackColor = true;
             this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
+            // textFilename
+            // 
+            this.textFilename.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::AsyncRAT_Sharp.Properties.Settings.Default, "Filename", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.textFilename.Enabled = false;
+            this.textFilename.Location = new System.Drawing.Point(103, 92);
+            this.textFilename.Name = "textFilename";
+            this.textFilename.Size = new System.Drawing.Size(271, 26);
+            this.textFilename.TabIndex = 5;
+            this.textFilename.Text = global::AsyncRAT_Sharp.Properties.Settings.Default.Filename;
+            // 
             // label3
             // 
             this.label3.AutoSize = true;
@@ -331,6 +353,15 @@ namespace AsyncRAT_Sharp.Forms
             this.chkBdos.TabIndex = 12;
             this.chkBdos.Text = "Process Critical";
             this.chkBdos.UseVisualStyleBackColor = true;
+            // 
+            // txtMutex
+            // 
+            this.txtMutex.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::AsyncRAT_Sharp.Properties.Settings.Default, "Mutex", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.txtMutex.Location = new System.Drawing.Point(106, 165);
+            this.txtMutex.Name = "txtMutex";
+            this.txtMutex.Size = new System.Drawing.Size(271, 26);
+            this.txtMutex.TabIndex = 11;
+            this.txtMutex.Text = global::AsyncRAT_Sharp.Properties.Settings.Default.Mutex;
             // 
             // label5
             // 
@@ -449,6 +480,66 @@ namespace AsyncRAT_Sharp.Forms
             this.btnAssembly.UseVisualStyleBackColor = true;
             this.btnAssembly.CheckedChanged += new System.EventHandler(this.BtnAssembly_CheckedChanged);
             // 
+            // txtFileVersion
+            // 
+            this.txtFileVersion.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::AsyncRAT_Sharp.Properties.Settings.Default, "txtFileVersion", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.txtFileVersion.Enabled = false;
+            this.txtFileVersion.Location = new System.Drawing.Point(159, 368);
+            this.txtFileVersion.Name = "txtFileVersion";
+            this.txtFileVersion.Size = new System.Drawing.Size(337, 26);
+            this.txtFileVersion.TabIndex = 19;
+            this.txtFileVersion.Text = global::AsyncRAT_Sharp.Properties.Settings.Default.txtFileVersion;
+            // 
+            // txtProductVersion
+            // 
+            this.txtProductVersion.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::AsyncRAT_Sharp.Properties.Settings.Default, "txtProductVersion", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.txtProductVersion.Enabled = false;
+            this.txtProductVersion.Location = new System.Drawing.Point(159, 325);
+            this.txtProductVersion.Name = "txtProductVersion";
+            this.txtProductVersion.Size = new System.Drawing.Size(337, 26);
+            this.txtProductVersion.TabIndex = 18;
+            this.txtProductVersion.Text = global::AsyncRAT_Sharp.Properties.Settings.Default.txtProductVersion;
+            // 
+            // txtOriginalFilename
+            // 
+            this.txtOriginalFilename.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::AsyncRAT_Sharp.Properties.Settings.Default, "txtOriginalFilename", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.txtOriginalFilename.Enabled = false;
+            this.txtOriginalFilename.Location = new System.Drawing.Point(159, 280);
+            this.txtOriginalFilename.Name = "txtOriginalFilename";
+            this.txtOriginalFilename.Size = new System.Drawing.Size(337, 26);
+            this.txtOriginalFilename.TabIndex = 17;
+            this.txtOriginalFilename.Text = global::AsyncRAT_Sharp.Properties.Settings.Default.txtOriginalFilename;
+            // 
+            // txtTrademarks
+            // 
+            this.txtTrademarks.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::AsyncRAT_Sharp.Properties.Settings.Default, "txtTrademarks", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.txtTrademarks.Enabled = false;
+            this.txtTrademarks.Location = new System.Drawing.Point(159, 237);
+            this.txtTrademarks.Name = "txtTrademarks";
+            this.txtTrademarks.Size = new System.Drawing.Size(337, 26);
+            this.txtTrademarks.TabIndex = 16;
+            this.txtTrademarks.Text = global::AsyncRAT_Sharp.Properties.Settings.Default.txtTrademarks;
+            // 
+            // txtCopyright
+            // 
+            this.txtCopyright.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::AsyncRAT_Sharp.Properties.Settings.Default, "txtCopyright", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.txtCopyright.Enabled = false;
+            this.txtCopyright.Location = new System.Drawing.Point(159, 198);
+            this.txtCopyright.Name = "txtCopyright";
+            this.txtCopyright.Size = new System.Drawing.Size(337, 26);
+            this.txtCopyright.TabIndex = 15;
+            this.txtCopyright.Text = global::AsyncRAT_Sharp.Properties.Settings.Default.txtCopyright;
+            // 
+            // txtCompany
+            // 
+            this.txtCompany.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::AsyncRAT_Sharp.Properties.Settings.Default, "txtCompany", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.txtCompany.Enabled = false;
+            this.txtCompany.Location = new System.Drawing.Point(159, 155);
+            this.txtCompany.Name = "txtCompany";
+            this.txtCompany.Size = new System.Drawing.Size(337, 26);
+            this.txtCompany.TabIndex = 14;
+            this.txtCompany.Text = global::AsyncRAT_Sharp.Properties.Settings.Default.txtCompany;
+            // 
             // label14
             // 
             this.label14.AutoSize = true;
@@ -503,6 +594,16 @@ namespace AsyncRAT_Sharp.Forms
             this.label9.TabIndex = 8;
             this.label9.Text = "Company:";
             // 
+            // txtDescription
+            // 
+            this.txtDescription.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::AsyncRAT_Sharp.Properties.Settings.Default, "txtDescription", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.txtDescription.Enabled = false;
+            this.txtDescription.Location = new System.Drawing.Point(159, 112);
+            this.txtDescription.Name = "txtDescription";
+            this.txtDescription.Size = new System.Drawing.Size(337, 26);
+            this.txtDescription.TabIndex = 7;
+            this.txtDescription.Text = global::AsyncRAT_Sharp.Properties.Settings.Default.txtDescription;
+            // 
             // label7
             // 
             this.label7.AutoSize = true;
@@ -511,6 +612,16 @@ namespace AsyncRAT_Sharp.Forms
             this.label7.Size = new System.Drawing.Size(93, 20);
             this.label7.TabIndex = 6;
             this.label7.Text = "Description:";
+            // 
+            // txtProduct
+            // 
+            this.txtProduct.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::AsyncRAT_Sharp.Properties.Settings.Default, "ProductName", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.txtProduct.Enabled = false;
+            this.txtProduct.Location = new System.Drawing.Point(159, 69);
+            this.txtProduct.Name = "txtProduct";
+            this.txtProduct.Size = new System.Drawing.Size(337, 26);
+            this.txtProduct.TabIndex = 5;
+            this.txtProduct.Text = global::AsyncRAT_Sharp.Properties.Settings.Default.ProductName;
             // 
             // label8
             // 
@@ -599,6 +710,7 @@ namespace AsyncRAT_Sharp.Forms
             // 
             // tabPage6
             // 
+            this.tabPage6.Controls.Add(this.chkObfu);
             this.tabPage6.Controls.Add(this.btnBuild);
             this.tabPage6.Location = new System.Drawing.Point(4, 29);
             this.tabPage6.Name = "tabPage6";
@@ -618,115 +730,17 @@ namespace AsyncRAT_Sharp.Forms
             this.btnBuild.UseVisualStyleBackColor = true;
             this.btnBuild.Click += new System.EventHandler(this.BtnBuild_Click);
             // 
-            // txtPastebin
+            // chkObfu
             // 
-            this.txtPastebin.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::AsyncRAT_Sharp.Properties.Settings.Default, "Pastebin", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.txtPastebin.Enabled = false;
-            this.txtPastebin.Location = new System.Drawing.Point(106, 352);
-            this.txtPastebin.Name = "txtPastebin";
-            this.txtPastebin.Size = new System.Drawing.Size(271, 26);
-            this.txtPastebin.TabIndex = 8;
-            this.txtPastebin.Text = global::AsyncRAT_Sharp.Properties.Settings.Default.Pastebin;
-            this.toolTip1.SetToolTip(this.txtPastebin, "IP:PORT .. Example 127.0.0.1:6606");
-            // 
-            // textFilename
-            // 
-            this.textFilename.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::AsyncRAT_Sharp.Properties.Settings.Default, "Filename", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.textFilename.Enabled = false;
-            this.textFilename.Location = new System.Drawing.Point(103, 92);
-            this.textFilename.Name = "textFilename";
-            this.textFilename.Size = new System.Drawing.Size(271, 26);
-            this.textFilename.TabIndex = 5;
-            this.textFilename.Text = global::AsyncRAT_Sharp.Properties.Settings.Default.Filename;
-            // 
-            // txtMutex
-            // 
-            this.txtMutex.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::AsyncRAT_Sharp.Properties.Settings.Default, "Mutex", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.txtMutex.Location = new System.Drawing.Point(106, 165);
-            this.txtMutex.Name = "txtMutex";
-            this.txtMutex.Size = new System.Drawing.Size(271, 26);
-            this.txtMutex.TabIndex = 11;
-            this.txtMutex.Text = global::AsyncRAT_Sharp.Properties.Settings.Default.Mutex;
-            // 
-            // txtFileVersion
-            // 
-            this.txtFileVersion.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::AsyncRAT_Sharp.Properties.Settings.Default, "txtFileVersion", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.txtFileVersion.Enabled = false;
-            this.txtFileVersion.Location = new System.Drawing.Point(159, 368);
-            this.txtFileVersion.Name = "txtFileVersion";
-            this.txtFileVersion.Size = new System.Drawing.Size(337, 26);
-            this.txtFileVersion.TabIndex = 19;
-            this.txtFileVersion.Text = global::AsyncRAT_Sharp.Properties.Settings.Default.txtFileVersion;
-            // 
-            // txtProductVersion
-            // 
-            this.txtProductVersion.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::AsyncRAT_Sharp.Properties.Settings.Default, "txtProductVersion", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.txtProductVersion.Enabled = false;
-            this.txtProductVersion.Location = new System.Drawing.Point(159, 325);
-            this.txtProductVersion.Name = "txtProductVersion";
-            this.txtProductVersion.Size = new System.Drawing.Size(337, 26);
-            this.txtProductVersion.TabIndex = 18;
-            this.txtProductVersion.Text = global::AsyncRAT_Sharp.Properties.Settings.Default.txtProductVersion;
-            // 
-            // txtOriginalFilename
-            // 
-            this.txtOriginalFilename.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::AsyncRAT_Sharp.Properties.Settings.Default, "txtOriginalFilename", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.txtOriginalFilename.Enabled = false;
-            this.txtOriginalFilename.Location = new System.Drawing.Point(159, 280);
-            this.txtOriginalFilename.Name = "txtOriginalFilename";
-            this.txtOriginalFilename.Size = new System.Drawing.Size(337, 26);
-            this.txtOriginalFilename.TabIndex = 17;
-            this.txtOriginalFilename.Text = global::AsyncRAT_Sharp.Properties.Settings.Default.txtOriginalFilename;
-            // 
-            // txtTrademarks
-            // 
-            this.txtTrademarks.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::AsyncRAT_Sharp.Properties.Settings.Default, "txtTrademarks", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.txtTrademarks.Enabled = false;
-            this.txtTrademarks.Location = new System.Drawing.Point(159, 237);
-            this.txtTrademarks.Name = "txtTrademarks";
-            this.txtTrademarks.Size = new System.Drawing.Size(337, 26);
-            this.txtTrademarks.TabIndex = 16;
-            this.txtTrademarks.Text = global::AsyncRAT_Sharp.Properties.Settings.Default.txtTrademarks;
-            // 
-            // txtCopyright
-            // 
-            this.txtCopyright.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::AsyncRAT_Sharp.Properties.Settings.Default, "txtCopyright", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.txtCopyright.Enabled = false;
-            this.txtCopyright.Location = new System.Drawing.Point(159, 198);
-            this.txtCopyright.Name = "txtCopyright";
-            this.txtCopyright.Size = new System.Drawing.Size(337, 26);
-            this.txtCopyright.TabIndex = 15;
-            this.txtCopyright.Text = global::AsyncRAT_Sharp.Properties.Settings.Default.txtCopyright;
-            // 
-            // txtCompany
-            // 
-            this.txtCompany.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::AsyncRAT_Sharp.Properties.Settings.Default, "txtCompany", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.txtCompany.Enabled = false;
-            this.txtCompany.Location = new System.Drawing.Point(159, 155);
-            this.txtCompany.Name = "txtCompany";
-            this.txtCompany.Size = new System.Drawing.Size(337, 26);
-            this.txtCompany.TabIndex = 14;
-            this.txtCompany.Text = global::AsyncRAT_Sharp.Properties.Settings.Default.txtCompany;
-            // 
-            // txtDescription
-            // 
-            this.txtDescription.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::AsyncRAT_Sharp.Properties.Settings.Default, "txtDescription", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.txtDescription.Enabled = false;
-            this.txtDescription.Location = new System.Drawing.Point(159, 112);
-            this.txtDescription.Name = "txtDescription";
-            this.txtDescription.Size = new System.Drawing.Size(337, 26);
-            this.txtDescription.TabIndex = 7;
-            this.txtDescription.Text = global::AsyncRAT_Sharp.Properties.Settings.Default.txtDescription;
-            // 
-            // txtProduct
-            // 
-            this.txtProduct.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::AsyncRAT_Sharp.Properties.Settings.Default, "ProductName", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.txtProduct.Enabled = false;
-            this.txtProduct.Location = new System.Drawing.Point(159, 69);
-            this.txtProduct.Name = "txtProduct";
-            this.txtProduct.Size = new System.Drawing.Size(337, 26);
-            this.txtProduct.TabIndex = 5;
-            this.txtProduct.Text = global::AsyncRAT_Sharp.Properties.Settings.Default.ProductName;
+            this.chkObfu.AutoSize = true;
+            this.chkObfu.Checked = true;
+            this.chkObfu.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkObfu.Location = new System.Drawing.Point(18, 148);
+            this.chkObfu.Name = "chkObfu";
+            this.chkObfu.Size = new System.Drawing.Size(166, 24);
+            this.chkObfu.TabIndex = 2;
+            this.chkObfu.Text = "Simple Obfuscator";
+            this.chkObfu.UseVisualStyleBackColor = true;
             // 
             // FormBuilder
             // 
@@ -758,6 +772,7 @@ namespace AsyncRAT_Sharp.Forms
             this.groupBox5.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picIcon)).EndInit();
             this.tabPage6.ResumeLayout(false);
+            this.tabPage6.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -822,5 +837,6 @@ namespace AsyncRAT_Sharp.Forms
         private System.Windows.Forms.CheckBox btnAssembly;
         private System.Windows.Forms.TabPage tabPage6;
         private System.Windows.Forms.Button btnBuild;
+        private System.Windows.Forms.CheckBox chkObfu;
     }
 }

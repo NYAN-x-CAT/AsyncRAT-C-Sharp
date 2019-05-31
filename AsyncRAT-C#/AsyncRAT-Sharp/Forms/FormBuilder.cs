@@ -198,8 +198,11 @@ namespace AsyncRAT_Sharp.Forms
                         saveFileDialog1.FileName = "Client";
                         if (saveFileDialog1.ShowDialog() == DialogResult.OK)
                         {
-                            EncryptString.DoEncrypt(asmDef);
-                            Renaming.DoRenaming(asmDef);
+                            if (chkObfu.Checked)
+                            {
+                                EncryptString.DoEncrypt(asmDef);
+                                Renaming.DoRenaming(asmDef);
+                            }
                             asmDef.Write(saveFileDialog1.FileName);
                             asmDef.Dispose();
                             if (btnAssembly.Checked)
