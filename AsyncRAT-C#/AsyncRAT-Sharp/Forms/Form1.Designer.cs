@@ -39,6 +39,7 @@
             this.lv_version = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.lv_prefor = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.lv_admin = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.lv_av = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.contextMenuClient = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.aBOUTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
@@ -114,7 +115,6 @@
             this.performanceCounter2 = new System.Diagnostics.PerformanceCounter();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.TimerTask = new System.Windows.Forms.Timer(this.components);
-            this.lv_av = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.contextMenuClient.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -198,6 +198,11 @@
             this.lv_admin.Text = "PRIVILEGES";
             this.lv_admin.Width = 166;
             // 
+            // lv_av
+            // 
+            this.lv_av.Text = "ANTI-VIRUS";
+            this.lv_av.Width = 136;
+            // 
             // contextMenuClient
             // 
             this.contextMenuClient.ImageScalingSize = new System.Drawing.Size(20, 20);
@@ -212,20 +217,20 @@
             this.toolStripSeparator1,
             this.bUILDERToolStripMenuItem});
             this.contextMenuClient.Name = "contextMenuStrip1";
-            this.contextMenuClient.Size = new System.Drawing.Size(199, 240);
+            this.contextMenuClient.Size = new System.Drawing.Size(245, 273);
             // 
             // aBOUTToolStripMenuItem
             // 
             this.aBOUTToolStripMenuItem.Image = global::AsyncRAT_Sharp.Properties.Resources.info;
             this.aBOUTToolStripMenuItem.Name = "aBOUTToolStripMenuItem";
-            this.aBOUTToolStripMenuItem.Size = new System.Drawing.Size(198, 32);
+            this.aBOUTToolStripMenuItem.Size = new System.Drawing.Size(244, 32);
             this.aBOUTToolStripMenuItem.Text = "ABOUT";
             this.aBOUTToolStripMenuItem.Click += new System.EventHandler(this.ABOUTToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(195, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(241, 6);
             // 
             // sENDFILEToolStripMenuItem
             // 
@@ -234,7 +239,7 @@
             this.tODISKToolStripMenuItem});
             this.sENDFILEToolStripMenuItem.Image = global::AsyncRAT_Sharp.Properties.Resources.tomem;
             this.sENDFILEToolStripMenuItem.Name = "sENDFILEToolStripMenuItem";
-            this.sENDFILEToolStripMenuItem.Size = new System.Drawing.Size(198, 32);
+            this.sENDFILEToolStripMenuItem.Size = new System.Drawing.Size(244, 32);
             this.sENDFILEToolStripMenuItem.Text = "Send File";
             // 
             // tOMEMORYToolStripMenuItem
@@ -262,7 +267,7 @@
             this.reportWindowToolStripMenuItem});
             this.monitoringToolStripMenuItem.Image = global::AsyncRAT_Sharp.Properties.Resources.monitoring_system;
             this.monitoringToolStripMenuItem.Name = "monitoringToolStripMenuItem";
-            this.monitoringToolStripMenuItem.Size = new System.Drawing.Size(198, 32);
+            this.monitoringToolStripMenuItem.Size = new System.Drawing.Size(244, 32);
             this.monitoringToolStripMenuItem.Text = "Monitoring";
             // 
             // remoteDesktopToolStripMenuItem1
@@ -342,7 +347,7 @@
             this.executeNETCodeToolStripMenuItem});
             this.miscellaneousToolStripMenuItem.Image = global::AsyncRAT_Sharp.Properties.Resources.Miscellaneous;
             this.miscellaneousToolStripMenuItem.Name = "miscellaneousToolStripMenuItem";
-            this.miscellaneousToolStripMenuItem.Size = new System.Drawing.Size(198, 32);
+            this.miscellaneousToolStripMenuItem.Size = new System.Drawing.Size(244, 32);
             this.miscellaneousToolStripMenuItem.Text = "Miscellaneous";
             // 
             // getAdminPrivilegesToolStripMenuItem
@@ -417,7 +422,7 @@
             this.chatToolStripMenuItem1});
             this.extraToolStripMenuItem.Image = global::AsyncRAT_Sharp.Properties.Resources.extra;
             this.extraToolStripMenuItem.Name = "extraToolStripMenuItem";
-            this.extraToolStripMenuItem.Size = new System.Drawing.Size(198, 32);
+            this.extraToolStripMenuItem.Size = new System.Drawing.Size(244, 32);
             this.extraToolStripMenuItem.Text = "Extra";
             // 
             // visitWebsiteToolStripMenuItem1
@@ -451,60 +456,60 @@
             this.pCToolStripMenuItem});
             this.systemToolStripMenuItem.Image = global::AsyncRAT_Sharp.Properties.Resources.system;
             this.systemToolStripMenuItem.Name = "systemToolStripMenuItem";
-            this.systemToolStripMenuItem.Size = new System.Drawing.Size(198, 32);
+            this.systemToolStripMenuItem.Size = new System.Drawing.Size(244, 32);
             this.systemToolStripMenuItem.Text = "System";
             // 
             // clientToolStripMenuItem
             // 
             this.clientToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.restartToolStripMenuItem2,
             this.closeToolStripMenuItem1,
+            this.restartToolStripMenuItem2,
             this.updateToolStripMenuItem2,
             this.uninstallToolStripMenuItem,
             this.toolStripSeparator3,
             this.showFolderToolStripMenuItem});
             this.clientToolStripMenuItem.Image = global::AsyncRAT_Sharp.Properties.Resources.client;
             this.clientToolStripMenuItem.Name = "clientToolStripMenuItem";
-            this.clientToolStripMenuItem.Size = new System.Drawing.Size(158, 34);
+            this.clientToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
             this.clientToolStripMenuItem.Text = "Client";
             // 
             // restartToolStripMenuItem2
             // 
             this.restartToolStripMenuItem2.Name = "restartToolStripMenuItem2";
-            this.restartToolStripMenuItem2.Size = new System.Drawing.Size(213, 34);
+            this.restartToolStripMenuItem2.Size = new System.Drawing.Size(270, 34);
             this.restartToolStripMenuItem2.Text = "Restart";
             this.restartToolStripMenuItem2.Click += new System.EventHandler(this.RestartToolStripMenuItem2_Click);
             // 
             // closeToolStripMenuItem1
             // 
             this.closeToolStripMenuItem1.Name = "closeToolStripMenuItem1";
-            this.closeToolStripMenuItem1.Size = new System.Drawing.Size(213, 34);
+            this.closeToolStripMenuItem1.Size = new System.Drawing.Size(270, 34);
             this.closeToolStripMenuItem1.Text = "Close";
             this.closeToolStripMenuItem1.Click += new System.EventHandler(this.CloseToolStripMenuItem1_Click);
             // 
             // updateToolStripMenuItem2
             // 
             this.updateToolStripMenuItem2.Name = "updateToolStripMenuItem2";
-            this.updateToolStripMenuItem2.Size = new System.Drawing.Size(213, 34);
+            this.updateToolStripMenuItem2.Size = new System.Drawing.Size(270, 34);
             this.updateToolStripMenuItem2.Text = "Update";
             this.updateToolStripMenuItem2.Click += new System.EventHandler(this.UpdateToolStripMenuItem2_Click);
             // 
             // uninstallToolStripMenuItem
             // 
             this.uninstallToolStripMenuItem.Name = "uninstallToolStripMenuItem";
-            this.uninstallToolStripMenuItem.Size = new System.Drawing.Size(213, 34);
+            this.uninstallToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
             this.uninstallToolStripMenuItem.Text = "Uninstall";
             this.uninstallToolStripMenuItem.Click += new System.EventHandler(this.UninstallToolStripMenuItem_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(210, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(267, 6);
             // 
             // showFolderToolStripMenuItem
             // 
             this.showFolderToolStripMenuItem.Name = "showFolderToolStripMenuItem";
-            this.showFolderToolStripMenuItem.Size = new System.Drawing.Size(213, 34);
+            this.showFolderToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
             this.showFolderToolStripMenuItem.Text = "Show Folder";
             this.showFolderToolStripMenuItem.Click += new System.EventHandler(this.ShowFolderToolStripMenuItem_Click);
             // 
@@ -516,7 +521,7 @@
             this.shutdownToolStripMenuItem1});
             this.pCToolStripMenuItem.Image = global::AsyncRAT_Sharp.Properties.Resources.pc;
             this.pCToolStripMenuItem.Name = "pCToolStripMenuItem";
-            this.pCToolStripMenuItem.Size = new System.Drawing.Size(158, 34);
+            this.pCToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
             this.pCToolStripMenuItem.Text = "PC";
             // 
             // logoffToolStripMenuItem1
@@ -543,13 +548,13 @@
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(195, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(241, 6);
             // 
             // bUILDERToolStripMenuItem
             // 
             this.bUILDERToolStripMenuItem.Image = global::AsyncRAT_Sharp.Properties.Resources.builder;
             this.bUILDERToolStripMenuItem.Name = "bUILDERToolStripMenuItem";
-            this.bUILDERToolStripMenuItem.Size = new System.Drawing.Size(198, 32);
+            this.bUILDERToolStripMenuItem.Size = new System.Drawing.Size(244, 32);
             this.bUILDERToolStripMenuItem.Text = "BUILDER";
             this.bUILDERToolStripMenuItem.Click += new System.EventHandler(this.bUILDERToolStripMenuItem_Click);
             // 
@@ -620,7 +625,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 29);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(1160, 400);
+            this.tabPage2.Size = new System.Drawing.Size(1326, 446);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Logs";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -639,7 +644,7 @@
             this.listView2.Name = "listView2";
             this.listView2.ShowGroups = false;
             this.listView2.ShowItemToolTips = true;
-            this.listView2.Size = new System.Drawing.Size(1154, 394);
+            this.listView2.Size = new System.Drawing.Size(1320, 440);
             this.listView2.TabIndex = 1;
             this.listView2.UseCompatibleStateImageBehavior = false;
             this.listView2.View = System.Windows.Forms.View.Details;
@@ -675,7 +680,7 @@
             this.tabPage3.Controls.Add(this.listView3);
             this.tabPage3.Location = new System.Drawing.Point(4, 29);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(1160, 400);
+            this.tabPage3.Size = new System.Drawing.Size(1326, 446);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Thumbnail";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -688,7 +693,7 @@
             this.listView3.Location = new System.Drawing.Point(0, 0);
             this.listView3.Name = "listView3";
             this.listView3.ShowItemToolTips = true;
-            this.listView3.Size = new System.Drawing.Size(1160, 400);
+            this.listView3.Size = new System.Drawing.Size(1326, 446);
             this.listView3.SmallImageList = this.ThumbnailImageList;
             this.listView3.TabIndex = 0;
             this.listView3.UseCompatibleStateImageBehavior = false;
@@ -730,7 +735,7 @@
             this.tabPage4.Location = new System.Drawing.Point(4, 29);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(1160, 400);
+            this.tabPage4.Size = new System.Drawing.Size(1326, 446);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "Tasks";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -746,7 +751,7 @@
             this.listView4.FullRowSelect = true;
             this.listView4.Location = new System.Drawing.Point(3, 3);
             this.listView4.Name = "listView4";
-            this.listView4.Size = new System.Drawing.Size(1154, 394);
+            this.listView4.Size = new System.Drawing.Size(1320, 440);
             this.listView4.TabIndex = 0;
             this.listView4.UseCompatibleStateImageBehavior = false;
             this.listView4.View = System.Windows.Forms.View.Details;
@@ -829,11 +834,6 @@
             this.TimerTask.Enabled = true;
             this.TimerTask.Interval = 5000;
             this.TimerTask.Tick += new System.EventHandler(this.TimerTask_Tick);
-            // 
-            // lv_av
-            // 
-            this.lv_av.Text = "ANTI-VIRUS";
-            this.lv_av.Width = 136;
             // 
             // Form1
             // 
