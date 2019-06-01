@@ -11,7 +11,7 @@ namespace AsyncRAT_Sharp.Handle_Packet
         {
             if (Program.form1.listView1.InvokeRequired)
             {
-                Program.form1.listView1.BeginInvoke((MethodInvoker)(() =>
+                Program.form1.listView1.Invoke((MethodInvoker)(() =>
                 {
                     try
                     {
