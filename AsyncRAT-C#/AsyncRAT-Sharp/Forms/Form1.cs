@@ -71,8 +71,14 @@ namespace AsyncRAT_Sharp
             }
         }
 
+
         private async void Form1_Load(object sender, EventArgs e)
         {
+            System.Reflection.PropertyInfo aProp = typeof(System.Windows.Forms.Control)
+    .GetProperty("DoubleBuffered", System.Reflection.BindingFlags.NonPublic |
+    System.Reflection.BindingFlags.Instance);
+            aProp.SetValue(listView1, true, null);
+
             CheckFiles();
             lvwColumnSorter = new ListViewColumnSorter();
             this.listView1.ListViewItemSorter = lvwColumnSorter;
