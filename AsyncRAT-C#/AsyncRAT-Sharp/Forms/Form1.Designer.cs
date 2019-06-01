@@ -37,9 +37,9 @@
             this.lv_user = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.lv_os = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.lv_version = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.lv_prefor = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.lv_admin = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.lv_av = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.lv_prefor = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.contextMenuClient = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.aBOUTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
@@ -115,6 +115,7 @@
             this.performanceCounter2 = new System.Diagnostics.PerformanceCounter();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.TimerTask = new System.Windows.Forms.Timer(this.components);
+            this.GetThumbnails = new System.Windows.Forms.Timer(this.components);
             this.contextMenuClient.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -188,11 +189,6 @@
             this.lv_version.Text = "VERSION";
             this.lv_version.Width = 126;
             // 
-            // lv_prefor
-            // 
-            this.lv_prefor.Text = "PERFORMANCE";
-            this.lv_prefor.Width = 200;
-            // 
             // lv_admin
             // 
             this.lv_admin.Text = "PRIVILEGES";
@@ -202,6 +198,11 @@
             // 
             this.lv_av.Text = "ANTI-VIRUS";
             this.lv_av.Width = 136;
+            // 
+            // lv_prefor
+            // 
+            this.lv_prefor.Text = "PERFORMANCE";
+            this.lv_prefor.Width = 200;
             // 
             // contextMenuClient
             // 
@@ -835,6 +836,11 @@
             this.TimerTask.Interval = 5000;
             this.TimerTask.Tick += new System.EventHandler(this.TimerTask_Tick);
             // 
+            // GetThumbnails
+            // 
+            this.GetThumbnails.Interval = 5000;
+            this.GetThumbnails.Tick += new System.EventHandler(this.GetThumbnails_Tick);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -954,6 +960,7 @@
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
         private System.Windows.Forms.ToolStripMenuItem executeNETCodeToolStripMenuItem;
         private System.Windows.Forms.ColumnHeader lv_av;
+        public System.Windows.Forms.Timer GetThumbnails;
     }
 }
 

