@@ -189,6 +189,7 @@
     <Compile Include="Helper\AsyncTask.cs" />
     <Compile Include="Helper\IconInjector.cs" />
     <Compile Include="Helper\ListViewColumnSorter.cs" />
+    <Compile Include="Helper\ListviewDoubleBuffer.cs" />
     <Compile Include="Helper\Methods.cs" />
     <Compile Include="Helper\ReferenceLoader.cs" />
     <Compile Include="MessagePack\BytesTools.cs" />
