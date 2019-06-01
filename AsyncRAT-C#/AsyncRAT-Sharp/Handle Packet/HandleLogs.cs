@@ -22,7 +22,12 @@ namespace AsyncRAT_Sharp.Handle_Packet
                         LV.Text = DateTime.Now.ToLongTimeString();
                         LV.SubItems.Add(Msg);
                         LV.ForeColor = color;
-                        Program.form1.listView2.Items.Insert(0, LV);
+                        lock (Settings.Listview2Lock)
+                        {
+                            Program.form1.listView2.BeginUpdate();
+                            Program.form1.listView2.Items.Insert(0, LV);
+                            Program.form1.listView2.EndUpdate();
+                        }
                     }));
                 }
                 else

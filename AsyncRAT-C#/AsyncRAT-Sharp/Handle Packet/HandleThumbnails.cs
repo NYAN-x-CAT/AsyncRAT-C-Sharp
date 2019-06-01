@@ -17,7 +17,7 @@ namespace AsyncRAT_Sharp.Handle_Packet
                 {
                     Program.form1.listView3.BeginInvoke((MethodInvoker)(() =>
                     {
-                        if (client.LV2 == null)
+                        if (client.LV2 == null && Program.form1.GetThumbnails.Tag == (object)"started")
                         {
                             client.LV2 = new ListViewItem();
                             client.LV2.Text = string.Format("{0}:{1}", client.ClientSocket.RemoteEndPoint.ToString().Split(':')[0], client.ClientSocket.LocalEndPoint.ToString().Split(':')[1]);
@@ -26,15 +26,25 @@ namespace AsyncRAT_Sharp.Handle_Packet
                             {
                                 Program.form1.ThumbnailImageList.Images.Add(client.ID, Bitmap.FromStream(memoryStream));
                                 client.LV2.ImageKey = client.ID;
-                                Program.form1.listView3.Items.Add(client.LV2);
+                                lock (Settings.Listview3Lock)
+                                {
+                                    Program.form1.listView3.BeginUpdate();
+                                    Program.form1.listView3.Items.Add(client.LV2);
+                                    Program.form1.listView3.EndUpdate();
+                                }
                             }
                         }
                         else
                         {
                             using (MemoryStream memoryStream = new MemoryStream(unpack_msgpack.ForcePathObject("Image").GetAsBytes()))
                             {
-                                Program.form1.ThumbnailImageList.Images.RemoveByKey(client.ID);
-                                Program.form1.ThumbnailImageList.Images.Add(client.ID, Bitmap.FromStream(memoryStream));
+                                lock (Settings.Listview3Lock)
+                                {
+                                    Program.form1.listView3.BeginUpdate();
+                                    Program.form1.ThumbnailImageList.Images.RemoveByKey(client.ID);
+                                    Program.form1.ThumbnailImageList.Images.Add(client.ID, Bitmap.FromStream(memoryStream));
+                                    Program.form1.listView3.EndUpdate();
+                                }
                             }
                         }
                     }));
