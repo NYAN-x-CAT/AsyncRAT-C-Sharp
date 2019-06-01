@@ -11,6 +11,7 @@ using AsyncRAT_Sharp.MessagePack;
 using System.Text;
 using System.Net.Security;
 using System.Security.Authentication;
+using System.Threading.Tasks;
 
 namespace AsyncRAT_Sharp.Sockets
 {
@@ -115,20 +116,21 @@ namespace AsyncRAT_Sharp.Sockets
 
         public void Disconnected()
         {
-            try
+            if (LV != null)
             {
-                if (LV != null)
-                {
-                    if (Program.form1.listView1.InvokeRequired)
-                        Program.form1.listView1.BeginInvoke((MethodInvoker)(() =>
+                if (Program.form1.listView1.InvokeRequired)
+                    Program.form1.listView1.BeginInvoke((MethodInvoker)(() =>
+                    {
+                        try
                         {
-                            LV.Remove();
-                        }));
-                    lock (Settings.Online)
-                        Settings.Online.Remove(this);
-                }
+                            lock (Settings.Listview1Lock)
+                                LV.Remove();
+                        }
+                        catch { }
+                    }));
+                lock (Settings.Online)
+                    Settings.Online.Remove(this);
             }
-            catch { }
 
             try
             {
