@@ -28,9 +28,7 @@ namespace AsyncRAT_Sharp.Handle_Packet
                                 client.LV2.ImageKey = client.ID;
                                 lock (Settings.Listview3Lock)
                                 {
-                                    Program.form1.listView3.BeginUpdate();
                                     Program.form1.listView3.Items.Add(client.LV2);
-                                    Program.form1.listView3.EndUpdate();
                                 }
                             }
                         }
@@ -40,10 +38,8 @@ namespace AsyncRAT_Sharp.Handle_Packet
                             {
                                 lock (Settings.Listview3Lock)
                                 {
-                                    Program.form1.listView3.BeginUpdate();
                                     Program.form1.ThumbnailImageList.Images.RemoveByKey(client.ID);
                                     Program.form1.ThumbnailImageList.Images.Add(client.ID, Bitmap.FromStream(memoryStream));
-                                    Program.form1.listView3.EndUpdate();
                                 }
                             }
                         }
