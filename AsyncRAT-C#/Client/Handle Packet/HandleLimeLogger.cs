@@ -157,8 +157,11 @@ namespace Client.Handle_Packet
                 IntPtr hwnd = GetForegroundWindow();
                 GetWindowThreadProcessId(hwnd, out uint pid);
                 Process p = Process.GetProcessById((int)pid);
-                CurrentActiveWindowTitle = p.MainWindowTitle;
-                return p.MainWindowTitle;
+                string title = p.MainWindowTitle;
+                if (string.IsNullOrWhiteSpace(title))
+                    title = p.MainModule.ModuleName;
+                CurrentActiveWindowTitle = title;
+                return title;
             }
             catch (Exception)
             {
