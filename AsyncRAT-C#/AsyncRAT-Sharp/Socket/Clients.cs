@@ -123,13 +123,20 @@ namespace AsyncRAT_Sharp.Sockets
                     {
                         try
                         {
+
                             lock (Settings.Listview1Lock)
                                 LV.Remove();
-                            lock (Settings.Listview3Lock)
-                                LV2?.Remove();
+
+                            if (LV2 != null)
+                            {
+                                lock (Settings.Listview3Lock)
+                                    LV2.Remove();
+                            }
+
                         }
                         catch { }
                     }));
+
                 lock (Settings.Online)
                     Settings.Online.Remove(this);
             }
