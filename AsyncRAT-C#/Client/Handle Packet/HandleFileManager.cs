@@ -58,7 +58,7 @@ namespace Client.Handle_Packet
                 {
                     using (MemoryStream ms = new MemoryStream())
                     {
-                        GetIcon(file).Save(ms, ImageFormat.Png);
+                        GetIcon(file.ToLower()).Save(ms, ImageFormat.Png);
                         sbFile.Append(Path.GetFileName(file) + "-=>" + Path.GetFullPath(file) + "-=>" + Convert.ToBase64String(ms.ToArray()) + "-=>" + new FileInfo(file).Length.ToString() + "-=>");
                     }
                 }
