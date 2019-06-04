@@ -1,53 +1,59 @@
 <img src="https://i.imgur.com/KbomEco.png">
-
-
 # AsyncRAT
-	
-***Remote Administration Tool For Windows***
- ```
-The AsyncRAT project's primary goal is to learn about the tcp protocol.
-If you find a bug or have any suggestions please submit a issue in the
-#Issues section
- ```
+___
+##### AsyncRAT is a Remote Access Tool (RAT) designed to remotely monitor and control other computers through a secure encrypted connection
 
----
+# Included projects
+##### This project includes the following
+- Access terminal for controlling clients
+- Configurable client manageable via Terminal
+- Log server recording all significant events
 
-## Author
+##### Features Include:
+- Client screen viewer & recorder
+- Client Antivirus & Integrity manager
+- Client SFTP access including upload & download
+- Client & Server chat window
+- Client Dynamic DNS & Multi-Server support (Configurable)
+- Client Password Recovery
+- Client JIT compiler 
+- Client Keylogger 
+- Client Anti Analysis (Configurable)
+- Server Controlled updates
+- Client Antimalware Start-up 
+- Server Config Editor
+- Server multiport receiver (Configurable)
+- Server thumbnails 
+- Server binary builder (Configurable)
+- Server obfuscator (Configurable)
+- And much more!
 
-* **NYAN CAT**  
+### Technical Details
+The following online servers / resources are used in this project
+* [pastebin.com] - used for the "PasteBin" option in client builder
+* [github.com] - used for downloading and uploading changes to the project
+### Installation & Deployment
 
----
+AsyncRAT requires the [.Net Framework](https://dotnet.microsoft.com/download/dotnet-framework/net46) v4 (client) and v4.6+ (server) to run.
 
-## Features
-* TCP network stream (IPv4support)
-* Fast and Secure
-* Dynamic DNS support
-* Open websites on the client
-* Show Messagebox
-* Remote Task Manager Tools
-* Remote File Managment Tools
-* Bot Killer 
-* Remote Desktop
-* Remote CMD
-* Downloading & Uploading to Client
-* Execute files
-* System Information via Client List
-* Power Options (Restart, Shutdown, Logoff)
-* Keylogger
-* Password Recovery (Chrome, FireFox)
-* Its Free!
+```diff
+- to compile this project(s) visual studio 2019 or above to is required
+```
 
-## Coming Soon!
-* Reverse proxy support
-* Registery Editing
----
+### Plugins
+Currently the program makes use of several integrated DLL's (see below for more details)
 
-## Disclaimer [Read Me!]
+| Plugin | Source |
+| ------ | ------ |
+| StealerLib | [Not Available] |
 
-I, the creator and all those assoicated with this program am not responsible for any actions, and or damages, caused by this software.
-You bear the full responsibility of your actions and acknowledge that this software was created for educational purposes only.
-This software's main purpose is NOT to be used maliciously, or on any system that you do not own, or have the right to use.
-By using this software, you automatically agree to the above.
+
+### Are you a C# or .Net Developer and want to contribute?
+##### Great!
+Please read through the project first to get an idea of how the program is structured first after which create a fork with your own changes and purpose a pull request as well a an issue referencing what you have changed, why you have changed it, and why / if you think it should be implemented
+
+### LEGAL DISCLAIMER PLEASE READ!
+##### I, the creator and all those associated with the development and production of this program are not responsible for any actions and or damages caused by this software. You bear the full responsibility of your actions and acknowledge that this software was created for educational purposes only. This software's intended purpose is NOT to be used maliciously, or on any system that you do not have own or have explicit permission to operate and use this program on. By using this software, you automatically agree to the above.
 
 ## License
 [![License](http://img.shields.io/:license-mit-blue.svg?style=flat-square)](/LICENSE)
