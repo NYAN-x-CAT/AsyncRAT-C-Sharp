@@ -1,7 +1,7 @@
 <img src="https://i.imgur.com/KbomEco.png">
+
 # AsyncRAT
-___
-##### AsyncRAT is a Remote Access Tool (RAT) designed to remotely monitor and control other computers through a secure encrypted connection
+AsyncRAT is a Remote Access Tool (RAT) designed to remotely monitor and control other computers through a secure encrypted connection
 
 # Included projects
 ##### This project includes the following
@@ -45,7 +45,7 @@ Currently the program makes use of several integrated DLL's (see below for more 
 
 | Plugin | Source |
 | ------ | ------ |
-| StealerLib | [Not Available] |
+| StealerLib | [gitlab.com/thoxy/stealerlib] |
 
 
 ### Are you a C# or .Net Developer and want to contribute?
