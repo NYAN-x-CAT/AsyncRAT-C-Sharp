@@ -24,38 +24,23 @@ namespace AsyncRAT_Sharp.Forms
             InitializeComponent();
         }
 
-        private async void FormCertificate_Load(object sender, EventArgs e)
+        private void FormCertificate_Load(object sender, EventArgs e)
         {
-            await Task.Run(() =>
+            try
             {
-                        try
-                        {
-                            string backup = Application.StartupPath + "\\BackupCertificate.zip";
-                            if (File.Exists(backup))
-                            {
-                                MessageBox.Show(this, "Found a zip backup, Extracting (BackupCertificate.zip)", "Certificate backup", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                                ZipFile.ExtractToDirectory(backup, Application.StartupPath);
-                                Settings.ServerCertificate = new X509Certificate2(Settings.CertificatePath);
-                                return;
-                            }
-
-                            Settings.ServerCertificate = CreateCertificateAuthority("AsyncRAT Server CA", 4096);
-                            File.WriteAllBytes(Settings.CertificatePath, Settings.ServerCertificate.Export(X509ContentType.Pkcs12));
-
-                            using (ZipArchive archive = ZipFile.Open(backup, ZipArchiveMode.Create))
-                            {
-                                archive.CreateEntryFromFile(Settings.CertificatePath, Path.GetFileName(Settings.CertificatePath));
-                            }
-                            MessageBox.Show(this, "Created a ZIP backup (BackupCertificate.zip)", "Certificate backup", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show(this, ex.Message, "Certificate", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                            Environment.Exit(0);
-                        }
-
-            });
-            this.Close();
+                string backup = Application.StartupPath + "\\BackupCertificate.zip";
+                if (File.Exists(backup))
+                {
+                    MessageBox.Show(this, "Found a zip backup, Extracting (BackupCertificate.zip)", "Certificate backup", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    ZipFile.ExtractToDirectory(backup, Application.StartupPath);
+                    Settings.ServerCertificate = new X509Certificate2(Settings.CertificatePath);
+                    this.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, ex.Message, "Certificate", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
         }
 
         public static X509Certificate2 CreateCertificate(string certName, X509Certificate2 ca, int keyStrength)
@@ -123,6 +108,35 @@ namespace AsyncRAT_Sharp.Forms
             certificate2.PrivateKey = DotNetUtilities.ToRSA(keypair.Private as RsaPrivateCrtKeyParameters);
 
             return certificate2;
+        }
+
+        private void Button1_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(textBox1.Text)) return;
+
+                button1.Text = "Please wait";
+                button1.Enabled = false;
+
+                string backup = Application.StartupPath + "\\BackupCertificate.zip";
+                Settings.ServerCertificate = CreateCertificateAuthority(textBox1.Text, 4096);
+                File.WriteAllBytes(Settings.CertificatePath, Settings.ServerCertificate.Export(X509ContentType.Pkcs12));
+
+                using (ZipArchive archive = ZipFile.Open(backup, ZipArchiveMode.Create))
+                {
+                    archive.CreateEntryFromFile(Settings.CertificatePath, Path.GetFileName(Settings.CertificatePath));
+                }
+                MessageBox.Show(this, "Created a ZIP backup (BackupCertificate.zip)", "Certificate backup", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(this, "If you want to use an updated version of AsyncRAT, remember to copy+paste your certificate", "Certificate backup", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, ex.Message, "Certificate", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                button1.Text = "Ok";
+                button1.Enabled = true;
+            }
         }
     }
 }
