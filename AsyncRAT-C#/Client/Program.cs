@@ -4,17 +4,13 @@ using Client.Install;
 using System;
 using Client.Helper;
 
-//       │ Author     : NYAN CAT
-//       │ Name       : AsyncRAT // Simple RAT
+/* 
+       │ Author       : NYAN CAT
+       │ Name         : AsyncRAT  Simple RAT
+       │ Contact Me   : https:github.com/NYAN-x-CAT
 
-//       Contact Me   : https://github.com/NYAN-x-CAT
-
-//       This program Is distributed for educational purposes only.
-
-//       Credits;
-//       Serialization    @ymofen
-//       StreamLibrary    @Dergan
-//       Special Thanks   MaxXor@hf gigajew@hf
+       This program Is distributed for educational purposes only.
+*/
 
 namespace Client
 {
