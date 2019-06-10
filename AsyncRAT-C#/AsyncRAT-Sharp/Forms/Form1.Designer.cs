@@ -116,6 +116,7 @@
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.TimerTask = new System.Windows.Forms.Timer(this.components);
             this.GetThumbnails = new System.Windows.Forms.Timer(this.components);
+            this.pASSWORDRECOVERYToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuClient.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -275,7 +276,7 @@
             // 
             this.remoteDesktopToolStripMenuItem1.Image = global::AsyncRAT_Sharp.Properties.Resources.remotedesktop;
             this.remoteDesktopToolStripMenuItem1.Name = "remoteDesktopToolStripMenuItem1";
-            this.remoteDesktopToolStripMenuItem1.Size = new System.Drawing.Size(267, 34);
+            this.remoteDesktopToolStripMenuItem1.Size = new System.Drawing.Size(270, 34);
             this.remoteDesktopToolStripMenuItem1.Text = "Remote Desktop";
             this.remoteDesktopToolStripMenuItem1.Click += new System.EventHandler(this.RemoteDesktopToolStripMenuItem1_Click);
             // 
@@ -283,7 +284,7 @@
             // 
             this.keyloggerToolStripMenuItem1.Image = global::AsyncRAT_Sharp.Properties.Resources.logger;
             this.keyloggerToolStripMenuItem1.Name = "keyloggerToolStripMenuItem1";
-            this.keyloggerToolStripMenuItem1.Size = new System.Drawing.Size(267, 34);
+            this.keyloggerToolStripMenuItem1.Size = new System.Drawing.Size(270, 34);
             this.keyloggerToolStripMenuItem1.Text = "Keylogger";
             this.keyloggerToolStripMenuItem1.Click += new System.EventHandler(this.KeyloggerToolStripMenuItem1_Click);
             // 
@@ -291,7 +292,7 @@
             // 
             this.passwordRecoveryToolStripMenuItem1.Image = global::AsyncRAT_Sharp.Properties.Resources.key;
             this.passwordRecoveryToolStripMenuItem1.Name = "passwordRecoveryToolStripMenuItem1";
-            this.passwordRecoveryToolStripMenuItem1.Size = new System.Drawing.Size(267, 34);
+            this.passwordRecoveryToolStripMenuItem1.Size = new System.Drawing.Size(270, 34);
             this.passwordRecoveryToolStripMenuItem1.Text = "Password Recovery";
             this.passwordRecoveryToolStripMenuItem1.Click += new System.EventHandler(this.PasswordRecoveryToolStripMenuItem1_Click);
             // 
@@ -299,7 +300,7 @@
             // 
             this.fileManagerToolStripMenuItem1.Image = global::AsyncRAT_Sharp.Properties.Resources.filemanager;
             this.fileManagerToolStripMenuItem1.Name = "fileManagerToolStripMenuItem1";
-            this.fileManagerToolStripMenuItem1.Size = new System.Drawing.Size(267, 34);
+            this.fileManagerToolStripMenuItem1.Size = new System.Drawing.Size(270, 34);
             this.fileManagerToolStripMenuItem1.Text = "File Manager";
             this.fileManagerToolStripMenuItem1.Click += new System.EventHandler(this.FileManagerToolStripMenuItem1_Click);
             // 
@@ -307,7 +308,7 @@
             // 
             this.processManagerToolStripMenuItem1.Image = global::AsyncRAT_Sharp.Properties.Resources.process;
             this.processManagerToolStripMenuItem1.Name = "processManagerToolStripMenuItem1";
-            this.processManagerToolStripMenuItem1.Size = new System.Drawing.Size(267, 34);
+            this.processManagerToolStripMenuItem1.Size = new System.Drawing.Size(270, 34);
             this.processManagerToolStripMenuItem1.Text = "Process Manager";
             this.processManagerToolStripMenuItem1.Click += new System.EventHandler(this.ProcessManagerToolStripMenuItem1_Click);
             // 
@@ -318,7 +319,7 @@
             this.stopToolStripMenuItem2});
             this.reportWindowToolStripMenuItem.Image = global::AsyncRAT_Sharp.Properties.Resources.report;
             this.reportWindowToolStripMenuItem.Name = "reportWindowToolStripMenuItem";
-            this.reportWindowToolStripMenuItem.Size = new System.Drawing.Size(267, 34);
+            this.reportWindowToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
             this.reportWindowToolStripMenuItem.Text = "Report Window";
             // 
             // runToolStripMenuItem1
@@ -430,7 +431,7 @@
             // 
             this.visitWebsiteToolStripMenuItem1.Image = global::AsyncRAT_Sharp.Properties.Resources.visit;
             this.visitWebsiteToolStripMenuItem1.Name = "visitWebsiteToolStripMenuItem1";
-            this.visitWebsiteToolStripMenuItem1.Size = new System.Drawing.Size(258, 34);
+            this.visitWebsiteToolStripMenuItem1.Size = new System.Drawing.Size(270, 34);
             this.visitWebsiteToolStripMenuItem1.Text = "Visit Website";
             this.visitWebsiteToolStripMenuItem1.Click += new System.EventHandler(this.VisitWebsiteToolStripMenuItem1_Click);
             // 
@@ -438,7 +439,7 @@
             // 
             this.sendMessageBoxToolStripMenuItem1.Image = global::AsyncRAT_Sharp.Properties.Resources.msgbox;
             this.sendMessageBoxToolStripMenuItem1.Name = "sendMessageBoxToolStripMenuItem1";
-            this.sendMessageBoxToolStripMenuItem1.Size = new System.Drawing.Size(258, 34);
+            this.sendMessageBoxToolStripMenuItem1.Size = new System.Drawing.Size(270, 34);
             this.sendMessageBoxToolStripMenuItem1.Text = "Send MessageBox";
             this.sendMessageBoxToolStripMenuItem1.Click += new System.EventHandler(this.SendMessageBoxToolStripMenuItem1_Click);
             // 
@@ -446,7 +447,7 @@
             // 
             this.chatToolStripMenuItem1.Image = global::AsyncRAT_Sharp.Properties.Resources.chat;
             this.chatToolStripMenuItem1.Name = "chatToolStripMenuItem1";
-            this.chatToolStripMenuItem1.Size = new System.Drawing.Size(258, 34);
+            this.chatToolStripMenuItem1.Size = new System.Drawing.Size(270, 34);
             this.chatToolStripMenuItem1.Text = "Chat";
             this.chatToolStripMenuItem1.Click += new System.EventHandler(this.ChatToolStripMenuItem1_Click);
             // 
@@ -771,6 +772,7 @@
             // 
             this.contextMenuTasks.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.contextMenuTasks.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.pASSWORDRECOVERYToolStripMenuItem,
             this.downloadAndExecuteToolStripMenuItem,
             this.sENDFILETOMEMORYToolStripMenuItem1,
             this.uPDATEToolStripMenuItem1,
@@ -778,7 +780,7 @@
             this.dELETETASKToolStripMenuItem});
             this.contextMenuTasks.Name = "contextMenuStrip4";
             this.contextMenuTasks.ShowImageMargin = false;
-            this.contextMenuTasks.Size = new System.Drawing.Size(250, 138);
+            this.contextMenuTasks.Size = new System.Drawing.Size(250, 203);
             // 
             // downloadAndExecuteToolStripMenuItem
             // 
@@ -840,6 +842,13 @@
             // 
             this.GetThumbnails.Interval = 5000;
             this.GetThumbnails.Tick += new System.EventHandler(this.GetThumbnails_Tick);
+            // 
+            // pASSWORDRECOVERYToolStripMenuItem
+            // 
+            this.pASSWORDRECOVERYToolStripMenuItem.Name = "pASSWORDRECOVERYToolStripMenuItem";
+            this.pASSWORDRECOVERYToolStripMenuItem.Size = new System.Drawing.Size(249, 32);
+            this.pASSWORDRECOVERYToolStripMenuItem.Text = "PASSWORD RECOVERY";
+            this.pASSWORDRECOVERYToolStripMenuItem.Click += new System.EventHandler(this.PASSWORDRECOVERYToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -961,6 +970,7 @@
         private System.Windows.Forms.ToolStripMenuItem executeNETCodeToolStripMenuItem;
         private System.Windows.Forms.ColumnHeader lv_av;
         public System.Windows.Forms.Timer GetThumbnails;
+        private System.Windows.Forms.ToolStripMenuItem pASSWORDRECOVERYToolStripMenuItem;
     }
 }
 

