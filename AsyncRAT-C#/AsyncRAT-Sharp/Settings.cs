@@ -16,7 +16,7 @@ namespace AsyncRAT_Sharp
 
         public static string CertificatePath = Application.StartupPath + "\\ServerCertificate.p12";
         public static X509Certificate2 ServerCertificate;
-        public static readonly string Version = "AsyncRAT 0.4.9F";
+        public static readonly string Version = "AsyncRAT 0.4.9G";
         public static object Listview1Lock = new object();
         public static object Listview2Lock = new object();
         public static object Listview3Lock = new object();
