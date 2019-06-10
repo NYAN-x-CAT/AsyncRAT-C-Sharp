@@ -414,7 +414,7 @@ namespace AsyncRAT_Sharp
                             Debug.WriteLine("task removed");
                             return;
                         }
-                        foreach (Clients client in Settings.Online)
+                        foreach (Clients client in Settings.Online.ToList())
                         {
                             if (!asyncTask.doneClient.Contains(client.ID))
                             {
