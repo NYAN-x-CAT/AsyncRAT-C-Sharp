@@ -53,7 +53,7 @@ Please read through the project first to get an idea of how the program is struc
 
 ### Donation
 ##### Buy me a coffee!
-BTC: 1jVe7d8GQB8z2ZqK6U8SCYAgeCJuYxaFo
+BTC: 12DaUTCemhDEzNw7cAFg9FndzcWkYZt6C8
 
 ### LEGAL DISCLAIMER PLEASE READ!
 ##### I, the creator and all those associated with the development and production of this program are not responsible for any actions and or damages caused by this software. You bear the full responsibility of your actions and acknowledge that this software was created for educational purposes only. This software's intended purpose is NOT to be used maliciously, or on any system that you do not have own or have explicit permission to operate and use this program on. By using this software, you automatically agree to the above.
