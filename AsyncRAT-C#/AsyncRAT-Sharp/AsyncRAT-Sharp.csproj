@@ -306,6 +306,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="async_icon.ico" />
+    <None Include="Resources\HandleLimeUSB.dll" />
     <None Include="Resources\save-image2.png" />
     <None Include="Resources\save-image.png" />
     <None Include="Resources\mouse_enable.png" />
