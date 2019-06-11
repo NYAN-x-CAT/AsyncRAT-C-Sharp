@@ -47,10 +47,13 @@ Currently the program makes use of several integrated DLL's (see below for more 
 | ------ | ------ |
 | StealerLib | [gitlab.com/thoxy/stealerlib] |
 
-
 ### Are you a C# or .Net Developer and want to contribute?
 ##### Great!
 Please read through the project first to get an idea of how the program is structured first after which create a fork with your own changes and purpose a pull request as well a an issue referencing what you have changed, why you have changed it, and why / if you think it should be implemented
+
+### Donation
+##### Buy me a coffee!
+BTC: 1jVe7d8GQB8z2ZqK6U8SCYAgeCJuYxaFo
 
 ### LEGAL DISCLAIMER PLEASE READ!
 ##### I, the creator and all those associated with the development and production of this program are not responsible for any actions and or damages caused by this software. You bear the full responsibility of your actions and acknowledge that this software was created for educational purposes only. This software's intended purpose is NOT to be used maliciously, or on any system that you do not have own or have explicit permission to operate and use this program on. By using this software, you automatically agree to the above.
