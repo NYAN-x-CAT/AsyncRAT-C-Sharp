@@ -187,6 +187,7 @@
     <Compile Include="Handle Packet\Packet.cs" />
     <Compile Include="Handle Packet\HandleProcessManager.cs" />
     <Compile Include="Helper\AsyncTask.cs" />
+    <Compile Include="Helper\CreateCertificate.cs" />
     <Compile Include="Helper\IconInjector.cs" />
     <Compile Include="Helper\ListViewColumnSorter.cs" />
     <Compile Include="Helper\ListviewDoubleBuffer.cs" />
