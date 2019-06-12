@@ -47,6 +47,9 @@ Currently the program makes use of several integrated DLL's (see below for more 
 | ------ | ------ |
 | StealerLib | [gitlab.com/thoxy/stealerlib] |
 
+### Download
+https://github.com/NYAN-x-CAT/AsyncRAT-C-Sharp/releases
+
 ### Are you a C# or .Net Developer and want to contribute?
 ##### Great!
 Please read through the project first to get an idea of how the program is structured first after which create a fork with your own changes and purpose a pull request as well a an issue referencing what you have changed, why you have changed it, and why / if you think it should be implemented
