@@ -30,7 +30,7 @@ namespace Server.Forms
         public string fullFileName;
         public string clientFullFileName;
         private bool isUpload = false;
-        private async void timer1_Tick(object sender, EventArgs e)
+        private void timer1_Tick(object sender, EventArgs e)
         {
             if (!isUpload)
             {
