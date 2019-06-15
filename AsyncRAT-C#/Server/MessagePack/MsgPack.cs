@@ -369,7 +369,7 @@ namespace Server.MessagePack
             tmp.SetAsInteger(value);
         }
 
-       public async Task<bool> LoadFileAsBytes(string fileName)
+        public async Task<bool> LoadFileAsBytes(string fileName)
         {
             if (File.Exists(fileName))
             {
@@ -377,6 +377,7 @@ namespace Server.MessagePack
                 FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
                 value = new byte[fs.Length];
                 await fs.ReadAsync(value, 0, (int)fs.Length);
+                await fs.FlushAsync();
                 fs.Close();
                 fs.Dispose();
                 SetAsBytes(value);
@@ -389,12 +390,13 @@ namespace Server.MessagePack
 
         }
 
-        public bool SaveBytesToFile(string fileName)
+        public async Task<bool> SaveBytesToFile(string fileName)
         {
             if (this.innerValue != null)
             {
                 FileStream fs = new FileStream(fileName, FileMode.Append);
-                fs.Write(((byte[])this.innerValue), 0, ((byte[])this.innerValue).Length);
+                await fs.WriteAsync(((byte[])this.innerValue), 0, ((byte[])this.innerValue).Length);
+                await fs.FlushAsync();
                 fs.Close();
                 fs.Dispose();
                 return true;
