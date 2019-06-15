@@ -40,8 +40,6 @@ namespace Server.Forms
                     labelsize.Text = "Downloaded";
                     labelsize.ForeColor = Color.Green;
                     timer1.Stop();
-                    await Task.Delay(1500);
-                    this.Close();
                 }
             }
             else
@@ -52,8 +50,6 @@ namespace Server.Forms
                     labelsize.Text = "Uploaded";
                     labelsize.ForeColor = Color.Green;
                     timer1.Stop();
-                    await Task.Delay(1500);
-                    this.Close();
                 }
             }
         }
