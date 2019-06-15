@@ -95,8 +95,6 @@ namespace Server.Sockets
                                 ClientMS = new MemoryStream();
                                 ClientBufferRecevied = false;
                             }
-                            else
-                                ClientBuffer = new byte[ClientBuffersize - ClientMS.Length];
                         }
                         ClientSslStream.BeginRead(ClientBuffer, 0, ClientBuffer.Length, ReadClientData, null);
                     }

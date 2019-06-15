@@ -140,8 +140,6 @@ namespace Client.Sockets
                                 MS.Dispose();
                                 MS = new MemoryStream();
                             }
-                            else
-                                Buffer = new byte[Buffersize - MS.Length];
                         }
                     }
                     SslClient.BeginRead(Buffer, 0, Buffer.Length, ReadServertData, null);
