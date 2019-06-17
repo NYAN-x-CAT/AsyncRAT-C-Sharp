@@ -307,6 +307,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="async_icon.ico" />
+    <None Include="Resources\netstat.png" />
+    <None Include="Resources\blank-screen.png" />
     <None Include="Resources\HandleLimeUSB.dll" />
     <None Include="Resources\save-image2.png" />
     <None Include="Resources\save-image.png" />

@@ -97,6 +97,16 @@ namespace Server.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap blank_screen {
+            get {
+                object obj = ResourceManager.GetObject("blank-screen", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap botkiller {
             get {
                 object obj = ResourceManager.GetObject("botkiller", resourceCulture);
@@ -280,6 +290,16 @@ namespace Server.Properties {
         internal static System.Drawing.Bitmap msgbox {
             get {
                 object obj = ResourceManager.GetObject("msgbox", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap netstat {
+            get {
+                object obj = ResourceManager.GetObject("netstat", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
