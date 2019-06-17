@@ -10,8 +10,8 @@ namespace Client
     public static class Settings
     {
 #if DEBUG
-        public static string Ports = "6606";
-        public static string Hosts = "127.0.0.1";
+        public static string Ports = "6606,";
+        public static string Hosts = "127.0.0.1,";
         public static string Version = "0.4.9H";
         public static string Install = "false";
         public static string ClientFullPath = Path.Combine(Environment.ExpandEnvironmentVariables("%AppData%"), "Payload.exe");
