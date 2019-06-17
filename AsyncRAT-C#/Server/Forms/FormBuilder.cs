@@ -173,7 +173,7 @@ namespace Server.Forms
 
         private async void BtnBuild_Click(object sender, EventArgs e)
         {
-            if (listBoxIP.Items.Count == 0 || listBoxPort.Items.Count == 0) return;
+            if (!chkPastebin.Checked && listBoxIP.Items.Count == 0 || listBoxPort.Items.Count == 0) return;
 
             if (checkBox1.Checked)
             {
