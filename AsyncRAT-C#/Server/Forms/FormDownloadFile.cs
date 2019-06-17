@@ -94,6 +94,10 @@ namespace Server.Forms
                         binaryReader.Close();
                         C?.Disconnected();
                     }
+                    Program.form1.BeginInvoke((MethodInvoker)(() =>
+                    {
+                        this.Close();
+                    }));
                 }
                 catch
                 {

