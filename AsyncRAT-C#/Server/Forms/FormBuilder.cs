@@ -364,7 +364,6 @@ namespace Server.Forms
                                         if (chkPastebin.Enabled && chkPastebin.Checked)
                                         {
                                             method.Body.Instructions[i].Operand = aes.Encrypt("null");
-
                                         }
                                         else
                                         {
