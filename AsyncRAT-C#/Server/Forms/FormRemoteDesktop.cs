@@ -76,8 +76,8 @@ namespace Server.Forms
                 MsgPack msgpack = new MsgPack();
                 msgpack.ForcePathObject("Packet").AsString = "remoteDesktop";
                 msgpack.ForcePathObject("Option").AsString = "capture";
-                msgpack.ForcePathObject("Quality").AsInteger = Convert.ToInt32(numericUpDown1.Value);
-                msgpack.ForcePathObject("Screen").AsInteger = Convert.ToInt32(numericUpDown2.Value);
+                msgpack.ForcePathObject("Quality").AsInteger = Convert.ToInt32(numericUpDown1.Value.ToString());
+                msgpack.ForcePathObject("Screen").AsInteger = Convert.ToInt32(numericUpDown2.Value.ToString());
                 decoder = new UnsafeStreamCodec(Convert.ToInt32(numericUpDown1.Value));
                 ThreadPool.QueueUserWorkItem(C.Send, msgpack.Encode2Bytes());
                 numericUpDown1.Enabled = false;
