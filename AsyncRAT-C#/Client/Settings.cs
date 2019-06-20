@@ -1,4 +1,4 @@
-﻿using Client.Cryptography;
+﻿using Client.Algorithm;
 using System;
 using System.IO;
 using System.Security.Cryptography;
@@ -10,11 +10,12 @@ namespace Client
     public static class Settings
     {
 #if DEBUG
-        public static string Ports = "6606,";
-        public static string Hosts = "127.0.0.1,";
-        public static string Version = "0.5.1";
+        public static string Ports = "6606";
+        public static string Hosts = "127.0.0.1";
+        public static string Version = "0.5.2";
         public static string Install = "false";
-        public static string ClientFullPath = Path.Combine(Environment.ExpandEnvironmentVariables("%AppData%"), "Payload.exe");
+        public static string InstallFolder = "AppData";
+        public static string InstallFile = "Test.exe";
         public static string Key = "NYAN CAT";
         public static string MTX = "%MTX%";
         public static string Certificate = "%Certificate%";
@@ -30,7 +31,8 @@ namespace Client
         public static string Hosts = "%Hosts%";
         public static string Version = "%Version%";
         public static string Install = "%Install%";
-        public static string ClientFullPath = Path.Combine(Environment.ExpandEnvironmentVariables("%Folder%"), "%File%");
+        public static string InstallFolder = "%Folder%";
+        public static string InstallFile = "%File%";
         public static string Key = "%Key%";
         public static string MTX = "%MTX%";
         public static string Certificate = "%Certificate%";

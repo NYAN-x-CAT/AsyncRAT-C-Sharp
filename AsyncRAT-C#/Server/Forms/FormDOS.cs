@@ -1,5 +1,5 @@
 ﻿using Server.MessagePack;
-using Server.Sockets;
+using Server.Connection;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

@@ -11,7 +11,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Server.MessagePack;
-using Server.Sockets;
+using Server.Connection;
 using FastColoredTextBoxNS;
 using Microsoft.CSharp;
 using Microsoft.VisualBasic;
@@ -323,6 +323,10 @@ End Namespace
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "AsyncRAT | Dot Net Editor", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+            finally
+            {
+                //GC.Collect();
             }
         }
     }

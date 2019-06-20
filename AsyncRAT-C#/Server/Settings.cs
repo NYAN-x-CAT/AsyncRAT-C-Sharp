@@ -1,5 +1,5 @@
-﻿using Server.Cryptography;
-using Server.Sockets;
+﻿using Server.Algorithm;
+using Server.Connection;
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography.X509Certificates;
@@ -16,7 +16,7 @@ namespace Server
 
         public static string CertificatePath = Application.StartupPath + "\\ServerCertificate.p12";
         public static X509Certificate2 ServerCertificate;
-        public static readonly string Version = "AsyncRAT 0.5.1";
+        public static readonly string Version = "AsyncRAT 0.5.2";
         public static object Listview1Lock = new object();
         public static object Listview2Lock = new object();
         public static object Listview3Lock = new object();

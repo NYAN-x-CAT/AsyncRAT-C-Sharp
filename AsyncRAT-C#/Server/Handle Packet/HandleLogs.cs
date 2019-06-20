@@ -14,26 +14,12 @@ namespace Server.Handle_Packet
         {
             try
             {
-                if (Program.form1.listView2.InvokeRequired)
+                ListViewItem LV = new ListViewItem();
+                LV.Text = DateTime.Now.ToLongTimeString();
+                LV.SubItems.Add(Msg);
+                LV.ForeColor = color;
+                lock (Settings.Listview2Lock)
                 {
-                    Program.form1.listView2.BeginInvoke((MethodInvoker)(() =>
-                    {
-                        ListViewItem LV = new ListViewItem();
-                        LV.Text = DateTime.Now.ToLongTimeString();
-                        LV.SubItems.Add(Msg);
-                        LV.ForeColor = color;
-                        lock (Settings.Listview2Lock)
-                        {
-                            Program.form1.listView2.Items.Insert(0, LV);
-                        }
-                    }));
-                }
-                else
-                {
-                    ListViewItem LV = new ListViewItem();
-                    LV.Text = DateTime.Now.ToLongTimeString();
-                    LV.SubItems.Add(Msg);
-                    LV.ForeColor = color;
                     Program.form1.listView2.Items.Insert(0, LV);
                 }
             }

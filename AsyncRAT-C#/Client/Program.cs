@@ -1,5 +1,5 @@
 ﻿using System.Threading;
-using Client.Sockets;
+using Client.Connection;
 using Client.Install;
 using System;
 using Client.Helper;

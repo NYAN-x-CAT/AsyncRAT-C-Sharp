@@ -42,6 +42,7 @@
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.timerSave = new System.Windows.Forms.Timer(this.components);
+            this.labelWait = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
@@ -164,7 +165,7 @@
             this.numericUpDown1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.numericUpDown1.UpDownAlign = System.Windows.Forms.LeftRightAlignment.Left;
             this.numericUpDown1.Value = new decimal(new int[] {
-            60,
+            30,
             0,
             0,
             0});
@@ -198,11 +199,22 @@
             this.timerSave.Interval = 1500;
             this.timerSave.Tick += new System.EventHandler(this.TimerSave_Tick);
             // 
+            // labelWait
+            // 
+            this.labelWait.AutoSize = true;
+            this.labelWait.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.labelWait.Location = new System.Drawing.Point(376, 222);
+            this.labelWait.Name = "labelWait";
+            this.labelWait.Size = new System.Drawing.Size(78, 29);
+            this.labelWait.TabIndex = 3;
+            this.labelWait.Text = "Wait...";
+            // 
             // FormRemoteDesktop
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(938, 485);
+            this.Controls.Add(this.labelWait);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.pictureBox1);
@@ -210,6 +222,7 @@
             this.MinimumSize = new System.Drawing.Size(655, 440);
             this.Name = "FormRemoteDesktop";
             this.Text = "RemoteDesktop";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormRemoteDesktop_FormClosed);
             this.Load += new System.EventHandler(this.FormRemoteDesktop_Load);
             this.ResizeEnd += new System.EventHandler(this.FormRemoteDesktop_ResizeEnd);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
@@ -218,6 +231,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -235,5 +249,6 @@
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Timer timerSave;
         private System.Windows.Forms.Button btnMouse;
+        public System.Windows.Forms.Label labelWait;
     }
 }

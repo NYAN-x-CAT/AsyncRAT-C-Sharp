@@ -6,7 +6,7 @@ using System.Text;
 using System.Windows.Forms;
 using Client.MessagePack;
 using System.Threading;
-using Client.Sockets;
+using Client.Connection;
 
 namespace Client.Handle_Packet
 {

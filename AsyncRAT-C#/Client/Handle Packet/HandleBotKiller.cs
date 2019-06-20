@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Microsoft.Win32;
 using Client.MessagePack;
-using Client.Sockets;
+using Client.Connection;
 using System.Security.Principal;
 
 //       │ Author     : NYAN CAT

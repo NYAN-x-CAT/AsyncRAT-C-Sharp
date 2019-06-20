@@ -3,7 +3,7 @@ using System.Windows.Forms;
 using Server.Helper;
 using System.Text;
 using System.Security.Cryptography;
-using Server.Cryptography;
+using Server.Algorithm;
 using System.Security.Cryptography.X509Certificates;
 using System.Collections.Generic;
 using Vestris.ResourceLib;
@@ -13,6 +13,7 @@ using System.Linq;
 using dnlib.DotNet.Emit;
 using Server.RenamingObfuscation;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace Server.Forms
 {

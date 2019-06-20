@@ -88,8 +88,8 @@ namespace Server.Forms
             this.btnIcon = new System.Windows.Forms.Button();
             this.picIcon = new System.Windows.Forms.PictureBox();
             this.tabPage6 = new System.Windows.Forms.TabPage();
-            this.btnBuild = new System.Windows.Forms.Button();
             this.chkObfu = new System.Windows.Forms.CheckBox();
+            this.btnBuild = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -720,6 +720,16 @@ namespace Server.Forms
             this.tabPage6.Text = "Build";
             this.tabPage6.UseVisualStyleBackColor = true;
             // 
+            // chkObfu
+            // 
+            this.chkObfu.AutoSize = true;
+            this.chkObfu.Location = new System.Drawing.Point(18, 148);
+            this.chkObfu.Name = "chkObfu";
+            this.chkObfu.Size = new System.Drawing.Size(166, 24);
+            this.chkObfu.TabIndex = 2;
+            this.chkObfu.Text = "Simple Obfuscator";
+            this.chkObfu.UseVisualStyleBackColor = true;
+            // 
             // btnBuild
             // 
             this.btnBuild.Location = new System.Drawing.Point(18, 196);
@@ -729,18 +739,6 @@ namespace Server.Forms
             this.btnBuild.Text = "Build";
             this.btnBuild.UseVisualStyleBackColor = true;
             this.btnBuild.Click += new System.EventHandler(this.BtnBuild_Click);
-            // 
-            // chkObfu
-            // 
-            this.chkObfu.AutoSize = true;
-            this.chkObfu.Checked = true;
-            this.chkObfu.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkObfu.Location = new System.Drawing.Point(18, 148);
-            this.chkObfu.Name = "chkObfu";
-            this.chkObfu.Size = new System.Drawing.Size(166, 24);
-            this.chkObfu.TabIndex = 2;
-            this.chkObfu.Text = "Simple Obfuscator";
-            this.chkObfu.UseVisualStyleBackColor = true;
             // 
             // FormBuilder
             // 

