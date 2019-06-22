@@ -28,7 +28,7 @@ namespace Client.Helper
             sb.Append(Environment.MachineName);
             sb.Append(Environment.OSVersion);
             sb.Append(new DriveInfo(Path.GetPathRoot(Environment.SystemDirectory)).TotalSize);
-            return GetHash(sb.ToString());
+            return GetHash(sb.ToString()).Substring(0, 15).ToUpper();
         }
 
         public static string GetHash(string strToHash)
@@ -39,7 +39,7 @@ namespace Client.Helper
             StringBuilder strResult = new StringBuilder();
             foreach (byte b in bytesToHash)
                 strResult.Append(b.ToString("x2"));
-            return strResult.ToString().Substring(0, 15).ToUpper();
+            return strResult.ToString();
         }
 
         private static Mutex _appMutex;

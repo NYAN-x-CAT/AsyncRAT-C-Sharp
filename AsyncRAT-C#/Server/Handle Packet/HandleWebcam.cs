@@ -49,6 +49,7 @@ namespace Server.Handle_Packet
                                 {
                                     client.Disconnected();
                                 }
+                                webcam.button1.PerformClick();
                             }
                             else
                             {

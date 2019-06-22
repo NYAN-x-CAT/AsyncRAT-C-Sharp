@@ -26,32 +26,40 @@ namespace Server.Forms
         public string FullFileName;
         public string ClientFullFileName;
         private bool IsUpload = false;
-
+        public string FullPath { get; set; }
         public FormDownloadFile()
         {
             InitializeComponent();
         }
         private void timer1_Tick(object sender, EventArgs e)
         {
-            if (!IsUpload)
+            if (Client.TcpClient.Connected)
             {
-                labelsize.Text = $"{Methods.BytesToString(FileSize)} \\ {Methods.BytesToString(Client.BytesRecevied)}";
-                if (Client.BytesRecevied >= FileSize)
+                if (!IsUpload)
                 {
-                    labelsize.Text = "Downloaded";
-                    labelsize.ForeColor = Color.Green;
-                    timer1.Stop();
+                    labelsize.Text = $"{Methods.BytesToString(FileSize)} \\ {Methods.BytesToString(Client.BytesRecevied)}";
+                    if (Client.BytesRecevied >= FileSize)
+                    {
+                        labelsize.Text = "Downloaded";
+                        labelsize.ForeColor = Color.Green;
+                        timer1.Stop();
+                    }
+                }
+                else
+                {
+                    labelsize.Text = $"{Methods.BytesToString(FileSize)} \\ {Methods.BytesToString(BytesSent)}";
+                    if (BytesSent >= FileSize)
+                    {
+                        labelsize.Text = "Uploaded";
+                        labelsize.ForeColor = Color.Green;
+                        timer1.Stop();
+                    }
                 }
             }
             else
             {
-                labelsize.Text = $"{Methods.BytesToString(FileSize)} \\ {Methods.BytesToString(BytesSent)}";
-                if (BytesSent >= FileSize)
-                {
-                    labelsize.Text = "Uploaded";
-                    labelsize.ForeColor = Color.Green;
-                    timer1.Stop();
-                }
+                Client.Disconnected();
+                this.Close();
             }
         }
 

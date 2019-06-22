@@ -87,6 +87,7 @@
             // 
             this.btnMouse.BackgroundImage = global::Server.Properties.Resources.mouse;
             this.btnMouse.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnMouse.Enabled = false;
             this.btnMouse.Location = new System.Drawing.Point(550, 3);
             this.btnMouse.Name = "btnMouse";
             this.btnMouse.Size = new System.Drawing.Size(32, 32);
@@ -98,6 +99,7 @@
             // 
             this.btnSave.BackgroundImage = global::Server.Properties.Resources.save_image;
             this.btnSave.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnSave.Enabled = false;
             this.btnSave.Location = new System.Drawing.Point(455, 3);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(32, 32);
@@ -172,8 +174,9 @@
             // 
             // button1
             // 
-            this.button1.BackgroundImage = global::Server.Properties.Resources.stop__1_;
+            this.button1.BackgroundImage = global::Server.Properties.Resources.play_button;
             this.button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.button1.Enabled = false;
             this.button1.Location = new System.Drawing.Point(12, 3);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(32, 32);
@@ -241,14 +244,14 @@
         public System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
         public System.Windows.Forms.NumericUpDown numericUpDown1;
         private System.Windows.Forms.Label label2;
         public System.Windows.Forms.NumericUpDown numericUpDown2;
-        private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Timer timerSave;
-        private System.Windows.Forms.Button btnMouse;
         public System.Windows.Forms.Label labelWait;
+        public System.Windows.Forms.Button btnSave;
+        public System.Windows.Forms.Button btnMouse;
+        public System.Windows.Forms.Button button1;
     }
 }

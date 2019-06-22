@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -37,6 +38,17 @@ namespace Server.Helper
                 randomName.Append(Alphabet[Random.Next(Alphabet.Length)]);
 
             return randomName.ToString();
+        }
+
+        public static string GetHash(string strToHash)
+        {
+            MD5CryptoServiceProvider md5Obj = new MD5CryptoServiceProvider();
+            byte[] bytesToHash = Encoding.ASCII.GetBytes(strToHash);
+            bytesToHash = md5Obj.ComputeHash(bytesToHash);
+            StringBuilder strResult = new StringBuilder();
+            foreach (byte b in bytesToHash)
+                strResult.Append(b.ToString("x2"));
+            return strResult.ToString();
         }
     }
 }

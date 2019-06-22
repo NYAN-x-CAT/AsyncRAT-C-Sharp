@@ -293,26 +293,6 @@ namespace Server.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] PluginCam {
-            get {
-                object obj = ResourceManager.GetObject("PluginCam", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] PluginDesktop {
-            get {
-                object obj = ResourceManager.GetObject("PluginDesktop", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
         internal static byte[] PluginRecovery {
             get {
                 object obj = ResourceManager.GetObject("PluginRecovery", resourceCulture);

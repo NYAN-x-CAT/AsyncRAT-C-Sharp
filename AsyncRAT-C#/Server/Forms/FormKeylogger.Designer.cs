@@ -42,7 +42,6 @@
             // 
             // timer1
             // 
-            this.timer1.Enabled = true;
             this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.Timer1_Tick);
             // 
@@ -119,12 +118,12 @@
         }
 
         #endregion
-        private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripLabel toolStripLabel1;
         private System.Windows.Forms.ToolStripTextBox toolStripTextBox1;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripButton toolStripButton1;
         public System.Windows.Forms.RichTextBox richTextBox1;
+        public System.Windows.Forms.Timer timer1;
     }
 }

