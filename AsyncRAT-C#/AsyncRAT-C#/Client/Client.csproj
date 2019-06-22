@@ -127,7 +127,6 @@
     <Compile Include="Handle Packet\Packet.cs" />
     <Compile Include="Handle Packet\HandleLimeLogger.cs" />
     <Compile Include="Handle Packet\HandleProcessManager.cs" />
-    <Compile Include="Handle Packet\HandlePlugin.cs" />
     <Compile Include="Handle Packet\HandleSendTo.cs" />
     <Compile Include="Handle Packet\HandleLimeUSB.cs" />
     <Compile Include="Helper\Anti_Analysis.cs" />
