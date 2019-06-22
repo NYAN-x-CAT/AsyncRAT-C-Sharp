@@ -208,6 +208,10 @@ namespace Client.Handle_Packet
             {
                 Error(ex.Message);
             }
+            finally
+            {
+                GC.Collect();
+            }
         }
 
         private static void Received()

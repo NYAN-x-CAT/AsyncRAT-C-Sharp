@@ -169,7 +169,7 @@ namespace Server
                     Clients client = (Clients)itm.Tag;
                     ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
                 }
-                //GC.Collect();
+                GC.Collect();
             }
         }
 
