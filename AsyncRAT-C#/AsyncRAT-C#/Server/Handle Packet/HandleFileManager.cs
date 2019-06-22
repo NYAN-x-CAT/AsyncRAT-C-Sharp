@@ -163,6 +163,10 @@ namespace Server.Handle_Packet
                                 }
                             }
                             catch { }
+                            finally
+                            {
+                                GC.Collect();
+                            }
                             break;
                         }
                 }
