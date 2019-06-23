@@ -158,7 +158,7 @@ namespace Server.Handle_Packet
                                         File.Delete(filename);
                                         await Task.Delay(500);
                                     }
-                                    await Task.Run(() => SaveFileAsync(unpack_msgpack.ForcePathObject("File"), Path.Combine(Application.StartupPath, "ClientsFolder\\" + SD.Text.Replace("socketDownload:", "") + "\\" + unpack_msgpack.ForcePathObject("Name").AsString)));
+                                    await Task.Run(() => SaveFileAsync(unpack_msgpack.ForcePathObject("File"), filename));
                                     SD.Close();
                                 }
                             }
