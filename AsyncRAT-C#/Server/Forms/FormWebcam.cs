@@ -48,6 +48,7 @@ namespace Server.Forms
                     button1.BackgroundImage = Properties.Resources.stop__1_;
                     numericUpDown1.Enabled = false;
                     comboBox1.Enabled = false;
+                    btnSave.Enabled = true;
                 }
                 else
                 {
@@ -60,6 +61,7 @@ namespace Server.Forms
                     btnSave.BackgroundImage = Properties.Resources.save_image;
                     numericUpDown1.Enabled = true;
                     comboBox1.Enabled = true;
+                    btnSave.Enabled = false;
                     timerSave.Stop();
                 }
             }

@@ -174,24 +174,32 @@ namespace Server.Connection
                     if ((byte[])msg == null) return;
                     byte[] buffer = (byte[])msg;
                     byte[] buffersize = BitConverter.GetBytes(buffer.Length);
-
                     TcpClient.Poll(-1, SelectMode.SelectWrite);
                     SslClient.Write(buffersize, 0, buffersize.Length);
-                    SslClient.Flush();
-                    int chunkSize = 50 * 1024;
-                    byte[] chunk = new byte[chunkSize];
-                    using (MemoryStream buffereReader = new MemoryStream(buffer))
-                    using (BinaryReader binaryReader = new BinaryReader(buffereReader))
+
+                    if (buffer.Length > 1000000) //1mb
                     {
-                        int bytesToRead = (int)buffereReader.Length;
-                        do
+                        Debug.WriteLine("send chunks");
+                        int chunkSize = 50 * 1024;
+                        byte[] chunk = new byte[chunkSize];
+                        using (MemoryStream buffereReader = new MemoryStream(buffer))
+                        using (BinaryReader binaryReader = new BinaryReader(buffereReader))
                         {
-                            chunk = binaryReader.ReadBytes(chunkSize);
-                            bytesToRead -= chunkSize;
-                            SslClient.Write(chunk);
-                            SslClient.Flush();
-                            Settings.Sent += chunk.Length;
-                        } while (bytesToRead > 0);
+                            int bytesToRead = (int)buffereReader.Length;
+                            do
+                            {
+                                chunk = binaryReader.ReadBytes(chunkSize);
+                                bytesToRead -= chunkSize;
+                                SslClient.Write(chunk, 0, chunk.Length);
+                                SslClient.Flush();
+                                Settings.Sent += chunk.Length;
+                            } while (bytesToRead > 0);
+                        }
+                    }
+                    else
+                    {
+                        SslClient.Write(buffer, 0, buffer.Length);
+                        SslClient.Flush();
                     }
                     Debug.WriteLine("/// Server Sent " + buffer.Length.ToString() + " Bytes  ///");
                 }

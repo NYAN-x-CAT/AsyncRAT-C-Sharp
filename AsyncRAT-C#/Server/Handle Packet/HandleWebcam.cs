@@ -37,18 +37,16 @@ namespace Server.Handle_Packet
                                         webcam.comboBox1.Items.Add(camDriver);
                                 }
                                 webcam.comboBox1.SelectedIndex = 0;
-                                webcam.labelWait.Visible = false;
-                                if (webcam.comboBox1.Text != "None")
-                                {
-                                    webcam.comboBox1.Enabled = true;
-                                    webcam.button1.Enabled = true;
-                                    webcam.btnSave.Enabled = true;
-                                    webcam.numericUpDown1.Enabled = true;
-                                }
-                                else
+                                if (webcam.comboBox1.Text == "None")
                                 {
                                     client.Disconnected();
                                 }
+                                webcam.comboBox1.Enabled = true;
+                                webcam.button1.Enabled = true;
+                                webcam.btnSave.Enabled = true;
+                                webcam.numericUpDown1.Enabled = true;
+                                webcam.labelWait.Visible = false;
+                                webcam.button1.PerformClick();
                             }
                             else
                             {

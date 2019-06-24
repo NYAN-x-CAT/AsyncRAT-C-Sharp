@@ -90,6 +90,8 @@ namespace Server.Forms
                 ThreadPool.QueueUserWorkItem(ParentClient.Send, msgpack.Encode2Bytes());
                 numericUpDown1.Enabled = false;
                 numericUpDown2.Enabled = false;
+                btnSave.Enabled = true;
+                btnMouse.Enabled = true;
                 button1.Tag = (object)"stop";
                 button1.BackgroundImage = Properties.Resources.stop__1_;
             }
@@ -104,6 +106,8 @@ namespace Server.Forms
                 catch { }
                 numericUpDown1.Enabled = true;
                 numericUpDown2.Enabled = true;
+                btnSave.Enabled = false;
+                btnMouse.Enabled = false;
                 button1.BackgroundImage = Properties.Resources.play_button;
             }
         }

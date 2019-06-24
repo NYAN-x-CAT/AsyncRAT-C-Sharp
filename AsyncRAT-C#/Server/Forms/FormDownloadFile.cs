@@ -75,23 +75,31 @@ namespace Server.Forms
                     byte[] msg = (byte[])obj;
                     byte[] buffersize = BitConverter.GetBytes(msg.Length);
                     Client.TcpClient.Poll(-1, SelectMode.SelectWrite);
-                    Client.SslClient.Write(buffersize);
-                    Client.SslClient.Flush();
-                    int chunkSize = 50 * 1024;
-                    byte[] chunk = new byte[chunkSize];
-                    using (MemoryStream buffereReader = new MemoryStream(msg))
-                    using (BinaryReader binaryReader = new BinaryReader(buffereReader))
+                    Client.SslClient.Write(buffersize, 0, buffersize.Length);
+
+                    if (msg.Length > 1000000) //1mb
                     {
-                        int bytesToRead = (int)buffereReader.Length;
-                        do
+                        int chunkSize = 50 * 1024;
+                        byte[] chunk = new byte[chunkSize];
+                        using (MemoryStream buffereReader = new MemoryStream(msg))
+                        using (BinaryReader binaryReader = new BinaryReader(buffereReader))
                         {
-                            chunk = binaryReader.ReadBytes(chunkSize);
-                            bytesToRead -= chunkSize;
-                            Client.SslClient.Write(chunk);
-                            Client.SslClient.Flush();
-                            BytesSent += chunk.Length;
-                        } while (bytesToRead > 0);
-                        Client?.Disconnected();
+                            int bytesToRead = (int)buffereReader.Length;
+                            do
+                            {
+                                chunk = binaryReader.ReadBytes(chunkSize);
+                                bytesToRead -= chunkSize;
+                                Client.SslClient.Write(chunk, 0, chunk.Length);
+                                Client.SslClient.Flush();
+                                BytesSent += chunk.Length;
+                            } while (bytesToRead > 0);
+                            Client?.Disconnected();
+                        }
+                    }
+                    else
+                    {
+                        Client.SslClient.Write(msg, 0, msg.Length);
+                        Client.SslClient.Flush();
                     }
                     Program.form1.BeginInvoke((MethodInvoker)(() =>
                     {
