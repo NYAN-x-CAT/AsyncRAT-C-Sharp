@@ -39,7 +39,7 @@ namespace Server.Forms
 
         private void FormChat_Load(object sender, EventArgs e)
         {
-            string nick = Interaction.InputBox("TYPE YOUR NICKNAME", "CHAT", "Admin");
+            string nick = Interaction.InputBox("TYPE YOUR NICKNAME", "CHAT", Environment.UserName);
             if (string.IsNullOrEmpty(nick))
                 this.Close();
             else
