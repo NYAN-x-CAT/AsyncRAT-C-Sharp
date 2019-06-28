@@ -26,7 +26,7 @@ namespace Server.Forms
         public string FullFileName;
         public string ClientFullFileName;
         private bool IsUpload = false;
-
+        public string DirPath;
         public FormDownloadFile()
         {
             InitializeComponent();

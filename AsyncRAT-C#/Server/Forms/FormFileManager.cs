@@ -101,7 +101,9 @@ namespace Server.Forms
                                 {
                                     Name = "socketDownload:" + dwid,
                                     Text = "socketDownload:" + Client.ID,
-                                    F = F
+                                    F = F,
+                                    DirPath = FullPath
+                                    
                                 };
                                 SD.Show();
                             }

