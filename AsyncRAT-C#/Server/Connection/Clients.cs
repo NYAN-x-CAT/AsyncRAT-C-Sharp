@@ -125,21 +125,18 @@ namespace Server.Connection
                         try
                         {
 
-                            lock (Settings.Listview1Lock)
+                            lock (Settings.LockListviewClients)
                                 LV.Remove();
 
                             if (LV2 != null)
                             {
-                                lock (Settings.Listview3Lock)
+                                lock (Settings.LockListviewThumb)
                                     LV2.Remove();
                             }
 
                         }
                         catch { }
                     }));
-
-                lock (Settings.Online)
-                    Settings.Online.Remove(this);
             }
 
             try
