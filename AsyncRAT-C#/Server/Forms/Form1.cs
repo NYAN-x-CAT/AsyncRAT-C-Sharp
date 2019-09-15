@@ -53,12 +53,6 @@ namespace Server
                     Environment.Exit(0);
                 }
 
-                if (!File.Exists(Path.Combine(Application.StartupPath, "cGeoIp.dll")))
-                {
-                    MessageBox.Show("File 'cGeoIp.dll' Not Found!");
-                    Environment.Exit(0);
-                }
-
                 if (!Directory.Exists(Path.Combine(Application.StartupPath, "Stub")))
                     Directory.CreateDirectory(Path.Combine(Application.StartupPath, "Stub"));
 
