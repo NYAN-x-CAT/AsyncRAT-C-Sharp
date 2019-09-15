@@ -12,6 +12,7 @@ using System.Security.Principal;
 using System.Text;
 using System.Threading;
 using System.Drawing.Imaging;
+using System.Runtime.InteropServices;
 
 namespace Client.Helper
 {
@@ -120,5 +121,23 @@ namespace Client.Helper
             return null;
         }
 
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern EXECUTION_STATE SetThreadExecutionState(EXECUTION_STATE esFlags);
+        public static void PreventSleep()
+        {
+            try
+            {
+                SetThreadExecutionState(EXECUTION_STATE.ES_SYSTEM_REQUIRED | EXECUTION_STATE.ES_CONTINUOUS | EXECUTION_STATE.ES_DISPLAY_REQUIRED);
+            }
+            catch { }
+        }
+
+        public enum EXECUTION_STATE : uint
+        {
+            ES_CONTINUOUS = 0x80000000,
+            ES_DISPLAY_REQUIRED = 0x00000002,
+            ES_SYSTEM_REQUIRED = 0x00000001
+        }
     }
 }

