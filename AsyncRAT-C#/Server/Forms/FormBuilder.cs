@@ -182,13 +182,14 @@ namespace Server.Forms
                 if (!textFilename.Text.EndsWith("exe")) textFilename.Text += ".exe";
             }
 
-            if (string.IsNullOrWhiteSpace(txtMutex.Text)) txtMutex.Text = Guid.NewGuid().ToString().Substring(20);
+            if (string.IsNullOrWhiteSpace(txtMutex.Text)) txtMutex.Text = getRandomCharacters();
 
             if (chkPastebin.Checked && string.IsNullOrWhiteSpace(txtPastebin.Text)) return;
 
+            ModuleDefMD asmDef = null;
             try
             {
-                using (ModuleDefMD asmDef = ModuleDefMD.Load(@"Stub/Stub.exe"))
+                using (asmDef = ModuleDefMD.Load(@"Stub/Stub.exe"))
                 using (SaveFileDialog saveFileDialog1 = new SaveFileDialog())
                 {
                     saveFileDialog1.Filter = ".exe (*.exe)|*.exe";
@@ -226,7 +227,9 @@ namespace Server.Forms
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "AsyncRAT | Builder", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                asmDef?.Dispose();
                 btnBuild.Enabled = true;
+
             }
         }
 
