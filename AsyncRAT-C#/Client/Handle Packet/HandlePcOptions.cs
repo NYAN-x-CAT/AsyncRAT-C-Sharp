@@ -43,7 +43,8 @@ namespace Client.Handle_Packet
                                 CreateNoWindow = true,
                             }
                         };
-                        proc.Start(); break;
+                        proc.Start();
+                        break;
                     }
 
                 case "logoff":
