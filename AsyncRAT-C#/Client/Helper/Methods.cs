@@ -25,14 +25,15 @@ namespace Client.Helper
         {
             try
             {
-                StringBuilder sb = new StringBuilder();
-                sb.Append(Environment.ProcessorCount);
-                sb.Append(Environment.UserName);
-                sb.Append(Environment.MachineName);
-                sb.Append(Environment.OSVersion);
-                sb.Append(new DriveInfo(Path.GetPathRoot(Environment.SystemDirectory)).TotalSize);
-                return GetHash(sb.ToString());
-
+                //StringBuilder sb = new StringBuilder();
+                //sb.Append(Environment.ProcessorCount);
+                //sb.Append(Environment.UserName);
+                //sb.Append(Environment.MachineName);
+                //sb.Append(Environment.OSVersion);
+                //sb.Append(new DriveInfo(Path.GetPathRoot(Environment.SystemDirectory)).TotalSize);
+                //return GetHash(sb.ToString());
+                
+                return Client.Helper.HWID.Get().ToString();
             }
             catch
             {
