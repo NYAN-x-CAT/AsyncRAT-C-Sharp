@@ -211,6 +211,9 @@
     <Compile Include="MessagePack\MsgPackType.cs" />
     <Compile Include="MessagePack\ReadTools.cs" />
     <Compile Include="MessagePack\WriteTools.cs" />
+    <Compile Include="Predefined\PredefinedManager.cs" />
+    <Compile Include="Predefined\Commands\PredefinedRecoveryCommand.cs" />
+    <Compile Include="Predefined\PredefinedCommand.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Forms\FormSendFileToMemory.cs">

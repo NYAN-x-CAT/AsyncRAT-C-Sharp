@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing;
 
-namespace Server.Handle_Packet
-{
+namespace Server.Handle_Packet {
     public class HandleLogs
     {
+        public static HandleLogs Instance => new HandleLogs();
+
         public void Addmsg(string Msg, Color color)
         {
             try
