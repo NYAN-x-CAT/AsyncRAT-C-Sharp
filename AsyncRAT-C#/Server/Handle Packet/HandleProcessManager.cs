@@ -14,9 +14,15 @@ namespace Server.Handle_Packet
         {
             try
             {
-                FormProcessManager PM = (FormProcessManager)Application.OpenForms["processManager:" + client.ID];
+                FormProcessManager PM = (FormProcessManager)Application.OpenForms["processManager:" + unpack_msgpack.ForcePathObject("Hwid").AsString];
                 if (PM != null)
                 {
+                    if (PM.Client == null)
+                    {
+                        PM.Client = client;
+                        PM.listView1.Enabled = true;
+                        PM.timer1.Enabled = true;
+                    }
                     PM.listView1.Items.Clear();
                     string processLists = unpack_msgpack.ForcePathObject("Message").AsString;
                     string[] _NextProc = processLists.Split(new[] { "-=>" }, StringSplitOptions.None);

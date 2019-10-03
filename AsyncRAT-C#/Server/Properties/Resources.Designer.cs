@@ -291,36 +291,6 @@ namespace Server.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] PluginRecovery {
-            get {
-                object obj = ResourceManager.GetObject("PluginRecovery", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] PluginRunPE {
-            get {
-                object obj = ResourceManager.GetObject("PluginRunPE", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] PluginUsbSpread {
-            get {
-                object obj = ResourceManager.GetObject("PluginUsbSpread", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap process {

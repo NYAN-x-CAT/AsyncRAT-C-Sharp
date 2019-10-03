@@ -66,7 +66,6 @@
             // 
             // timer1
             // 
-            this.timer1.Enabled = true;
             this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.Timer1_Tick);
             // 
@@ -101,7 +100,7 @@
         #endregion
         private System.Windows.Forms.TextBox textBox1;
         public System.Windows.Forms.RichTextBox richTextBox1;
-        private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Panel panel1;
+        public System.Windows.Forms.Timer timer1;
     }
 }

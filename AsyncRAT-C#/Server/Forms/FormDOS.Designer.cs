@@ -36,8 +36,6 @@
             this.txtPort = new System.Windows.Forms.TextBox();
             this.txtHost = new System.Windows.Forms.TextBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.btnAll = new System.Windows.Forms.RadioButton();
-            this.btnSelected = new System.Windows.Forms.RadioButton();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.txtTimeout = new System.Windows.Forms.TextBox();
@@ -100,8 +98,6 @@
             // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.btnAll);
-            this.groupBox2.Controls.Add(this.btnSelected);
             this.groupBox2.Controls.Add(this.label4);
             this.groupBox2.Controls.Add(this.label3);
             this.groupBox2.Controls.Add(this.txtTimeout);
@@ -111,28 +107,6 @@
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Settings";
-            // 
-            // btnAll
-            // 
-            this.btnAll.AutoSize = true;
-            this.btnAll.Checked = true;
-            this.btnAll.Location = new System.Drawing.Point(455, 43);
-            this.btnAll.Name = "btnAll";
-            this.btnAll.Size = new System.Drawing.Size(103, 24);
-            this.btnAll.TabIndex = 7;
-            this.btnAll.TabStop = true;
-            this.btnAll.Text = "All Clients";
-            this.btnAll.UseVisualStyleBackColor = true;
-            // 
-            // btnSelected
-            // 
-            this.btnSelected.AutoSize = true;
-            this.btnSelected.Location = new System.Drawing.Point(273, 43);
-            this.btnSelected.Name = "btnSelected";
-            this.btnSelected.Size = new System.Drawing.Size(149, 24);
-            this.btnSelected.TabIndex = 6;
-            this.btnSelected.Text = "Selected Clients";
-            this.btnSelected.UseVisualStyleBackColor = true;
             // 
             // label4
             // 
@@ -235,8 +209,6 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox txtTimeout;
-        private System.Windows.Forms.RadioButton btnAll;
-        private System.Windows.Forms.RadioButton btnSelected;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.Button btnStop;
         private System.Windows.Forms.Button btnAttack;

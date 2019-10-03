@@ -52,6 +52,7 @@
             // textBox1
             // 
             this.textBox1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.textBox1.Enabled = false;
             this.textBox1.Location = new System.Drawing.Point(0, 384);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(757, 26);
@@ -60,7 +61,6 @@
             // 
             // timer1
             // 
-            this.timer1.Enabled = true;
             this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.Timer1_Tick);
             // 
@@ -83,8 +83,8 @@
         }
 
         #endregion
-        private System.Windows.Forms.TextBox textBox1;
         public System.Windows.Forms.RichTextBox richTextBox1;
-        private System.Windows.Forms.Timer timer1;
+        public System.Windows.Forms.Timer timer1;
+        public System.Windows.Forms.TextBox textBox1;
     }
 }

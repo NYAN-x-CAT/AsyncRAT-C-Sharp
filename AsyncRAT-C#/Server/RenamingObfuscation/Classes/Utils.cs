@@ -10,7 +10,7 @@ namespace Server.RenamingObfuscation.Classes
         public static string GenerateRandomString()
         {
             var sb = new StringBuilder();
-            for (int i = 1; i <= random.Next(10,30); i++)
+            for (int i = 1; i <= random.Next(10,20); i++)
             {
                 var randomCharacterPosition = random.Next(0, alphabet.Length);
                 sb.Append(alphabet[randomCharacterPosition]);
@@ -19,7 +19,7 @@ namespace Server.RenamingObfuscation.Classes
         }
 
         private static readonly Random random = new Random();
-        const string alphabet = "だうよたし長成に調順はんゃち赤たれま生くさ小番1で界世はてしと子の男たし院退がんゃち赤の男たれま生でムラグかずわ重体に昨で";
+        const string alphabet = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM";
 
     }
 }

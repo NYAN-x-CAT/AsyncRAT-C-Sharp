@@ -16,6 +16,7 @@ namespace Server.RenamingObfuscation.Classes
         public ModuleDefMD Rename(ModuleDefMD module)
         {
             ModuleDefMD moduleToRename = module;
+            moduleToRename.Name = Utils.GenerateRandomString();
 
             foreach (TypeDef type in moduleToRename.GetTypes())
             {

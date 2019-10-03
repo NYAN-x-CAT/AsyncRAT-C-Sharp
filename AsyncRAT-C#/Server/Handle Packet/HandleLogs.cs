@@ -18,6 +18,7 @@ namespace Server.Handle_Packet
                 LV.Text = DateTime.Now.ToLongTimeString();
                 LV.SubItems.Add(Msg);
                 LV.ForeColor = color;
+
                 lock (Settings.LockListviewLogs)
                 {
                     Program.form1.listView2.Items.Insert(0, LV);

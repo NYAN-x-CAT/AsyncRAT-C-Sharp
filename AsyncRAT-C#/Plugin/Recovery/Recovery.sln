@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29123.88
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Recovery", "Recovery\Recovery.csproj", "{8BFC8ED2-71CC-49DC-9020-2C8199BC27B6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8BFC8ED2-71CC-49DC-9020-2C8199BC27B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BFC8ED2-71CC-49DC-9020-2C8199BC27B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8BFC8ED2-71CC-49DC-9020-2C8199BC27B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8BFC8ED2-71CC-49DC-9020-2C8199BC27B6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1C926148-C492-48B3-8F82-7EBB235A9866}
+	EndGlobalSection
+EndGlobal

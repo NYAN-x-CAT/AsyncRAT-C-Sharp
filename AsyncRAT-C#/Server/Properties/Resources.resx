@@ -235,13 +235,4 @@
   <data name="webcam" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\webcam.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="PluginRecovery" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\PluginRecovery.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="PluginRunPE" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\PluginRunPE.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="PluginUsbSpread" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\PluginUsbSpread.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
 </root>

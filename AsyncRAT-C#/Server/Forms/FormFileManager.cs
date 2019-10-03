@@ -394,5 +394,10 @@ namespace Server.Forms
             }
             catch { }
         }
+
+        private void FormFileManager_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Client?.Disconnected();
+        }
     }
 }

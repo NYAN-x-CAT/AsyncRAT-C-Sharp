@@ -1,4 +1,8 @@
-﻿using System;
+﻿using Microsoft.VisualBasic;
+using Server.Algorithm;
+using Server.Handle_Packet;
+using System;
+using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
@@ -37,6 +41,21 @@ namespace Server.Helper
                 randomName.Append(Alphabet[Random.Next(Alphabet.Length)]);
 
             return randomName.ToString();
+        }
+
+        public static void SetPlugins()
+        {
+            try
+            {
+                foreach (string plugin in Directory.GetFiles("Plugins", "*.dll", SearchOption.TopDirectoryOnly))
+                {
+                    Settings.Plugins.Add(GetHash.GetChecksum(plugin), Strings.StrReverse(Convert.ToBase64String(File.ReadAllBytes(plugin))));
+                }
+            }
+            catch (Exception ex)
+            {
+                new HandleLogs().Addmsg(ex.Message, Color.Red);
+            }
         }
     }
 }

