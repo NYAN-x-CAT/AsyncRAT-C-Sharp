@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 
 namespace Plugin.Handler
 {
@@ -19,7 +20,7 @@ namespace Plugin.Handler
                     StartInfo = new ProcessStartInfo
                     {
                         FileName = "cmd",
-                        Arguments = "/k START \"\" \"" + Process.GetCurrentProcess().MainModule.FileName + "\" & EXIT",
+                        Arguments = "/k START \"\" \"" + Application.ExecutablePath + "\" & EXIT",
                         WindowStyle = ProcessWindowStyle.Hidden,
                         Verb = "runas",
                         UseShellExecute = true

