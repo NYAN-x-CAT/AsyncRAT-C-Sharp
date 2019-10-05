@@ -8,6 +8,7 @@
  * 修复整数值为127时解码出来为0的情况,感谢(Putree  274638001<spiritring@gmail.com>)反馈
  *   2015-07-14 15:28:45
  */
+using Client.Algorithm;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -494,6 +495,7 @@ namespace Client.MessagePack
         {
             using (MemoryStream ms = new MemoryStream())
             {
+                bytes = Zip.Decompress(bytes);
                 ms.Write(bytes, 0, bytes.Length);
                 ms.Position = 0;
                 DecodeFromStream(ms);
@@ -835,7 +837,7 @@ namespace Client.MessagePack
                 byte[] r = new byte[ms.Length];
                 ms.Position = 0;
                 ms.Read(r, 0, (int)ms.Length);
-                return r;
+                return Zip.Compress(r);
             }
         }
 

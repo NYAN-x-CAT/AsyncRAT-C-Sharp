@@ -71,6 +71,7 @@ namespace Plugin
             MsgPack msgpack;
             IUnsafeCodec unsafeCodec = new UnsafeStreamCodec(quality);
             MemoryStream stream;
+            Thread.Sleep(1);
             while (IsOk && Connection.IsConnected)
             {
                 try

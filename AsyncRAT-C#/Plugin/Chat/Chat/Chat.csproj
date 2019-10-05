@@ -59,6 +59,7 @@
     <Compile Include="Packet.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Zip.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="FormChat.resx">

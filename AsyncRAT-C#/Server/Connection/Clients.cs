@@ -89,7 +89,13 @@ namespace Server.Connection
                             BytesRecevied += Recevied;
                             if (ClientMS.Length == ClientBuffersize)
                             {
-                                ThreadPool.QueueUserWorkItem(new Packet().Read, new object[] { ClientMS.ToArray(), this });
+
+                                ThreadPool.QueueUserWorkItem(new Packet
+                                {
+                                    client = this,
+                                    data = ClientMS.ToArray(),
+                                }.Read, null);
+
                                 ClientBuffer = new byte[4];
                                 ClientMS.Dispose();
                                 ClientMS = new MemoryStream();

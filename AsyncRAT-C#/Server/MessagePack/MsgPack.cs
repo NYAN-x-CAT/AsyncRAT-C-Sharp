@@ -10,6 +10,7 @@
  *   
  *   Credit -> github.com/ymofen/SimpleMsgPack.Net
  */
+using Server.Algorithm;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -498,6 +499,7 @@ namespace Server.MessagePack
         {
             using (MemoryStream ms = new MemoryStream())
             {
+                bytes = Zip.Decompress(bytes);
                 ms.Write(bytes, 0, bytes.Length);
                 ms.Position = 0;
                 DecodeFromStream(ms);
@@ -839,7 +841,7 @@ namespace Server.MessagePack
                 byte[] r = new byte[ms.Length];
                 ms.Position = 0;
                 ms.Read(r, 0, (int)ms.Length);
-                return r;
+                return Zip.Compress(r);
             }
         }
 

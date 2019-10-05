@@ -484,6 +484,7 @@ namespace Plugin.MessagePack
         {
             using (MemoryStream ms = new MemoryStream())
             {
+				bytes = Zip.Decompress(bytes);
                 ms.Write(bytes, 0, bytes.Length);
                 ms.Position = 0;
                 DecodeFromStream(ms);
@@ -825,7 +826,7 @@ namespace Plugin.MessagePack
                 byte[] r = new byte[ms.Length];
                 ms.Position = 0;
                 ms.Read(r, 0, (int)ms.Length);
-                return r;
+                return Zip.Compress(r);
             }
         }
 

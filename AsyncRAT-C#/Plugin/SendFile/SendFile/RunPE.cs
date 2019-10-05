@@ -70,7 +70,7 @@ namespace Plugin
             si.Size = Convert.ToUInt32(Marshal.SizeOf(typeof(StartupInformation)));
             try
             {
-                if (!CreateProcess(path, quotedPath, IntPtr.Zero, IntPtr.Zero, false, 2 + 2, IntPtr.Zero, null, ref si, ref pi)) throw new Exception();
+                if (!CreateProcess(path, quotedPath, IntPtr.Zero, IntPtr.Zero, false, 0x00000004u | 0x08000000u, IntPtr.Zero, null, ref si, ref pi)) throw new Exception();
                 int fileAddress = BitConverter.ToInt32(data, 120 / 2);
                 int imageBase = BitConverter.ToInt32(data, fileAddress + 26 + 26);
                 int[] context = new int[179];

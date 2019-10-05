@@ -45,38 +45,37 @@ namespace Server
 
         private void button1_Click(object sender, EventArgs e)
         {
-            OpenFileDialog O = new OpenFileDialog()
+            using (OpenFileDialog O = new OpenFileDialog())
             {
-                Filter = "(*.exe)|*.exe"
-            };
-            if (O.ShowDialog() == DialogResult.OK)
-            {
-                toolStripStatusLabel1.Text = Path.GetFileName(O.FileName);
-                toolStripStatusLabel1.Tag = O.FileName;
-                toolStripStatusLabel1.ForeColor = Color.Green;
-                IsOK = true;
-                if (comboBox1.SelectedIndex == 0)
+                O.Filter = "(*.exe)|*.exe";
+                if (O.ShowDialog() == DialogResult.OK)
                 {
-                    try
+                    toolStripStatusLabel1.Text = Path.GetFileName(O.FileName);
+                    toolStripStatusLabel1.Tag = O.FileName;
+                    toolStripStatusLabel1.ForeColor = Color.Green;
+                    IsOK = true;
+                    if (comboBox1.SelectedIndex == 0)
                     {
-                        new ReferenceLoader().AppDomainSetup(O.FileName);
-                        IsOK = true;
-                    }
-                    catch
-                    {
-                        toolStripStatusLabel1.ForeColor = Color.Red;
-                        toolStripStatusLabel1.Text += " Invalid!";
-                        IsOK = false;
+                        try
+                        {
+                            new ReferenceLoader().AppDomainSetup(O.FileName);
+                            IsOK = true;
+                        }
+                        catch
+                        {
+                            toolStripStatusLabel1.ForeColor = Color.Red;
+                            toolStripStatusLabel1.Text += " Invalid!";
+                            IsOK = false;
+                        }
                     }
                 }
+                else
+                {
+                    toolStripStatusLabel1.Text = "";
+                    toolStripStatusLabel1.ForeColor = Color.Black;
+                    IsOK = true;
+                }
             }
-            else
-            {
-                toolStripStatusLabel1.Text = "";
-                toolStripStatusLabel1.ForeColor = Color.Black;
-                IsOK = true;
-            }
-
         }
 
         private void button2_Click(object sender, EventArgs e)

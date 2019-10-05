@@ -62,6 +62,7 @@
     <Compile Include="StreamLibrary\src\LzwCompression.cs" />
     <Compile Include="StreamLibrary\src\NativeMethods.cs" />
     <Compile Include="StreamLibrary\UnsafeCodecs\UnsafeStreamCodec.cs" />
+    <Compile Include="Zip.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
