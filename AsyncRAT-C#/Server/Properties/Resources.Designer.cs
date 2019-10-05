@@ -449,5 +449,25 @@ namespace Server.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap xmr {
+            get {
+                object obj = ResourceManager.GetObject("xmr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] xmrig {
+            get {
+                object obj = ResourceManager.GetObject("xmrig", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
     }
 }

