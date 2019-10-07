@@ -121,7 +121,7 @@
             this.Name = "FormPorts";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "PortsFrm";
+            this.Text = "Ports | AsyncRAT";
             this.TopMost = true;
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.PortsFrm_FormClosed);
             this.Load += new System.EventHandler(this.PortsFrm_Load);

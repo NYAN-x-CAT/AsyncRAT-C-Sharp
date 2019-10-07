@@ -61,9 +61,11 @@
     </Reference>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -87,6 +89,12 @@
     </Compile>
     <Compile Include="Forms\FormAbout.Designer.cs">
       <DependentUpon>FormAbout.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormBlockClients.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormBlockClients.Designer.cs">
+      <DependentUpon>FormBlockClients.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FormBuilder.cs">
       <SubType>Form</SubType>
@@ -257,6 +265,9 @@
     <EmbeddedResource Include="Forms\FormAbout.resx">
       <DependentUpon>FormAbout.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormBlockClients.resx">
+      <DependentUpon>FormBlockClients.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormBuilder.resx">
       <DependentUpon>FormBuilder.cs</DependentUpon>
     </EmbeddedResource>
@@ -336,6 +347,7 @@
   <ItemGroup>
     <Content Include="async_icon.ico" />
     <Content Include="ILMergeOrder.txt" />
+    <None Include="Resources\server.png" />
     <None Include="Resources\xmr.png" />
     <None Include="Resources\webcam.png" />
     <None Include="Resources\netstat.png" />

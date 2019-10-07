@@ -58,11 +58,11 @@ namespace Server
                     Environment.Exit(0);
                 }
 
+                if (!File.Exists(Path.Combine(Application.StartupPath, "Stub\\Stub.exe")))
+                    MessageBox.Show("Stub not found! unzip files again and make sure your AV is OFF");
+
                 if (!Directory.Exists(Path.Combine(Application.StartupPath, "Stub")))
                     Directory.CreateDirectory(Path.Combine(Application.StartupPath, "Stub"));
-
-                if (!File.Exists(Path.Combine(Application.StartupPath, "Stub\\Stub.exe")))
-                    MessageBox.Show("Stub Not Found!");
             }
             catch (Exception ex)
             {
@@ -71,7 +71,6 @@ namespace Server
         }
         private Clients[] GetSelectedClients()
         {
-
             List<Clients> clientsList = new List<Clients>();
             Invoke((MethodInvoker)(() =>
             {
@@ -89,7 +88,6 @@ namespace Server
 
         private Clients[] GetAllClients()
         {
-
             List<Clients> clientsList = new List<Clients>();
             Invoke((MethodInvoker)(() =>
             {
@@ -105,10 +103,11 @@ namespace Server
             return clientsList.ToArray();
         }
 
-        private void Connect()
+        private async void Connect()
         {
             try
             {
+                await Task.Delay(1000);
                 string[] ports = Properties.Settings.Default.Ports.Split(',');
                 foreach (var port in ports)
                 {
@@ -140,6 +139,18 @@ namespace Server
 
             Methods.SetPlugins();
 
+            try
+            {
+                foreach (string client in Properties.Settings.Default.txtBlocked.Split(','))
+                {
+                    if (!string.IsNullOrWhiteSpace(client))
+                    {
+                        Settings.Blocked.Add(client);
+                    }
+                }
+            }
+            catch { }
+
             CheckFiles();
             lvwColumnSorter = new ListViewColumnSorter();
             this.listView1.ListViewItemSorter = lvwColumnSorter;
@@ -161,8 +172,6 @@ namespace Server
             await Methods.FadeIn(this, 5);
             trans = true;
 
-            await Task.Run(() => Connect());
-
             if (Properties.Settings.Default.Notification == true)
             {
                 toolStripStatusLabel2.ForeColor = Color.Green;
@@ -171,6 +180,11 @@ namespace Server
             {
                 toolStripStatusLabel2.ForeColor = Color.Black;
             }
+
+            new Thread(() =>
+            {
+                Connect();
+            }).Start();
         }
 
         private void Form1_Activated(object sender, EventArgs e)
@@ -1581,5 +1595,12 @@ namespace Server
         [DllImport("uxtheme", CharSet = CharSet.Unicode)]
         public static extern int SetWindowTheme(IntPtr hWnd, string textSubAppName, string textSubIdList);
 
+        private void BlockClientsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (FormBlockClients form = new FormBlockClients())
+            {
+                form.ShowDialog();
+            }
+        }
     }
 }

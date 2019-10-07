@@ -40,7 +40,10 @@ namespace Plugin.Handler
                     bmp.Dispose();
                 }
             }
-            catch { }
+            catch
+            {
+                return;
+            }
             Connection.Disconnected();
         }
     }
