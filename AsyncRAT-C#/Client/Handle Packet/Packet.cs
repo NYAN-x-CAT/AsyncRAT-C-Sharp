@@ -44,7 +44,7 @@ namespace Client.Handle_Packet
                     case "savePlugin": // save plugin as MD5:Base64
                         {
                             SetRegistry.SetValue(unpack_msgpack.ForcePathObject("Hash").AsString, unpack_msgpack.ForcePathObject("Dll").AsString);
-                            Debug.WriteLine("plguin saved");
+                            Debug.WriteLine("plugin saved");
                             break;
                         }
 
@@ -56,7 +56,7 @@ namespace Client.Handle_Packet
                                 if (SetRegistry.GetValue(plugin) == null)
                                 {
                                     plugins.Add(plugin);
-                                    Debug.WriteLine("plguin not found");
+                                    Debug.WriteLine("plugin not found");
                                 }
                             }
                             if (plugins.Count > 0)

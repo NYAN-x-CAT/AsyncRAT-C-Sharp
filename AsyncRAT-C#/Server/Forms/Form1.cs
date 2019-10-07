@@ -69,42 +69,41 @@ namespace Server
                 MessageBox.Show(ex.Message, "AsyncRAT", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
         private Clients[] GetSelectedClients()
         {
-            lock (Settings.LockListviewClients)
+
+            List<Clients> clientsList = new List<Clients>();
+            Invoke((MethodInvoker)(() =>
             {
-                List<Clients> clientsList = new List<Clients>();
-                Invoke((MethodInvoker)(() =>
+                lock (Settings.LockListviewClients)
                 {
                     if (listView1.SelectedItems.Count == 0) return;
                     foreach (ListViewItem itm in listView1.SelectedItems)
                     {
                         clientsList.Add((Clients)itm.Tag);
                     }
-                }));
-                return clientsList.ToArray();
-            }
+                }
+            }));
+            return clientsList.ToArray();
         }
 
         private Clients[] GetAllClients()
         {
-            lock (Settings.LockListviewClients)
+
+            List<Clients> clientsList = new List<Clients>();
+            Invoke((MethodInvoker)(() =>
             {
-                List<Clients> clientsList = new List<Clients>();
-                Invoke((MethodInvoker)(() =>
+                lock (Settings.LockListviewClients)
                 {
                     if (listView1.Items.Count == 0) return;
                     foreach (ListViewItem itm in listView1.Items)
                     {
                         clientsList.Add((Clients)itm.Tag);
                     }
-                }));
-                return clientsList.ToArray();
-            }
+                }
+            }));
+            return clientsList.ToArray();
         }
-
 
         private void Connect()
         {

