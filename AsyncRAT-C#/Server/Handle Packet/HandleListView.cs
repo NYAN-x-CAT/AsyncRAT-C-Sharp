@@ -50,6 +50,14 @@ namespace Server.Handle_Packet
                 client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("User").AsString);
                 client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("OS").AsString);
                 client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("Version").AsString);
+                try
+                {
+                    client.LV.SubItems.Add(Convert.ToDateTime(unpack_msgpack.ForcePathObject("Installed").AsString).ToLocalTime().ToString());
+                }
+                catch
+                {
+                    client.LV.SubItems.Add("Outdated stub");
+                }
                 client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("Admin").AsString);
                 client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("Antivirus").AsString);
                 client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("Performance").AsString.Replace("MINER 0", "MINER Offline").Replace("MINER 1", "MINER Online"));
