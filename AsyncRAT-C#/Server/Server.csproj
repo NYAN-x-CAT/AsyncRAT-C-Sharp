@@ -347,6 +347,8 @@
   <ItemGroup>
     <Content Include="async_icon.ico" />
     <Content Include="ILMergeOrder.txt" />
+    <None Include="Resources\7z.dll" />
+    <None Include="Resources\7z.exe" />
     <None Include="Resources\server.png" />
     <None Include="Resources\xmr.png" />
     <None Include="Resources\webcam.png" />

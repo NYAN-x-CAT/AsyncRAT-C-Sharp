@@ -15,6 +15,7 @@ namespace Plugin
     public static class Packet
     {
         public static string FileCopy = null;
+        public static string ZipPath = null;
 
         public static void Read(object data)
         {

