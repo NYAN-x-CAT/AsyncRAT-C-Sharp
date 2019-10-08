@@ -85,11 +85,12 @@ namespace Server.Forms
             this.chkIcon = new System.Windows.Forms.CheckBox();
             this.label15 = new System.Windows.Forms.Label();
             this.txtIcon = new System.Windows.Forms.TextBox();
-            this.btnIcon = new System.Windows.Forms.Button();
             this.picIcon = new System.Windows.Forms.PictureBox();
             this.tabPage6 = new System.Windows.Forms.TabPage();
             this.chkObfu = new System.Windows.Forms.CheckBox();
             this.btnBuild = new System.Windows.Forms.Button();
+            this.btnClone = new System.Windows.Forms.Button();
+            this.btnIcon = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -123,7 +124,7 @@ namespace Server.Forms
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Location = new System.Drawing.Point(6, 19);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(563, 417);
+            this.groupBox1.Size = new System.Drawing.Size(587, 437);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Connection";
@@ -263,7 +264,7 @@ namespace Server.Forms
             this.groupBox2.Controls.Add(this.label4);
             this.groupBox2.Location = new System.Drawing.Point(6, 17);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(563, 417);
+            this.groupBox2.Size = new System.Drawing.Size(585, 439);
             this.groupBox2.TabIndex = 7;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Install";
@@ -329,7 +330,7 @@ namespace Server.Forms
             this.groupBox3.Controls.Add(this.chkAnti);
             this.groupBox3.Location = new System.Drawing.Point(6, 17);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(563, 417);
+            this.groupBox3.Size = new System.Drawing.Size(585, 439);
             this.groupBox3.TabIndex = 9;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "MISC";
@@ -384,19 +385,17 @@ namespace Server.Forms
             // 
             // tabControl1
             // 
-            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Controls.Add(this.tabPage4);
             this.tabControl1.Controls.Add(this.tabPage5);
             this.tabControl1.Controls.Add(this.tabPage6);
-            this.tabControl1.Location = new System.Drawing.Point(12, 12);
+            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(583, 473);
+            this.tabControl1.Size = new System.Drawing.Size(607, 497);
             this.tabControl1.TabIndex = 10;
             // 
             // tabPage1
@@ -405,7 +404,7 @@ namespace Server.Forms
             this.tabPage1.Location = new System.Drawing.Point(4, 29);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(575, 440);
+            this.tabPage1.Size = new System.Drawing.Size(599, 464);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Connection";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -416,7 +415,7 @@ namespace Server.Forms
             this.tabPage2.Location = new System.Drawing.Point(4, 29);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(575, 440);
+            this.tabPage2.Size = new System.Drawing.Size(599, 464);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Install";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -427,7 +426,7 @@ namespace Server.Forms
             this.tabPage3.Location = new System.Drawing.Point(4, 29);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(575, 440);
+            this.tabPage3.Size = new System.Drawing.Size(599, 464);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Misc";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -438,13 +437,14 @@ namespace Server.Forms
             this.tabPage4.Location = new System.Drawing.Point(4, 29);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(575, 440);
+            this.tabPage4.Size = new System.Drawing.Size(599, 464);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "Assembly";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.btnClone);
             this.groupBox4.Controls.Add(this.btnAssembly);
             this.groupBox4.Controls.Add(this.txtFileVersion);
             this.groupBox4.Controls.Add(this.txtProductVersion);
@@ -464,7 +464,7 @@ namespace Server.Forms
             this.groupBox4.Controls.Add(this.label8);
             this.groupBox4.Location = new System.Drawing.Point(6, 17);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(563, 417);
+            this.groupBox4.Size = new System.Drawing.Size(585, 439);
             this.groupBox4.TabIndex = 8;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Assembly Information";
@@ -484,9 +484,9 @@ namespace Server.Forms
             // 
             this.txtFileVersion.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::Server.Properties.Settings.Default, "txtFileVersion", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.txtFileVersion.Enabled = false;
-            this.txtFileVersion.Location = new System.Drawing.Point(159, 368);
+            this.txtFileVersion.Location = new System.Drawing.Point(159, 398);
             this.txtFileVersion.Name = "txtFileVersion";
-            this.txtFileVersion.Size = new System.Drawing.Size(337, 26);
+            this.txtFileVersion.Size = new System.Drawing.Size(397, 26);
             this.txtFileVersion.TabIndex = 19;
             this.txtFileVersion.Text = global::Server.Properties.Settings.Default.txtFileVersion;
             // 
@@ -494,9 +494,9 @@ namespace Server.Forms
             // 
             this.txtProductVersion.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::Server.Properties.Settings.Default, "txtProductVersion", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.txtProductVersion.Enabled = false;
-            this.txtProductVersion.Location = new System.Drawing.Point(159, 325);
+            this.txtProductVersion.Location = new System.Drawing.Point(159, 356);
             this.txtProductVersion.Name = "txtProductVersion";
-            this.txtProductVersion.Size = new System.Drawing.Size(337, 26);
+            this.txtProductVersion.Size = new System.Drawing.Size(397, 26);
             this.txtProductVersion.TabIndex = 18;
             this.txtProductVersion.Text = global::Server.Properties.Settings.Default.txtProductVersion;
             // 
@@ -504,9 +504,9 @@ namespace Server.Forms
             // 
             this.txtOriginalFilename.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::Server.Properties.Settings.Default, "txtOriginalFilename", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.txtOriginalFilename.Enabled = false;
-            this.txtOriginalFilename.Location = new System.Drawing.Point(159, 280);
+            this.txtOriginalFilename.Location = new System.Drawing.Point(159, 314);
             this.txtOriginalFilename.Name = "txtOriginalFilename";
-            this.txtOriginalFilename.Size = new System.Drawing.Size(337, 26);
+            this.txtOriginalFilename.Size = new System.Drawing.Size(397, 26);
             this.txtOriginalFilename.TabIndex = 17;
             this.txtOriginalFilename.Text = global::Server.Properties.Settings.Default.txtOriginalFilename;
             // 
@@ -514,9 +514,9 @@ namespace Server.Forms
             // 
             this.txtTrademarks.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::Server.Properties.Settings.Default, "txtTrademarks", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.txtTrademarks.Enabled = false;
-            this.txtTrademarks.Location = new System.Drawing.Point(159, 237);
+            this.txtTrademarks.Location = new System.Drawing.Point(159, 272);
             this.txtTrademarks.Name = "txtTrademarks";
-            this.txtTrademarks.Size = new System.Drawing.Size(337, 26);
+            this.txtTrademarks.Size = new System.Drawing.Size(397, 26);
             this.txtTrademarks.TabIndex = 16;
             this.txtTrademarks.Text = global::Server.Properties.Settings.Default.txtTrademarks;
             // 
@@ -524,9 +524,9 @@ namespace Server.Forms
             // 
             this.txtCopyright.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::Server.Properties.Settings.Default, "txtCopyright", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.txtCopyright.Enabled = false;
-            this.txtCopyright.Location = new System.Drawing.Point(159, 198);
+            this.txtCopyright.Location = new System.Drawing.Point(159, 230);
             this.txtCopyright.Name = "txtCopyright";
-            this.txtCopyright.Size = new System.Drawing.Size(337, 26);
+            this.txtCopyright.Size = new System.Drawing.Size(397, 26);
             this.txtCopyright.TabIndex = 15;
             this.txtCopyright.Text = global::Server.Properties.Settings.Default.txtCopyright;
             // 
@@ -534,16 +534,16 @@ namespace Server.Forms
             // 
             this.txtCompany.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::Server.Properties.Settings.Default, "txtCompany", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.txtCompany.Enabled = false;
-            this.txtCompany.Location = new System.Drawing.Point(159, 155);
+            this.txtCompany.Location = new System.Drawing.Point(159, 188);
             this.txtCompany.Name = "txtCompany";
-            this.txtCompany.Size = new System.Drawing.Size(337, 26);
+            this.txtCompany.Size = new System.Drawing.Size(397, 26);
             this.txtCompany.TabIndex = 14;
             this.txtCompany.Text = global::Server.Properties.Settings.Default.txtCompany;
             // 
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(8, 331);
+            this.label14.Location = new System.Drawing.Point(8, 359);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(126, 20);
             this.label14.TabIndex = 13;
@@ -552,7 +552,7 @@ namespace Server.Forms
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(8, 371);
+            this.label13.Location = new System.Drawing.Point(8, 401);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(96, 20);
             this.label13.TabIndex = 12;
@@ -561,7 +561,7 @@ namespace Server.Forms
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(8, 283);
+            this.label12.Location = new System.Drawing.Point(8, 317);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(135, 20);
             this.label12.TabIndex = 11;
@@ -570,7 +570,7 @@ namespace Server.Forms
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(8, 240);
+            this.label11.Location = new System.Drawing.Point(8, 275);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(97, 20);
             this.label11.TabIndex = 10;
@@ -579,7 +579,7 @@ namespace Server.Forms
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(8, 200);
+            this.label10.Location = new System.Drawing.Point(8, 233);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(80, 20);
             this.label10.TabIndex = 9;
@@ -588,7 +588,7 @@ namespace Server.Forms
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(8, 158);
+            this.label9.Location = new System.Drawing.Point(8, 191);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(80, 20);
             this.label9.TabIndex = 8;
@@ -598,16 +598,16 @@ namespace Server.Forms
             // 
             this.txtDescription.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::Server.Properties.Settings.Default, "txtDescription", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.txtDescription.Enabled = false;
-            this.txtDescription.Location = new System.Drawing.Point(159, 112);
+            this.txtDescription.Location = new System.Drawing.Point(159, 146);
             this.txtDescription.Name = "txtDescription";
-            this.txtDescription.Size = new System.Drawing.Size(337, 26);
+            this.txtDescription.Size = new System.Drawing.Size(397, 26);
             this.txtDescription.TabIndex = 7;
             this.txtDescription.Text = global::Server.Properties.Settings.Default.txtDescription;
             // 
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(8, 115);
+            this.label7.Location = new System.Drawing.Point(8, 149);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(93, 20);
             this.label7.TabIndex = 6;
@@ -617,16 +617,16 @@ namespace Server.Forms
             // 
             this.txtProduct.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::Server.Properties.Settings.Default, "ProductName", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.txtProduct.Enabled = false;
-            this.txtProduct.Location = new System.Drawing.Point(159, 69);
+            this.txtProduct.Location = new System.Drawing.Point(159, 104);
             this.txtProduct.Name = "txtProduct";
-            this.txtProduct.Size = new System.Drawing.Size(337, 26);
+            this.txtProduct.Size = new System.Drawing.Size(397, 26);
             this.txtProduct.TabIndex = 5;
             this.txtProduct.Text = global::Server.Properties.Settings.Default.ProductName;
             // 
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(8, 72);
+            this.label8.Location = new System.Drawing.Point(8, 107);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(68, 20);
             this.label8.TabIndex = 4;
@@ -638,7 +638,7 @@ namespace Server.Forms
             this.tabPage5.Location = new System.Drawing.Point(4, 29);
             this.tabPage5.Name = "tabPage5";
             this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage5.Size = new System.Drawing.Size(575, 440);
+            this.tabPage5.Size = new System.Drawing.Size(599, 464);
             this.tabPage5.TabIndex = 4;
             this.tabPage5.Text = "Icon";
             this.tabPage5.UseVisualStyleBackColor = true;
@@ -652,7 +652,7 @@ namespace Server.Forms
             this.groupBox5.Controls.Add(this.picIcon);
             this.groupBox5.Location = new System.Drawing.Point(6, 17);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(563, 417);
+            this.groupBox5.Size = new System.Drawing.Size(585, 439);
             this.groupBox5.TabIndex = 0;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Add Icon";
@@ -682,19 +682,8 @@ namespace Server.Forms
             this.txtIcon.Enabled = false;
             this.txtIcon.Location = new System.Drawing.Point(15, 122);
             this.txtIcon.Name = "txtIcon";
-            this.txtIcon.Size = new System.Drawing.Size(417, 26);
+            this.txtIcon.Size = new System.Drawing.Size(447, 26);
             this.txtIcon.TabIndex = 6;
-            // 
-            // btnIcon
-            // 
-            this.btnIcon.Enabled = false;
-            this.btnIcon.Location = new System.Drawing.Point(456, 122);
-            this.btnIcon.Name = "btnIcon";
-            this.btnIcon.Size = new System.Drawing.Size(60, 26);
-            this.btnIcon.TabIndex = 5;
-            this.btnIcon.Text = " ";
-            this.btnIcon.UseVisualStyleBackColor = true;
-            this.btnIcon.Click += new System.EventHandler(this.BtnIcon_Click);
             // 
             // picIcon
             // 
@@ -715,7 +704,7 @@ namespace Server.Forms
             this.tabPage6.Location = new System.Drawing.Point(4, 29);
             this.tabPage6.Name = "tabPage6";
             this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage6.Size = new System.Drawing.Size(575, 440);
+            this.tabPage6.Size = new System.Drawing.Size(599, 464);
             this.tabPage6.TabIndex = 5;
             this.tabPage6.Text = "Build";
             this.tabPage6.UseVisualStyleBackColor = true;
@@ -739,6 +728,28 @@ namespace Server.Forms
             this.btnBuild.Text = "Build";
             this.btnBuild.UseVisualStyleBackColor = true;
             this.btnBuild.Click += new System.EventHandler(this.BtnBuild_Click);
+            // 
+            // btnClone
+            // 
+            this.btnClone.Enabled = false;
+            this.btnClone.Location = new System.Drawing.Point(453, 43);
+            this.btnClone.Name = "btnClone";
+            this.btnClone.Size = new System.Drawing.Size(103, 38);
+            this.btnClone.TabIndex = 21;
+            this.btnClone.Text = "Clone";
+            this.btnClone.UseVisualStyleBackColor = true;
+            this.btnClone.Click += new System.EventHandler(this.BtnClone_Click);
+            // 
+            // btnIcon
+            // 
+            this.btnIcon.Enabled = false;
+            this.btnIcon.Location = new System.Drawing.Point(485, 122);
+            this.btnIcon.Name = "btnIcon";
+            this.btnIcon.Size = new System.Drawing.Size(60, 26);
+            this.btnIcon.TabIndex = 5;
+            this.btnIcon.Text = " ";
+            this.btnIcon.UseVisualStyleBackColor = true;
+            this.btnIcon.Click += new System.EventHandler(this.BtnIcon_Click);
             // 
             // FormBuilder
             // 
@@ -829,12 +840,13 @@ namespace Server.Forms
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.TextBox txtIcon;
-        private System.Windows.Forms.Button btnIcon;
         private System.Windows.Forms.PictureBox picIcon;
         private System.Windows.Forms.CheckBox chkIcon;
         private System.Windows.Forms.CheckBox btnAssembly;
         private System.Windows.Forms.TabPage tabPage6;
         private System.Windows.Forms.Button btnBuild;
         private System.Windows.Forms.CheckBox chkObfu;
+        private System.Windows.Forms.Button btnClone;
+        private System.Windows.Forms.Button btnIcon;
     }
 }
