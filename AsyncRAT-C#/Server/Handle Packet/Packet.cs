@@ -33,7 +33,13 @@ namespace Server.Handle_Packet
 
                         case "Ping":
                             {
-                                new HandlePing(client, unpack_msgpack);
+                                new HandlePing().Ping(client, unpack_msgpack);
+                                break;
+                            }
+
+                        case "pong":
+                            {
+                                new HandlePing().Pong(client, unpack_msgpack);
                                 break;
                             }
 

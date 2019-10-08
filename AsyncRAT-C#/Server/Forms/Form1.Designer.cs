@@ -37,6 +37,7 @@
             this.lv_user = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.lv_os = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.lv_version = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.lv_ins = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.lv_admin = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.lv_av = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.lv_prefor = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -124,7 +125,7 @@
             this.performanceCounter2 = new System.Diagnostics.PerformanceCounter();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.TimerTask = new System.Windows.Forms.Timer(this.components);
-            this.lv_ins = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.lv_ping = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.contextMenuClient.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -152,6 +153,7 @@
             this.lv_ins,
             this.lv_admin,
             this.lv_av,
+            this.lv_ping,
             this.lv_prefor});
             this.listView1.ContextMenuStrip = this.contextMenuClient;
             this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -172,12 +174,12 @@
             // 
             // lv_ip
             // 
-            this.lv_ip.Text = "IP";
+            this.lv_ip.Text = "IP Address";
             this.lv_ip.Width = 121;
             // 
             // lv_country
             // 
-            this.lv_country.Text = "COUNTRY";
+            this.lv_country.Text = "Country";
             this.lv_country.Width = 124;
             // 
             // lv_hwid
@@ -187,32 +189,37 @@
             // 
             // lv_user
             // 
-            this.lv_user.Text = "USER";
+            this.lv_user.Text = "Username";
             this.lv_user.Width = 117;
             // 
             // lv_os
             // 
-            this.lv_os.Text = "OPERATING SYSTEM";
+            this.lv_os.Text = "Operating System";
             this.lv_os.Width = 179;
             // 
             // lv_version
             // 
-            this.lv_version.Text = "VERSION";
+            this.lv_version.Text = "Payload Version";
             this.lv_version.Width = 126;
+            // 
+            // lv_ins
+            // 
+            this.lv_ins.Text = "Installed UTC";
+            this.lv_ins.Width = 120;
             // 
             // lv_admin
             // 
-            this.lv_admin.Text = "PRIVILEGES";
+            this.lv_admin.Text = "Privileges";
             this.lv_admin.Width = 166;
             // 
             // lv_av
             // 
-            this.lv_av.Text = "ANTI-VIRUS";
+            this.lv_av.Text = "Anti-Virus Software";
             this.lv_av.Width = 136;
             // 
             // lv_prefor
             // 
-            this.lv_prefor.Text = "PERFORMANCE";
+            this.lv_prefor.Text = "Performance";
             this.lv_prefor.Width = 200;
             // 
             // contextMenuClient
@@ -708,7 +715,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 29);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(1360, 446);
+            this.tabPage2.Size = new System.Drawing.Size(1293, 446);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Logs";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -728,7 +735,7 @@
             this.listView2.Name = "listView2";
             this.listView2.ShowGroups = false;
             this.listView2.ShowItemToolTips = true;
-            this.listView2.Size = new System.Drawing.Size(1354, 440);
+            this.listView2.Size = new System.Drawing.Size(1287, 440);
             this.listView2.TabIndex = 1;
             this.listView2.UseCompatibleStateImageBehavior = false;
             this.listView2.View = System.Windows.Forms.View.Details;
@@ -764,7 +771,7 @@
             this.tabPage3.Controls.Add(this.listView3);
             this.tabPage3.Location = new System.Drawing.Point(4, 29);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(1360, 446);
+            this.tabPage3.Size = new System.Drawing.Size(1293, 446);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Thumbnail";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -778,7 +785,7 @@
             this.listView3.Location = new System.Drawing.Point(0, 0);
             this.listView3.Name = "listView3";
             this.listView3.ShowItemToolTips = true;
-            this.listView3.Size = new System.Drawing.Size(1360, 446);
+            this.listView3.Size = new System.Drawing.Size(1293, 446);
             this.listView3.SmallImageList = this.ThumbnailImageList;
             this.listView3.TabIndex = 0;
             this.listView3.UseCompatibleStateImageBehavior = false;
@@ -820,7 +827,7 @@
             this.tabPage4.Location = new System.Drawing.Point(4, 29);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(1360, 446);
+            this.tabPage4.Size = new System.Drawing.Size(1293, 446);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "Tasks";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -837,7 +844,7 @@
             this.listView4.HideSelection = false;
             this.listView4.Location = new System.Drawing.Point(3, 3);
             this.listView4.Name = "listView4";
-            this.listView4.Size = new System.Drawing.Size(1354, 440);
+            this.listView4.Size = new System.Drawing.Size(1287, 440);
             this.listView4.TabIndex = 0;
             this.listView4.UseCompatibleStateImageBehavior = false;
             this.listView4.View = System.Windows.Forms.View.Details;
@@ -929,10 +936,9 @@
             this.TimerTask.Interval = 5000;
             this.TimerTask.Tick += new System.EventHandler(this.TimerTask_Tick);
             // 
-            // lv_ins
+            // lv_ping
             // 
-            this.lv_ins.Text = "Installed UTC";
-            this.lv_ins.Width = 120;
+            this.lv_ping.Text = "Ping";
             // 
             // Form1
             // 
@@ -1064,6 +1070,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.ToolStripMenuItem blockClientsToolStripMenuItem;
         private System.Windows.Forms.ColumnHeader lv_ins;
+        public System.Windows.Forms.ColumnHeader lv_ping;
     }
 }
 
