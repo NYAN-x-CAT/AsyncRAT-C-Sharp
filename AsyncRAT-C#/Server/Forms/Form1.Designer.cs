@@ -40,6 +40,7 @@
             this.lv_ins = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.lv_admin = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.lv_av = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.lv_ping = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.lv_prefor = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.contextMenuClient = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.aBOUTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -125,7 +126,6 @@
             this.performanceCounter2 = new System.Diagnostics.PerformanceCounter();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.TimerTask = new System.Windows.Forms.Timer(this.components);
-            this.lv_ping = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.contextMenuClient.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -204,7 +204,7 @@
             // 
             // lv_ins
             // 
-            this.lv_ins.Text = "Installed UTC";
+            this.lv_ins.Text = "Installed";
             this.lv_ins.Width = 120;
             // 
             // lv_admin
@@ -216,6 +216,10 @@
             // 
             this.lv_av.Text = "Anti-Virus Software";
             this.lv_av.Width = 136;
+            // 
+            // lv_ping
+            // 
+            this.lv_ping.Text = "Ping";
             // 
             // lv_prefor
             // 
@@ -935,10 +939,6 @@
             this.TimerTask.Enabled = true;
             this.TimerTask.Interval = 5000;
             this.TimerTask.Tick += new System.EventHandler(this.TimerTask_Tick);
-            // 
-            // lv_ping
-            // 
-            this.lv_ping.Text = "Ping";
             // 
             // Form1
             // 
