@@ -4,6 +4,7 @@ using Server.Connection;
 using cGeoIp;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Threading;
 
 namespace Server.Handle_Packet
 {
@@ -32,7 +33,7 @@ namespace Server.Handle_Packet
 
                 try
                 {
-                    client.CheckPlugin();
+                    ThreadPool.QueueUserWorkItem(client.CheckPlugin);
                 }
                 catch { }
 
