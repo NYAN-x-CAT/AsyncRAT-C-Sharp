@@ -138,8 +138,8 @@ namespace Server.Connection
                         }
                     }
                     catch { }
+                    new HandleLogs().Addmsg($"Client {TcpClient.RemoteEndPoint.ToString().Split(':')[0]} disconnected", Color.Red);
                 }));
-                new HandleLogs().Addmsg($"Client {TcpClient.RemoteEndPoint.ToString().Split(':')[0]} disconnected", Color.Red);
             }
 
             try
