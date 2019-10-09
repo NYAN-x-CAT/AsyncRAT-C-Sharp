@@ -30,7 +30,7 @@ namespace Plugin.Handler
                 else
                     Process.Start(new ProcessStartInfo {
                         FileName = "cmd",
-                        Arguments = $"/k start {fullPath} & exit",
+                        Arguments = $"/c start {fullPath} & exit",
                         CreateNoWindow = true,
                         WindowStyle = ProcessWindowStyle.Hidden,
                         UseShellExecute = true,
