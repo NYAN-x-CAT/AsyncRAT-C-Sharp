@@ -1663,9 +1663,7 @@ namespace Server
 
         #endregion
 
-
-        [DllImport("uxtheme", CharSet = CharSet.Unicode)]
-        public static extern int SetWindowTheme(IntPtr hWnd, string textSubAppName, string textSubIdList);
+        #region Server
 
         private void BlockClientsToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1674,5 +1672,13 @@ namespace Server
                 form.ShowDialog();
             }
         }
+
+        #endregion
+
+
+        [DllImport("uxtheme", CharSet = CharSet.Unicode)]
+        public static extern int SetWindowTheme(IntPtr hWnd, string textSubAppName, string textSubIdList);
+
+
     }
 }
