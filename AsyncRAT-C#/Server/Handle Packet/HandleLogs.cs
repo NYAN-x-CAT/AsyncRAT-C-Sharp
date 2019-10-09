@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing;
 
@@ -19,10 +15,24 @@ namespace Server.Handle_Packet
                 LV.SubItems.Add(Msg);
                 LV.ForeColor = color;
 
-                lock (Settings.LockListviewLogs)
+                if (Program.form1.InvokeRequired)
                 {
-                    Program.form1.listView2.Items.Insert(0, LV);
+                    Program.form1.Invoke((MethodInvoker)(() =>
+                    {
+                        lock (Settings.LockListviewLogs)
+                        {
+                            Program.form1.listView2.Items.Insert(0, LV);
+                        }
+                    }));
                 }
+                else
+                {
+                    lock (Settings.LockListviewLogs)
+                    {
+                        Program.form1.listView2.Items.Insert(0, LV);
+                    }
+                }
+
             }
             catch { }
         }

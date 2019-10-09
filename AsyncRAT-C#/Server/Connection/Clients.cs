@@ -204,7 +204,7 @@ namespace Server.Connection
             }
         }
 
-        public void CheckPlugin(object o) // send all plugins md5 hash to client
+        public void CheckPlugin() // send all plugins md5 hash to client
         {
             try
             {

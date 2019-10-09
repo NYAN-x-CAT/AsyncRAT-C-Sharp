@@ -27,7 +27,9 @@ namespace Server.Handle_Packet
                     {
                         case "ClientInfo":
                             {
-                                new HandleListView().AddToListview(client, unpack_msgpack);
+                                ThreadPool.QueueUserWorkItem(delegate {
+                                    new HandleListView().AddToListview(client, unpack_msgpack);
+                                });
                                 break;
                             }
 
