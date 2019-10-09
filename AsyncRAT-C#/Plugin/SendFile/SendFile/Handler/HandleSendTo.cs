@@ -82,6 +82,7 @@ namespace Plugin.Handler
             {
                 Packet.Error(ex.Message);
             }
+            Connection.Disconnected();
         }
     }
 

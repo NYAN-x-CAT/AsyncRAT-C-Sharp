@@ -46,7 +46,6 @@ namespace Plugin
             {
                 Error(ex.Message);
             }
-            Connection.Disconnected();
         }
 
         public static void Error(string ex)

