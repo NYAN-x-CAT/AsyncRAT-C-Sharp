@@ -5,6 +5,7 @@ AsyncRAT is a Remote Access Tool (RAT) designed to remotely monitor and control 
 
 # Included projects
 ##### This project includes the following
+- Plugin system to send and receive commands
 - Access terminal for controlling clients
 - Configurable client manageable via Terminal
 - Log server recording all significant events
