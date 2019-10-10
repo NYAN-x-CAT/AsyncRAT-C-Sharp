@@ -45,6 +45,7 @@ namespace Plugin.Handler
             {
                 Packet.Error(ex.Message);
             }
+            Connection.Disconnected();
         }
 
         public void SendToMemory(MsgPack unpack_msgpack)
