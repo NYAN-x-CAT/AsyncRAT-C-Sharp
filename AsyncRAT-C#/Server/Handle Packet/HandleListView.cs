@@ -35,12 +35,6 @@ namespace Server.Handle_Packet
                     catch { }
                 }
 
-                try
-                {
-                    client.CheckPlugin(); //send plugins hashes to client to check if exists or need update
-                }
-                catch { }
-
                 client.LV = new ListViewItem();
                 client.LV.Tag = client;
                 client.LV.Text = string.Format("{0}:{1}", client.TcpClient.RemoteEndPoint.ToString().Split(':')[0], client.TcpClient.LocalEndPoint.ToString().Split(':')[1]);

