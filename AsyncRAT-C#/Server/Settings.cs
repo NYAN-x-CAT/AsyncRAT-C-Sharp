@@ -24,7 +24,6 @@ namespace Server
         public static bool ReportWindow = false;
         public static List<Clients> ReportWindowClients = new List<Clients>();
         public static object LockReportWindowClients = new object();
-        public static Dictionary<string, string> Plugins = new Dictionary<string, string>();
     }
 
     public static class XmrSettings

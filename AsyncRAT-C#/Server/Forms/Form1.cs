@@ -136,8 +136,6 @@ namespace Server
             ListviewDoubleBuffer.Enable(listView2);
             ListviewDoubleBuffer.Enable(listView3);
 
-            Methods.SetPlugins();
-
             try
             {
                 foreach (string client in Properties.Settings.Default.txtBlocked.Split(','))

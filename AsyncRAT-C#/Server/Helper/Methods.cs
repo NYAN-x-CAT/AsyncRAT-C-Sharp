@@ -43,24 +43,5 @@ namespace Server.Helper
 
             return randomName.ToString();
         }
-
-        public static void SetPlugins()
-        {
-            try
-            {
-                foreach (string plugin in Directory.GetFiles("Plugins", "*.dll", SearchOption.TopDirectoryOnly))
-                {
-                    Settings.Plugins.Add(GetHash.GetChecksum(plugin), Strings.StrReverse(Convert.ToBase64String(Zip.Compress(File.ReadAllBytes(plugin)))));
-#if DEBUG
-                    byte[] plg = Zip.Compress(File.ReadAllBytes(plugin));
-                    Debug.WriteLine($"{plugin} : {BytesToString(plg.Length)}");
-#endif
-                }
-            }
-            catch (Exception ex)
-            {
-                new HandleLogs().Addmsg(ex.Message, Color.Red);
-            }
-        }
     }
 }

