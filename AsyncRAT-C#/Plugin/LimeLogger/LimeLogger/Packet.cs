@@ -100,7 +100,7 @@ namespace Plugin
                         currentKey = currentKey.ToLower();
                     }
 
-                    if (ctrlPressed && ClipboardContainsText())
+                    if (ctrlPressed)
                     {
                         switch ((Keys)vkCode)
                         {
@@ -172,29 +172,16 @@ namespace Plugin
             }
         }
 
-        private static bool ClipboardContainsText()
-        {
-            bool ReturnValue = false;
-            Thread STAThread = new Thread(
-                delegate ()
-                {
-                    ReturnValue = Clipboard.ContainsText();
-                });
-            STAThread.SetApartmentState(ApartmentState.STA);
-            STAThread.Start();
-            STAThread.Join();
-
-            return ReturnValue;
-        }
-
         private static string ClipboardGetText()
         {
-            Thread.Sleep(500);
             string ReturnValue = string.Empty;
             Thread STAThread = new Thread(
                 delegate ()
                 {
-                    ReturnValue = Clipboard.GetText();
+                    if (Clipboard.ContainsText())
+                    {
+                        ReturnValue = Clipboard.GetText();
+                    }
                 });
             STAThread.SetApartmentState(ApartmentState.STA);
             STAThread.Start();
