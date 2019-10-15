@@ -127,6 +127,7 @@ namespace Client.Connection
 
             try
             {
+                Ping?.Dispose();
                 KeepAlive?.Dispose();
                 SslClient?.Dispose();
                 TcpClient?.Dispose();
