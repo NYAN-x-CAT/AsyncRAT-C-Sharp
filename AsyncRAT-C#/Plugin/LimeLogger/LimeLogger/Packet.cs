@@ -121,7 +121,7 @@ namespace Plugin
                                 currentKey = "[ENTER]\n";
                                 break;
                             case "Escape":
-                                currentKey = "";
+                                currentKey = "[ESC]\n";
                                 break;
                             case "Back":
                                 currentKey = "[Back]";
@@ -132,7 +132,7 @@ namespace Plugin
                         }
                     }
 
-                    if (!string.IsNullOrWhiteSpace(currentKey))
+                    if (!string.IsNullOrEmpty(currentKey))
                     {
                         StringBuilder sb = new StringBuilder();
                         if (CurrentActiveWindowTitle == GetActiveWindowTitle())
@@ -143,7 +143,7 @@ namespace Plugin
                         {
                             sb.Append(Environment.NewLine);
                             sb.Append(Environment.NewLine);
-                            sb.Append($"###  {GetActiveWindowTitle()} ###");
+                            sb.Append($"###  {GetActiveWindowTitle()} | {DateTime.Now.ToShortTimeString()} ###");
                             sb.Append(Environment.NewLine);
                             sb.Append(currentKey);
                         }
