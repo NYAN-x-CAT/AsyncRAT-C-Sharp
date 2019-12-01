@@ -357,7 +357,7 @@ namespace Server.Forms
             this.numDelay.Size = new System.Drawing.Size(84, 26);
             this.numDelay.TabIndex = 15;
             this.numDelay.Value = new decimal(new int[] {
-            30,
+            5,
             0,
             0,
             0});
