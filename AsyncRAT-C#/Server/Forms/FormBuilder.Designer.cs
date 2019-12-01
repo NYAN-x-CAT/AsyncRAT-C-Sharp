@@ -51,6 +51,8 @@ namespace Server.Forms
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.numDelay = new System.Windows.Forms.NumericUpDown();
+            this.label16 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.chkBdos = new System.Windows.Forms.CheckBox();
             this.txtMutex = new System.Windows.Forms.TextBox();
@@ -63,6 +65,7 @@ namespace Server.Forms
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.btnClone = new System.Windows.Forms.Button();
             this.btnAssembly = new System.Windows.Forms.CheckBox();
             this.txtFileVersion = new System.Windows.Forms.TextBox();
             this.txtProductVersion = new System.Windows.Forms.TextBox();
@@ -85,15 +88,15 @@ namespace Server.Forms
             this.chkIcon = new System.Windows.Forms.CheckBox();
             this.label15 = new System.Windows.Forms.Label();
             this.txtIcon = new System.Windows.Forms.TextBox();
+            this.btnIcon = new System.Windows.Forms.Button();
             this.picIcon = new System.Windows.Forms.PictureBox();
             this.tabPage6 = new System.Windows.Forms.TabPage();
             this.chkObfu = new System.Windows.Forms.CheckBox();
             this.btnBuild = new System.Windows.Forms.Button();
-            this.btnClone = new System.Windows.Forms.Button();
-            this.btnIcon = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numDelay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -323,6 +326,8 @@ namespace Server.Forms
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.numDelay);
+            this.groupBox3.Controls.Add(this.label16);
             this.groupBox3.Controls.Add(this.pictureBox1);
             this.groupBox3.Controls.Add(this.chkBdos);
             this.groupBox3.Controls.Add(this.txtMutex);
@@ -334,6 +339,37 @@ namespace Server.Forms
             this.groupBox3.TabIndex = 9;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "MISC";
+            // 
+            // numDelay
+            // 
+            this.numDelay.Location = new System.Drawing.Point(19, 165);
+            this.numDelay.Maximum = new decimal(new int[] {
+            999,
+            0,
+            0,
+            0});
+            this.numDelay.Minimum = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            this.numDelay.Name = "numDelay";
+            this.numDelay.Size = new System.Drawing.Size(84, 26);
+            this.numDelay.TabIndex = 15;
+            this.numDelay.Value = new decimal(new int[] {
+            30,
+            0,
+            0,
+            0});
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(15, 133);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(123, 20);
+            this.label16.TabIndex = 14;
+            this.label16.Text = "Delay (seconds)";
             // 
             // pictureBox1
             // 
@@ -358,16 +394,16 @@ namespace Server.Forms
             // txtMutex
             // 
             this.txtMutex.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::Server.Properties.Settings.Default, "Mutex", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.txtMutex.Location = new System.Drawing.Point(106, 165);
+            this.txtMutex.Location = new System.Drawing.Point(19, 251);
             this.txtMutex.Name = "txtMutex";
-            this.txtMutex.Size = new System.Drawing.Size(271, 26);
+            this.txtMutex.Size = new System.Drawing.Size(301, 26);
             this.txtMutex.TabIndex = 11;
             this.txtMutex.Text = global::Server.Properties.Settings.Default.Mutex;
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(14, 169);
+            this.label5.Location = new System.Drawing.Point(15, 219);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(52, 20);
             this.label5.TabIndex = 10;
@@ -468,6 +504,17 @@ namespace Server.Forms
             this.groupBox4.TabIndex = 8;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Assembly Information";
+            // 
+            // btnClone
+            // 
+            this.btnClone.Enabled = false;
+            this.btnClone.Location = new System.Drawing.Point(453, 43);
+            this.btnClone.Name = "btnClone";
+            this.btnClone.Size = new System.Drawing.Size(103, 38);
+            this.btnClone.TabIndex = 21;
+            this.btnClone.Text = "Clone";
+            this.btnClone.UseVisualStyleBackColor = true;
+            this.btnClone.Click += new System.EventHandler(this.BtnClone_Click);
             // 
             // btnAssembly
             // 
@@ -685,6 +732,17 @@ namespace Server.Forms
             this.txtIcon.Size = new System.Drawing.Size(447, 26);
             this.txtIcon.TabIndex = 6;
             // 
+            // btnIcon
+            // 
+            this.btnIcon.Enabled = false;
+            this.btnIcon.Location = new System.Drawing.Point(485, 122);
+            this.btnIcon.Name = "btnIcon";
+            this.btnIcon.Size = new System.Drawing.Size(60, 26);
+            this.btnIcon.TabIndex = 5;
+            this.btnIcon.Text = " ";
+            this.btnIcon.UseVisualStyleBackColor = true;
+            this.btnIcon.Click += new System.EventHandler(this.BtnIcon_Click);
+            // 
             // picIcon
             // 
             this.picIcon.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -729,28 +787,6 @@ namespace Server.Forms
             this.btnBuild.UseVisualStyleBackColor = true;
             this.btnBuild.Click += new System.EventHandler(this.BtnBuild_Click);
             // 
-            // btnClone
-            // 
-            this.btnClone.Enabled = false;
-            this.btnClone.Location = new System.Drawing.Point(453, 43);
-            this.btnClone.Name = "btnClone";
-            this.btnClone.Size = new System.Drawing.Size(103, 38);
-            this.btnClone.TabIndex = 21;
-            this.btnClone.Text = "Clone";
-            this.btnClone.UseVisualStyleBackColor = true;
-            this.btnClone.Click += new System.EventHandler(this.BtnClone_Click);
-            // 
-            // btnIcon
-            // 
-            this.btnIcon.Enabled = false;
-            this.btnIcon.Location = new System.Drawing.Point(485, 122);
-            this.btnIcon.Name = "btnIcon";
-            this.btnIcon.Size = new System.Drawing.Size(60, 26);
-            this.btnIcon.TabIndex = 5;
-            this.btnIcon.Text = " ";
-            this.btnIcon.UseVisualStyleBackColor = true;
-            this.btnIcon.Click += new System.EventHandler(this.BtnIcon_Click);
-            // 
             // FormBuilder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -768,6 +804,7 @@ namespace Server.Forms
             this.groupBox2.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numDelay)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
@@ -848,5 +885,7 @@ namespace Server.Forms
         private System.Windows.Forms.CheckBox chkObfu;
         private System.Windows.Forms.Button btnClone;
         private System.Windows.Forms.Button btnIcon;
+        private System.Windows.Forms.NumericUpDown numDelay;
+        private System.Windows.Forms.Label label16;
     }
 }

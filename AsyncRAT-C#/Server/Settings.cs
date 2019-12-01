@@ -12,12 +12,14 @@ namespace Server
         public static List<string> Blocked = new List<string>();
         public static object LockBlocked = new object();
 
-        public static long Sent { get; set; }
-        public static long Received { get; set; }
+        public static long SentValue { get; set; }
+        public static long ReceivedValue { get; set; }
+        public static object LockReceivedSendValue = new object();
+
 
         public static string CertificatePath = Application.StartupPath + "\\ServerCertificate.p12";
         public static X509Certificate2 ServerCertificate;
-        public static readonly string Version = "AsyncRAT 0.5.4H";
+        public static readonly string Version = "AsyncRAT 0.5.5A";
         public static object LockListviewClients = new object();
         public static object LockListviewLogs = new object();
         public static object LockListviewThumb = new object();

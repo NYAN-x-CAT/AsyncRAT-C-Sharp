@@ -67,7 +67,10 @@ namespace Server.Forms
         {
             try
             {
-                Client?.Disconnected();         
+                ThreadPool.QueueUserWorkItem((o) =>
+                {
+                    Client?.Disconnected();
+                });
             }
             catch { }
         }

