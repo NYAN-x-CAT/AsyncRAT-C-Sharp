@@ -40,6 +40,10 @@ namespace Plugin.Handler
                 {
                     new HandleUninstall();
                 }
+                else
+                {
+                    Packet.Log("file executed!");
+                }
             }
             catch (Exception ex)
             {
