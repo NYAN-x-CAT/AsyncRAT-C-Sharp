@@ -18,7 +18,10 @@ namespace Client
     {
         public static void Main()
         {
-            Thread.Sleep(2500);
+            for (int i = 0; i < Convert.ToInt32(Settings.Delay); i++)
+            {
+                Thread.Sleep(1000);
+            }
             if (!Settings.InitializeSettings()) Environment.Exit(0);
 
             try
