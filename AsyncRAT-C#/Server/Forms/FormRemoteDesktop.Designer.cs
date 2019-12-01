@@ -33,6 +33,7 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.panel1 = new System.Windows.Forms.Panel();
+            this.btnKeyboard = new System.Windows.Forms.Button();
             this.btnMouse = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
@@ -59,7 +60,6 @@
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             this.pictureBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.PictureBox1_MouseDown);
-            //this.pictureBox1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.PictureBox1_MouseMove);
             this.pictureBox1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.PictureBox1_MouseUp);
             // 
             // timer1
@@ -70,6 +70,7 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.Transparent;
+            this.panel1.Controls.Add(this.btnKeyboard);
             this.panel1.Controls.Add(this.btnMouse);
             this.panel1.Controls.Add(this.btnSave);
             this.panel1.Controls.Add(this.label2);
@@ -82,6 +83,17 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(938, 38);
             this.panel1.TabIndex = 1;
+            // 
+            // btnKeyboard
+            // 
+            this.btnKeyboard.BackgroundImage = global::Server.Properties.Resources.keyboard;
+            this.btnKeyboard.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnKeyboard.Location = new System.Drawing.Point(622, 3);
+            this.btnKeyboard.Name = "btnKeyboard";
+            this.btnKeyboard.Size = new System.Drawing.Size(32, 32);
+            this.btnKeyboard.TabIndex = 6;
+            this.btnKeyboard.UseVisualStyleBackColor = true;
+            this.btnKeyboard.Click += new System.EventHandler(this.btnKeyboard_Click);
             // 
             // btnMouse
             // 
@@ -219,12 +231,15 @@
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.pictureBox1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.KeyPreview = true;
             this.MinimumSize = new System.Drawing.Size(655, 440);
             this.Name = "FormRemoteDesktop";
             this.Text = "RemoteDesktop";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormRemoteDesktop_FormClosed);
             this.Load += new System.EventHandler(this.FormRemoteDesktop_Load);
             this.ResizeEnd += new System.EventHandler(this.FormRemoteDesktop_ResizeEnd);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FormRemoteDesktop_KeyDown);
+            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.FormRemoteDesktop_KeyUp);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
@@ -250,5 +265,6 @@
         private System.Windows.Forms.Timer timerSave;
         private System.Windows.Forms.Button btnMouse;
         public System.Windows.Forms.Label labelWait;
+        private System.Windows.Forms.Button btnKeyboard;
     }
 }

