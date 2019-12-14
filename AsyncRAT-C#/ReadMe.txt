@@ -1,0 +1,1 @@
+Use any .NET obfuscation tool such as "ConfuserEx" to get a better plugin runtime
