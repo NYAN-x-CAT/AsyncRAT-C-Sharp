@@ -23,10 +23,9 @@ namespace Server.Connection
         public ListViewItem LV2 { get; set; }
         public string ID { get; set; }
         private byte[] ClientBuffer { get; set; }
-        private const int HeaderSize = 4;
-        private int ClientBuffersize { get; set; }
+        private long HeaderSize { get; set; }
+        private long Offset { get; set; }
         private bool ClientBufferRecevied { get; set; }
-        private MemoryStream ClientMS { get; set; }
         public object SendSync { get; set; }
         public long BytesRecevied { get; set; }
 
@@ -43,9 +42,10 @@ namespace Server.Connection
             try
             {
                 SslClient.EndAuthenticateAsServer(ar);
+                Offset = 0;
+                HeaderSize = 4;
                 ClientBuffer = new byte[HeaderSize];
-                ClientMS = new MemoryStream();
-                SslClient.BeginRead(ClientBuffer, 0, ClientBuffer.Length, ReadClientData, null);
+                SslClient.BeginRead(ClientBuffer, (int)Offset, (int)HeaderSize, ReadClientData, null);
             }
             catch
             {
@@ -65,53 +65,60 @@ namespace Server.Connection
                 }
                 else
                 {
-                    int Recevied = SslClient.EndRead(ar);
-                    if (Recevied > 0)
+                    int recevied = SslClient.EndRead(ar);
+                    if (recevied > 0)
                     {
+                        HeaderSize -= recevied;
+                        Offset += recevied;
                         switch (ClientBufferRecevied)
                         {
                             case false:
                                 {
-                                    ClientMS.Write(ClientBuffer, 0, Recevied);
-                                    if (ClientMS.Length == HeaderSize)
+                                    if (HeaderSize == 0)
                                     {
-                                        ClientBuffersize = BitConverter.ToInt32(ClientMS.ToArray(), 0);
-                                        ClientMS.Dispose();
-                                        ClientMS = new MemoryStream();
-                                        if (ClientBuffersize > 0)
+                                        HeaderSize = BitConverter.ToInt32(ClientBuffer, 0);
+                                        if (HeaderSize > 0)
                                         {
-                                            ClientBuffer = new byte[ClientBuffersize];
-                                            Debug.WriteLine("/// Server Buffersize " + ClientBuffersize.ToString() + " Bytes  ///");
+                                            ClientBuffer = new byte[HeaderSize];
+                                            Debug.WriteLine("/// Server Buffersize " + HeaderSize.ToString() + " Bytes  ///");
+                                            Offset = 0;
                                             ClientBufferRecevied = true;
                                         }
+                                    }
+                                    else if (HeaderSize < 0)
+                                    {
+                                        Disconnected();
+                                        return;
                                     }
                                     break;
                                 }
 
                             case true:
                                 {
-                                    ClientMS.Write(ClientBuffer, 0, Recevied);
                                     lock (Settings.LockReceivedSendValue)
-                                        Settings.ReceivedValue += Recevied;
-                                    BytesRecevied += Recevied;
-                                    if (ClientMS.Length == ClientBuffersize)
+                                        Settings.ReceivedValue += recevied;
+                                    BytesRecevied += recevied;
+                                    if (HeaderSize == 0)
                                     {
-
                                         ThreadPool.QueueUserWorkItem(new Packet
                                         {
                                             client = this,
-                                            data = ClientMS.ToArray(),
+                                            data = ClientBuffer,
                                         }.Read, null);
-
+                                        Offset = 0;
+                                        HeaderSize = 4;
                                         ClientBuffer = new byte[HeaderSize];
-                                        ClientMS.Dispose();
-                                        ClientMS = new MemoryStream();
                                         ClientBufferRecevied = false;
+                                    }
+                                    else if (HeaderSize < 0)
+                                    {
+                                        Disconnected();
+                                        return;
                                     }
                                     break;
                                 }
                         }
-                        SslClient.BeginRead(ClientBuffer, 0, ClientBuffer.Length, ReadClientData, null);
+                        SslClient.BeginRead(ClientBuffer, (int)Offset, (int)HeaderSize, ReadClientData, null);
                     }
                     else
                     {
@@ -154,7 +161,6 @@ namespace Server.Connection
             {
                 SslClient?.Dispose();
                 TcpClient?.Dispose();
-                ClientMS?.Dispose();
             }
             catch { }
         }
@@ -180,25 +186,23 @@ namespace Server.Connection
                     if (buffer.Length > 1000000) //1mb
                     {
                         Debug.WriteLine("send chunks");
-                        int chunkSize = 50 * 1024;
-                        byte[] chunk = new byte[chunkSize];
-                        using (MemoryStream buffereReader = new MemoryStream(buffer))
-                        using (BinaryReader binaryReader = new BinaryReader(buffereReader))
+                        using (MemoryStream memoryStream = new MemoryStream(buffer))
                         {
-                            int bytesToRead = (int)buffereReader.Length;
-                            do
+                            int read = 0;
+                            memoryStream.Position = 0;
+                            byte[] chunk = new byte[50 * 1000];
+                            while ((read = memoryStream.Read(chunk, 0, chunk.Length)) > 0)
                             {
-                                chunk = binaryReader.ReadBytes(chunkSize);
-                                bytesToRead -= chunkSize;
-                                SslClient.Write(chunk, 0, chunk.Length);
-                                SslClient.Flush();
+                                TcpClient.Poll(-1, SelectMode.SelectWrite);
+                                SslClient.Write(chunk, 0, read);
                                 lock (Settings.LockReceivedSendValue)
-                                    Settings.SentValue += chunk.Length;
-                            } while (bytesToRead > 0);
+                                    Settings.SentValue += read;
+                            }
                         }
                     }
                     else
                     {
+                        TcpClient.Poll(-1, SelectMode.SelectWrite);
                         SslClient.Write(buffer, 0, buffer.Length);
                         SslClient.Flush();
                         lock (Settings.LockReceivedSendValue)

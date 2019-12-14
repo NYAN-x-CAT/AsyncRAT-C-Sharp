@@ -14,6 +14,7 @@ using System.Net.Sockets;
 using Timer = System.Threading.Timer;
 using Server.Helper;
 using Server.Algorithm;
+using System.Diagnostics;
 
 namespace Server.Forms
 {
@@ -79,21 +80,17 @@ namespace Server.Forms
 
                     if (msg.Length > 1000000) //1mb
                     {
-                        int chunkSize = 50 * 1024;
-                        byte[] chunk = new byte[chunkSize];
-                        using (MemoryStream buffereReader = new MemoryStream(msg))
-                        using (BinaryReader binaryReader = new BinaryReader(buffereReader))
+                        Debug.WriteLine("send chunks");
+                        using (MemoryStream memoryStream = new MemoryStream(msg))
                         {
-                            int bytesToRead = (int)buffereReader.Length;
-                            do
+                            int read = 0;
+                            memoryStream.Position = 0;
+                            byte[] chunk = new byte[50 * 1000];
+                            while ((read = memoryStream.Read(chunk, 0, chunk.Length)) > 0)
                             {
-                                chunk = binaryReader.ReadBytes(chunkSize);
-                                bytesToRead -= chunkSize;
-                                Client.SslClient.Write(chunk, 0, chunk.Length);
-                                Client.SslClient.Flush();
-                                BytesSent += chunk.Length;
-                            } while (bytesToRead > 0);
-                            Client?.Disconnected();
+                                Client.TcpClient.Poll(-1, SelectMode.SelectWrite);
+                                Client.SslClient.Write(chunk, 0, read);
+                            }
                         }
                     }
                     else
