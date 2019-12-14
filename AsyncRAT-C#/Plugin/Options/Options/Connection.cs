@@ -114,22 +114,33 @@ namespace Plugin
                         {
                             Offset = 0;
                             Buffer = new byte[HeaderSize];
-                            while (HeaderSize != 0)
+                            while (HeaderSize > 0)
                             {
                                 int rc = SslClient.Read(Buffer, (int)Offset, (int)HeaderSize);
-                                if (rc <= 0 || HeaderSize < 0)
+                                if (rc <= 0)
                                 {
                                     IsConnected = false;
                                     return;
                                 }
                                 Offset += rc;
                                 HeaderSize -= rc;
+                                if (HeaderSize < 0)
+                                {
+                                    IsConnected = false;
+                                    return;
+                                }
                             }
                             Thread thread = new Thread(new ParameterizedThreadStart(Packet.Read));
                             thread.Start(Buffer);
                             Offset = 0;
                             HeaderSize = 4;
                             Buffer = new byte[HeaderSize];
+                        }
+                        else
+                        {
+                            HeaderSize = 4;
+                            Buffer = new byte[HeaderSize];
+                            Offset = 0;
                         }
                     }
                     else if (HeaderSize < 0)
