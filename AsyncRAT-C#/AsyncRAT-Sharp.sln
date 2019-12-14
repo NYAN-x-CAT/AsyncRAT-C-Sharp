@@ -8,6 +8,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "Client\Client.csproj", "{C3C49F45-2589-4E04-9C50-71B6035C14AE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{0DE8DA5D-061D-4649-8A56-48729CF1F789}"
+	ProjectSection(SolutionItems) = preProject
+		ReadMe.txt = ReadMe.txt
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chat", "Plugin\Chat\Chat\Chat.csproj", "{EE03FAA9-C9E8-4766-BD4E-5CD54C7F13D3}"
 EndProject
