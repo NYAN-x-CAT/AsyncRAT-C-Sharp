@@ -395,7 +395,10 @@ namespace Server.Forms
 
         private void FormFileManager_FormClosed(object sender, FormClosedEventArgs e)
         {
-            Client?.Disconnected();
+            ThreadPool.QueueUserWorkItem((o) =>
+            {
+                Client?.Disconnected();
+            });
         }
 
         private void CutToolStripMenuItem1_Click(object sender, EventArgs e)
