@@ -34,6 +34,7 @@ namespace Server.Forms
         private bool isKeyboard = false;
         public object syncPicbox = new object();
         private readonly List<Keys> _keysPressed;
+        public Image GetImage { get; set; }
         public FormRemoteDesktop()
         {
             _keysPressed = new List<Keys>();
@@ -262,6 +263,7 @@ namespace Server.Forms
         {
             try
             {
+                GetImage?.Dispose();
                 ThreadPool.QueueUserWorkItem((o) =>
                 {
                     Client?.Disconnected();
