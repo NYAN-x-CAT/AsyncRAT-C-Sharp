@@ -24,9 +24,9 @@ namespace Server.Forms
         public string FullPath { get; set; }
 
         public Stopwatch sw = Stopwatch.StartNew();
-        public Stopwatch RenderSW = Stopwatch.StartNew();
         public int FPS = 0;
         public bool SaveIt = false;
+        public Image GetImage { get; set; }
         public FormWebcam()
         {
             InitializeComponent();
@@ -81,7 +81,10 @@ namespace Server.Forms
         {
             try
             {
-                Client?.Disconnected();
+                ThreadPool.QueueUserWorkItem((o) =>
+                {
+                    Client?.Disconnected();
+                });
             }
             catch { }
         }
