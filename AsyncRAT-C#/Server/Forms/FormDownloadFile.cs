@@ -78,26 +78,20 @@ namespace Server.Forms
                     Client.TcpClient.Poll(-1, SelectMode.SelectWrite);
                     Client.SslClient.Write(buffersize, 0, buffersize.Length);
 
-                    if (msg.Length > 1000000) //1mb
+                    Debug.WriteLine("send chunks");
+                    using (MemoryStream memoryStream = new MemoryStream(msg))
                     {
-                        Debug.WriteLine("send chunks");
-                        using (MemoryStream memoryStream = new MemoryStream(msg))
+                        int read = 0;
+                        memoryStream.Position = 0;
+                        byte[] chunk = new byte[50 * 1000];
+                        while ((read = memoryStream.Read(chunk, 0, chunk.Length)) > 0)
                         {
-                            int read = 0;
-                            memoryStream.Position = 0;
-                            byte[] chunk = new byte[50 * 1000];
-                            while ((read = memoryStream.Read(chunk, 0, chunk.Length)) > 0)
-                            {
-                                Client.TcpClient.Poll(-1, SelectMode.SelectWrite);
-                                Client.SslClient.Write(chunk, 0, read);
-                            }
+                            Client.TcpClient.Poll(-1, SelectMode.SelectWrite);
+                            Client.SslClient.Write(chunk, 0, read);
+                            BytesSent += read;
                         }
                     }
-                    else
-                    {
-                        Client.SslClient.Write(msg, 0, msg.Length);
-                        Client.SslClient.Flush();
-                    }
+
                     Program.form1.BeginInvoke((MethodInvoker)(() =>
                     {
                         this.Close();
