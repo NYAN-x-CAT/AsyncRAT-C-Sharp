@@ -35,16 +35,26 @@ namespace Server.Handle_Packet
                     catch { }
                 }
 
-                client.LV = new ListViewItem();
-                client.LV.Tag = client;
-                client.LV.Text = string.Format("{0}:{1}", client.TcpClient.RemoteEndPoint.ToString().Split(':')[0], client.TcpClient.LocalEndPoint.ToString().Split(':')[1]);
+                client.LV = new ListViewItem
+                {
+                    Tag = client,
+                    Text = string.Format("{0}:{1}", client.TcpClient.RemoteEndPoint.ToString().Split(':')[0], client.TcpClient.LocalEndPoint.ToString().Split(':')[1]),
+                };
                 string[] ipinf;
                 try
                 {
-                    ipinf = new cGeoMain().GetIpInf(client.TcpClient.RemoteEndPoint.ToString().Split(':')[0]).Split(':');
+                    ipinf = Program.form1.cGeoMain.GetIpInf(client.TcpClient.RemoteEndPoint.ToString().Split(':')[0]).Split(':');
+                    client.LV.SubItems.Add(ipinf[1]);
+                    try
+                    {
+                        client.LV.ImageKey = ipinf[2] + ".png";
+                    }
+                    catch { }
                 }
-                catch { ipinf = new string[] { "?", "?" }; }
-                client.LV.SubItems.Add(ipinf[1]);
+                catch
+                {
+                    client.LV.SubItems.Add("??");
+                }
                 client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("HWID").AsString);
                 client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("User").AsString);
                 client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("OS").AsString);
