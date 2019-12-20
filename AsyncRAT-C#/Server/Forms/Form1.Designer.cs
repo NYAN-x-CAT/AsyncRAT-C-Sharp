@@ -226,7 +226,7 @@
             // 
             // lv_prefor
             // 
-            this.lv_prefor.Text = "Performance";
+            this.lv_prefor.Text = "Miner";
             this.lv_prefor.Width = 200;
             // 
             // contextMenuClient
