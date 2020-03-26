@@ -85,6 +85,10 @@ namespace Server.Handle_Packet
                         case "Error":
                             {
                                 new HandleLogs().Addmsg($"Client {ip} error: {unpack_msgpack.ForcePathObject("Error").AsString}", Color.Red);
+                                lock (Settings.LockListviewClients)
+                                {
+                                    client.LV.ForeColor = Color.Empty;
+                                }
                                 break;
                             }
                         case "remoteDesktop":
