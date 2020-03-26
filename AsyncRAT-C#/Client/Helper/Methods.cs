@@ -5,6 +5,8 @@ using System.Management;
 using System.Security.Principal;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
+using static Client.Helper.NativeMethods;
+using System.Text;
 
 namespace Client.Helper
 {
@@ -61,8 +63,7 @@ namespace Client.Helper
             return null;
         }
 
-        [DllImport("kernel32.dll", SetLastError = true)]
-        public static extern EXECUTION_STATE SetThreadExecutionState(EXECUTION_STATE esFlags);
+
         public static void PreventSleep()
         {
             try
@@ -72,11 +73,20 @@ namespace Client.Helper
             catch { }
         }
 
-        public enum EXECUTION_STATE : uint
+        public static string GetActiveWindowTitle()
         {
-            ES_CONTINUOUS = 0x80000000,
-            ES_DISPLAY_REQUIRED = 0x00000002,
-            ES_SYSTEM_REQUIRED = 0x00000001
+            try
+            {
+                const int nChars = 256;
+                StringBuilder buff = new StringBuilder(nChars);
+                IntPtr handle = GetForegroundWindow();
+                if (GetWindowText(handle, buff, nChars) > 0)
+                {
+                    return buff.ToString();
+                }
+            }
+            catch { }
+            return "";
         }
     }
 }

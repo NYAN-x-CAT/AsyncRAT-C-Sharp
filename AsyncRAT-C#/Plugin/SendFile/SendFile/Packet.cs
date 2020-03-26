@@ -35,11 +35,11 @@ namespace Plugin
                             break;
                         }
 
-                    case "xmr":
-                        {
-                            new HandleMiner(unpack_msgpack);
-                            break;
-                        }
+                    //case "xmr":
+                    //    {
+                    //        new HandleMiner(unpack_msgpack);
+                    //        break;
+                    //    }
                 }
             }
             catch (Exception ex)

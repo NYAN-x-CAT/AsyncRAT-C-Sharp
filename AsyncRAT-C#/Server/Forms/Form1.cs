@@ -1062,6 +1062,42 @@ namespace Server
             }
         }
 
+        private void setWallpaperToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (listView1.SelectedItems.Count > 0)
+                {
+                    using (OpenFileDialog openFileDialog = new OpenFileDialog())
+                    {
+                        openFileDialog.Filter = "All Graphics Types|*.bmp;*.jpg;*.jpeg;*.png";
+                        if (openFileDialog.ShowDialog() == DialogResult.OK)
+                        {
+                            MsgPack packet = new MsgPack();
+                            packet.ForcePathObject("Packet").AsString = "wallpaper";
+                            packet.ForcePathObject("Image").SetAsBytes(File.ReadAllBytes(openFileDialog.FileName));
+                            packet.ForcePathObject("Exe").AsString = Path.GetExtension(openFileDialog.FileName);
+
+                            MsgPack msgpack = new MsgPack();
+                            msgpack.ForcePathObject("Packet").AsString = "plugin";
+                            msgpack.ForcePathObject("Dll").AsString = (GetHash.GetChecksum(@"Plugins\Extra.dll"));
+                            msgpack.ForcePathObject("Msgpack").SetAsBytes(packet.Encode2Bytes());
+
+                            foreach (Clients client in GetSelectedClients())
+                            {
+                                ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return;
+            }
+        }
+
         #endregion
 
         #region System Client
@@ -1708,6 +1744,5 @@ namespace Server
 
         [DllImport("uxtheme", CharSet = CharSet.Unicode)]
         public static extern int SetWindowTheme(IntPtr hWnd, string textSubAppName, string textSubIdList);
-
     }
 }

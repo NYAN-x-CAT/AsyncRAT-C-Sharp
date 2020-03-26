@@ -350,6 +350,7 @@
   <ItemGroup>
     <Content Include="async_icon.ico" />
     <Content Include="ILMergeOrder.txt" />
+    <None Include="Resources\iconfinder_32_171485 %281%29.png" />
     <None Include="Resources\keyboard-on.png" />
     <None Include="Resources\keyboard.png" />
     <None Include="Resources\7z.dll" />

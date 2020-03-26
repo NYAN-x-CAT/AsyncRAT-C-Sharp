@@ -45,7 +45,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Connection.cs" />
-    <Compile Include="Handler\HandleMiner.cs" />
     <Compile Include="Handler\HandleSendTo.cs" />
     <Compile Include="Handler\HandleUninstall.cs" />
     <Compile Include="MessagePack\BytesTools.cs" />

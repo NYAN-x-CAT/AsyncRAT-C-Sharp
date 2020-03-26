@@ -40,7 +40,7 @@ namespace Client
 
                 Methods.PreventSleep(); //prevent pc to idle\sleep
 
-                new CheckMiner().GetProcess(); //check miner status
+                //new CheckMiner().GetProcess(); //check miner status
             }
             catch { }
 

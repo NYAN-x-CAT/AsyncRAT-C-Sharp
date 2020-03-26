@@ -41,10 +41,45 @@
             this.lv_admin = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.lv_av = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.lv_ping = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.lv_prefor = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.lv_act = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.contextMenuClient = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.aBOUTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.ping = new System.Windows.Forms.Timer(this.components);
+            this.UpdateUI = new System.Windows.Forms.Timer(this.components);
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.listView2 = new System.Windows.Forms.ListView();
+            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.contextMenuLogs = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.cLEARToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.listView3 = new System.Windows.Forms.ListView();
+            this.contextMenuThumbnail = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.ThumbnailImageList = new System.Windows.Forms.ImageList(this.components);
+            this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.listView4 = new System.Windows.Forms.ListView();
+            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.contextMenuTasks = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.pASSWORDRECOVERYToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.downloadAndExecuteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sENDFILETOMEMORYToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.minerToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.uPDATEToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.dELETETASKToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.performanceCounter1 = new System.Diagnostics.PerformanceCounter();
+            this.performanceCounter2 = new System.Diagnostics.PerformanceCounter();
+            this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
+            this.TimerTask = new System.Windows.Forms.Timer(this.components);
+            this.aBOUTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sENDFILEToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tOMEMORYToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tODISKToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -77,6 +112,7 @@
             this.runToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.stopToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.disableWindowsDefenderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.setWallpaperToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.systemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clientToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.closeToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -89,46 +125,11 @@
             this.logoffToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.restartToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this.shutdownToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.serverToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.blockClientsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.bUILDERToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.ping = new System.Windows.Forms.Timer(this.components);
-            this.UpdateUI = new System.Windows.Forms.Timer(this.components);
-            this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.listView2 = new System.Windows.Forms.ListView();
-            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.contextMenuLogs = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.cLEARToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.listView3 = new System.Windows.Forms.ListView();
-            this.contextMenuThumbnail = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.sTARTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sTOPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.ThumbnailImageList = new System.Windows.Forms.ImageList(this.components);
-            this.tabPage4 = new System.Windows.Forms.TabPage();
-            this.listView4 = new System.Windows.Forms.ListView();
-            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.contextMenuTasks = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.pASSWORDRECOVERYToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.downloadAndExecuteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.sENDFILETOMEMORYToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.minerToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.uPDATEToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
-            this.dELETETASKToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.performanceCounter1 = new System.Diagnostics.PerformanceCounter();
-            this.performanceCounter2 = new System.Diagnostics.PerformanceCounter();
-            this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
-            this.TimerTask = new System.Windows.Forms.Timer(this.components);
             this.contextMenuClient.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -157,7 +158,7 @@
             this.lv_admin,
             this.lv_av,
             this.lv_ping,
-            this.lv_prefor});
+            this.lv_act});
             this.listView1.ContextMenuStrip = this.contextMenuClient;
             this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listView1.FullRowSelect = true;
@@ -224,10 +225,10 @@
             // 
             this.lv_ping.Text = "Ping";
             // 
-            // lv_prefor
+            // lv_act
             // 
-            this.lv_prefor.Text = "Miner";
-            this.lv_prefor.Width = 200;
+            this.lv_act.Text = "Active Window";
+            this.lv_act.Width = 350;
             // 
             // contextMenuClient
             // 
@@ -247,6 +248,302 @@
             this.contextMenuClient.Name = "contextMenuStrip1";
             this.contextMenuClient.Size = new System.Drawing.Size(203, 278);
             // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(199, 6);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(199, 6);
+            // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(199, 6);
+            // 
+            // statusStrip1
+            // 
+            this.statusStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabel1,
+            this.toolStripStatusLabel2});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 479);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(1301, 32);
+            this.statusStrip1.TabIndex = 1;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // toolStripStatusLabel1
+            // 
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(24, 25);
+            this.toolStripStatusLabel1.Text = "...";
+            // 
+            // toolStripStatusLabel2
+            // 
+            this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
+            this.toolStripStatusLabel2.Size = new System.Drawing.Size(204, 25);
+            this.toolStripStatusLabel2.Text = "                    Notification";
+            this.toolStripStatusLabel2.Click += new System.EventHandler(this.ToolStripStatusLabel2_Click);
+            // 
+            // ping
+            // 
+            this.ping.Enabled = true;
+            this.ping.Interval = 30000;
+            this.ping.Tick += new System.EventHandler(this.ping_Tick);
+            // 
+            // UpdateUI
+            // 
+            this.UpdateUI.Enabled = true;
+            this.UpdateUI.Interval = 500;
+            this.UpdateUI.Tick += new System.EventHandler(this.UpdateUI_Tick);
+            // 
+            // tabControl1
+            // 
+            this.tabControl1.Controls.Add(this.tabPage1);
+            this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Controls.Add(this.tabPage3);
+            this.tabControl1.Controls.Add(this.tabPage4);
+            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl1.Location = new System.Drawing.Point(0, 0);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(1301, 479);
+            this.tabControl1.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
+            this.tabControl1.TabIndex = 2;
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.listView1);
+            this.tabPage1.Location = new System.Drawing.Point(4, 29);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(1293, 446);
+            this.tabPage1.TabIndex = 0;
+            this.tabPage1.Text = "Clients";
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.Controls.Add(this.listView2);
+            this.tabPage2.Location = new System.Drawing.Point(4, 29);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(1293, 446);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "Logs";
+            this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // listView2
+            // 
+            this.listView2.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.listView2.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader1,
+            this.columnHeader2});
+            this.listView2.ContextMenuStrip = this.contextMenuLogs;
+            this.listView2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listView2.FullRowSelect = true;
+            this.listView2.GridLines = true;
+            this.listView2.HideSelection = false;
+            this.listView2.Location = new System.Drawing.Point(3, 3);
+            this.listView2.Name = "listView2";
+            this.listView2.ShowGroups = false;
+            this.listView2.ShowItemToolTips = true;
+            this.listView2.Size = new System.Drawing.Size(1287, 440);
+            this.listView2.TabIndex = 1;
+            this.listView2.UseCompatibleStateImageBehavior = false;
+            this.listView2.View = System.Windows.Forms.View.Details;
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Text = "Time";
+            this.columnHeader1.Width = 150;
+            // 
+            // columnHeader2
+            // 
+            this.columnHeader2.Text = "Message";
+            this.columnHeader2.Width = 705;
+            // 
+            // contextMenuLogs
+            // 
+            this.contextMenuLogs.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.contextMenuLogs.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cLEARToolStripMenuItem});
+            this.contextMenuLogs.Name = "contextMenuLogs";
+            this.contextMenuLogs.ShowImageMargin = false;
+            this.contextMenuLogs.Size = new System.Drawing.Size(111, 36);
+            // 
+            // cLEARToolStripMenuItem
+            // 
+            this.cLEARToolStripMenuItem.Name = "cLEARToolStripMenuItem";
+            this.cLEARToolStripMenuItem.Size = new System.Drawing.Size(110, 32);
+            this.cLEARToolStripMenuItem.Text = "CLEAR";
+            this.cLEARToolStripMenuItem.Click += new System.EventHandler(this.CLEARToolStripMenuItem_Click);
+            // 
+            // tabPage3
+            // 
+            this.tabPage3.Controls.Add(this.listView3);
+            this.tabPage3.Location = new System.Drawing.Point(4, 29);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Size = new System.Drawing.Size(1293, 446);
+            this.tabPage3.TabIndex = 2;
+            this.tabPage3.Text = "Thumbnail";
+            this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // listView3
+            // 
+            this.listView3.ContextMenuStrip = this.contextMenuThumbnail;
+            this.listView3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listView3.HideSelection = false;
+            this.listView3.LargeImageList = this.ThumbnailImageList;
+            this.listView3.Location = new System.Drawing.Point(0, 0);
+            this.listView3.Name = "listView3";
+            this.listView3.ShowItemToolTips = true;
+            this.listView3.Size = new System.Drawing.Size(1293, 446);
+            this.listView3.SmallImageList = this.ThumbnailImageList;
+            this.listView3.TabIndex = 0;
+            this.listView3.UseCompatibleStateImageBehavior = false;
+            // 
+            // contextMenuThumbnail
+            // 
+            this.contextMenuThumbnail.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.contextMenuThumbnail.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.sTARTToolStripMenuItem,
+            this.sTOPToolStripMenuItem});
+            this.contextMenuThumbnail.Name = "contextMenuStrip2";
+            this.contextMenuThumbnail.Size = new System.Drawing.Size(144, 68);
+            // 
+            // ThumbnailImageList
+            // 
+            this.ThumbnailImageList.ColorDepth = System.Windows.Forms.ColorDepth.Depth16Bit;
+            this.ThumbnailImageList.ImageSize = new System.Drawing.Size(256, 256);
+            this.ThumbnailImageList.TransparentColor = System.Drawing.Color.Transparent;
+            // 
+            // tabPage4
+            // 
+            this.tabPage4.Controls.Add(this.listView4);
+            this.tabPage4.Location = new System.Drawing.Point(4, 29);
+            this.tabPage4.Name = "tabPage4";
+            this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage4.Size = new System.Drawing.Size(1293, 446);
+            this.tabPage4.TabIndex = 3;
+            this.tabPage4.Text = "Tasks";
+            this.tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // listView4
+            // 
+            this.listView4.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.listView4.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader4,
+            this.columnHeader5});
+            this.listView4.ContextMenuStrip = this.contextMenuTasks;
+            this.listView4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listView4.FullRowSelect = true;
+            this.listView4.HideSelection = false;
+            this.listView4.Location = new System.Drawing.Point(3, 3);
+            this.listView4.Name = "listView4";
+            this.listView4.Size = new System.Drawing.Size(1287, 440);
+            this.listView4.TabIndex = 0;
+            this.listView4.UseCompatibleStateImageBehavior = false;
+            this.listView4.View = System.Windows.Forms.View.Details;
+            // 
+            // columnHeader4
+            // 
+            this.columnHeader4.Text = "Task";
+            this.columnHeader4.Width = 97;
+            // 
+            // columnHeader5
+            // 
+            this.columnHeader5.Text = "Execution";
+            this.columnHeader5.Width = 116;
+            // 
+            // contextMenuTasks
+            // 
+            this.contextMenuTasks.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.contextMenuTasks.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.pASSWORDRECOVERYToolStripMenuItem,
+            this.downloadAndExecuteToolStripMenuItem,
+            this.sENDFILETOMEMORYToolStripMenuItem1,
+            this.minerToolStripMenuItem1,
+            this.uPDATEToolStripMenuItem1,
+            this.toolStripSeparator4,
+            this.dELETETASKToolStripMenuItem});
+            this.contextMenuTasks.Name = "contextMenuStrip4";
+            this.contextMenuTasks.ShowImageMargin = false;
+            this.contextMenuTasks.Size = new System.Drawing.Size(250, 202);
+            // 
+            // pASSWORDRECOVERYToolStripMenuItem
+            // 
+            this.pASSWORDRECOVERYToolStripMenuItem.Name = "pASSWORDRECOVERYToolStripMenuItem";
+            this.pASSWORDRECOVERYToolStripMenuItem.Size = new System.Drawing.Size(249, 32);
+            this.pASSWORDRECOVERYToolStripMenuItem.Text = "PASSWORD RECOVERY";
+            this.pASSWORDRECOVERYToolStripMenuItem.Click += new System.EventHandler(this.PASSWORDRECOVERYToolStripMenuItem_Click);
+            // 
+            // downloadAndExecuteToolStripMenuItem
+            // 
+            this.downloadAndExecuteToolStripMenuItem.Name = "downloadAndExecuteToolStripMenuItem";
+            this.downloadAndExecuteToolStripMenuItem.Size = new System.Drawing.Size(249, 32);
+            this.downloadAndExecuteToolStripMenuItem.Text = "SEND FILE TO DISK";
+            this.downloadAndExecuteToolStripMenuItem.Click += new System.EventHandler(this.DownloadAndExecuteToolStripMenuItem_Click);
+            // 
+            // sENDFILETOMEMORYToolStripMenuItem1
+            // 
+            this.sENDFILETOMEMORYToolStripMenuItem1.Name = "sENDFILETOMEMORYToolStripMenuItem1";
+            this.sENDFILETOMEMORYToolStripMenuItem1.Size = new System.Drawing.Size(249, 32);
+            this.sENDFILETOMEMORYToolStripMenuItem1.Text = "SEND FILE TO MEMORY";
+            this.sENDFILETOMEMORYToolStripMenuItem1.Click += new System.EventHandler(this.SENDFILETOMEMORYToolStripMenuItem1_Click);
+            // 
+            // minerToolStripMenuItem1
+            // 
+            this.minerToolStripMenuItem1.Name = "minerToolStripMenuItem1";
+            this.minerToolStripMenuItem1.Size = new System.Drawing.Size(249, 32);
+            this.minerToolStripMenuItem1.Text = "XMR MINER";
+            this.minerToolStripMenuItem1.Visible = false;
+            this.minerToolStripMenuItem1.Click += new System.EventHandler(this.MinerToolStripMenuItem1_Click);
+            // 
+            // uPDATEToolStripMenuItem1
+            // 
+            this.uPDATEToolStripMenuItem1.Name = "uPDATEToolStripMenuItem1";
+            this.uPDATEToolStripMenuItem1.Size = new System.Drawing.Size(249, 32);
+            this.uPDATEToolStripMenuItem1.Text = "UPDATE ALL CLIENTS";
+            this.uPDATEToolStripMenuItem1.Click += new System.EventHandler(this.UPDATEToolStripMenuItem1_Click);
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(246, 6);
+            // 
+            // dELETETASKToolStripMenuItem
+            // 
+            this.dELETETASKToolStripMenuItem.Name = "dELETETASKToolStripMenuItem";
+            this.dELETETASKToolStripMenuItem.Size = new System.Drawing.Size(249, 32);
+            this.dELETETASKToolStripMenuItem.Text = "DELETE TASK";
+            this.dELETETASKToolStripMenuItem.Click += new System.EventHandler(this.DELETETASKToolStripMenuItem_Click);
+            // 
+            // performanceCounter1
+            // 
+            this.performanceCounter1.CategoryName = "Processor";
+            this.performanceCounter1.CounterName = "% Processor Time";
+            this.performanceCounter1.InstanceName = "_Total";
+            // 
+            // performanceCounter2
+            // 
+            this.performanceCounter2.CategoryName = "Memory";
+            this.performanceCounter2.CounterName = "% Committed Bytes In Use";
+            // 
+            // notifyIcon1
+            // 
+            this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
+            this.notifyIcon1.Text = "AsyncRAT";
+            this.notifyIcon1.Visible = true;
+            // 
+            // TimerTask
+            // 
+            this.TimerTask.Enabled = true;
+            this.TimerTask.Interval = 5000;
+            this.TimerTask.Tick += new System.EventHandler(this.TimerTask_Tick);
+            // 
             // aBOUTToolStripMenuItem
             // 
             this.aBOUTToolStripMenuItem.Image = global::Server.Properties.Resources.info;
@@ -254,11 +551,6 @@
             this.aBOUTToolStripMenuItem.Size = new System.Drawing.Size(202, 32);
             this.aBOUTToolStripMenuItem.Text = "ABOUT";
             this.aBOUTToolStripMenuItem.Click += new System.EventHandler(this.ABOUTToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(199, 6);
             // 
             // sENDFILEToolStripMenuItem
             // 
@@ -445,6 +737,7 @@
             this.xMRMinerToolStripMenuItem.Name = "xMRMinerToolStripMenuItem";
             this.xMRMinerToolStripMenuItem.Size = new System.Drawing.Size(260, 34);
             this.xMRMinerToolStripMenuItem.Text = "XMR Miner";
+            this.xMRMinerToolStripMenuItem.Visible = false;
             // 
             // runToolStripMenuItem
             // 
@@ -470,7 +763,8 @@
             this.chatToolStripMenuItem1,
             this.getAdminPrivilegesToolStripMenuItem,
             this.blankScreenToolStripMenuItem,
-            this.disableWindowsDefenderToolStripMenuItem});
+            this.disableWindowsDefenderToolStripMenuItem,
+            this.setWallpaperToolStripMenuItem});
             this.extraToolStripMenuItem.Image = global::Server.Properties.Resources.extra;
             this.extraToolStripMenuItem.Name = "extraToolStripMenuItem";
             this.extraToolStripMenuItem.Size = new System.Drawing.Size(202, 32);
@@ -541,6 +835,14 @@
             this.disableWindowsDefenderToolStripMenuItem.Size = new System.Drawing.Size(329, 34);
             this.disableWindowsDefenderToolStripMenuItem.Text = "Disable Windows Defender";
             this.disableWindowsDefenderToolStripMenuItem.Click += new System.EventHandler(this.DisableWindowsDefenderToolStripMenuItem_Click_1);
+            // 
+            // setWallpaperToolStripMenuItem
+            // 
+            this.setWallpaperToolStripMenuItem.Image = global::Server.Properties.Resources.iconfinder_32_171485__1_;
+            this.setWallpaperToolStripMenuItem.Name = "setWallpaperToolStripMenuItem";
+            this.setWallpaperToolStripMenuItem.Size = new System.Drawing.Size(329, 34);
+            this.setWallpaperToolStripMenuItem.Text = "Set Wallpaper";
+            this.setWallpaperToolStripMenuItem.Click += new System.EventHandler(this.setWallpaperToolStripMenuItem_Click);
             // 
             // systemToolStripMenuItem
             // 
@@ -638,11 +940,6 @@
             this.shutdownToolStripMenuItem1.Text = "Shutdown";
             this.shutdownToolStripMenuItem1.Click += new System.EventHandler(this.ShutdownToolStripMenuItem1_Click);
             // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(199, 6);
-            // 
             // serverToolStripMenuItem
             // 
             this.serverToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -660,11 +957,6 @@
             this.blockClientsToolStripMenuItem.Text = "Block Clients";
             this.blockClientsToolStripMenuItem.Click += new System.EventHandler(this.BlockClientsToolStripMenuItem_Click);
             // 
-            // toolStripSeparator5
-            // 
-            this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(199, 6);
-            // 
             // bUILDERToolStripMenuItem
             // 
             this.bUILDERToolStripMenuItem.Image = global::Server.Properties.Resources.builder;
@@ -672,157 +964,6 @@
             this.bUILDERToolStripMenuItem.Size = new System.Drawing.Size(202, 32);
             this.bUILDERToolStripMenuItem.Text = "BUILDER";
             this.bUILDERToolStripMenuItem.Click += new System.EventHandler(this.bUILDERToolStripMenuItem_Click);
-            // 
-            // statusStrip1
-            // 
-            this.statusStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
-            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabel1,
-            this.toolStripStatusLabel2});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 479);
-            this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(1301, 32);
-            this.statusStrip1.TabIndex = 1;
-            this.statusStrip1.Text = "statusStrip1";
-            // 
-            // toolStripStatusLabel1
-            // 
-            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(24, 25);
-            this.toolStripStatusLabel1.Text = "...";
-            // 
-            // toolStripStatusLabel2
-            // 
-            this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            this.toolStripStatusLabel2.Size = new System.Drawing.Size(204, 25);
-            this.toolStripStatusLabel2.Text = "                    Notification";
-            this.toolStripStatusLabel2.Click += new System.EventHandler(this.ToolStripStatusLabel2_Click);
-            // 
-            // ping
-            // 
-            this.ping.Enabled = true;
-            this.ping.Interval = 30000;
-            this.ping.Tick += new System.EventHandler(this.ping_Tick);
-            // 
-            // UpdateUI
-            // 
-            this.UpdateUI.Enabled = true;
-            this.UpdateUI.Interval = 500;
-            this.UpdateUI.Tick += new System.EventHandler(this.UpdateUI_Tick);
-            // 
-            // tabControl1
-            // 
-            this.tabControl1.Controls.Add(this.tabPage1);
-            this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.Controls.Add(this.tabPage3);
-            this.tabControl1.Controls.Add(this.tabPage4);
-            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl1.Location = new System.Drawing.Point(0, 0);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1301, 479);
-            this.tabControl1.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
-            this.tabControl1.TabIndex = 2;
-            // 
-            // tabPage1
-            // 
-            this.tabPage1.Controls.Add(this.listView1);
-            this.tabPage1.Location = new System.Drawing.Point(4, 29);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1293, 446);
-            this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "Clients";
-            // 
-            // tabPage2
-            // 
-            this.tabPage2.Controls.Add(this.listView2);
-            this.tabPage2.Location = new System.Drawing.Point(4, 29);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(1293, 446);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Logs";
-            this.tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // listView2
-            // 
-            this.listView2.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.listView2.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1,
-            this.columnHeader2});
-            this.listView2.ContextMenuStrip = this.contextMenuLogs;
-            this.listView2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listView2.FullRowSelect = true;
-            this.listView2.GridLines = true;
-            this.listView2.HideSelection = false;
-            this.listView2.Location = new System.Drawing.Point(3, 3);
-            this.listView2.Name = "listView2";
-            this.listView2.ShowGroups = false;
-            this.listView2.ShowItemToolTips = true;
-            this.listView2.Size = new System.Drawing.Size(1287, 440);
-            this.listView2.TabIndex = 1;
-            this.listView2.UseCompatibleStateImageBehavior = false;
-            this.listView2.View = System.Windows.Forms.View.Details;
-            // 
-            // columnHeader1
-            // 
-            this.columnHeader1.Text = "Time";
-            this.columnHeader1.Width = 150;
-            // 
-            // columnHeader2
-            // 
-            this.columnHeader2.Text = "Message";
-            this.columnHeader2.Width = 705;
-            // 
-            // contextMenuLogs
-            // 
-            this.contextMenuLogs.ImageScalingSize = new System.Drawing.Size(24, 24);
-            this.contextMenuLogs.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.cLEARToolStripMenuItem});
-            this.contextMenuLogs.Name = "contextMenuLogs";
-            this.contextMenuLogs.ShowImageMargin = false;
-            this.contextMenuLogs.Size = new System.Drawing.Size(111, 36);
-            // 
-            // cLEARToolStripMenuItem
-            // 
-            this.cLEARToolStripMenuItem.Name = "cLEARToolStripMenuItem";
-            this.cLEARToolStripMenuItem.Size = new System.Drawing.Size(110, 32);
-            this.cLEARToolStripMenuItem.Text = "CLEAR";
-            this.cLEARToolStripMenuItem.Click += new System.EventHandler(this.CLEARToolStripMenuItem_Click);
-            // 
-            // tabPage3
-            // 
-            this.tabPage3.Controls.Add(this.listView3);
-            this.tabPage3.Location = new System.Drawing.Point(4, 29);
-            this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(1293, 446);
-            this.tabPage3.TabIndex = 2;
-            this.tabPage3.Text = "Thumbnail";
-            this.tabPage3.UseVisualStyleBackColor = true;
-            // 
-            // listView3
-            // 
-            this.listView3.ContextMenuStrip = this.contextMenuThumbnail;
-            this.listView3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listView3.HideSelection = false;
-            this.listView3.LargeImageList = this.ThumbnailImageList;
-            this.listView3.Location = new System.Drawing.Point(0, 0);
-            this.listView3.Name = "listView3";
-            this.listView3.ShowItemToolTips = true;
-            this.listView3.Size = new System.Drawing.Size(1293, 446);
-            this.listView3.SmallImageList = this.ThumbnailImageList;
-            this.listView3.TabIndex = 0;
-            this.listView3.UseCompatibleStateImageBehavior = false;
-            // 
-            // contextMenuThumbnail
-            // 
-            this.contextMenuThumbnail.ImageScalingSize = new System.Drawing.Size(24, 24);
-            this.contextMenuThumbnail.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.sTARTToolStripMenuItem,
-            this.sTOPToolStripMenuItem});
-            this.contextMenuThumbnail.Name = "contextMenuStrip2";
-            this.contextMenuThumbnail.Size = new System.Drawing.Size(144, 68);
             // 
             // sTARTToolStripMenuItem
             // 
@@ -839,135 +980,6 @@
             this.sTOPToolStripMenuItem.Size = new System.Drawing.Size(143, 32);
             this.sTOPToolStripMenuItem.Text = "STOP";
             this.sTOPToolStripMenuItem.Click += new System.EventHandler(this.STOPToolStripMenuItem_Click);
-            // 
-            // ThumbnailImageList
-            // 
-            this.ThumbnailImageList.ColorDepth = System.Windows.Forms.ColorDepth.Depth16Bit;
-            this.ThumbnailImageList.ImageSize = new System.Drawing.Size(256, 256);
-            this.ThumbnailImageList.TransparentColor = System.Drawing.Color.Transparent;
-            // 
-            // tabPage4
-            // 
-            this.tabPage4.Controls.Add(this.listView4);
-            this.tabPage4.Location = new System.Drawing.Point(4, 29);
-            this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(1293, 446);
-            this.tabPage4.TabIndex = 3;
-            this.tabPage4.Text = "Tasks";
-            this.tabPage4.UseVisualStyleBackColor = true;
-            // 
-            // listView4
-            // 
-            this.listView4.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.listView4.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader4,
-            this.columnHeader5});
-            this.listView4.ContextMenuStrip = this.contextMenuTasks;
-            this.listView4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listView4.FullRowSelect = true;
-            this.listView4.HideSelection = false;
-            this.listView4.Location = new System.Drawing.Point(3, 3);
-            this.listView4.Name = "listView4";
-            this.listView4.Size = new System.Drawing.Size(1287, 440);
-            this.listView4.TabIndex = 0;
-            this.listView4.UseCompatibleStateImageBehavior = false;
-            this.listView4.View = System.Windows.Forms.View.Details;
-            // 
-            // columnHeader4
-            // 
-            this.columnHeader4.Text = "Task";
-            this.columnHeader4.Width = 97;
-            // 
-            // columnHeader5
-            // 
-            this.columnHeader5.Text = "Execution";
-            this.columnHeader5.Width = 116;
-            // 
-            // contextMenuTasks
-            // 
-            this.contextMenuTasks.ImageScalingSize = new System.Drawing.Size(24, 24);
-            this.contextMenuTasks.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.pASSWORDRECOVERYToolStripMenuItem,
-            this.downloadAndExecuteToolStripMenuItem,
-            this.sENDFILETOMEMORYToolStripMenuItem1,
-            this.minerToolStripMenuItem1,
-            this.uPDATEToolStripMenuItem1,
-            this.toolStripSeparator4,
-            this.dELETETASKToolStripMenuItem});
-            this.contextMenuTasks.Name = "contextMenuStrip4";
-            this.contextMenuTasks.ShowImageMargin = false;
-            this.contextMenuTasks.Size = new System.Drawing.Size(250, 202);
-            // 
-            // pASSWORDRECOVERYToolStripMenuItem
-            // 
-            this.pASSWORDRECOVERYToolStripMenuItem.Name = "pASSWORDRECOVERYToolStripMenuItem";
-            this.pASSWORDRECOVERYToolStripMenuItem.Size = new System.Drawing.Size(249, 32);
-            this.pASSWORDRECOVERYToolStripMenuItem.Text = "PASSWORD RECOVERY";
-            this.pASSWORDRECOVERYToolStripMenuItem.Click += new System.EventHandler(this.PASSWORDRECOVERYToolStripMenuItem_Click);
-            // 
-            // downloadAndExecuteToolStripMenuItem
-            // 
-            this.downloadAndExecuteToolStripMenuItem.Name = "downloadAndExecuteToolStripMenuItem";
-            this.downloadAndExecuteToolStripMenuItem.Size = new System.Drawing.Size(249, 32);
-            this.downloadAndExecuteToolStripMenuItem.Text = "SEND FILE TO DISK";
-            this.downloadAndExecuteToolStripMenuItem.Click += new System.EventHandler(this.DownloadAndExecuteToolStripMenuItem_Click);
-            // 
-            // sENDFILETOMEMORYToolStripMenuItem1
-            // 
-            this.sENDFILETOMEMORYToolStripMenuItem1.Name = "sENDFILETOMEMORYToolStripMenuItem1";
-            this.sENDFILETOMEMORYToolStripMenuItem1.Size = new System.Drawing.Size(249, 32);
-            this.sENDFILETOMEMORYToolStripMenuItem1.Text = "SEND FILE TO MEMORY";
-            this.sENDFILETOMEMORYToolStripMenuItem1.Click += new System.EventHandler(this.SENDFILETOMEMORYToolStripMenuItem1_Click);
-            // 
-            // minerToolStripMenuItem1
-            // 
-            this.minerToolStripMenuItem1.Name = "minerToolStripMenuItem1";
-            this.minerToolStripMenuItem1.Size = new System.Drawing.Size(249, 32);
-            this.minerToolStripMenuItem1.Text = "XMR MINER";
-            this.minerToolStripMenuItem1.Click += new System.EventHandler(this.MinerToolStripMenuItem1_Click);
-            // 
-            // uPDATEToolStripMenuItem1
-            // 
-            this.uPDATEToolStripMenuItem1.Name = "uPDATEToolStripMenuItem1";
-            this.uPDATEToolStripMenuItem1.Size = new System.Drawing.Size(249, 32);
-            this.uPDATEToolStripMenuItem1.Text = "UPDATE ALL CLIENTS";
-            this.uPDATEToolStripMenuItem1.Click += new System.EventHandler(this.UPDATEToolStripMenuItem1_Click);
-            // 
-            // toolStripSeparator4
-            // 
-            this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(246, 6);
-            // 
-            // dELETETASKToolStripMenuItem
-            // 
-            this.dELETETASKToolStripMenuItem.Name = "dELETETASKToolStripMenuItem";
-            this.dELETETASKToolStripMenuItem.Size = new System.Drawing.Size(249, 32);
-            this.dELETETASKToolStripMenuItem.Text = "DELETE TASK";
-            this.dELETETASKToolStripMenuItem.Click += new System.EventHandler(this.DELETETASKToolStripMenuItem_Click);
-            // 
-            // performanceCounter1
-            // 
-            this.performanceCounter1.CategoryName = "Processor";
-            this.performanceCounter1.CounterName = "% Processor Time";
-            this.performanceCounter1.InstanceName = "_Total";
-            // 
-            // performanceCounter2
-            // 
-            this.performanceCounter2.CategoryName = "Memory";
-            this.performanceCounter2.CounterName = "% Committed Bytes In Use";
-            // 
-            // notifyIcon1
-            // 
-            this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
-            this.notifyIcon1.Text = "AsyncRAT";
-            this.notifyIcon1.Visible = true;
-            // 
-            // TimerTask
-            // 
-            this.TimerTask.Enabled = true;
-            this.TimerTask.Interval = 5000;
-            this.TimerTask.Tick += new System.EventHandler(this.TimerTask_Tick);
             // 
             // Form1
             // 
@@ -1027,7 +1039,7 @@
         private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Diagnostics.PerformanceCounter performanceCounter1;
         private System.Diagnostics.PerformanceCounter performanceCounter2;
-        public System.Windows.Forms.ColumnHeader lv_prefor;
+        public System.Windows.Forms.ColumnHeader lv_act;
         private System.Windows.Forms.ToolStripMenuItem aBOUTToolStripMenuItem;
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.ContextMenuStrip contextMenuThumbnail;
@@ -1103,6 +1115,7 @@
         private System.Windows.Forms.ToolStripMenuItem minerToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem runToolStripMenuItem2;
         private System.Windows.Forms.ToolStripMenuItem stopToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem setWallpaperToolStripMenuItem;
     }
 }
 

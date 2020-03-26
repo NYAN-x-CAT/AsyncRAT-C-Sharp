@@ -48,6 +48,7 @@
       <HintPath>..\..\..\packages\System.Data.SQLite.Core.1.0.111.0\lib\net40\System.Data.SQLite.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -55,6 +56,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Browsers\Chromium\Account.cs" />
+    <Compile Include="Browsers\Chromium\AesGcm.cs" />
+    <Compile Include="Browsers\Chromium\BCrypt.cs" />
     <Compile Include="Browsers\Chromium\Chromium.cs" />
     <Compile Include="Browsers\Chromium\ChromiumCookies.cs" />
     <Compile Include="Browsers\CredentialModel.cs" />

