@@ -60,7 +60,6 @@
     <Compile Include="Browsers\Chromium\AesGcm.cs" />
     <Compile Include="Browsers\Chromium\BCrypt.cs" />
     <Compile Include="Browsers\Chromium\Chromium.cs" />
-    <Compile Include="Browsers\Chromium\ChromiumCookies.cs" />
     <Compile Include="Browsers\CredentialModel.cs" />
     <Compile Include="Browsers\Firefox\Cookies\FFCookiesGrabber.cs" />
     <Compile Include="Browsers\Firefox\FFDecryptor.cs" />
