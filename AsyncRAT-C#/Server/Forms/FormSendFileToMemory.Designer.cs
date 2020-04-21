@@ -102,9 +102,11 @@
             this.comboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox2.FormattingEnabled = true;
             this.comboBox2.Items.AddRange(new object[] {
+            "aspnet_compiler.exe",
             "RegAsm.exe",
             "MSBuild.exe",
-            "RegSvcs.exe"});
+            "RegSvcs.exe",
+            "vbc.exe"});
             this.comboBox2.Location = new System.Drawing.Point(112, 139);
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(201, 28);
@@ -139,9 +141,9 @@
             this.statusStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 276);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 274);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(351, 30);
+            this.statusStrip1.Size = new System.Drawing.Size(351, 32);
             this.statusStrip1.TabIndex = 2;
             this.statusStrip1.Text = "statusStrip1";
             // 

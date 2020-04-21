@@ -7,16 +7,19 @@ using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using static Client.Helper.NativeMethods;
 using System.Text;
+using System.IO;
+using System.Windows.Forms;
+using System.Threading;
 
 namespace Client.Helper
 {
-    static class Methods
-    {  
+    public static class Methods
+    {
         public static bool IsAdmin()
         {
             return new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
         }
-        public static void ClientExit()
+        public static void ClientOnExit()
         {
             try
             {

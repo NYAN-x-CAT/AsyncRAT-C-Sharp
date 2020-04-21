@@ -1,7 +1,7 @@
 ﻿using Microsoft.CSharp;
 using Microsoft.VisualBasic;
 using Plugin;
-using Plugin.MessagePack;
+using MessagePackLib.MessagePack;
 using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;

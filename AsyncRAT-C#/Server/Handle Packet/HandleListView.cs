@@ -25,7 +25,7 @@ namespace Server.Handle_Packet
                                 client.Disconnected();
                                 return;
                             }
-                            else if (Settings.Blocked.Contains(client.TcpClient.RemoteEndPoint.ToString().Split(':')[0]))
+                            else if (Settings.Blocked.Contains(client.Ip))
                             {
                                 client.Disconnected();
                                 return;
@@ -38,7 +38,7 @@ namespace Server.Handle_Packet
                 client.LV = new ListViewItem
                 {
                     Tag = client,
-                    Text = string.Format("{0}:{1}", client.TcpClient.RemoteEndPoint.ToString().Split(':')[0], client.TcpClient.LocalEndPoint.ToString().Split(':')[1]),
+                    Text = string.Format("{0}:{1}", client.Ip, client.TcpClient.LocalEndPoint.ToString().Split(':')[1]),
                 };
                 string[] ipinf;
                 try
@@ -89,16 +89,17 @@ namespace Server.Handle_Packet
                     {
                         Program.form1.listView1.Items.Add(client.LV);
                         Program.form1.listView1.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+                        Program.form1.lv_act.Width = 500;
                     }
 
                     if (Properties.Settings.Default.Notification == true)
                     {
                         Program.form1.notifyIcon1.BalloonTipText = $@"Connected 
-{client.TcpClient.RemoteEndPoint.ToString().Split(':')[0]} : {client.TcpClient.LocalEndPoint.ToString().Split(':')[1]}";
+{client.Ip} : {client.TcpClient.LocalEndPoint.ToString().Split(':')[1]}";
                         Program.form1.notifyIcon1.ShowBalloonTip(100);
                     }
 
-                    new HandleLogs().Addmsg($"Client {client.TcpClient.RemoteEndPoint.ToString().Split(':')[0]} connected", Color.Green);
+                    new HandleLogs().Addmsg($"Client {client.Ip} connected", Color.Green);
                 }));
             }
             catch { }

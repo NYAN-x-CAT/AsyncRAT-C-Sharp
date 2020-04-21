@@ -56,8 +56,9 @@ namespace Server.Forms
                         }
                         Program.form1.listView1.BeginInvoke((MethodInvoker)(() =>
                         {
-                            MessageBox.Show(this, @"[!]If you wish to upgrade to new version of AsyncRAT, You will need to copy this certificate
-[!]If you lose\delete this certificate you will NOT be able to control your clients, You will lose them all.", "Certificate", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show(this, @"[!]If you wish to upgrade to new version of AsyncRAT, You will need to copy 'ServerCertificate.p12'.
+
+[!]If you lose\delete 'ServerCertificate.p12' certificate you will NOT be able to control your clients, You will lose them all.", "Certificate", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             this.Close();
                         }));
                     }

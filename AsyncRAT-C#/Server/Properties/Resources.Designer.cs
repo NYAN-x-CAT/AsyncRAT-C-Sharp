@@ -201,6 +201,22 @@ namespace Server.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to @echo off
+        ///title AsyncRAT - Fixer
+        ///echo You this if AsyncRAT won&apos;t open at all
+        ///echo YOU NEED TO RUN THIS AS ADMIN
+        ///
+        ///pause
+        ///lodctr /r
+        ///pause.
+        /// </summary>
+        internal static string Fixer {
+            get {
+                return ResourceManager.GetString("Fixer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap iconfinder_32_171485__1_ {

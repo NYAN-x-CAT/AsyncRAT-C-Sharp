@@ -1,4 +1,4 @@
-﻿using Plugin.MessagePack;
+﻿using MessagePackLib.MessagePack;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -58,7 +58,7 @@ namespace Plugin
                 }
                 else
                 {
-                    IsConnected = false;
+                    Disconnected();
                     return;
                 }
             }
@@ -98,7 +98,7 @@ namespace Plugin
             {
                 if (!TcpClient.Connected || !IsConnected)
                 {
-                    IsConnected = false;
+                    Disconnected();
                     return;
                 }
                 int recevied = SslClient.EndRead(ar);
@@ -119,14 +119,14 @@ namespace Plugin
                                 int rc = SslClient.Read(Buffer, (int)Offset, (int)HeaderSize);
                                 if (rc <= 0)
                                 {
-                                    IsConnected = false;
+                                    Disconnected();
                                     return;
                                 }
                                 Offset += rc;
                                 HeaderSize -= rc;
                                 if (HeaderSize < 0)
                                 {
-                                    IsConnected = false;
+                                    Disconnected();
                                     return;
                                 }
                             }
@@ -145,20 +145,20 @@ namespace Plugin
                     }
                     else if (HeaderSize < 0)
                     {
-                        IsConnected = false;
+                        Disconnected();
                         return;
                     }
                     SslClient.BeginRead(Buffer, (int)Offset, (int)HeaderSize, ReadServertData, null);
                 }
                 else
                 {
-                    IsConnected = false;
+                    Disconnected();
                     return;
                 }
             }
             catch
             {
-                IsConnected = false;
+                Disconnected();
                 return;
             }
         }

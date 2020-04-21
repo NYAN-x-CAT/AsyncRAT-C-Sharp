@@ -16,7 +16,7 @@ namespace Server.Handle_Packet
                 if (client.LV2 == null)
                 {
                     client.LV2 = new ListViewItem();
-                    client.LV2.Text = string.Format("{0}:{1}", client.TcpClient.RemoteEndPoint.ToString().Split(':')[0], client.TcpClient.LocalEndPoint.ToString().Split(':')[1]);
+                    client.LV2.Text = string.Format("{0}:{1}", client.Ip, client.TcpClient.LocalEndPoint.ToString().Split(':')[1]);
                     client.LV2.ToolTipText = client.ID;
                     client.LV2.Tag = client;
 

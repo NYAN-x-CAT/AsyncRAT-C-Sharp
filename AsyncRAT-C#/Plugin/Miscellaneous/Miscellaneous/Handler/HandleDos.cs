@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-using Plugin.MessagePack;
+using MessagePackLib.MessagePack;
 using Plugin;
 
 namespace Miscellaneous.Handler

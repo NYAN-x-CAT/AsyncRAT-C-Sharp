@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Microsoft.Win32;
 using System.Security.Principal;
-using Plugin.MessagePack;
+using MessagePackLib.MessagePack;
 using Plugin;
 
 namespace Miscellaneous.Handler
