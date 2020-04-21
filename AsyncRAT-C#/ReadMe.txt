@@ -1,3 +1,1 @@
-- Use any .NET obfuscation tool such as "ConfuserEx" to get a better plugin runtime
-
 - If AsyncRAT didn't open, then you need to open CMD as admin and type (lodctr /r) https://prnt.sc/ot1mna
