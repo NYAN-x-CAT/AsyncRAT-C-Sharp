@@ -131,6 +131,7 @@
             this.performanceCounter2 = new System.Diagnostics.PerformanceCounter();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.TimerTask = new System.Windows.Forms.Timer(this.components);
+            this.lv_group = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.contextMenuClient.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -151,6 +152,7 @@
             this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.lv_ip,
             this.lv_country,
+            this.lv_group,
             this.lv_hwid,
             this.lv_user,
             this.lv_os,
@@ -991,6 +993,11 @@
             this.TimerTask.Interval = 5000;
             this.TimerTask.Tick += new System.EventHandler(this.TimerTask_Tick);
             // 
+            // lv_group
+            // 
+            this.lv_group.Text = "Group";
+            this.lv_group.Width = 110;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -1127,6 +1134,7 @@
         private System.Windows.Forms.ToolStripMenuItem stopToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem setWallpaperToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem filesSearcherToolStripMenuItem;
+        private System.Windows.Forms.ColumnHeader lv_group;
     }
 }
 

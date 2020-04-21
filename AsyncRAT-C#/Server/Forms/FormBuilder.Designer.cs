@@ -51,6 +51,8 @@ namespace Server.Forms
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.txtGroup = new System.Windows.Forms.TextBox();
+            this.label17 = new System.Windows.Forms.Label();
             this.numDelay = new System.Windows.Forms.NumericUpDown();
             this.label16 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
@@ -326,6 +328,8 @@ namespace Server.Forms
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.txtGroup);
+            this.groupBox3.Controls.Add(this.label17);
             this.groupBox3.Controls.Add(this.numDelay);
             this.groupBox3.Controls.Add(this.label16);
             this.groupBox3.Controls.Add(this.pictureBox1);
@@ -340,16 +344,34 @@ namespace Server.Forms
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "MISC";
             // 
+            // txtGroup
+            // 
+            this.txtGroup.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::Server.Properties.Settings.Default, "Group", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.txtGroup.Location = new System.Drawing.Point(23, 75);
+            this.txtGroup.Name = "txtGroup";
+            this.txtGroup.Size = new System.Drawing.Size(301, 26);
+            this.txtGroup.TabIndex = 17;
+            this.txtGroup.Text = global::Server.Properties.Settings.Default.Group;
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(19, 43);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(54, 20);
+            this.label17.TabIndex = 16;
+            this.label17.Text = "Group";
+            // 
             // numDelay
             // 
-            this.numDelay.Location = new System.Drawing.Point(19, 165);
+            this.numDelay.Location = new System.Drawing.Point(27, 368);
             this.numDelay.Maximum = new decimal(new int[] {
             999,
             0,
             0,
             0});
             this.numDelay.Minimum = new decimal(new int[] {
-            2,
+            1,
             0,
             0,
             0});
@@ -357,7 +379,7 @@ namespace Server.Forms
             this.numDelay.Size = new System.Drawing.Size(84, 26);
             this.numDelay.TabIndex = 15;
             this.numDelay.Value = new decimal(new int[] {
-            5,
+            1,
             0,
             0,
             0});
@@ -365,7 +387,7 @@ namespace Server.Forms
             // label16
             // 
             this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(15, 133);
+            this.label16.Location = new System.Drawing.Point(23, 336);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(123, 20);
             this.label16.TabIndex = 14;
@@ -374,7 +396,7 @@ namespace Server.Forms
             // pictureBox1
             // 
             this.pictureBox1.Image = global::Server.Properties.Resources.uac;
-            this.pictureBox1.Location = new System.Drawing.Point(175, 72);
+            this.pictureBox1.Location = new System.Drawing.Point(183, 275);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(32, 32);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -384,7 +406,7 @@ namespace Server.Forms
             // chkBdos
             // 
             this.chkBdos.AutoSize = true;
-            this.chkBdos.Location = new System.Drawing.Point(15, 80);
+            this.chkBdos.Location = new System.Drawing.Point(23, 283);
             this.chkBdos.Name = "chkBdos";
             this.chkBdos.Size = new System.Drawing.Size(143, 24);
             this.chkBdos.TabIndex = 12;
@@ -394,7 +416,7 @@ namespace Server.Forms
             // txtMutex
             // 
             this.txtMutex.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::Server.Properties.Settings.Default, "Mutex", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.txtMutex.Location = new System.Drawing.Point(19, 251);
+            this.txtMutex.Location = new System.Drawing.Point(23, 163);
             this.txtMutex.Name = "txtMutex";
             this.txtMutex.Size = new System.Drawing.Size(301, 26);
             this.txtMutex.TabIndex = 11;
@@ -403,7 +425,7 @@ namespace Server.Forms
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(15, 219);
+            this.label5.Location = new System.Drawing.Point(19, 131);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(52, 20);
             this.label5.TabIndex = 10;
@@ -412,7 +434,7 @@ namespace Server.Forms
             // chkAnti
             // 
             this.chkAnti.AutoSize = true;
-            this.chkAnti.Location = new System.Drawing.Point(15, 29);
+            this.chkAnti.Location = new System.Drawing.Point(23, 232);
             this.chkAnti.Name = "chkAnti";
             this.chkAnti.Size = new System.Drawing.Size(125, 24);
             this.chkAnti.TabIndex = 9;
@@ -887,5 +909,7 @@ namespace Server.Forms
         private System.Windows.Forms.Button btnIcon;
         private System.Windows.Forms.NumericUpDown numDelay;
         private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.TextBox txtGroup;
+        private System.Windows.Forms.Label label17;
     }
 }

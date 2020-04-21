@@ -19,7 +19,7 @@ namespace Server
 
         public static string CertificatePath = Application.StartupPath + "\\ServerCertificate.p12";
         public static X509Certificate2 ServerCertificate;
-        public static readonly string Version = "AsyncRAT 0.5.6C";
+        public static readonly string Version = "AsyncRAT 0.5.6D";
         public static object LockListviewClients = new object();
         public static object LockListviewLogs = new object();
         public static object LockListviewThumb = new object();

