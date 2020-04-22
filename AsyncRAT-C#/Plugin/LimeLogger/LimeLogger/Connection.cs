@@ -190,6 +190,7 @@ namespace Plugin
                             {
                                 TcpClient.Poll(-1, SelectMode.SelectWrite);
                                 SslClient.Write(chunk, 0, read);
+                                SslClient.Flush();
                             }
                         }
                     }
