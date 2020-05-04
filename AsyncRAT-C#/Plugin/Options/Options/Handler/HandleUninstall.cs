@@ -23,12 +23,10 @@ namespace Plugin.Handler
                     {
                         Process.Start(new ProcessStartInfo()
                         {
-                            FileName = "schtasks",
-                            Arguments = "/delete /f /tn " + @"""'" + Path.GetFileNameWithoutExtension(Application.ExecutablePath) + @"""'",
+                            FileName = "cmd",
+                            Arguments = "/c schtasks /delete /f  /tn " + "\"" + Path.GetFileNameWithoutExtension(Application.ExecutablePath) + "\"",
+                            WindowStyle = ProcessWindowStyle.Hidden,
                             CreateNoWindow = true,
-                            ErrorDialog = false,
-                            UseShellExecute = false,
-                            WindowStyle = ProcessWindowStyle.Hidden
                         });
                     }
                 }

