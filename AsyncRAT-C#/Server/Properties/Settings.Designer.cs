@@ -61,7 +61,7 @@ namespace Server.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("AsyncMutex_6SI8OkPnk")]
         public string Mutex {
             get {
                 return ((string)(this["Mutex"]));

