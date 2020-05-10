@@ -7,7 +7,7 @@ using Client.Helper;
 /* 
        │ Author       : NYAN CAT
        │ Name         : AsyncRAT  Simple RAT
-       │ Contact Me   : https:github.com/NYAN-x-CAT
+       │ Contact Me   : https://github.com/NYAN-x-CAT
 
        This program is distributed for educational purposes only.
 */
