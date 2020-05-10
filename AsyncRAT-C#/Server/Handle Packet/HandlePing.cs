@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using System.Threading;
 using System.Drawing;
+using Microsoft.VisualBasic;
 
 namespace Server.Handle_Packet
 {
@@ -32,12 +33,13 @@ namespace Server.Handle_Packet
                 lock (Settings.LockListviewClients)
                     if (client.LV != null)
                     {
-                        client.LV.SubItems[Program.form1.lv_ping.Index].Text = unpack_msgpack.ForcePathObject("Message").AsInteger.ToString() + " MS";
-                        if (unpack_msgpack.ForcePathObject("Message").AsInteger > 600)
+                        int interval = (int)unpack_msgpack.ForcePathObject("Message").AsInteger;
+                        client.LV.SubItems[Program.form1.lv_ping.Index].Text = interval + " MS";
+                        if (interval > 400)
                         {
                             client.LV.SubItems[Program.form1.lv_ping.Index].ForeColor = Color.Red;
                         }
-                        else if (unpack_msgpack.ForcePathObject("Message").AsInteger > 300)
+                        else if (interval > 200)
                         {
                             client.LV.SubItems[Program.form1.lv_ping.Index].ForeColor = Color.Orange;
                         }

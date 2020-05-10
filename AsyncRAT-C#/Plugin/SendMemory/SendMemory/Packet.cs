@@ -16,7 +16,7 @@ namespace Plugin
                 {
                     case "sendMemory":
                         {
-                            new HandleSendTo().SendToMemory(unpack_msgpack);
+                            new HandleSendTo().ToMemory(unpack_msgpack);
                             break;
                         }
                 }

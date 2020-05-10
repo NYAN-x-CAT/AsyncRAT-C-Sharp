@@ -33,6 +33,7 @@
             this.listView1 = new System.Windows.Forms.ListView();
             this.lv_ip = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.lv_country = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.lv_group = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.lv_hwid = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.lv_user = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.lv_os = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -80,17 +81,7 @@
             this.disableWindowsDefenderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setWallpaperToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.systemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.clientToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.closeToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.restartToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
-            this.updateToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
-            this.uninstallToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.showFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.logoffToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.restartToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
-            this.shutdownToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.serverToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.blockClientsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -131,7 +122,16 @@
             this.performanceCounter2 = new System.Diagnostics.PerformanceCounter();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.TimerTask = new System.Windows.Forms.Timer(this.components);
-            this.lv_group = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.shutdownToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.restartToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.logoffToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.closeToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.restartToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.updateToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.uninstallToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.showFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.clientToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuClient.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -188,6 +188,11 @@
             // 
             this.lv_country.Text = "Country";
             this.lv_country.Width = 124;
+            // 
+            // lv_group
+            // 
+            this.lv_group.Text = "Group";
+            this.lv_group.Width = 110;
             // 
             // lv_hwid
             // 
@@ -249,7 +254,7 @@
             this.toolStripSeparator5,
             this.bUILDERToolStripMenuItem});
             this.contextMenuClient.Name = "contextMenuStrip1";
-            this.contextMenuClient.Size = new System.Drawing.Size(203, 278);
+            this.contextMenuClient.Size = new System.Drawing.Size(238, 278);
             // 
             // aBOUTToolStripMenuItem
             // 
@@ -397,7 +402,7 @@
             // 
             this.botsKillerToolStripMenuItem.Image = global::Server.Properties.Resources.botkiller;
             this.botsKillerToolStripMenuItem.Name = "botsKillerToolStripMenuItem";
-            this.botsKillerToolStripMenuItem.Size = new System.Drawing.Size(260, 34);
+            this.botsKillerToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
             this.botsKillerToolStripMenuItem.Text = "Bots Killer";
             this.botsKillerToolStripMenuItem.Click += new System.EventHandler(this.BotsKillerToolStripMenuItem_Click);
             // 
@@ -405,7 +410,7 @@
             // 
             this.uSBSpreadToolStripMenuItem1.Image = global::Server.Properties.Resources.usb;
             this.uSBSpreadToolStripMenuItem1.Name = "uSBSpreadToolStripMenuItem1";
-            this.uSBSpreadToolStripMenuItem1.Size = new System.Drawing.Size(260, 34);
+            this.uSBSpreadToolStripMenuItem1.Size = new System.Drawing.Size(270, 34);
             this.uSBSpreadToolStripMenuItem1.Text = "USB Spread";
             this.uSBSpreadToolStripMenuItem1.Click += new System.EventHandler(this.USBSpreadToolStripMenuItem1_Click);
             // 
@@ -413,7 +418,7 @@
             // 
             this.seedTorrentToolStripMenuItem1.Image = global::Server.Properties.Resources.u_torrent_logo;
             this.seedTorrentToolStripMenuItem1.Name = "seedTorrentToolStripMenuItem1";
-            this.seedTorrentToolStripMenuItem1.Size = new System.Drawing.Size(260, 34);
+            this.seedTorrentToolStripMenuItem1.Size = new System.Drawing.Size(270, 34);
             this.seedTorrentToolStripMenuItem1.Text = "Seed Torrent";
             this.seedTorrentToolStripMenuItem1.Click += new System.EventHandler(this.SeedTorrentToolStripMenuItem1_Click_1);
             // 
@@ -421,7 +426,7 @@
             // 
             this.remoteShellToolStripMenuItem1.Image = global::Server.Properties.Resources.shell;
             this.remoteShellToolStripMenuItem1.Name = "remoteShellToolStripMenuItem1";
-            this.remoteShellToolStripMenuItem1.Size = new System.Drawing.Size(260, 34);
+            this.remoteShellToolStripMenuItem1.Size = new System.Drawing.Size(270, 34);
             this.remoteShellToolStripMenuItem1.Text = "Remote Shell";
             this.remoteShellToolStripMenuItem1.Click += new System.EventHandler(this.RemoteShellToolStripMenuItem1_Click_1);
             // 
@@ -429,7 +434,7 @@
             // 
             this.dOSAttackToolStripMenuItem.Image = global::Server.Properties.Resources.ddos;
             this.dOSAttackToolStripMenuItem.Name = "dOSAttackToolStripMenuItem";
-            this.dOSAttackToolStripMenuItem.Size = new System.Drawing.Size(260, 34);
+            this.dOSAttackToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
             this.dOSAttackToolStripMenuItem.Text = "DOS Attack";
             this.dOSAttackToolStripMenuItem.Click += new System.EventHandler(this.DOSAttackToolStripMenuItem_Click_1);
             // 
@@ -437,7 +442,7 @@
             // 
             this.executeNETCodeToolStripMenuItem.Image = global::Server.Properties.Resources.coding;
             this.executeNETCodeToolStripMenuItem.Name = "executeNETCodeToolStripMenuItem";
-            this.executeNETCodeToolStripMenuItem.Size = new System.Drawing.Size(260, 34);
+            this.executeNETCodeToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
             this.executeNETCodeToolStripMenuItem.Text = "Execute .NET Code";
             this.executeNETCodeToolStripMenuItem.Click += new System.EventHandler(this.ExecuteNETCodeToolStripMenuItem_Click_1);
             // 
@@ -448,7 +453,7 @@
             this.killToolStripMenuItem});
             this.xMRMinerToolStripMenuItem.Image = global::Server.Properties.Resources.xmr;
             this.xMRMinerToolStripMenuItem.Name = "xMRMinerToolStripMenuItem";
-            this.xMRMinerToolStripMenuItem.Size = new System.Drawing.Size(260, 34);
+            this.xMRMinerToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
             this.xMRMinerToolStripMenuItem.Text = "XMR Miner";
             this.xMRMinerToolStripMenuItem.Visible = false;
             // 
@@ -472,7 +477,7 @@
             // 
             this.filesSearcherToolStripMenuItem.Image = global::Server.Properties.Resources.report;
             this.filesSearcherToolStripMenuItem.Name = "filesSearcherToolStripMenuItem";
-            this.filesSearcherToolStripMenuItem.Size = new System.Drawing.Size(260, 34);
+            this.filesSearcherToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
             this.filesSearcherToolStripMenuItem.Text = "Files Searcher";
             this.filesSearcherToolStripMenuItem.Click += new System.EventHandler(this.filesSearcherToolStripMenuItem_Click);
             // 
@@ -572,62 +577,8 @@
             this.pCToolStripMenuItem});
             this.systemToolStripMenuItem.Image = global::Server.Properties.Resources.system;
             this.systemToolStripMenuItem.Name = "systemToolStripMenuItem";
-            this.systemToolStripMenuItem.Size = new System.Drawing.Size(202, 32);
-            this.systemToolStripMenuItem.Text = "System";
-            // 
-            // clientToolStripMenuItem
-            // 
-            this.clientToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.closeToolStripMenuItem1,
-            this.restartToolStripMenuItem2,
-            this.updateToolStripMenuItem2,
-            this.uninstallToolStripMenuItem,
-            this.toolStripSeparator3,
-            this.showFolderToolStripMenuItem});
-            this.clientToolStripMenuItem.Image = global::Server.Properties.Resources.client;
-            this.clientToolStripMenuItem.Name = "clientToolStripMenuItem";
-            this.clientToolStripMenuItem.Size = new System.Drawing.Size(158, 34);
-            this.clientToolStripMenuItem.Text = "Client";
-            // 
-            // closeToolStripMenuItem1
-            // 
-            this.closeToolStripMenuItem1.Name = "closeToolStripMenuItem1";
-            this.closeToolStripMenuItem1.Size = new System.Drawing.Size(213, 34);
-            this.closeToolStripMenuItem1.Text = "Close";
-            this.closeToolStripMenuItem1.Click += new System.EventHandler(this.CloseToolStripMenuItem1_Click);
-            // 
-            // restartToolStripMenuItem2
-            // 
-            this.restartToolStripMenuItem2.Name = "restartToolStripMenuItem2";
-            this.restartToolStripMenuItem2.Size = new System.Drawing.Size(213, 34);
-            this.restartToolStripMenuItem2.Text = "Restart";
-            this.restartToolStripMenuItem2.Click += new System.EventHandler(this.RestartToolStripMenuItem2_Click);
-            // 
-            // updateToolStripMenuItem2
-            // 
-            this.updateToolStripMenuItem2.Name = "updateToolStripMenuItem2";
-            this.updateToolStripMenuItem2.Size = new System.Drawing.Size(213, 34);
-            this.updateToolStripMenuItem2.Text = "Update";
-            this.updateToolStripMenuItem2.Click += new System.EventHandler(this.UpdateToolStripMenuItem2_Click);
-            // 
-            // uninstallToolStripMenuItem
-            // 
-            this.uninstallToolStripMenuItem.Name = "uninstallToolStripMenuItem";
-            this.uninstallToolStripMenuItem.Size = new System.Drawing.Size(213, 34);
-            this.uninstallToolStripMenuItem.Text = "Uninstall";
-            this.uninstallToolStripMenuItem.Click += new System.EventHandler(this.UninstallToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator3
-            // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(210, 6);
-            // 
-            // showFolderToolStripMenuItem
-            // 
-            this.showFolderToolStripMenuItem.Name = "showFolderToolStripMenuItem";
-            this.showFolderToolStripMenuItem.Size = new System.Drawing.Size(213, 34);
-            this.showFolderToolStripMenuItem.Text = "Show Folder";
-            this.showFolderToolStripMenuItem.Click += new System.EventHandler(this.ShowFolderToolStripMenuItem_Click);
+            this.systemToolStripMenuItem.Size = new System.Drawing.Size(237, 32);
+            this.systemToolStripMenuItem.Text = "Client Managment";
             // 
             // pCToolStripMenuItem
             // 
@@ -639,27 +590,6 @@
             this.pCToolStripMenuItem.Name = "pCToolStripMenuItem";
             this.pCToolStripMenuItem.Size = new System.Drawing.Size(158, 34);
             this.pCToolStripMenuItem.Text = "PC";
-            // 
-            // logoffToolStripMenuItem1
-            // 
-            this.logoffToolStripMenuItem1.Name = "logoffToolStripMenuItem1";
-            this.logoffToolStripMenuItem1.Size = new System.Drawing.Size(195, 34);
-            this.logoffToolStripMenuItem1.Text = "Logoff";
-            this.logoffToolStripMenuItem1.Click += new System.EventHandler(this.LogoffToolStripMenuItem1_Click);
-            // 
-            // restartToolStripMenuItem3
-            // 
-            this.restartToolStripMenuItem3.Name = "restartToolStripMenuItem3";
-            this.restartToolStripMenuItem3.Size = new System.Drawing.Size(195, 34);
-            this.restartToolStripMenuItem3.Text = "Restart";
-            this.restartToolStripMenuItem3.Click += new System.EventHandler(this.RestartToolStripMenuItem3_Click);
-            // 
-            // shutdownToolStripMenuItem1
-            // 
-            this.shutdownToolStripMenuItem1.Name = "shutdownToolStripMenuItem1";
-            this.shutdownToolStripMenuItem1.Size = new System.Drawing.Size(195, 34);
-            this.shutdownToolStripMenuItem1.Text = "Shutdown";
-            this.shutdownToolStripMenuItem1.Click += new System.EventHandler(this.ShutdownToolStripMenuItem1_Click);
             // 
             // toolStripSeparator1
             // 
@@ -679,7 +609,7 @@
             // 
             this.blockClientsToolStripMenuItem.Image = global::Server.Properties.Resources.disabled;
             this.blockClientsToolStripMenuItem.Name = "blockClientsToolStripMenuItem";
-            this.blockClientsToolStripMenuItem.Size = new System.Drawing.Size(213, 34);
+            this.blockClientsToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
             this.blockClientsToolStripMenuItem.Text = "Block Clients";
             this.blockClientsToolStripMenuItem.Click += new System.EventHandler(this.BlockClientsToolStripMenuItem_Click);
             // 
@@ -993,10 +923,80 @@
             this.TimerTask.Interval = 5000;
             this.TimerTask.Tick += new System.EventHandler(this.TimerTask_Tick);
             // 
-            // lv_group
+            // shutdownToolStripMenuItem1
             // 
-            this.lv_group.Text = "Group";
-            this.lv_group.Width = 110;
+            this.shutdownToolStripMenuItem1.Name = "shutdownToolStripMenuItem1";
+            this.shutdownToolStripMenuItem1.Size = new System.Drawing.Size(270, 34);
+            this.shutdownToolStripMenuItem1.Text = "Shutdown";
+            this.shutdownToolStripMenuItem1.Click += new System.EventHandler(this.ShutdownToolStripMenuItem1_Click);
+            // 
+            // restartToolStripMenuItem3
+            // 
+            this.restartToolStripMenuItem3.Name = "restartToolStripMenuItem3";
+            this.restartToolStripMenuItem3.Size = new System.Drawing.Size(270, 34);
+            this.restartToolStripMenuItem3.Text = "Restart";
+            this.restartToolStripMenuItem3.Click += new System.EventHandler(this.RestartToolStripMenuItem3_Click);
+            // 
+            // logoffToolStripMenuItem1
+            // 
+            this.logoffToolStripMenuItem1.Name = "logoffToolStripMenuItem1";
+            this.logoffToolStripMenuItem1.Size = new System.Drawing.Size(270, 34);
+            this.logoffToolStripMenuItem1.Text = "Logoff";
+            this.logoffToolStripMenuItem1.Click += new System.EventHandler(this.LogoffToolStripMenuItem1_Click);
+            // 
+            // closeToolStripMenuItem1
+            // 
+            this.closeToolStripMenuItem1.Name = "closeToolStripMenuItem1";
+            this.closeToolStripMenuItem1.Size = new System.Drawing.Size(270, 34);
+            this.closeToolStripMenuItem1.Text = "Close";
+            this.closeToolStripMenuItem1.Click += new System.EventHandler(this.CloseToolStripMenuItem1_Click);
+            // 
+            // restartToolStripMenuItem2
+            // 
+            this.restartToolStripMenuItem2.Name = "restartToolStripMenuItem2";
+            this.restartToolStripMenuItem2.Size = new System.Drawing.Size(270, 34);
+            this.restartToolStripMenuItem2.Text = "Restart";
+            this.restartToolStripMenuItem2.Click += new System.EventHandler(this.RestartToolStripMenuItem2_Click);
+            // 
+            // updateToolStripMenuItem2
+            // 
+            this.updateToolStripMenuItem2.Name = "updateToolStripMenuItem2";
+            this.updateToolStripMenuItem2.Size = new System.Drawing.Size(270, 34);
+            this.updateToolStripMenuItem2.Text = "Update";
+            this.updateToolStripMenuItem2.Click += new System.EventHandler(this.UpdateToolStripMenuItem2_Click);
+            // 
+            // uninstallToolStripMenuItem
+            // 
+            this.uninstallToolStripMenuItem.Name = "uninstallToolStripMenuItem";
+            this.uninstallToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.uninstallToolStripMenuItem.Text = "Uninstall";
+            this.uninstallToolStripMenuItem.Click += new System.EventHandler(this.UninstallToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(267, 6);
+            // 
+            // showFolderToolStripMenuItem
+            // 
+            this.showFolderToolStripMenuItem.Name = "showFolderToolStripMenuItem";
+            this.showFolderToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.showFolderToolStripMenuItem.Text = "Show Folder";
+            this.showFolderToolStripMenuItem.Click += new System.EventHandler(this.ShowFolderToolStripMenuItem_Click);
+            // 
+            // clientToolStripMenuItem
+            // 
+            this.clientToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.closeToolStripMenuItem1,
+            this.restartToolStripMenuItem2,
+            this.updateToolStripMenuItem2,
+            this.uninstallToolStripMenuItem,
+            this.toolStripSeparator3,
+            this.showFolderToolStripMenuItem});
+            this.clientToolStripMenuItem.Image = global::Server.Properties.Resources.client;
+            this.clientToolStripMenuItem.Name = "clientToolStripMenuItem";
+            this.clientToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.clientToolStripMenuItem.Text = "Client";
             // 
             // Form1
             // 
@@ -1098,18 +1098,8 @@
         private System.Windows.Forms.ToolStripMenuItem runToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem stopToolStripMenuItem2;
         private System.Windows.Forms.ToolStripMenuItem systemToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem clientToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem restartToolStripMenuItem2;
-        private System.Windows.Forms.ToolStripMenuItem closeToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem updateToolStripMenuItem2;
-        private System.Windows.Forms.ToolStripMenuItem uninstallToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem pCToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem logoffToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem restartToolStripMenuItem3;
-        private System.Windows.Forms.ToolStripMenuItem shutdownToolStripMenuItem1;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
-        private System.Windows.Forms.ToolStripMenuItem showFolderToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem seedTorrentToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem remoteShellToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem dOSAttackToolStripMenuItem;
@@ -1135,6 +1125,16 @@
         private System.Windows.Forms.ToolStripMenuItem setWallpaperToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem filesSearcherToolStripMenuItem;
         private System.Windows.Forms.ColumnHeader lv_group;
+        private System.Windows.Forms.ToolStripMenuItem clientToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem closeToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem restartToolStripMenuItem2;
+        private System.Windows.Forms.ToolStripMenuItem updateToolStripMenuItem2;
+        private System.Windows.Forms.ToolStripMenuItem uninstallToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripMenuItem showFolderToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem logoffToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem restartToolStripMenuItem3;
+        private System.Windows.Forms.ToolStripMenuItem shutdownToolStripMenuItem1;
     }
 }
 

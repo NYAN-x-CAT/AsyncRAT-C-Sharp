@@ -46,12 +46,16 @@ namespace Client
 
             while (true) // ~ loop to check socket status
             {
-                if (!ClientSocket.IsConnected)
+                try
                 {
-                    ClientSocket.Reconnect();
-                    ClientSocket.InitializeClient();
+                    if (!ClientSocket.IsConnected)
+                    {
+                        ClientSocket.Reconnect();
+                        ClientSocket.InitializeClient();
+                    }
                 }
-                Thread.Sleep(new Random().Next(2000, 5000));
+                catch { }
+                Thread.Sleep(5000);
             }
         }
     }

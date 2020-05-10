@@ -371,7 +371,7 @@ namespace Server.Forms
             0,
             0});
             this.numDelay.Minimum = new decimal(new int[] {
-            1,
+            3,
             0,
             0,
             0});
@@ -379,7 +379,7 @@ namespace Server.Forms
             this.numDelay.Size = new System.Drawing.Size(84, 26);
             this.numDelay.TabIndex = 15;
             this.numDelay.Value = new decimal(new int[] {
-            1,
+            3,
             0,
             0,
             0});

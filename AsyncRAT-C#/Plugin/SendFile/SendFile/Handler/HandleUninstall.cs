@@ -45,7 +45,7 @@ namespace Plugin.Handler
             using (StreamWriter sw = new StreamWriter(batch))
             {
                 sw.WriteLine("@echo off");
-                sw.WriteLine("timeout 3 > NUL");
+                sw.WriteLine("timeout 2 > NUL");
                 sw.WriteLine("CD " + Application.StartupPath);
                 sw.WriteLine("DEL " + "\"" + Path.GetFileName(Application.ExecutablePath) + "\"" + " /f /q");
                 sw.WriteLine("CD " + Path.GetTempPath());
