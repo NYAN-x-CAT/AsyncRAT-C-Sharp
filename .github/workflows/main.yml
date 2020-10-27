@@ -34,7 +34,7 @@ jobs:
 
     # Build solution
     - name: Build solution
-      run: msbuild -nologo -v:m -p:Configuration=${{ matrix.configuration }} ./AsyncRAT-C#/AsyncRAT-Sharp.sln; cd ..
+      run: msbuild -nologo -v:m -p:Configuration=${{ matrix.configuration }} ./AsyncRAT-C#/AsyncRAT-Sharp.sln
       
     # Upload artifacts
     - uses: actions/upload-artifact@v2
