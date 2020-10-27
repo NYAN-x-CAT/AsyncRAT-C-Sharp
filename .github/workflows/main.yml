@@ -37,7 +37,8 @@ jobs:
       run: msbuild -nologo -v:m -p:Configuration=${{ matrix.configuration }} AsyncRAT-C#/AsyncRAT-Sharp.sln
       
     # Upload artifacts
-    - uses: actions/upload-artifact@v2
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v2
       with:
         name: AsyncRAT-${{ matrix.configuration }}
-        path: ${{ github.workspace }}AsyncRAT-C#/Binaries/${{ matrix.configuration }}/
+        path: ${{ github.workspace }}\AsyncRAT-C#\Binaries\${{ matrix.configuration }}\
