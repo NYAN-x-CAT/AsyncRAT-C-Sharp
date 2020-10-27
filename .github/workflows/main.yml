@@ -30,14 +30,14 @@ jobs:
 
     # Install NuGet packages
     - name: Install NuGet Packages
-      run: nuget restore ./AsyncRAT-C#/AsyncRAT-Sharp.sln
+      run: nuget restore AsyncRAT-C#/AsyncRAT-Sharp.sln
 
     # Build solution
     - name: Build solution
-      run: msbuild -nologo -v:m -p:Configuration=${{ matrix.configuration }} ./AsyncRAT-C#/AsyncRAT-Sharp.sln
+      run: msbuild -nologo -v:m -p:Configuration=${{ matrix.configuration }} AsyncRAT-C#/AsyncRAT-Sharp.sln
       
     # Upload artifacts
     - uses: actions/upload-artifact@v2
       with:
         name: AsyncRAT-${{ matrix.configuration }}
-        path: Binaries\${{ matrix.configuration }}\
+        path: D:\a\AsyncRAT-C-Sharp\AsyncRAT-C-Sharp\AsyncRAT-C#\Binaries\${{ matrix.configuration }}\
