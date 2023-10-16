@@ -40,8 +40,8 @@
             this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.btnStart = new System.Windows.Forms.Button();
+            this.btnSlide = new System.Windows.Forms.Button();
             this.timerSave = new System.Windows.Forms.Timer(this.components);
             this.labelWait = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -54,8 +54,9 @@
             // 
             this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox1.Location = new System.Drawing.Point(0, 0);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(2);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(938, 485);
+            this.pictureBox1.Size = new System.Drawing.Size(625, 315);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
@@ -78,20 +79,22 @@
             this.panel1.Controls.Add(this.numericUpDown2);
             this.panel1.Controls.Add(this.label1);
             this.panel1.Controls.Add(this.numericUpDown1);
-            this.panel1.Controls.Add(this.button1);
+            this.panel1.Controls.Add(this.btnStart);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Margin = new System.Windows.Forms.Padding(2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(938, 38);
+            this.panel1.Size = new System.Drawing.Size(625, 25);
             this.panel1.TabIndex = 1;
             // 
             // btnKeyboard
             // 
             this.btnKeyboard.BackgroundImage = global::Server.Properties.Resources.keyboard;
             this.btnKeyboard.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnKeyboard.Location = new System.Drawing.Point(622, 3);
+            this.btnKeyboard.Location = new System.Drawing.Point(415, 2);
+            this.btnKeyboard.Margin = new System.Windows.Forms.Padding(2);
             this.btnKeyboard.Name = "btnKeyboard";
-            this.btnKeyboard.Size = new System.Drawing.Size(32, 32);
+            this.btnKeyboard.Size = new System.Drawing.Size(21, 21);
             this.btnKeyboard.TabIndex = 6;
             this.btnKeyboard.UseVisualStyleBackColor = true;
             this.btnKeyboard.Click += new System.EventHandler(this.btnKeyboard_Click);
@@ -100,9 +103,10 @@
             // 
             this.btnMouse.BackgroundImage = global::Server.Properties.Resources.mouse;
             this.btnMouse.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnMouse.Location = new System.Drawing.Point(550, 3);
+            this.btnMouse.Location = new System.Drawing.Point(367, 2);
+            this.btnMouse.Margin = new System.Windows.Forms.Padding(2);
             this.btnMouse.Name = "btnMouse";
-            this.btnMouse.Size = new System.Drawing.Size(32, 32);
+            this.btnMouse.Size = new System.Drawing.Size(21, 21);
             this.btnMouse.TabIndex = 3;
             this.btnMouse.UseVisualStyleBackColor = true;
             this.btnMouse.Click += new System.EventHandler(this.Button3_Click);
@@ -111,9 +115,10 @@
             // 
             this.btnSave.BackgroundImage = global::Server.Properties.Resources.save_image;
             this.btnSave.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnSave.Location = new System.Drawing.Point(455, 3);
+            this.btnSave.Location = new System.Drawing.Point(303, 2);
+            this.btnSave.Margin = new System.Windows.Forms.Padding(2);
             this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(32, 32);
+            this.btnSave.Size = new System.Drawing.Size(21, 21);
             this.btnSave.TabIndex = 5;
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.BtnSave_Click);
@@ -121,9 +126,10 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(268, 9);
+            this.label2.Location = new System.Drawing.Point(179, 6);
+            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(76, 20);
+            this.label2.Size = new System.Drawing.Size(51, 13);
             this.label2.TabIndex = 4;
             this.label2.Text = "SCREEN";
             // 
@@ -136,14 +142,15 @@
             0,
             0,
             0});
-            this.numericUpDown2.Location = new System.Drawing.Point(352, 5);
+            this.numericUpDown2.Location = new System.Drawing.Point(235, 3);
+            this.numericUpDown2.Margin = new System.Windows.Forms.Padding(2);
             this.numericUpDown2.Maximum = new decimal(new int[] {
             0,
             0,
             0,
             0});
             this.numericUpDown2.Name = "numericUpDown2";
-            this.numericUpDown2.Size = new System.Drawing.Size(63, 26);
+            this.numericUpDown2.Size = new System.Drawing.Size(42, 20);
             this.numericUpDown2.TabIndex = 3;
             this.numericUpDown2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.numericUpDown2.UpDownAlign = System.Windows.Forms.LeftRightAlignment.Left;
@@ -151,9 +158,10 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(82, 9);
+            this.label1.Location = new System.Drawing.Point(55, 6);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(78, 20);
+            this.label1.Size = new System.Drawing.Size(53, 13);
             this.label1.TabIndex = 2;
             this.label1.Text = "QUALITY";
             // 
@@ -166,14 +174,15 @@
             0,
             0,
             0});
-            this.numericUpDown1.Location = new System.Drawing.Point(166, 5);
+            this.numericUpDown1.Location = new System.Drawing.Point(111, 3);
+            this.numericUpDown1.Margin = new System.Windows.Forms.Padding(2);
             this.numericUpDown1.Minimum = new decimal(new int[] {
             20,
             0,
             0,
             0});
             this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(82, 26);
+            this.numericUpDown1.Size = new System.Drawing.Size(55, 20);
             this.numericUpDown1.TabIndex = 1;
             this.numericUpDown1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.numericUpDown1.UpDownAlign = System.Windows.Forms.LeftRightAlignment.Left;
@@ -183,29 +192,31 @@
             0,
             0});
             // 
-            // button1
+            // btnStart
             // 
-            this.button1.BackgroundImage = global::Server.Properties.Resources.stop__1_;
-            this.button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.button1.Location = new System.Drawing.Point(12, 3);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(32, 32);
-            this.button1.TabIndex = 0;
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.Button1_Click);
+            this.btnStart.BackgroundImage = global::Server.Properties.Resources.stop__1_;
+            this.btnStart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnStart.Location = new System.Drawing.Point(8, 2);
+            this.btnStart.Margin = new System.Windows.Forms.Padding(2);
+            this.btnStart.Name = "btnStart";
+            this.btnStart.Size = new System.Drawing.Size(21, 21);
+            this.btnStart.TabIndex = 0;
+            this.btnStart.UseVisualStyleBackColor = true;
+            this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
             // 
-            // button2
+            // btnSlide
             // 
-            this.button2.BackgroundImage = global::Server.Properties.Resources.arrow_up;
-            this.button2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button2.Location = new System.Drawing.Point(428, 44);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(18, 18);
-            this.button2.TabIndex = 2;
-            this.button2.Text = " ";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.Button2_Click);
+            this.btnSlide.BackgroundImage = global::Server.Properties.Resources.arrow_up;
+            this.btnSlide.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnSlide.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSlide.Location = new System.Drawing.Point(285, 29);
+            this.btnSlide.Margin = new System.Windows.Forms.Padding(2);
+            this.btnSlide.Name = "btnSlide";
+            this.btnSlide.Size = new System.Drawing.Size(12, 12);
+            this.btnSlide.TabIndex = 2;
+            this.btnSlide.Text = " ";
+            this.btnSlide.UseVisualStyleBackColor = true;
+            this.btnSlide.Click += new System.EventHandler(this.btnSlide_Click);
             // 
             // timerSave
             // 
@@ -216,24 +227,26 @@
             // 
             this.labelWait.AutoSize = true;
             this.labelWait.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.labelWait.Location = new System.Drawing.Point(376, 222);
+            this.labelWait.Location = new System.Drawing.Point(251, 144);
+            this.labelWait.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelWait.Name = "labelWait";
-            this.labelWait.Size = new System.Drawing.Size(78, 29);
+            this.labelWait.Size = new System.Drawing.Size(53, 20);
             this.labelWait.TabIndex = 3;
             this.labelWait.Text = "Wait...";
             // 
             // FormRemoteDesktop
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(938, 485);
+            this.ClientSize = new System.Drawing.Size(625, 315);
             this.Controls.Add(this.labelWait);
-            this.Controls.Add(this.button2);
+            this.Controls.Add(this.btnSlide);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.pictureBox1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
-            this.MinimumSize = new System.Drawing.Size(655, 440);
+            this.Margin = new System.Windows.Forms.Padding(2);
+            this.MinimumSize = new System.Drawing.Size(442, 300);
             this.Name = "FormRemoteDesktop";
             this.Text = "RemoteDesktop";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormRemoteDesktop_FormClosed);
@@ -257,8 +270,8 @@
         public System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button btnStart;
+        private System.Windows.Forms.Button btnSlide;
         public System.Windows.Forms.NumericUpDown numericUpDown1;
         private System.Windows.Forms.Label label2;
         public System.Windows.Forms.NumericUpDown numericUpDown2;
