@@ -94,9 +94,6 @@ namespace Server.Forms
                 }
             }
             catch { }
-
-            if (Properties.Settings.Default.Mutex.Length == 0)
-                txtMutex.Text = getRandomCharacters();
         }
 
 
@@ -189,6 +186,8 @@ namespace Server.Forms
             if (string.IsNullOrWhiteSpace(txtGroup.Text)) txtGroup.Text = "Default";
 
             if (chkPastebin.Checked && string.IsNullOrWhiteSpace(txtPastebin.Text)) return;
+
+            if (string.IsNullOrWhiteSpace(txtMutex.Text)) txtMutex.Text = Helper.Methods.GetRandomString(12);
 
             ModuleDefMD asmDef = null;
             try
@@ -430,7 +429,7 @@ namespace Server.Forms
 
                                     if (method.Body.Instructions[i].Operand.ToString() == "%MTX%")
                                         if (string.IsNullOrWhiteSpace(txtMutex.Text))
-                                            method.Body.Instructions[i].Operand = getRandomCharacters();
+                                            method.Body.Instructions[i].Operand = Helper.Methods.GetRandomString(12);
                                         else
                                             method.Body.Instructions[i].Operand = aes.Encrypt(txtMutex.Text);
 
@@ -468,21 +467,6 @@ namespace Server.Forms
             }
         }
 
-
-        private readonly Random random = new Random();
-        const string alphabet = "asdfghjklqwertyuiopmnbvcxz";
-
-        public string getRandomCharacters()
-        {
-            var sb = new StringBuilder();
-            for (int i = 1; i <= new Random().Next(10, 20); i++)
-            {
-                var randomCharacterPosition = random.Next(0, alphabet.Length);
-                sb.Append(alphabet[randomCharacterPosition]);
-            }
-            return sb.ToString();
-        }
-
         private void BtnClone_Click(object sender, EventArgs e)
         {
             using (var openFileDialog = new OpenFileDialog())
@@ -504,6 +488,11 @@ namespace Server.Forms
                     txtProductVersion.Text = $"{fileVersionInfo.FileMajorPart.ToString()}.{fileVersionInfo.FileMinorPart.ToString()}.{fileVersionInfo.FileBuildPart.ToString()}.{fileVersionInfo.FilePrivatePart.ToString()}";
                 }
             }
+        }
+
+        private void txtMutex_MouseEnter(object sender, EventArgs e)
+        {
+            txtMutex.Text = Helper.Methods.GetRandomString(12);
         }
     }
 }
