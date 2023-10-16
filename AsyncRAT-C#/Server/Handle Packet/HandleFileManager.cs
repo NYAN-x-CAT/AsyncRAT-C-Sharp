@@ -170,14 +170,15 @@ namespace Server.Handle_Packet
                                 {
                                     if (!Directory.Exists(SD.DirPath))
                                         return;
-                                    string fileName = unpack_msgpack.ForcePathObject("Name").AsString;
+                                    string fileName = Path.GetFileName(unpack_msgpack.ForcePathObject("Name").AsString);
                                     string dirPath = SD.DirPath;
-                                    if (File.Exists(dirPath + "\\" + fileName))
+                                    string fileFullPath = Path.Combine(dirPath, fileName);
+                                    if (File.Exists(fileFullPath))
                                     {
                                         fileName = DateTime.Now.ToString("MM-dd-yyyy HH;mm;ss") + "_" + fileName;
-                                        await Task.Delay(100);
+                                        fileFullPath = Path.Combine(dirPath, fileName);
                                     }
-                                    await Task.Run(() => SaveFileAsync(unpack_msgpack.ForcePathObject("File"), dirPath + "\\" + fileName));
+                                    await Task.Run(() => SaveFileAsync(unpack_msgpack.ForcePathObject("File"), fileFullPath));
                                     SD.Close();
                                 }
                             }
