@@ -1,0 +1,44 @@
+name: Build AsyncRAT
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        configuration: [Debug, Release]
+
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@main
+      with:
+        fetch-depth: 0
+
+    # Install the .NET Core workload
+    - name: Install .NET Core
+      uses: actions/setup-dotnet@v1
+
+    # Add MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1.0.2
+
+    # Install NuGet packages
+    - name: Install NuGet Packages
+      run: nuget restore AsyncRAT-C#/AsyncRAT-Sharp.sln
+
+    # Build solution
+    - name: Build solution
+      run: msbuild -nologo -v:m -p:Configuration=${{ matrix.configuration }} AsyncRAT-C#/AsyncRAT-Sharp.sln
+      
+    # Upload artifacts
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: AsyncRAT-${{ matrix.configuration }}
+        path: ${{ github.workspace }}\AsyncRAT-C#\Binaries\${{ matrix.configuration }}\
